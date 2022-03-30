@@ -1,0 +1,1032 @@
+1st operating point. Wind speed = 5, rotor speed = 0.567415
+-------------------------------------------------------------------------------------------------
+------ Tower 1st side-side mode ------
+Tower 1st side-side mode   0.874   -90.6°
+Tower 1st fore-aft mode    0.031    81.2°
+Rotor 1st edgewise cosine cyclic   0.315   -92.2°
+Tower 1st torsional mode   0.001    89.6°
+Rotor 1st flapwise cosine cyclic   0.349   104.3°
+Rotor 2nd edgewise cosine cyclic   0.035    90.3°
+Rotor 1st edgewise sine cyclic   0.030    -8.7°
+Rotor 1st flapwise sine cyclic   0.070    64.5°
+Rotor 2nd flapwise cosine cyclic   0.048    74.9°
+Rotor 1st flapwise collective   0.057   -39.7°
+
+------ Tower 1st fore-aft mode ------
+Tower 1st fore-aft mode    0.310    31.1°
+Tower 1st side-side mode   0.026  -165.1°
+Rotor 1st flapwise cosine cyclic   0.725   -92.6°
+Rotor 1st flapwise collective   0.586   -88.6°
+Rotor 2nd flapwise collective   0.122  -170.2°
+Rotor 2nd flapwise cosine cyclic   0.105  -165.8°
+Rotor 1st edgewise collective   0.036  -147.0°
+Rotor 2nd flapwise sine cyclic   0.057   -94.3°
+Rotor 1st edgewise cosine cyclic   0.022   161.3°
+Rotor 3rd flapwise collective   0.015    47.0°
+
+------ Rotor 1st flapwise backward whirl ------
+Rotor 1st flapwise sine cyclic   0.716    13.0°
+Rotor 1st flapwise cosine cyclic   0.669   -75.8°
+Rotor 2nd flapwise sine cyclic   0.143   -12.1°
+Rotor 2nd flapwise cosine cyclic   0.133  -103.2°
+Rotor 1st edgewise sine cyclic   0.018   -16.2°
+Rotor 1st edgewise cosine cyclic   0.017  -108.0°
+Rotor 2nd edgewise sine cyclic   0.010   163.5°
+Rotor 2nd edgewise cosine cyclic   0.009    72.5°
+Tower 1st fore-aft mode    0.001   -34.7°
+Rotor 3rd flapwise sine cyclic   0.008   -19.6°
+
+------ Rotor 1st flapwise collective ------
+Rotor 1st flapwise collective   0.978    25.6°
+Rotor 2nd flapwise collective   0.199    -1.6°
+Rotor 1st edgewise collective   0.052    12.1°
+Rotor 2nd edgewise collective   0.016   177.4°
+Tower 1st fore-aft mode    0.003   102.6°
+Rotor 3rd flapwise collective   0.010   -16.1°
+Rotor 1st flapwise sine cyclic   0.037    14.3°
+Rotor 1st flapwise cosine cyclic   0.019    54.2°
+Rotor 3rd edgewise collective   0.002   176.1°
+Rotor 4th flapwise collective   0.002    -8.4°
+
+------ Rotor 1st flapwise forward whirl ------
+Rotor 1st flapwise cosine cyclic   0.705  -146.3°
+Rotor 1st flapwise sine cyclic   0.680   121.4°
+Rotor 2nd flapwise cosine cyclic   0.142  -171.2°
+Rotor 2nd flapwise sine cyclic   0.137    96.1°
+Tower 1st side-side mode   0.001   141.1°
+Rotor 1st edgewise cosine cyclic   0.019  -175.1°
+Rotor 1st edgewise sine cyclic   0.018    89.8°
+Rotor 2nd edgewise cosine cyclic   0.010     3.3°
+Rotor 2nd edgewise sine cyclic   0.009   -88.5°
+Rotor 3rd flapwise sine cyclic   0.007    90.0°
+
+------ Rotor 1st edgewise backward whirl ------
+Rotor 1st edgewise sine cyclic   0.611   -92.9°
+Rotor 1st edgewise cosine cyclic   0.598   177.2°
+Tower 1st side-side mode   0.007     1.6°
+Rotor 2nd flapwise sine cyclic   0.268  -167.9°
+Rotor 1st flapwise cosine cyclic   0.287   -22.7°
+Rotor 2nd flapwise cosine cyclic   0.245   105.7°
+Rotor 1st flapwise sine cyclic   0.225    75.6°
+Tower 1st fore-aft mode    0.003   110.2°
+Rotor 2nd edgewise cosine cyclic   0.020    -5.7°
+Rotor 2nd edgewise sine cyclic   0.020    85.6°
+
+------ Rotor 1st edgewise forward whirl ------
+Rotor 1st edgewise cosine cyclic   0.608   -92.7°
+Rotor 1st edgewise sine cyclic   0.583   176.6°
+Rotor 1st flapwise cosine cyclic   0.309    63.4°
+Rotor 2nd flapwise sine cyclic   0.259   110.2°
+Rotor 2nd flapwise cosine cyclic   0.242  -152.0°
+Tower 1st side-side mode   0.006    80.8°
+Rotor 1st flapwise sine cyclic   0.255   -30.0°
+Rotor 2nd edgewise cosine cyclic   0.020    76.5°
+Rotor 2nd edgewise sine cyclic   0.019   -10.3°
+Rotor 5th flapwise sine cyclic   0.020    12.2°
+
+------ Rotor 2nd flapwise backward whirl ------
+Rotor 2nd flapwise sine cyclic   0.746  -105.6°
+Rotor 2nd flapwise cosine cyclic   0.581   158.8°
+Tower 1st torsional mode   0.001    92.9°
+Rotor 1st edgewise sine cyclic   0.109   -65.2°
+Rotor 1st flapwise sine cyclic   0.255   -40.3°
+Rotor 1st edgewise cosine cyclic   0.049  -155.1°
+Rotor 3rd flapwise sine cyclic   0.070   168.2°
+Rotor 1st flapwise cosine cyclic   0.134  -110.7°
+Tower 1st side-side mode   0.002    93.9°
+Rotor 2nd edgewise sine cyclic   0.024   -17.4°
+
+------ Rotor 2nd flapwise collective ------
+Rotor 2nd flapwise collective   0.931  -105.0°
+Rotor 1st edgewise collective   0.255   -91.4°
+Rotor 3rd flapwise collective   0.073  -171.1°
+Rotor 1st flapwise collective   0.241    25.4°
+Rotor 2nd edgewise collective   0.034    -4.9°
+Tower 1st fore-aft mode    0.006  -121.8°
+Rotor 5th flapwise collective   0.011   177.9°
+Rotor 2nd flapwise sine cyclic   0.045   -55.2°
+Rotor 4th flapwise collective   0.009   167.4°
+Rotor 3rd edgewise collective   0.005   158.6°
+
+------ Rotor 2nd flapwise forward whirl ------
+Rotor 2nd flapwise cosine cyclic   0.809  -102.5°
+Rotor 2nd flapwise sine cyclic   0.514   157.6°
+Rotor 1st edgewise cosine cyclic   0.124   -45.7°
+Rotor 1st edgewise sine cyclic   0.094  -144.2°
+Rotor 1st flapwise sine cyclic   0.168  -146.8°
+Rotor 1st flapwise cosine cyclic   0.142   -17.3°
+Rotor 2nd edgewise cosine cyclic   0.026    -7.6°
+Rotor 3rd flapwise cosine cyclic   0.069   178.8°
+Rotor 3rd flapwise sine cyclic   0.051    61.1°
+Tower 1st fore-aft mode    0.002  -108.0°
+
+------ Tower 1st torsional mode ------
+Tower 1st torsional mode   0.003  -114.0°
+Rotor 3rd flapwise sine cyclic   0.439  -125.0°
+Rotor 2nd flapwise sine cyclic   0.634   -95.8°
+Rotor 1st flapwise sine cyclic   0.553    65.0°
+Rotor 2nd edgewise sine cyclic   0.118    42.4°
+Rotor 3rd flapwise cosine cyclic   0.186   160.4°
+Rotor 2nd edgewise cosine cyclic   0.060   -57.6°
+Rotor 4th flapwise sine cyclic   0.080   103.1°
+Tower 1st side-side mode   0.004  -113.1°
+Rotor 1st edgewise cosine cyclic   0.054  -115.4°
+
+------ Rotor 1st edgewise collective ------
+Rotor 1st edgewise collective   0.590    75.5°
+Rotor 2nd flapwise collective   0.667   -92.5°
+Rotor 3rd flapwise collective   0.295    98.5°
+Rotor 3rd edgewise collective   0.110   -96.9°
+Rotor 2nd edgewise collective   0.125    65.9°
+Low-speed Shaft            0.003  -170.0°
+Rotor 5th flapwise collective   0.070   -97.5°
+Rotor 1st flapwise collective   0.274   -94.3°
+Rotor 6th flapwise collective   0.030    80.1°
+Rotor 4th flapwise collective   0.032   -93.1°
+
+------ Rotor 3rd flapwise coforward whirl ------
+Rotor 3rd flapwise cosine cyclic   0.498  -140.5°
+Rotor 2nd flapwise cosine cyclic   0.522   -95.0°
+Tower 1st torsional mode   0.002   153.9°
+Rotor 2nd edgewise cosine cyclic   0.112    37.9°
+Rotor 1st flapwise cosine cyclic   0.492    53.4°
+Rotor 2nd flapwise sine cyclic   0.321  -173.6°
+Rotor 3rd flapwise sine cyclic   0.176   132.2°
+Rotor 1st flapwise sine cyclic   0.273   -38.8°
+Rotor 4th flapwise cosine cyclic   0.081    89.9°
+Rotor 2nd edgewise sine cyclic   0.043    -0.7°
+
+------ Rotor 3rd flapwise collective ------
+Rotor 3rd flapwise collective   0.924   -96.9°
+Rotor 2nd edgewise collective   0.224    82.7°
+Rotor 4th flapwise collective   0.093   170.8°
+Rotor 2nd flapwise collective   0.189     2.6°
+Rotor 1st edgewise collective   0.105   103.1°
+Rotor 3rd flapwise cosine cyclic   0.178   101.6°
+Rotor 3rd edgewise collective   0.023    57.3°
+Tower 1st fore-aft mode    0.005    79.2°
+Rotor 2nd edgewise cosine cyclic   0.032   -94.3°
+Rotor 5th flapwise collective   0.022   116.3°
+
+------ Rotor 3rd flapwise backward whirl ------
+Rotor 3rd flapwise cosine cyclic   0.695    85.6°
+Rotor 3rd flapwise sine cyclic   0.391  -165.8°
+Tower 1st torsional mode   0.002    -9.8°
+Tower 2nd side-side mode   0.001    31.6°
+Rotor 2nd flapwise cosine cyclic   0.388  -114.5°
+Rotor 3rd flapwise collective   0.101   114.2°
+Rotor 2nd flapwise sine cyclic   0.311   -15.2°
+Rotor 2nd edgewise sine cyclic   0.075    67.4°
+Rotor 2nd edgewise cosine cyclic   0.062   -69.2°
+Rotor 4th flapwise cosine cyclic   0.084    28.1°
+
+------ Low-speed Shaft ------
+Low-speed Shaft            0.190   -74.5°
+Rotor 1st edgewise collective   0.757  -133.5°
+Rotor 2nd edgewise collective   0.260     0.2°
+Rotor 2nd flapwise collective   0.451    45.9°
+Rotor 3rd flapwise collective   0.181    17.4°
+Rotor 3rd edgewise collective   0.073   161.6°
+Rotor 1st flapwise collective   0.217    62.7°
+Rotor 4th edgewise collective   0.013   -22.7°
+Rotor 6th flapwise collective   0.014   146.7°
+Rotor 1st torsional collective   0.013    41.4°
+
+------ Tower 2nd side-side mode ------
+Tower 2nd side-side mode   0.004    -4.9°
+Rotor 3rd flapwise cosine cyclic   0.828   -94.0°
+Rotor 2nd edgewise cosine cyclic   0.160    32.0°
+Rotor 3rd flapwise sine cyclic   0.296   168.9°
+Rotor 2nd edgewise sine cyclic   0.113   -56.2°
+Rotor 2nd flapwise cosine cyclic   0.329    76.3°
+Rotor 4th flapwise cosine cyclic   0.115  -172.6°
+Tower 1st side-side mode   0.007   -12.8°
+Rotor 5th flapwise cosine cyclic   0.071   119.4°
+Rotor 3rd flapwise collective   0.064   -75.2°
+
+------ Rotor 3rd flapwise sine cyclic ------
+Rotor 3rd flapwise sine cyclic   0.715   -93.5°
+Tower 1st torsional mode   0.002    78.3°
+Tower 2nd side-side mode   0.002   -96.1°
+Rotor 2nd edgewise cosine cyclic   0.151   121.1°
+Rotor 2nd flapwise sine cyclic   0.450    81.6°
+Rotor 3rd flapwise cosine cyclic   0.333    17.4°
+Rotor 5th flapwise sine cyclic   0.096   105.7°
+Rotor 2nd edgewise sine cyclic   0.089   -17.3°
+Rotor 3rd edgewise sine cyclic   0.103   104.4°
+Rotor 4th flapwise sine cyclic   0.117  -151.2°
+
+------ Rotor 2nd edgewise backward whirl ------
+Rotor 2nd edgewise sine cyclic   0.504    85.6°
+Rotor 2nd edgewise cosine cyclic   0.336    35.2°
+Rotor 3rd flapwise sine cyclic   0.464   -22.4°
+Rotor 4th flapwise sine cyclic   0.250   -97.6°
+Tower 1st torsional mode   0.002   138.1°
+Rotor 5th flapwise sine cyclic   0.134  -118.3°
+Rotor 3rd edgewise sine cyclic   0.167  -105.7°
+Rotor 4th flapwise cosine cyclic   0.174  -163.0°
+Rotor 3rd edgewise cosine cyclic   0.120  -148.2°
+Rotor 5th flapwise cosine cyclic   0.092  -160.8°
+
+------ Rotor 2nd edgewise forward whirl ------
+Rotor 2nd edgewise cosine cyclic   0.519    -0.2°
+Rotor 2nd edgewise sine cyclic   0.537   -94.3°
+Rotor 4th flapwise sine cyclic   0.277    51.8°
+Rotor 3rd edgewise cosine cyclic   0.192  -175.7°
+Rotor 3rd edgewise sine cyclic   0.178    91.3°
+Rotor 5th flapwise cosine cyclic   0.141  -179.6°
+Rotor 4th flapwise cosine cyclic   0.191   143.2°
+Rotor 5th flapwise sine cyclic   0.120    84.2°
+Tower 1st torsional mode   0.001  -110.8°
+Rotor 6th flapwise sine cyclic   0.078   -92.5°
+
+------ Rotor 4th flapwise collective ------
+Rotor 4th flapwise collective   0.946   -96.3°
+Rotor 2nd edgewise collective   0.118    95.6°
+Rotor 4th flapwise cosine cyclic   0.208    79.9°
+Rotor 3rd flapwise collective   0.118    21.6°
+Rotor 1st edgewise collective   0.126  -101.8°
+Rotor 5th flapwise collective   0.050  -144.6°
+Rotor 6th flapwise collective   0.038   137.0°
+Low-speed Shaft            0.001   -46.0°
+Rotor 3rd edgewise collective   0.025    76.1°
+Rotor 4th flapwise sine cyclic   0.066   148.7°
+
+------ Rotor 4th flapwise backward whirl ------
+Rotor 4th flapwise cosine cyclic   0.824   -96.5°
+Rotor 4th flapwise sine cyclic   0.412   -17.8°
+Rotor 4th flapwise collective   0.102   -97.6°
+Rotor 3rd edgewise cosine cyclic   0.182   114.1°
+Rotor 5th flapwise cosine cyclic   0.106   132.2°
+Rotor 2nd edgewise cosine cyclic   0.086  -121.1°
+Rotor 3rd edgewise sine cyclic   0.112  -161.8°
+Rotor 6th flapwise cosine cyclic   0.058  -106.7°
+Rotor 2nd edgewise sine cyclic   0.067   -35.8°
+Rotor 6th flapwise sine cyclic   0.044   -19.5°
+
+------ Rotor 4th flapwise forward whirl ------
+Rotor 4th flapwise sine cyclic   0.798   -96.3°
+Rotor 4th flapwise cosine cyclic   0.403    -8.3°
+Rotor 3rd edgewise sine cyclic   0.200   141.0°
+Rotor 5th flapwise sine cyclic   0.129   164.8°
+Tower 1st torsional mode   0.001  -101.9°
+Rotor 2nd edgewise sine cyclic   0.102   -91.3°
+Rotor 6th flapwise sine cyclic   0.073   -81.0°
+Rotor 5th flapwise cosine cyclic   0.069  -104.8°
+Rotor 1st flapwise sine cyclic   0.255    93.8°
+Rotor 3rd flapwise sine cyclic   0.123    48.2°
+
+------ Rotor 3rd edgewise cobackward whirl ------
+Rotor 3rd edgewise cosine cyclic   0.550   -91.6°
+Rotor 4th flapwise cosine cyclic   0.397   138.4°
+Rotor 3rd edgewise sine cyclic   0.331    -3.9°
+Rotor 5th flapwise cosine cyclic   0.272   -88.0°
+Rotor 4th flapwise sine cyclic   0.311   -71.8°
+Rotor 6th flapwise cosine cyclic   0.166    80.8°
+Rotor 2nd edgewise cosine cyclic   0.174   100.1°
+Rotor 5th flapwise sine cyclic   0.153   -15.7°
+Rotor 6th flapwise sine cyclic   0.098  -176.2°
+Tower 1st torsional mode   0.001   -91.0°
+
+------ Rotor 2nd edgewise collective ------
+Rotor 2nd edgewise collective   0.453    78.0°
+Rotor 3rd edgewise collective   0.316    15.6°
+Rotor 5th flapwise collective   0.327   -28.0°
+Rotor 1st edgewise collective   0.519  -101.8°
+Rotor 6th flapwise collective   0.206   134.7°
+Rotor 4th flapwise collective   0.240    50.5°
+Rotor 1st torsional collective   0.194   110.9°
+Low-speed Shaft            0.005   -55.8°
+Rotor 7th flapwise collective   0.142   113.9°
+Rotor 3rd flapwise collective   0.224    69.7°
+
+------ Rotor 3rd edgewise forward whirl ------
+Rotor 3rd edgewise sine cyclic   0.482   -91.4°
+Rotor 3rd edgewise cosine cyclic   0.467    -2.5°
+Rotor 4th flapwise sine cyclic   0.394   122.5°
+Rotor 5th flapwise cosine cyclic   0.230     8.3°
+Rotor 5th flapwise sine cyclic   0.210   -79.6°
+Rotor 4th flapwise cosine cyclic   0.282  -146.9°
+Rotor 6th flapwise sine cyclic   0.145    74.9°
+Rotor 6th flapwise cosine cyclic   0.126   167.4°
+Rotor 2nd edgewise sine cyclic   0.137    97.4°
+Rotor 2nd edgewise cosine cyclic   0.119  -167.2°
+
+------ Rotor 3rd edgewise collective ------
+Rotor 3rd edgewise collective   0.361   167.2°
+Rotor 2nd edgewise collective   0.471    99.3°
+Rotor 5th flapwise collective   0.359  -145.7°
+Rotor 1st edgewise collective   0.515   -83.5°
+Rotor 6th flapwise collective   0.206    38.7°
+Rotor 4th flapwise collective   0.200   102.3°
+Rotor 1st torsional collective   0.192    66.0°
+Rotor 7th flapwise collective   0.153    69.7°
+Low-speed Shaft            0.004   -36.6°
+Rotor 3rd flapwise collective   0.160   103.0°
+
+------ Rotor 3rd edgewise backward whirl ------
+Rotor 3rd edgewise sine cyclic   0.588   -91.8°
+Rotor 3rd edgewise cosine cyclic   0.457   167.2°
+Rotor 5th flapwise sine cyclic   0.296    76.9°
+Rotor 5th flapwise cosine cyclic   0.250   -24.9°
+Rotor 1st torsional sine cyclic   0.283  -107.0°
+Rotor 1st torsional cosine cyclic   0.221   154.0°
+Rotor 4th flapwise sine cyclic   0.201  -164.0°
+Rotor 7th flapwise sine cyclic   0.220   -91.2°
+Rotor 4th flapwise cosine cyclic   0.123    92.0°
+Rotor 7th flapwise cosine cyclic   0.174   168.2°
+
+------ Rotor 3rd edgewise forward whirl ------
+Rotor 3rd edgewise cosine cyclic   0.573   -92.0°
+Rotor 3rd edgewise sine cyclic   0.505  -179.0°
+Rotor 5th flapwise cosine cyclic   0.304    65.2°
+Rotor 5th flapwise sine cyclic   0.237   -25.5°
+Rotor 1st torsional cosine cyclic   0.267   -99.2°
+Rotor 1st torsional sine cyclic   0.242   176.7°
+Rotor 6th flapwise cosine cyclic   0.117    -1.3°
+Rotor 6th flapwise sine cyclic   0.117  -109.5°
+Rotor 7th flapwise cosine cyclic   0.225   -90.9°
+Rotor 7th flapwise sine cyclic   0.200  -179.4°
+
+------ Rotor 6th flapwise collective ------
+Rotor 6th flapwise collective   0.685   -94.9°
+Rotor 5th flapwise collective   0.594   -94.3°
+Rotor 3rd edgewise collective   0.176    94.4°
+Rotor 2nd edgewise collective   0.152   -70.0°
+Rotor 1st edgewise collective   0.247   111.4°
+Rotor 4th flapwise collective   0.132    -7.1°
+Low-speed Shaft            0.002   145.7°
+Rotor 1st torsional collective   0.072   -15.8°
+Rotor 3rd flapwise collective   0.094   -60.2°
+Rotor 6th flapwise cosine cyclic   0.072    68.8°
+
+------ Rotor 6th flapwise backward whirl ------
+Rotor 6th flapwise cosine cyclic   0.651   -95.5°
+Rotor 6th flapwise sine cyclic   0.468   -24.1°
+Rotor 5th flapwise cosine cyclic   0.322   -94.6°
+Rotor 5th flapwise sine cyclic   0.240   -23.7°
+Rotor 1st torsional cosine cyclic   0.217   -84.8°
+Rotor 3rd edgewise cosine cyclic   0.146  -116.3°
+Rotor 1st torsional sine cyclic   0.139   -12.8°
+Rotor 7th flapwise cosine cyclic   0.202   -98.4°
+Rotor 3rd edgewise sine cyclic   0.088   -45.7°
+Rotor 7th flapwise sine cyclic   0.150   -22.1°
+
+------ Rotor 6th flapwise forward whirl ------
+Rotor 6th flapwise sine cyclic   0.647   -95.2°
+Rotor 6th flapwise cosine cyclic   0.439     2.5°
+Rotor 5th flapwise sine cyclic   0.323   -99.8°
+Rotor 5th flapwise cosine cyclic   0.201    -4.3°
+Rotor 1st torsional sine cyclic   0.215   -73.4°
+Rotor 1st torsional cosine cyclic   0.173    19.4°
+Rotor 7th flapwise sine cyclic   0.226   -95.3°
+Rotor 3rd edgewise sine cyclic   0.131   -94.1°
+Rotor 3rd edgewise cosine cyclic   0.120     8.7°
+Rotor 4th flapwise sine cyclic   0.122    37.3°
+
+------ Rotor 1st torsional backward whirl ------
+Rotor 1st torsional cosine cyclic   0.446  -168.3°
+Rotor 1st torsional sine cyclic   0.413   -75.9°
+Rotor 7th flapwise cosine cyclic   0.572   -96.5°
+Rotor 7th flapwise sine cyclic   0.534    -7.0°
+Rotor 4th edgewise cosine cyclic   0.047  -129.7°
+Rotor 4th edgewise sine cyclic   0.044   -38.9°
+Rotor 6th flapwise sine cyclic   0.029   139.3°
+Rotor 6th flapwise cosine cyclic   0.029    33.2°
+Rotor 3rd edgewise cosine cyclic   0.036  -172.6°
+Rotor 3rd edgewise sine cyclic   0.033   -81.6°
+
+------ Rotor 1st torsional collective ------
+Rotor 1st torsional collective   0.510  -171.2°
+Rotor 4th edgewise collective   0.178   139.8°
+Rotor 6th flapwise collective   0.282    71.1°
+Rotor 2nd edgewise collective   0.309  -102.3°
+Rotor 3rd edgewise collective   0.214    81.9°
+Rotor 1st edgewise collective   0.535    79.9°
+Rotor 7th flapwise collective   0.253  -133.5°
+Low-speed Shaft            0.005   104.8°
+Rotor 2nd flapwise collective   0.299   -88.9°
+Rotor 3rd flapwise collective   0.151   -97.2°
+
+------ Rotor 7th flapwise backward whirl ------
+Rotor 7th flapwise cosine cyclic   0.799   -93.5°
+Rotor 7th flapwise sine cyclic   0.475    -8.2°
+Rotor 1st torsional cosine cyclic   0.312   -52.9°
+Rotor 1st torsional sine cyclic   0.117    17.8°
+Rotor 4th edgewise cosine cyclic   0.041   -64.3°
+Rotor 6th flapwise sine cyclic   0.044   121.5°
+Rotor 6th flapwise cosine cyclic   0.040    -2.0°
+Rotor 5th flapwise cosine cyclic   0.037   -36.3°
+Rotor 4th edgewise sine cyclic   0.020     5.8°
+Rotor 7th flapwise collective   0.019   -19.8°
+
+------ Rotor 7th flapwise collective ------
+Rotor 7th flapwise collective   0.430   -20.1°
+Rotor 1st torsional collective   0.443     4.3°
+Rotor 4th edgewise collective   0.229    65.1°
+Rotor 3rd edgewise collective   0.221    89.8°
+Rotor 6th flapwise collective   0.255   107.0°
+Rotor 2nd edgewise collective   0.283   -84.9°
+Rotor 1st edgewise collective   0.502    91.7°
+Low-speed Shaft            0.004   114.5°
+Rotor 3rd flapwise collective   0.155   -96.5°
+Rotor 2nd flapwise collective   0.270   -99.8°
+
+------ Rotor 7th flapwise sine cyclic ------
+Rotor 7th flapwise sine cyclic   0.699   -96.1°
+Rotor 1st torsional sine cyclic   0.410  -152.5°
+Rotor 1st torsional cosine cyclic   0.326   -62.3°
+Rotor 7th flapwise cosine cyclic   0.448    -0.7°
+Rotor 4th edgewise sine cyclic   0.054  -119.0°
+Rotor 4th edgewise cosine cyclic   0.047   -28.7°
+Rotor 7th flapwise collective   0.040   -72.5°
+Rotor 6th flapwise sine cyclic   0.041    82.5°
+Rotor 3rd edgewise sine cyclic   0.039  -159.5°
+Rotor 3rd edgewise cosine cyclic   0.039   -67.2°
+
+------ Rotor 7th flapwise collective ------
+Rotor 7th flapwise collective   0.868   -95.2°
+Rotor 1st torsional collective   0.289    83.7°
+Rotor 4th edgewise collective   0.112  -109.1°
+Rotor 2nd edgewise collective   0.128    57.6°
+Rotor 3rd edgewise collective   0.088  -134.4°
+Rotor 1st edgewise collective   0.232  -123.1°
+Rotor 6th flapwise collective   0.096   -96.2°
+Low-speed Shaft            0.002   -99.6°
+Rotor 5th flapwise collective   0.069    28.9°
+Rotor 3rd flapwise collective   0.082    56.1°
+
+------ Rotor 7th flapwise forward whirl ------
+Rotor 7th flapwise sine cyclic   0.745   -93.7°
+Rotor 7th flapwise cosine cyclic   0.547   -11.5°
+Rotor 1st torsional sine cyclic   0.277   -62.9°
+Rotor 1st torsional cosine cyclic   0.230    23.2°
+Rotor 4th edgewise sine cyclic   0.033   -80.4°
+Rotor 4th edgewise cosine cyclic   0.028    -2.3°
+Rotor 6th flapwise sine cyclic   0.026    41.4°
+Rotor 4th flapwise sine cyclic   0.036   -92.3°
+Rotor 2nd edgewise sine cyclic   0.022   -79.9°
+Rotor 5th flapwise cosine cyclic   0.024    31.6°
+
+------ Rotor 4th edgewise backward whirl ------
+Rotor 4th edgewise sine cyclic   0.541   -91.6°
+Rotor 4th edgewise cosine cyclic   0.432   175.5°
+Rotor 1st torsional sine cyclic   0.456   110.8°
+Rotor 1st torsional cosine cyclic   0.360    16.7°
+Rotor 7th flapwise sine cyclic   0.327    79.2°
+Rotor 7th flapwise cosine cyclic   0.253    -9.9°
+Rotor 4th flapwise sine cyclic   0.045    11.3°
+Rotor 4th flapwise cosine cyclic   0.026   -76.0°
+Rotor 5th flapwise sine cyclic   0.016   143.8°
+Rotor 2nd flapwise sine cyclic   0.054   -31.4°
+
+------ Rotor 4th edgewise forward whirl ------
+Rotor 4th edgewise cosine cyclic   0.540   -91.6°
+Rotor 4th edgewise sine cyclic   0.456   178.0°
+Rotor 1st torsional cosine cyclic   0.449   108.9°
+Rotor 1st torsional sine cyclic   0.382    17.9°
+Rotor 7th flapwise cosine cyclic   0.297    88.7°
+Rotor 7th flapwise sine cyclic   0.238     2.4°
+Rotor 6th flapwise sine cyclic   0.021   -80.1°
+Rotor 6th flapwise cosine cyclic   0.014    20.3°
+Rotor 5th flapwise sine cyclic   0.014   -40.2°
+Rotor 3rd flapwise sine cyclic   0.027  -104.3°
+
+------ Rotor 4th edgewise collective ------
+Rotor 4th edgewise collective   0.268    75.7°
+Rotor 2nd edgewise collective   0.369    84.4°
+Rotor 1st edgewise collective   0.682   -95.7°
+Rotor 3rd edgewise collective   0.171   -95.2°
+Rotor 6th flapwise collective   0.196   -94.6°
+Low-speed Shaft            0.006   -81.6°
+Rotor 1st torsional collective   0.148   -98.3°
+Rotor 3rd flapwise collective   0.206    84.3°
+Rotor 2nd flapwise collective   0.378    84.1°
+Rotor 7th flapwise collective   0.117  -104.0°
+
+
+-------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------------------
+
+2nd operating point. Wind speed = 10.000, rotor speed = 1.047
+-------------------------------------------------------------------------------------------------
+------ Tower 1st side-side mode ------
+Tower 1st side-side mode   0.412   -52.8°
+Tower 1st fore-aft mode    0.109  -159.1°
+Rotor 1st edgewise cosine cyclic   0.222   -40.9°
+Rotor 1st flapwise cosine cyclic   0.748   -90.5°
+Rotor 1st flapwise collective   0.293    70.9°
+Rotor 1st edgewise sine cyclic   0.074    71.3°
+Rotor 1st flapwise sine cyclic   0.318   -62.4°
+Rotor 2nd edgewise cosine cyclic   0.033   132.9°
+Rotor 2nd flapwise cosine cyclic   0.102   -13.2°
+Rotor 5th flapwise cosine cyclic   0.016   149.2°
+
+------ Tower 1st fore-aft mode ------
+Tower 1st fore-aft mode    0.261  -143.3°
+Tower 1st side-side mode   0.020    41.0°
+Rotor 1st flapwise collective   0.719    87.1°
+Rotor 1st flapwise cosine cyclic   0.609   111.6°
+Rotor 2nd flapwise collective   0.111    22.9°
+Rotor 1st edgewise collective   0.038    46.5°
+Rotor 1st edgewise cosine cyclic   0.036   -57.3°
+Rotor 2nd flapwise cosine cyclic   0.089     8.4°
+Rotor 2nd flapwise sine cyclic   0.092    85.0°
+Rotor 3rd flapwise collective   0.015  -102.2°
+
+------ Rotor 1st edgewise backward whirl ------
+Rotor 1st edgewise sine cyclic   0.183    90.4°
+Rotor 1st edgewise cosine cyclic   0.178     0.5°
+Rotor 1st flapwise cosine cyclic   0.694   -80.7°
+Rotor 1st flapwise sine cyclic   0.640     7.6°
+Tower 1st side-side mode   0.003  -124.3°
+Rotor 2nd flapwise cosine cyclic   0.139    29.3°
+Rotor 2nd flapwise sine cyclic   0.144   119.2°
+Rotor 3rd edgewise cosine cyclic   0.020  -167.0°
+Rotor 3rd edgewise sine cyclic   0.020   -77.1°
+Rotor 5th flapwise sine cyclic   0.018   -77.5°
+
+------ Rotor 1st flapwise collective ------
+Rotor 1st flapwise collective   0.978   180.0°
+Rotor 2nd flapwise collective   0.197   180.0°
+Rotor 1st edgewise collective   0.058   180.0°
+Rotor 2nd edgewise collective   0.012     0.0°
+Rotor 3rd flapwise collective   0.011   180.0°
+Tower 1st fore-aft mode    0.003   180.0°
+Rotor 4th flapwise collective   0.006   180.0°
+Rotor 5th flapwise collective   0.002   180.0°
+Rotor 1st flapwise sine cyclic   0.017   180.0°
+Rotor 1st flapwise cosine cyclic   0.014   180.0°
+
+------ Rotor 1st flapwise forward whirl ------
+Rotor 1st flapwise cosine cyclic   0.679  -163.0°
+Rotor 1st flapwise sine cyclic   0.663   106.2°
+Rotor 2nd flapwise cosine cyclic   0.223  -163.5°
+Rotor 2nd flapwise sine cyclic   0.217   106.4°
+Tower 1st side-side mode   0.002   130.5°
+Rotor 1st edgewise cosine cyclic   0.025  -159.4°
+Rotor 1st edgewise sine cyclic   0.025   106.4°
+Rotor 3rd flapwise sine cyclic   0.020   106.8°
+Rotor 2nd edgewise sine cyclic   0.010   -73.2°
+Rotor 3rd flapwise cosine cyclic   0.021  -164.9°
+
+------ Rotor 1st edgewise forward whirl ------
+Rotor 1st edgewise cosine cyclic   0.196    -3.6°
+Rotor 1st edgewise sine cyclic   0.197   -90.3°
+Rotor 1st flapwise cosine cyclic   0.704   -85.4°
+Rotor 1st flapwise sine cyclic   0.613  -172.7°
+Tower 1st side-side mode   0.003  -174.9°
+Rotor 2nd flapwise sine cyclic   0.170   -65.8°
+Rotor 2nd flapwise cosine cyclic   0.138    29.7°
+Rotor 3rd edgewise cosine cyclic   0.022  -170.5°
+Rotor 5th flapwise cosine cyclic   0.020  -171.7°
+Rotor 3rd edgewise sine cyclic   0.020   103.4°
+
+------ Rotor 2nd flapwise backward whirl ------
+Rotor 2nd flapwise sine cyclic   0.499   175.7°
+Rotor 2nd flapwise cosine cyclic   0.437    80.3°
+Rotor 1st flapwise sine cyclic   0.576  -148.4°
+Rotor 1st flapwise cosine cyclic   0.446   118.2°
+Rotor 3rd flapwise sine cyclic   0.086   142.0°
+Rotor 1st edgewise sine cyclic   0.077   176.2°
+Rotor 2nd edgewise sine cyclic   0.043   -47.9°
+Rotor 1st edgewise cosine cyclic   0.067    79.9°
+Rotor 3rd flapwise cosine cyclic   0.076    46.5°
+Rotor 2nd edgewise cosine cyclic   0.039  -145.7°
+
+------ Rotor 2nd flapwise sine cyclic ------
+Rotor 2nd flapwise sine cyclic   0.618  -108.9°
+Rotor 3rd flapwise sine cyclic   0.226   176.8°
+Rotor 2nd flapwise cosine cyclic   0.555   164.5°
+Tower 1st torsional mode   0.001   143.9°
+Rotor 3rd flapwise cosine cyclic   0.191    86.6°
+Rotor 2nd edgewise sine cyclic   0.084   -33.7°
+Rotor 2nd edgewise cosine cyclic   0.073  -130.0°
+Rotor 1st flapwise sine cyclic   0.396   -67.3°
+Rotor 1st edgewise sine cyclic   0.087   -95.8°
+Rotor 1st edgewise cosine cyclic   0.063   171.6°
+
+------ Rotor 2nd flapwise collective B ------
+Rotor 2nd flapwise collective   0.825   -96.1°
+Rotor 1st edgewise collective   0.284   -99.2°
+Rotor 3rd flapwise collective   0.141   168.7°
+Rotor 1st flapwise collective   0.465   164.6°
+Rotor 3rd edgewise collective   0.031   138.5°
+Rotor 5th flapwise collective   0.029   142.8°
+Rotor 4th flapwise collective   0.025   132.4°
+Rotor 2nd edgewise collective   0.024   -50.6°
+Rotor 6th flapwise collective   0.014   -32.0°
+Rotor 4th edgewise collective   0.005   -48.5°
+
+------ Rotor 3rd flapwise coforward whirl ------
+Rotor 3rd flapwise cosine cyclic   0.301  -168.3°
+Rotor 2nd flapwise cosine cyclic   0.653  -107.9°
+Rotor 3rd flapwise sine cyclic   0.243   101.1°
+Rotor 2nd flapwise sine cyclic   0.557   150.5°
+Rotor 2nd edgewise cosine cyclic   0.107   -27.7°
+Rotor 2nd edgewise sine cyclic   0.068  -115.1°
+Rotor 4th flapwise cosine cyclic   0.052   139.8°
+Rotor 3rd edgewise cosine cyclic   0.032  -119.5°
+Rotor 5th flapwise cosine cyclic   0.030  -154.1°
+Rotor 1st edgewise cosine cyclic   0.064  -101.7°
+
+------ Rotor 2nd flapwise collective ------
+Rotor 2nd flapwise collective   0.664     3.4°
+Rotor 1st flapwise collective   0.722    31.2°
+Rotor 3rd flapwise collective   0.115   -21.9°
+Rotor 2nd edgewise collective   0.065   154.6°
+Rotor 1st edgewise collective   0.117    20.3°
+Rotor 4th flapwise collective   0.035   -18.3°
+Rotor 5th flapwise collective   0.019     2.8°
+Rotor 3rd edgewise collective   0.013    52.3°
+Rotor 6th flapwise collective   0.006  -154.9°
+Rotor 7th flapwise collective   0.007   -50.2°
+
+------ Rotor 3rd flapwise cosine cyclic ------
+Rotor 3rd flapwise cosine cyclic   0.354    79.4°
+Tower 1st torsional mode   0.002  -128.8°
+Rotor 3rd flapwise sine cyclic   0.284   175.6°
+Rotor 2nd flapwise sine cyclic   0.466  -161.9°
+Rotor 4th flapwise sine cyclic   0.113    70.0°
+Rotor 4th flapwise cosine cyclic   0.100   -27.9°
+Rotor 1st flapwise sine cyclic   0.571    83.3°
+Rotor 2nd flapwise cosine cyclic   0.345   127.0°
+Rotor 2nd edgewise cosine cyclic   0.079   -93.3°
+Rotor 2nd edgewise sine cyclic   0.043    42.8°
+
+------ Rotor 3rd edgewise collective B ------
+Rotor 3rd edgewise collective   0.229  -145.6°
+Rotor 5th flapwise collective   0.180  -143.7°
+Rotor 2nd edgewise collective   0.175  -169.7°
+Rotor 6th flapwise collective   0.091    32.7°
+Rotor 2nd flapwise collective   0.609   -32.6°
+Rotor 1st torsional collective   0.097    56.5°
+Rotor 1st flapwise collective   0.689   -50.8°
+Rotor 4th edgewise collective   0.030    49.5°
+Rotor 4th flapwise collective   0.089  -165.7°
+Rotor 7th flapwise collective   0.073    60.6°
+
+------ Rotor 2nd flapwise forward whirl ------
+Rotor 2nd flapwise sine cyclic   0.484  -173.5°
+Rotor 2nd flapwise cosine cyclic   0.398   -86.2°
+Rotor 1st flapwise sine cyclic   0.588  -136.4°
+Rotor 1st flapwise cosine cyclic   0.487   -46.5°
+Rotor 3rd flapwise sine cyclic   0.084   152.7°
+Rotor 1st edgewise sine cyclic   0.076  -172.1°
+Rotor 2nd edgewise sine cyclic   0.043   -35.7°
+Rotor 1st edgewise cosine cyclic   0.060   -83.6°
+Rotor 3rd flapwise cosine cyclic   0.060  -117.4°
+Rotor 2nd edgewise cosine cyclic   0.031    58.8°
+
+------ Rotor 3rd flapwise collective ------
+Rotor 3rd flapwise collective   0.834  -102.8°
+Rotor 2nd edgewise collective   0.225    70.5°
+Rotor 4th flapwise collective   0.156   179.6°
+Rotor 1st edgewise collective   0.170    76.3°
+Rotor 2nd flapwise collective   0.411   -40.6°
+Low-speed Shaft            0.001  -161.0°
+Rotor 3rd edgewise collective   0.036   -60.8°
+Rotor 5th flapwise collective   0.027  -140.5°
+Rotor 2nd edgewise cosine cyclic   0.033   -53.6°
+Rotor 6th flapwise collective   0.014   105.4°
+
+------ Rotor 2nd edgewise cobackward whirl ------
+Rotor 2nd edgewise cosine cyclic   0.256   -83.1°
+Rotor 3rd flapwise cosine cyclic   0.444   114.4°
+Rotor 2nd edgewise sine cyclic   0.160     3.2°
+Rotor 3rd flapwise sine cyclic   0.296  -148.9°
+Tower 1st torsional mode   0.002    -3.2°
+Tower 2nd side-side mode   0.001    36.5°
+Rotor 2nd flapwise cosine cyclic   0.588   -95.9°
+Rotor 4th flapwise cosine cyclic   0.113    58.5°
+Rotor 4th flapwise sine cyclic   0.117   156.5°
+Rotor 2nd flapwise sine cyclic   0.426   -16.0°
+
+------ Low-speed Shaft ------
+Low-speed Shaft            0.100  -152.5°
+Rotor 2nd edgewise collective   0.237   -43.5°
+Rotor 1st edgewise collective   0.398   154.9°
+Rotor 3rd flapwise collective   0.224  -142.6°
+Rotor 2nd flapwise collective   0.663  -133.5°
+Rotor 4th flapwise collective   0.083   176.1°
+Rotor 1st flapwise collective   0.512  -140.0°
+Rotor 5th flapwise collective   0.046  -133.5°
+Rotor 6th flapwise collective   0.036    80.8°
+Rotor 3rd edgewise collective   0.039   -86.4°
+
+------ Tower 2nd side-side mode ------
+Tower 2nd side-side mode   0.006   -58.9°
+Rotor 2nd edgewise cosine cyclic   0.303    79.3°
+Rotor 3rd flapwise cosine cyclic   0.445   -99.2°
+Tower 1st torsional mode   0.002   164.9°
+Rotor 3rd flapwise sine cyclic   0.290    49.6°
+Rotor 4th flapwise sine cyclic   0.154   -33.1°
+Rotor 2nd flapwise cosine cyclic   0.580    85.9°
+Rotor 2nd edgewise sine cyclic   0.108  -154.6°
+Rotor 3rd edgewise cosine cyclic   0.077    51.8°
+Rotor 4th flapwise cosine cyclic   0.092  -163.2°
+
+------ Rotor 2nd edgewise sine cyclic ------
+Rotor 2nd edgewise sine cyclic   0.321    87.5°
+Rotor 3rd flapwise sine cyclic   0.544   -96.1°
+Tower 1st torsional mode   0.002    78.0°
+Rotor 2nd edgewise cosine cyclic   0.186   176.3°
+Rotor 3rd flapwise cosine cyclic   0.335   -25.4°
+Rotor 4th flapwise sine cyclic   0.187  -146.8°
+Rotor 2nd flapwise sine cyclic   0.529    82.3°
+Rotor 5th flapwise sine cyclic   0.056    92.4°
+Rotor 4th flapwise cosine cyclic   0.081  -133.6°
+Rotor 3rd edgewise sine cyclic   0.052    68.1°
+
+------ Tower 1st torsional mode ------
+Tower 1st torsional mode   0.002    86.6°
+Rotor 3rd flapwise cosine cyclic   0.200  -138.7°
+Rotor 1st flapwise sine cyclic   0.728   -92.4°
+Rotor 2nd edgewise cosine cyclic   0.098    24.6°
+Rotor 1st flapwise cosine cyclic   0.534     8.2°
+Rotor 2nd edgewise sine cyclic   0.069   -97.4°
+Rotor 3rd flapwise sine cyclic   0.130    56.2°
+Rotor 2nd flapwise cosine cyclic   0.285     0.2°
+Rotor 4th flapwise sine cyclic   0.055  -102.7°
+Rotor 3rd edgewise cosine cyclic   0.036   -54.7°
+
+------ Rotor 3rd edgewise forward whirl ------
+Rotor 3rd edgewise sine cyclic   0.134     1.9°
+Rotor 3rd edgewise cosine cyclic   0.130    91.2°
+Rotor 2nd edgewise sine cyclic   0.146     2.4°
+Rotor 2nd edgewise cosine cyclic   0.139    92.8°
+Rotor 2nd flapwise cosine cyclic   0.463   -88.2°
+Rotor 2nd flapwise sine cyclic   0.474  -177.7°
+Rotor 1st torsional cosine cyclic   0.099   -87.9°
+Rotor 1st torsional sine cyclic   0.102  -178.0°
+Rotor 5th flapwise sine cyclic   0.071     1.9°
+Rotor 5th flapwise cosine cyclic   0.069    91.8°
+
+------ Rotor 4th flapwise collective ------
+Rotor 4th flapwise collective   0.843   -98.8°
+Rotor 2nd edgewise collective   0.185   120.9°
+Rotor 4th flapwise cosine cyclic   0.283  -165.9°
+Rotor 4th flapwise sine cyclic   0.208   -55.5°
+Rotor 3rd edgewise collective   0.085   106.5°
+Rotor 3rd flapwise collective   0.132    21.9°
+Rotor 1st edgewise collective   0.184   -70.8°
+Low-speed Shaft            0.002   -15.9°
+Rotor 6th flapwise collective   0.057   169.7°
+Rotor 5th flapwise collective   0.054   179.2°
+
+------ Rotor 4th flapwise backward whirl ------
+Rotor 4th flapwise cosine cyclic   0.782   -98.3°
+Rotor 4th flapwise sine cyclic   0.502     3.0°
+Rotor 4th flapwise collective   0.182    17.9°
+Rotor 6th flapwise cosine cyclic   0.054   154.9°
+Rotor 5th flapwise cosine cyclic   0.062  -146.9°
+Rotor 3rd flapwise sine cyclic   0.145   139.5°
+Rotor 2nd edgewise sine cyclic   0.073   -55.4°
+Rotor 2nd edgewise cosine cyclic   0.078   173.4°
+Rotor 5th flapwise sine cyclic   0.052   -37.0°
+Rotor 2nd edgewise collective   0.045  -128.6°
+
+------ Rotor 4th flapwise forward whirl ------
+Rotor 4th flapwise sine cyclic   0.783   -97.7°
+Rotor 4th flapwise cosine cyclic   0.537    -6.6°
+Tower 1st torsional mode   0.001  -109.0°
+Rotor 3rd flapwise sine cyclic   0.177    32.2°
+Rotor 5th flapwise sine cyclic   0.074  -132.0°
+Rotor 6th flapwise sine cyclic   0.059   165.7°
+Rotor 6th flapwise cosine cyclic   0.047  -123.0°
+Rotor 2nd edgewise sine cyclic   0.068  -147.8°
+Rotor 3rd edgewise cosine cyclic   0.041    77.4°
+Rotor 3rd flapwise cosine cyclic   0.103   101.1°
+
+------ Rotor 3rd edgewise backward whirl ------
+Rotor 3rd edgewise cosine cyclic   0.169  -143.4°
+Rotor 3rd edgewise sine cyclic   0.169   -53.5°
+Rotor 5th flapwise sine cyclic   0.135   -52.4°
+Rotor 5th flapwise cosine cyclic   0.136  -142.4°
+Rotor 2nd edgewise sine cyclic   0.146   -83.8°
+Rotor 2nd edgewise cosine cyclic   0.147  -174.5°
+Rotor 6th flapwise cosine cyclic   0.070    33.4°
+Rotor 6th flapwise sine cyclic   0.069   123.7°
+Rotor 2nd flapwise cosine cyclic   0.416   -30.4°
+Rotor 2nd flapwise sine cyclic   0.414    59.2°
+
+------ Rotor 2nd edgewise collective ------
+Rotor 2nd edgewise collective   0.380  -112.6°
+Rotor 3rd edgewise collective   0.299  -106.7°
+Rotor 4th flapwise collective   0.253  -138.7°
+Rotor 1st edgewise collective   0.474    72.0°
+Low-speed Shaft            0.004   126.3°
+Rotor 1st torsional collective   0.150  -110.2°
+Rotor 7th flapwise collective   0.122  -110.8°
+Rotor 6th flapwise collective   0.083    57.3°
+Rotor 5th flapwise collective   0.092  -114.2°
+Rotor 2nd flapwise collective   0.475   -91.9°
+
+------ Rotor 3rd edgewise forward whirl ------
+Rotor 3rd edgewise cosine cyclic   0.171  -146.8°
+Rotor 3rd edgewise sine cyclic   0.166   123.0°
+Rotor 5th flapwise cosine cyclic   0.137  -145.2°
+Rotor 5th flapwise sine cyclic   0.133   124.4°
+Rotor 2nd edgewise sine cyclic   0.144    91.7°
+Rotor 2nd edgewise cosine cyclic   0.150  -177.1°
+Rotor 6th flapwise cosine cyclic   0.070    30.3°
+Rotor 6th flapwise sine cyclic   0.068   -60.5°
+Rotor 2nd flapwise cosine cyclic   0.417   -33.3°
+Rotor 2nd flapwise sine cyclic   0.402  -122.8°
+
+------ Rotor 3rd edgewise collective ------
+Rotor 3rd edgewise collective   0.188     0.0°
+Rotor 2nd edgewise collective   0.188     0.0°
+Rotor 1st torsional collective   0.141   180.0°
+Rotor 2nd flapwise collective   0.678   180.0°
+Rotor 7th flapwise collective   0.132   180.0°
+Rotor 5th flapwise collective   0.099     0.0°
+Rotor 3rd flapwise collective   0.144   180.0°
+Rotor 6th flapwise collective   0.072   180.0°
+Rotor 4th edgewise collective   0.029   180.0°
+Rotor 1st flapwise collective   0.616   180.0°
+
+------ Rotor 6th flapwise backward whirl ------
+Rotor 6th flapwise cosine cyclic   0.383   -95.5°
+Rotor 6th flapwise sine cyclic   0.321     9.8°
+Rotor 3rd edgewise cosine cyclic   0.277   114.1°
+Rotor 5th flapwise cosine cyclic   0.264   -95.2°
+Rotor 3rd edgewise sine cyclic   0.249  -139.4°
+Rotor 1st torsional cosine cyclic   0.283   114.1°
+Rotor 5th flapwise sine cyclic   0.201    10.2°
+Rotor 1st torsional sine cyclic   0.283  -144.6°
+Rotor 4th flapwise sine cyclic   0.247   137.2°
+Rotor 7th flapwise cosine cyclic   0.288   136.6°
+
+------ Rotor 6th flapwise forward whirl ------
+Rotor 6th flapwise sine cyclic   0.366    84.9°
+Rotor 6th flapwise cosine cyclic   0.313   167.0°
+Rotor 3rd edgewise sine cyclic   0.301   -57.3°
+Rotor 5th flapwise sine cyclic   0.251    79.2°
+Rotor 3rd edgewise cosine cyclic   0.251    29.1°
+Rotor 1st torsional sine cyclic   0.339   -51.7°
+Rotor 5th flapwise cosine cyclic   0.234   163.0°
+Rotor 1st torsional cosine cyclic   0.251    39.3°
+Rotor 7th flapwise sine cyclic   0.339   -35.5°
+Rotor 7th flapwise cosine cyclic   0.273    52.7°
+
+------ Rotor 6th flapwise collective ------
+Rotor 6th flapwise collective   0.681   -96.8°
+Rotor 5th flapwise collective   0.570   -87.2°
+Rotor 4th flapwise collective   0.224   -10.2°
+Rotor 3rd edgewise collective   0.170    92.8°
+Rotor 1st torsional collective   0.136    -1.2°
+Rotor 2nd edgewise collective   0.144   -60.9°
+Rotor 1st edgewise collective   0.240   121.5°
+Low-speed Shaft            0.002   154.0°
+Rotor 4th edgewise collective   0.028   121.3°
+Rotor 3rd flapwise collective   0.083   -50.5°
+
+------ Rotor 1st torsional backward whirl ------
+Rotor 1st torsional cosine cyclic   0.449  -102.4°
+Rotor 1st torsional sine cyclic   0.445   -10.4°
+Rotor 6th flapwise cosine cyclic   0.230   148.5°
+Rotor 6th flapwise sine cyclic   0.234  -119.5°
+Rotor 7th flapwise cosine cyclic   0.352   -89.5°
+Rotor 7th flapwise sine cyclic   0.349     2.3°
+Rotor 3rd edgewise cosine cyclic   0.165  -132.7°
+Rotor 3rd edgewise sine cyclic   0.163   -39.6°
+Rotor 5th flapwise sine cyclic   0.127   -67.7°
+Rotor 5th flapwise cosine cyclic   0.124  -158.2°
+
+------ Rotor 1st torsional backward whirl ------
+Rotor 1st torsional cosine cyclic   0.428    -2.2°
+Rotor 6th flapwise sine cyclic   0.281   140.3°
+Rotor 1st torsional sine cyclic   0.446  -101.9°
+Rotor 6th flapwise cosine cyclic   0.236  -118.9°
+Rotor 7th flapwise sine cyclic   0.345   -94.6°
+Rotor 7th flapwise cosine cyclic   0.330    10.9°
+Rotor 3rd edgewise cosine cyclic   0.164   -35.3°
+Rotor 3rd edgewise sine cyclic   0.162  -132.6°
+Rotor 5th flapwise sine cyclic   0.126  -176.3°
+Rotor 4th edgewise cosine cyclic   0.057    16.0°
+
+------ Rotor 1st torsional forward whirl ------
+Rotor 1st torsional cosine cyclic   0.435   -86.1°
+Rotor 1st torsional sine cyclic   0.432  -173.4°
+Rotor 7th flapwise cosine cyclic   0.426   -90.8°
+Rotor 7th flapwise sine cyclic   0.421  -178.7°
+Rotor 3rd edgewise cosine cyclic   0.184   -44.6°
+Rotor 3rd edgewise sine cyclic   0.180  -132.6°
+Rotor 6th flapwise cosine cyclic   0.134    10.9°
+Rotor 6th flapwise sine cyclic   0.129   -78.5°
+Rotor 4th edgewise cosine cyclic   0.065   -88.5°
+Rotor 4th edgewise sine cyclic   0.063  -176.1°
+
+------ Rotor 1st torsional collective B ------
+Rotor 1st torsional collective   0.559  -103.5°
+Rotor 6th flapwise collective   0.319   111.5°
+Rotor 7th flapwise collective   0.411   -71.5°
+Rotor 2nd edgewise collective   0.306   -65.0°
+Rotor 4th edgewise collective   0.085  -131.5°
+Rotor 1st edgewise collective   0.460   121.9°
+Low-speed Shaft            0.004   150.8°
+Rotor 3rd edgewise collective   0.151   150.4°
+Rotor 5th flapwise collective   0.125  -109.8°
+Rotor 3rd flapwise collective   0.078    -9.5°
+
+------ Rotor 7th flapwise backward whirl ------
+Rotor 7th flapwise cosine cyclic   0.757    83.9°
+Rotor 7th flapwise sine cyclic   0.610  -177.0°
+Rotor 4th edgewise cosine cyclic   0.059    75.6°
+Rotor 4th edgewise sine cyclic   0.049   174.7°
+Rotor 6th flapwise cosine cyclic   0.072  -176.5°
+Rotor 6th flapwise sine cyclic   0.071   -59.6°
+Rotor 1st torsional cosine cyclic   0.052   -24.4°
+Rotor 5th flapwise cosine cyclic   0.037   141.1°
+Rotor 5th flapwise sine cyclic   0.033   -95.6°
+Rotor 2nd edgewise sine cyclic   0.034   163.0°
+
+------ Rotor 1st torsional collective ------
+Rotor 1st torsional collective   0.537   -84.8°
+Rotor 7th flapwise collective   0.526  -100.9°
+Rotor 4th edgewise collective   0.108   -39.6°
+Rotor 6th flapwise collective   0.235    58.7°
+Rotor 2nd edgewise collective   0.253  -122.7°
+Rotor 3rd edgewise collective   0.188    17.5°
+Rotor 1st edgewise collective   0.418    45.1°
+Rotor 5th flapwise collective   0.144   -97.4°
+Low-speed Shaft            0.003    65.7°
+Rotor 3rd flapwise collective   0.122   177.3°
+
+------ Rotor 1st torsional backward whirl ------
+Rotor 1st torsional sine cyclic   0.477    93.6°
+Rotor 1st torsional cosine cyclic   0.358    23.3°
+Rotor 7th flapwise sine cyclic   0.471    95.5°
+Rotor 3rd edgewise sine cyclic   0.213   132.7°
+Rotor 7th flapwise cosine cyclic   0.361    21.9°
+Rotor 6th flapwise sine cyclic   0.161  -150.9°
+Rotor 3rd edgewise cosine cyclic   0.159    66.7°
+Rotor 6th flapwise cosine cyclic   0.129   130.0°
+Rotor 4th edgewise sine cyclic   0.072    94.0°
+Rotor 4th edgewise cosine cyclic   0.057    22.3°
+
+------ Rotor 7th flapwise collective ------
+Rotor 7th flapwise collective   0.870   -96.5°
+Rotor 1st torsional collective   0.304    82.0°
+Rotor 4th edgewise collective   0.102  -100.3°
+Rotor 6th flapwise collective   0.133   -63.0°
+Rotor 2nd edgewise collective   0.119    74.5°
+Rotor 1st edgewise collective   0.223  -106.9°
+Rotor 3rd edgewise collective   0.083  -123.7°
+Rotor 5th flapwise collective   0.084    16.6°
+Low-speed Shaft            0.002   -83.7°
+Rotor 3rd flapwise collective   0.084    69.4°
+
+------ Rotor 7th flapwise forward whirl ------
+Rotor 7th flapwise sine cyclic   0.762   -96.0°
+Rotor 7th flapwise cosine cyclic   0.608    -7.7°
+Rotor 4th edgewise sine cyclic   0.061  -106.9°
+Rotor 4th edgewise cosine cyclic   0.050   -23.1°
+Rotor 6th flapwise sine cyclic   0.062    28.6°
+Rotor 6th flapwise cosine cyclic   0.038    95.3°
+Rotor 5th flapwise cosine cyclic   0.036    49.7°
+Rotor 7th flapwise collective   0.032    25.7°
+Rotor 5th flapwise sine cyclic   0.035   -21.9°
+Rotor 2nd edgewise sine cyclic   0.040   -93.6°
+
+------ Rotor 4th edgewise backward whirl ------
+Rotor 4th edgewise sine cyclic   0.398    77.0°
+Rotor 4th edgewise cosine cyclic   0.348   -15.1°
+Rotor 1st torsional sine cyclic   0.512   -92.1°
+Rotor 1st torsional cosine cyclic   0.437   175.3°
+Rotor 7th flapwise sine cyclic   0.360  -116.6°
+Rotor 7th flapwise cosine cyclic   0.303   154.8°
+Rotor 5th flapwise sine cyclic   0.039   -91.7°
+Rotor 4th flapwise sine cyclic   0.053   163.8°
+Rotor 5th flapwise cosine cyclic   0.030   167.3°
+Rotor 6th flapwise sine cyclic   0.023    69.8°
+
+------ Rotor 4th edgewise forward whirl ------
+Rotor 4th edgewise cosine cyclic   0.403    78.0°
+Rotor 4th edgewise sine cyclic   0.359   -11.4°
+Rotor 1st torsional cosine cyclic   0.508   -92.1°
+Rotor 1st torsional sine cyclic   0.457   178.1°
+Rotor 7th flapwise cosine cyclic   0.338  -108.4°
+Rotor 7th flapwise sine cyclic   0.294   164.6°
+Rotor 5th flapwise sine cyclic   0.037   150.6°
+Rotor 5th flapwise cosine cyclic   0.037  -112.3°
+Rotor 6th flapwise sine cyclic   0.031    46.7°
+Rotor 6th flapwise cosine cyclic   0.026   127.3°
+
+------ Rotor 4th edgewise collective ------
+Rotor 4th edgewise collective   0.278  -103.0°
+Rotor 2nd edgewise collective   0.354   -95.2°
+Rotor 1st edgewise collective   0.672    84.6°
+Low-speed Shaft            0.006    97.9°
+Rotor 6th flapwise collective   0.184    86.0°
+Rotor 1st torsional collective   0.180    77.5°
+Rotor 3rd edgewise collective   0.166    85.8°
+Rotor 3rd flapwise collective   0.207   -96.1°
+Rotor 7th flapwise collective   0.141    71.3°
+Rotor 5th flapwise collective   0.076   -94.2°
+
+
+-------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------------------
+
