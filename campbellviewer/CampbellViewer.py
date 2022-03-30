@@ -16,13 +16,14 @@
 ########################################################################################
 #
 # --------------------------------------------------------------------------------------
-# This is a first try to build a simple postprocessing GUI for HAWCStab2.
+# Simple postprocessing GUI for wind turbine linearization results.
 #
 #
-# Purpose: Create Campbell-Plots from HAWCStab2 result files (*.cmp, *.amp, *.op).
+# Purpose: Create Interactive Campbell-Plots, participation plots, mode visualizations, etc.
 #
 # author: J.Rieke - Nordex Energy GmbH
-#
+#         H.Verdonck - DLR
+#         O.Hach - DLR
 #
 # --------------------------------------------------------------------------------------
 # There is NO warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
@@ -30,11 +31,12 @@
 
 import sys
 import numpy as np
+import copy
 
 from PyQt5 import QtCore
 from PyQt5.QtWidgets import QApplication, QMainWindow, QMenu, QVBoxLayout, QHBoxLayout, QSizePolicy, QMessageBox, QWidget, QDialog
 from PyQt5.QtWidgets import QInputDialog, QLineEdit, QFileDialog, QPushButton, QLabel, QTableWidget, QTableWidgetItem, QSpinBox
-from PyQt5.QtWidgets import QStyleFactory
+from PyQt5.QtWidgets import QStyleFactory, QCheckBox, QComboBox, QTableView, QListView, QTreeView
 from PyQt5.QtGui  import QIcon
 from PyQt5.QtCore import QFileInfo
 
@@ -44,6 +46,9 @@ from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.backends.backend_qt5agg import NavigationToolbar2QT as NavigationToolbar
 from matplotlib.figure import Figure
 import mplcursors
+from model_lib import DatasetTableModel, ModeTableModel, TreeModel
+from globals import database, view_cfg
+from utilities import assure_unique_name
 
 matplotlib.rcParams['hatch.color']     = 'grey'
 matplotlib.rcParams['hatch.linewidth'] = 0.2
@@ -51,18 +56,56 @@ matplotlib.rcParams['hatch.linewidth'] = 0.2
 # activate clipboard --> not working currently!
 #~ matplotlib.rcParams['toolbar'] = 'toolmanager'
 
-
-####
-# Some data classes
-class AmpDataSensor(object):
-    '''A small class for storing the amplitude data in a sorted way.'''
-    def __init__(self, number_of_windspeeds, numberDOFs, number_of_modes):
-        self.name      = []
-        self.amplitude = np.empty([number_of_windspeeds, numberDOFs, number_of_modes])
-        self.phase     = np.empty([number_of_windspeeds, numberDOFs, number_of_modes])
-
 ####
 # Popup
+class DataSelectionPopup(QDialog):
+    '''Class for popup-window to specify data type'''
+    def __init__(self, default='HAWCStab2'):
+        QDialog.__init__(self)
+        self.selected_tool = default
+        self.dataset_name = 'default'
+
+        self.setWindowTitle("Tool selection")
+        popup_layoutV = QVBoxLayout(self)
+        popup_layoutTool = QHBoxLayout(self)
+        popup_layoutName = QHBoxLayout(self)
+        popup_layoutBttn = QHBoxLayout(self)
+
+        tool_selection = QLabel('Select which data type will be loaded (default=''HAWCStab2''):')
+        self.__ToolSelection = QComboBox()
+        self.__ToolSelection.addItems(['HAWCStab2', 'Bladed (lin.)'])
+        popup_layoutTool.addWidget(tool_selection)
+        popup_layoutTool.addWidget(self.__ToolSelection)
+
+        datasetname = QLabel('Specify dataset name:')
+        self.__DataSetName = QLineEdit('default')
+        popup_layoutName.addWidget(datasetname)
+        popup_layoutName.addWidget(self.__DataSetName)
+
+        button_OK = QPushButton('OK', self)
+        button_OK.clicked.connect(self.newDataSelected)
+        popup_layoutBttn.addWidget(button_OK)
+        button_Cancel = QPushButton('Cancel', self)
+        button_Cancel.clicked.connect(self.ClosePopup)
+        popup_layoutBttn.addWidget(button_Cancel)
+
+        popup_layoutV.addLayout(popup_layoutTool)
+        popup_layoutV.addLayout(popup_layoutName)
+        popup_layoutV.addLayout(popup_layoutBttn)
+        self.exec_()
+
+    def selectTool(self):
+        return self.selected_tool, self.dataset_name
+
+    def newDataSelected(self):
+        self.selected_tool = self.__ToolSelection.currentText()
+        self.dataset_name = self.__DataSetName.text()
+        self.close()
+
+    def ClosePopup(self):
+        self.close()
+
+
 class SettingsPopup(QDialog):
     '''Class for popup-window to modify the header lines in Campbell, Amplitude and operational 
        data file as computed with HAWCStab2'''
@@ -79,7 +122,7 @@ class SettingsPopup(QDialog):
         popup_layoutHOP  = QHBoxLayout(self)
         popup_layoutBttn = QHBoxLayout(self)
         
-        headerLinesCMBL   = QLabel('Number of header lines in Cambell file:')
+        headerLinesCMBL   = QLabel('Number of header lines in Campbell file:')
         headerLinesAMPL   = QLabel('Number of header lines in Amplitude file:')
         headerLinesOPL    = QLabel('Number of header lines in Operational data file:')
         self.__headerLinesCMBE   = QSpinBox()
@@ -124,18 +167,36 @@ class SettingsPopup(QDialog):
         
 
 class SettingsPopupAMP(QDialog):
-    def __init__(self, settingsAMPmode):
+    def __init__(self):
         QDialog.__init__(self)
         
-        self.settingsAMPmode = settingsAMPmode
+        self.settingsAMPmode = None
+        self.selected_tool = list(view_cfg.active_data.keys())[0]
+        self.selected_dataset = list(view_cfg.active_data[self.selected_tool].keys())[0]
         self.setWindowTitle("Set mode number for Amplitude plot")
         popup_layoutV        = QVBoxLayout(self)
         popup_layoutAMPmode  = QHBoxLayout(self)
         popup_layoutBttn     = QHBoxLayout(self)
-        
-        AMPmode          = QLabel('Number of amplitude mode to plot:')
-        self.__AMPmode   = QSpinBox()
-        self.__AMPmode.setValue(self.settingsAMPmode)
+        popup_layoutDS       = QHBoxLayout(self)
+        popup_layouttool     = QHBoxLayout(self)
+
+        tool_selection = QLabel('Select tool:')
+        self.__ToolSelection = QComboBox()
+        self.__ToolSelection.addItems(view_cfg.active_data.keys())
+        self.__ToolSelection.currentTextChanged.connect(self.update_dataset_choice)
+        popup_layouttool.addWidget(tool_selection)
+        popup_layouttool.addWidget(self.__ToolSelection)
+
+        dataset_selection = QLabel('Select dataset:')
+        self.__DataSetSelection = QComboBox()
+        self.__DataSetSelection.addItems(view_cfg.active_data[self.selected_tool].keys())
+        self.__DataSetSelection.currentTextChanged.connect(self.update_mode_choice)
+        popup_layoutDS.addWidget(dataset_selection)
+        popup_layoutDS.addWidget(self.__DataSetSelection)
+
+        AMPmode = QLabel('Amplitude mode to plot:')
+        self.__AMPmode = QComboBox()
+        self.__AMPmode.addItems([str(database[self.selected_tool][self.selected_dataset].modes.values[mode_id].name) for mode_id in view_cfg.active_data[self.selected_tool][self.selected_dataset]])
         popup_layoutAMPmode.addWidget(AMPmode)
         popup_layoutAMPmode.addWidget(self.__AMPmode)
         
@@ -145,17 +206,30 @@ class SettingsPopupAMP(QDialog):
         button_Cancel = QPushButton('Cancel', self)
         button_Cancel.clicked.connect(self.ClosePopup)
         popup_layoutBttn.addWidget(button_Cancel)
-        
-        
+
+        popup_layoutV.addLayout(popup_layouttool)
+        popup_layoutV.addLayout(popup_layoutDS)
         popup_layoutV.addLayout(popup_layoutAMPmode)
         popup_layoutV.addLayout(popup_layoutBttn)
         self.exec_()
-        
-    def getNewSettings(self):
-        return(self.settingsAMPmode)        
 
-    def newSettings(self):  
-        self.settingsAMPmode = self.__AMPmode.value()
+    def update_dataset_choice(self):
+        self.__DataSetSelection.clear()
+        self.__DataSetSelection.addItems(view_cfg.active_data[self.__ToolSelection.currentText()].keys())
+
+    def update_mode_choice(self):
+        self.__AMPmode.clear()
+        self.__AMPmode.addItems(view_cfg.active_data[self.__ToolSelection.currentText()]
+                                [self.__DataSetSelection.currentText()])
+
+    def getNewSettings(self):
+        return self.selected_tool, self.selected_dataset, self.settingsAMPmode
+
+    def newSettings(self):
+        self.selected_tool = self.__ToolSelection.currentText()
+        self.selected_dataset = self.__DataSetSelection.currentText()
+        self.settingsAMPmode = view_cfg.active_data[self.selected_tool][self.selected_dataset][int(self.__AMPmode.currentIndex())]
+
         self.on_apply = False
         self.close()        
 
@@ -165,74 +239,54 @@ class SettingsPopupAMP(QDialog):
 
 
 ####
-# Main classes  self.AmpDataList.name
-class TableModeListClass(QTableWidget):
-    ''' Small custom table class'''
-    def __init__(self, parent=None):
-        super().__init__(parent)
-        
-    def addList(self, ListOfItems):
-        """Add items in list to table."""
-        row    = len(ListOfItems)
-        column = 1 # don't change this!
-        self.setRowCount(row)
-        self.setColumnCount(column)
-        self.setHorizontalHeaderLabels(['Mode'])
-        i=0
-        for item in ListOfItems:
-            self.setItem(i,0, QTableWidgetItem(item))
-            i+=1
-            
-    def renewListNames(self,AmpDataList):
-        """Update items in list to table."""
-        i=0
-        for item in AmpDataList:
-            self.setItem(i,0, QTableWidgetItem(item))
-            i+=1
 
 
 class AmplitudeWindow(QMainWindow):
-    def __init__(self,settingsAMPmode, data, numberDOFs, sensorList):
+    sigClosed = QtCore.pyqtSignal()
+
+    def __init__(self):
         super(AmplitudeWindow, self).__init__()
         self.setAttribute(QtCore.Qt.WA_DeleteOnClose)
         self.setWindowTitle("Amplitude Plot window")
         self.setMinimumWidth(1024)
         self.setMinimumHeight(800)
-        
+
+    def configure_plotAMP(self, requested_toolname, requested_datasetname, settingsAMPmode, dataset, AMPthreshold):
         self.settingsAMPmode = settingsAMPmode
-        self.data            = data
-        self.numberDOFs      = numberDOFs
-        self.sensorList      = sensorList
-        
-        
+        self.AMPmode_name = database[requested_toolname][requested_datasetname].modes.values[settingsAMPmode].name
+        self.dataset = dataset
+        self.AMPthreshold = AMPthreshold
+
         # Figure settings
-        self.AMPfig    = Figure(figsize=(6, 6), dpi=100, tight_layout=True)
+        self.AMPfig = Figure(figsize=(6, 6), dpi=100, tight_layout=True)
         self.AMPfig.subplots_adjust(0.06, 0.06, 0.88, 0.97) # left,bottom,right,top
         self.AMPcanvas = FigureCanvas(self.AMPfig)
-        toolbar        = NavigationToolbar(self.AMPcanvas, self)
-        
-        self.main_widget  = QWidget(self)
+        toolbar = NavigationToolbar(self.AMPcanvas, self)
+
+        self.main_widget = QWidget(self)
         self.layout_mplib = QVBoxLayout(self.main_widget)
         self.layout_mplib.addWidget(toolbar)
         self.layout_mplib.addWidget(self.AMPcanvas)
         self.main_widget.setFocus()
         self.setCentralWidget(self.main_widget)
-        
-        if hasattr(self,'axes1'):
-            uxlim=self.axes1.get_xlim()
-            uylim=self.axes1.get_ylim()
-            uy2lim=self.axes2.get_ylim()
+
+        if hasattr(self, 'axes1'):
+            uxlim = self.axes1.get_xlim()
+            uylim = self.axes1.get_ylim()
+            uy2lim = self.axes2.get_ylim()
         else:            
-            #~ uxlim  = [ 3,20]
-            uxlim  = [self.data["campbell_data"][0,0],self.data["campbell_data"][-1,0]]
+            uxlim  = [ 3,20]
+            #~ uxlim  = [self.data["campbell_data"][0,0],self.data["campbell_data"][-1,0]]
             uylim  = [0,1.1]
             uy2lim = [-180,180]
+ 
+        self.main_plotAMP(title='Amplitude participations for tool {}, dataset {}, {}, visibility threshold = {}'.format(requested_toolname, requested_datasetname, self.AMPmode_name, self.AMPthreshold),
+                          xlabel='Wind Speed in m/s', ylabel='normalized participation',
+                          y2label='phase angle in degree', xlim=uxlim, ylim=uylim, y2lim=uy2lim)
         
-        self.main_plotAMP(title='Amplitude participations for mode '+str(self.settingsAMPmode), xlabel='Wind Speed in m/s', ylabel='normalized participation', 
-                       y2label='phase angle in degree', xlim=uxlim, ylim=uylim,y2lim=uy2lim) 
-        
-    def main_plotAMP(self, title='Amplitudes', xlabel='', ylabel='', y2label='', xlim=None, ylim=None, y2lim=None, xscale='linear', yscale='linear'):
-                
+    def main_plotAMP(self, title='Amplitudes', xlabel='', ylabel='', y2label='',
+                     xlim=None, ylim=None, y2lim=None, xscale='linear', yscale='linear'):
+
         # define figure with 2 subplots
         self.axes1 = self.AMPfig.add_subplot(211)
         self.axes2 = self.AMPfig.add_subplot(212, sharex=self.axes1)
@@ -240,8 +294,7 @@ class AmplitudeWindow(QMainWindow):
         # We want the axes cleared every time plot() is called
         self.axes1.clear()
         self.axes2.clear()
-        
-        
+
         # Set label, grid, etc...
         self.axes1.set_title(title)
         self.axes1.set_xlabel(xlabel)
@@ -260,57 +313,64 @@ class AmplitudeWindow(QMainWindow):
         lw                  = 1.0
         filled_markers      = ['o', 'v', '^', '<', '>', '8', 's', 'p', '*', 'h', 'H', 'D', 'd', 'P', 'X']
         markersizedefault   = 3
-        
-        
-        mode_index=(self.settingsAMPmode-1)*self.numberDOFs*2+1
-        
-        for i in range(1,self.numberDOFs):
-            csq  = color_sequence     [(i-1) % len(color_sequence)]
+        ampl_lines = []
+        phase_lines = []
+
+        for i, mode in enumerate(self.dataset.participation_modes.values):
+            csq  = color_sequence     [(i) % len(color_sequence)]
             if i > len(color_sequence):
-                lssq = line_style_sequence[(i-1) % len(line_style_sequence)]
-                mssq = filled_markers     [(i-1) % len(filled_markers     )]
+                lssq = line_style_sequence[(i) % len(line_style_sequence)]
+                mssq = filled_markers     [(i) % len(filled_markers     )]
             else:
                 lssq = '-'
                 mssq = ''
-            self.axes1.plot(self.data["amplitude_data"][:,0], self.data["amplitude_data"][:,mode_index+  (i-1)*2],label=self.sensorList[i-1], 
-                            linewidth=lw, c=csq, linestyle=lssq, marker=mssq, markersize=markersizedefault, picker=True, pickradius=2)
-            self.axes2.plot(self.data["amplitude_data"][:,0], self.data["amplitude_data"][:,mode_index+1+(i-1)*2],label=self.sensorList[i-1], 
-                            linewidth=lw, c=csq, linestyle=lssq, marker=mssq, markersize=markersizedefault, picker=True, pickradius=2)
-  
-  
-        self.axes2.legend(bbox_to_anchor=(1, 0),loc=3)
-        cursor_upper = mplcursors.cursor(self.axes1,multiple=True) # , highlight=True
-        cursor_lower = mplcursors.cursor(self.axes2,multiple=True) # , highlight=True
-        @cursor_upper.connect("add")
-        def _(sel):
+
+            # only show modes with a part. of minimum self.AMPthreshold (for at least one of the operating points)
+            if max(self.dataset.participation_factors_amp.loc[:, i, self.settingsAMPmode]) > self.AMPthreshold:
+                ampl_line, = self.axes1.plot(self.dataset.operating_points.loc[:, 'wind speed [m/s]'],
+                                self.dataset.participation_factors_amp.loc[:, i, self.settingsAMPmode],
+                                label=mode.name, linewidth=lw, c=csq, linestyle=lssq,
+                                marker=mssq, markersize=markersizedefault)
+                phase_line, = self.axes2.plot(self.dataset.operating_points.loc[:, 'wind speed [m/s]'],
+                                self.dataset.participation_factors_phase.loc[:, i, self.settingsAMPmode],
+                                label=mode.name, linewidth=lw, c=csq, linestyle=lssq,
+                                marker=mssq, markersize=markersizedefault)
+                ampl_lines.append(ampl_line)
+                phase_lines.append(phase_line)
+
+        self.axes2.legend(bbox_to_anchor=(1, 0), loc=3)
+
+        cursor = mplcursors.cursor(ampl_lines + phase_lines, multiple=True, highlight=True)
+        pairs = dict(zip(ampl_lines, phase_lines))
+        pairs.update(zip(phase_lines, ampl_lines))
+        @cursor.connect("add")
+        def on_add(sel):
+            sel.extras.append(cursor.add_highlight(pairs[sel.artist]))
             sel.annotation.get_bbox_patch().set(fc="grey")
-        @cursor_lower.connect("add")
-        def _(sel):
-            sel.annotation.get_bbox_patch().set(fc="grey")
+            for line in sel.extras:
+                line.set(color="C3")
+
         self.AMPcanvas.draw()
-        
-        
-        
+
+    def closeEvent(self, event):
+        self.sigClosed.emit()
+
 
 class ApplicationWindow(QMainWindow):
     def __init__(self):
         super(ApplicationWindow, self).__init__()
         self.setAttribute(QtCore.Qt.WA_DeleteOnClose)
         self.setWindowTitle("Application main window")
+        self.xaxis_item = 'WS'
         
-        self.data         = {}
-        self.cmb_filename = None
-        self.xaxis_item   = 'WS'
-        
-                
         ##############################################################
         # Menu items
         # FILE
         self.file_menu = QMenu('&File', self)
-        self.file_menu.addAction('&Open HAWCStab2 Campbell result file', self.openFileNameDialogCMB, 
+        self.file_menu.addAction('&Add Dataset', self.dataSelection,
                                  QtCore.Qt.CTRL + QtCore.Qt.Key_O)
-        self.file_menu.addAction('&Open HAWCStab2 Amplitude result file', self.openFileNameDialogAMP, 
-                                 QtCore.Qt.CTRL + QtCore.Qt.Key_L)
+        self.file_menu.addAction('&Load Database', self.load_database)
+        self.file_menu.addAction('&Save to Database', self.save_database)
         self.file_menu.addAction('&Quit', self.fileQuit,
                                  QtCore.Qt.CTRL + QtCore.Qt.Key_Q)
         self.menuBar().addMenu(self.file_menu)
@@ -325,7 +385,7 @@ class ApplicationWindow(QMainWindow):
         self.tools_menu = QMenu('&Tools', self)
         self.menuBar().addSeparator()
         self.menuBar().addMenu(self.tools_menu)
-        self.tools_menu.addAction('&Plot amplitudes of modes', self.plotAmplitudes)
+        self.tools_menu.addAction('&Plot amplitudes of modes', self.initAmplitudes)
         
         # HELP
         self.help_menu = QMenu('&Help', self)
@@ -333,12 +393,10 @@ class ApplicationWindow(QMainWindow):
         self.menuBar().addMenu(self.help_menu)
         self.help_menu.addAction('&About', self.about)
 
-
         ##############################################################
         # DEFINITION OF MAIN WIDGET
         self.main_widget = QWidget(self)
 
-        
         ##############################################################
         # Layout definition
         self.main_layout      = QVBoxLayout(self.main_widget)
@@ -349,119 +407,102 @@ class ApplicationWindow(QMainWindow):
         
         self.main_layout.addLayout(self.button_layout)
         self.main_layout.addLayout(self.layout_mpliblist)
-        self.layout_mpliblist.addLayout(self.layout_mplib,10)
-        self.layout_mpliblist.addLayout(self.layout_list,1)
-               
-        
-        
+        self.layout_mpliblist.addLayout(self.layout_mplib, 4)
+        self.layout_mpliblist.addLayout(self.layout_list, 1)
+
+        """
         ##############################################################
         # Table as Selection List
-        self.myTable = TableModeListClass() 
-        self.myTable.addList(["Tower SS", "Tower FA"])
-        self.layout_list.addWidget(self.myTable,0)
-        self.myTable.clicked.connect(self.RedrawCMBfromSelection)
-        self.myTable.cellChanged.connect(self.RedrawCMBafterListChange)
-        
-        
-        
+        self.mode_table_model = ModeTableModel()
+        self.mode_table = QTableView()
+        self.mode_table.setModel(self.mode_table_model)
+        self.layout_list.addWidget(self.mode_table, 0)
+
         ##############################################################
-        # Some defaults  
+        # Table as Selection List
+        self.dataset_table_model = DatasetTableModel()
+        self.dataset_table = QTableView()
+        self.dataset_table.setModel(self.dataset_table_model)
+        self.layout_list.addWidget(self.dataset_table, 0)
+        """
+
+        ##############################################################
+        # Treemodel of datasets
+        self.dataset_tree_model = TreeModel()
+        self.dataset_tree = QTreeView()
+        self.dataset_tree.setModel(self.dataset_tree_model)
+        self.dataset_tree.selectionModel().selectionChanged.connect(self.dataset_tree_model.update_highlight)
+        self.layout_list.addWidget(self.dataset_tree, 0)
+
+        ##############################################################
+        # Some defaults
         self.mode_minpara_cmb = 1
         self.mode_maxpara_cmb = 10
-        self.mode_max_cmb     = self.mode_maxpara_cmb  
+        self.mode_max_cmb     = self.mode_maxpara_cmb
         self.mode_min_cmb     = self.mode_minpara_cmb  
         self.pharmonics       = False
-        self.skip_header_CMB  = 1                     # number of header lines in Campbell file
-        self.skip_header_AMP  = 5                     # number of header lines in Amplitude file
-        self.skip_header_OP   = 1                     # number of header lines in operational data file
-        self.numberDOFs       = 15                    # number of degree of freedoms in amplitude file
-        self.sensorList       = ['TWR x   ','TWR y   ','TWR yaw ','SFT x   ','SFT y   ','SFT tor ','Sym edge',
-                                 'BW edge ','FW edge ','Sym flap','BW flap ','FW flap ','Sym tors','BW tors ','FW tors ']
-        self.settingsAMPmode  = 1
-        
-        
-        ##############################################################
-        # Buttons
-        self.button_cmb = QPushButton('Open HAWCStab2 Campbell diagramm result file', self)
-        self.button_cmb.clicked.connect(self.openFileNameDialogCMB)
-        self.button_layout.addWidget(self.button_cmb)
-        self.button_amp = QPushButton('Open HAWCStab2 Amplitude result file', self)
-        self.button_amp.clicked.connect(self.openFileNameDialogAMP)
-        self.button_layout.addWidget(self.button_amp)
-        self.button_op = QPushButton('Open HAWCStab2 Operational data file', self)
-        self.button_op.clicked.connect(self.openFileNameDialogOP)
-        self.button_layout.addWidget(self.button_op)
-        self.button_extract = QPushButton('Extract mode names \n from amplitude result file', self)
-        self.button_extract.clicked.connect(self.ExtractModeNames)
-        self.button_layout.addWidget(self.button_extract)
-        
-        self.button_add = QPushButton('Add mode', self)
-        self.button_add.clicked.connect(self.AddModeCMB)
-        self.button_layout.addWidget(self.button_add)
-        
-        self.button_remove = QPushButton('Remove mode', self)
-        self.button_remove.clicked.connect(self.RemoveModeCMB)
-        self.button_layout.addWidget(self.button_remove)
-        
-        self.button_pharm = QPushButton('Plot P-Harmonics', self)
-        self.button_pharm.clicked.connect(self.plotPharmonics)
-        self.button_layout.addWidget(self.button_pharm)
-        
-        self.button_wsrpm = QPushButton('Switch Plot over\nRPM/Windspeed', self)
-        self.button_wsrpm.clicked.connect(self.plotWSRPM)
-        self.button_layout.addWidget(self.button_wsrpm)
-        
-        self.button_savepdf = QPushButton('Quick Save\nto PDF', self)
-        self.button_savepdf.clicked.connect(self.savepdf)
-        self.button_layout.addWidget(self.button_savepdf)
-        
-        
+        self.skip_header_CMB  = 1              # number of header lines in Campbell file
+        self.skip_header_AMP  = 5              # number of header lines in Amplitude file
+        self.skip_header_OP   = 1              # number of header lines in operational data file
+        self.settingsAMPmode  = None           # default mode for which amplitude plot is made
+        self.settingsAMPdataset = None         # which dataset to use for amplitude plot
+        self.AMPthreshold     = 0.05           # only modes with 5% amplitude participation are shown in amplitude plot
+        # self.LineStyleDict = dict()
+
         ##############################################################
         # Figure settings
-        #~ self.fig    = Figure(figsize=(6, 6), dpi=100, tight_layout=True)
-        self.fig    = Figure(figsize=(6, 6), dpi=100)
-        self.fig.subplots_adjust(0.06, 0.06, 0.88, 0.97) # left,bottom,right,top 
+        self.fig = Figure(figsize=(6, 6), dpi=100)
+        self.fig.subplots_adjust(0.06, 0.06, 0.88, 0.97)  # left,bottom,right,top
         self.canvas = FigureCanvas(self.fig)
-        toolbar     = NavigationToolbar(self.canvas, self)
-        
+        toolbar = NavigationToolbar(self.canvas, self)
+        self.layout_mplib.addWidget(toolbar)
+        self.layout_mplib.addWidget(self.canvas)
+
         # create figure with two axis
         self.axes1      = self.fig.add_subplot(211)
         self.axes2      = self.fig.add_subplot(212, sharex=self.axes1)
         self.initlimits = True                                         # True for init
-        
-        self.layout_mplib.addWidget(toolbar)         
-        
-        
+
         ##############################################################
         # Set Main Widget
+        # This next line makes sure that key press events arrive in the matplotlib figure (e.g. to use 'x' and
+        # 'y' for fixing an axis when zooming/panning)
+        self.canvas.setFocusPolicy(QtCore.Qt.ClickFocus)
         self.main_widget.setFocus()
         self.setCentralWidget(self.main_widget)
+
+        self.statusBar().showMessage("Let the fun begin!", 2000)
+
+        ##############################################################
+        # Set buttons
+        self.button_pharm = QPushButton('Plot P-Harmonics', self)
+        self.button_pharm.clicked.connect(self.plotPharmonics)
+        self.button_layout.addWidget(self.button_pharm)
         
-        self.statusBar().showMessage("All hail matplotlib!", 2000)
-    
-            #~ def onpick(self,event):
-                #~ print('click', event)
-                #~ thisline = event.artist
-                #~ xdata = thisline.get_xdata()
-                #~ ydata = thisline.get_ydata()
-                #~ ind = event.ind
-                #~ points = tuple(zip(xdata[ind], ydata[ind]))
-                #~ print('onpick points:', points)
-                #~ TODO get mode number/name from self.ActiveModeList
-                #~ QMessageBox.information(self, "Info for mode","x-data:"+str(xdata[ind])+"\n"+"y-data:"+str(ydata[ind]))
-            
-        
+        self.button_wsrpm = QPushButton('Switch plot over RPM/Windspeed', self)
+        self.button_wsrpm.clicked.connect(self.plotWSRPM)
+        self.button_layout.addWidget(self.button_wsrpm)
+
+        self.button_savepdf = QPushButton('Quick Save to PDF', self)
+        self.button_savepdf.clicked.connect(self.savepdf)
+        self.button_layout.addWidget(self.button_savepdf)
+
+        ##############################################################
+        # Signals from the tree model.
+        # -> layoutChanged signals are used to update the main plot
+        # -> dataChanged signals are used to update the tree view
+        self.dataset_tree_model.layoutChanged.connect(self.UpdateMainPlot)
 
     ##############################################################
     # Main plotting routine
-    def main_plot(self, title='Campbell', xlabel='', ylabel='', y2label='', xlim=None, ylim=None, y2lim=None, xscale='linear', yscale='linear', xaxis_item='WS'):
+    def main_plot(self, title='Campbell', xlabel='', ylabel='', y2label='', xlim=None, ylim=None, y2lim=None,
+                  xscale='linear', yscale='linear', xaxis_item='WS'):
         """Ultimately, this is a QWidget (as well as a FigureCanvasAgg, etc.)."""
                         
         # We want the axes cleared every time plot() is called
         self.axes1.clear()
         self.axes2.clear()
-        
-        
+
         # Set label, grid, etc...
         self.axes1.set_title(title)
         self.axes1.set_xlabel(xlabel)
@@ -474,9 +515,10 @@ class ApplicationWindow(QMainWindow):
         self.axes2.set_xlim(xlim)
         self.axes2.set_ylim(y2lim)
         self.axes2.grid()
-        
+        self.axes2.fill_between([-10, 100], y1=0, y2=-10, where=None, facecolor='grey', alpha=0.1, hatch='/')
+
         # Set item of x-axis = wind speed or RPM
-        if not hasattr(self,'xaxis_item'):
+        if not hasattr(self, 'xaxis_item'):
             self.xaxis_item = xaxis_item
             
         if self.xaxis_item == 'RPM' and xaxis_item == 'WS':
@@ -484,88 +526,70 @@ class ApplicationWindow(QMainWindow):
         elif self.xaxis_item == 'WS' and xaxis_item == 'RPM':
             self.xaxis_item = 'RPM'
             
-        # set markes and colors for plot
-        color_sequence      = ['r','g','b','y','c','m','k']
-        line_style_sequence = [ '-','--','-.',':']
+        # linewidth and markersizedefault
         lw                  = 1.0
-        filled_markers      = ['o', 'v', '^', '<', '>', '8', 's', 'p', '*', 'h', 'H', 'D', 'd', 'P', 'X']
         markersizedefault   = 3
-        
-        (number_of_windspeeds, number_of_modes) = np.shape(self.data["campbell_data"])
-        # num_datablocks_cmb = 2 for HS2 <= 2.13 from 2.14 on num_datablocks_cmb = 3
-        num_datablocks_cmb = self.num_datablocks_cmb
-        number_of_modes=int((number_of_modes-1)/num_datablocks_cmb)
-                    
-        if "campbell_data" in self.data:
-            #~ self.axes2.fill_between(self.data["campbell_data"][:,0], y1=0, y2=-10, where=None, facecolor='grey', alpha=0.1, hatch='/')
-            self.axes2.fill_between([0,30], y1=0, y2=-10, where=None, facecolor='grey', alpha=0.1, hatch='/')
-            #~ self.axes2.axhline(y = 0, linewidth=2, color='r')
-            
-            # set xaxis item
-            if self.xaxis_item == 'WS':
-                xaxis_values = self.data["campbell_data"][:,0]
-            else:
-                if 'Operational_data' in self.data:
-                    xaxis_values = self.data["Operational_data"][:,2]
-                else:
-                    QMessageBox.about(self, "WARNING from main plot","Operational data have to be loaded first!")
-                    xaxis_values = self.data["campbell_data"][:,0]
-            min_rpm = np.floor(np.amin(xaxis_values))
-            max_rpm = np.ceil (np.amax(xaxis_values))
-            self.axes1.set_xlim([min_rpm,max_rpm])
-            
-            #
-            i = 0
-            for counter, value in enumerate(self.ActiveModeList):
-                csq  = color_sequence     [(counter) % len(color_sequence)]
-                if counter > len(color_sequence)-1:
-                    lssq = line_style_sequence[(counter) % len(line_style_sequence)]
-                    mssq = filled_markers     [(counter) % len(filled_markers     )]
-                else:
-                    lssq = '-'
-                    mssq = ''
-                if hasattr(self, 'AmpDataList'):
-                    self.axes1.plot(xaxis_values,self.data["campbell_data"][:,value+1 ], 
-                                                           c=csq, linestyle=lssq, linewidth=lw, label=str(value+1)+' '+self.AmpDataList.name[value],
-                                                           marker=mssq, markersize=markersizedefault, picker=True, pickradius=2)
-                    self.axes2.plot(xaxis_values,self.data["campbell_data"][:,value+number_of_modes+1], 
-                                                           c=csq, linestyle=lssq, linewidth=lw, label=str(value+1)+' '+self.AmpDataList.name[value],
-                                                           marker=mssq, markersize=markersizedefault, picker=True, pickradius=2)
-                else:
-                    self.axes1.plot(xaxis_values,self.data["campbell_data"][:,value+1 ], 
-                                                           c=csq, linestyle=lssq, linewidth=lw, label='mode '+str(value+1), 
-                                                           marker=mssq, markersize=markersizedefault, picker=True, pickradius=2)
-                    self.axes2.plot(xaxis_values,self.data["campbell_data"][:,value+number_of_modes+1], 
-                                                           c=csq, linestyle=lssq, linewidth=lw, label='mode '+str(value+1), 
-                                                           marker=mssq, markersize=markersizedefault, picker=True, pickradius=2)
-            # plot p-harmonics if present
-            if 'Operational_data' in self.data and self.pharmonics==True:
-                P_harmonics = [1,3,6,9,12]
-                #~ P_harmonics = [1,2,3,4,5,6,7,8,9,10,11,12]
-                for index in P_harmonics:
-                    P_hamonics_data = self.data["Operational_data"][:,2]/60*index # rpm in Hz
-                    self.axes1.plot(xaxis_values,P_hamonics_data, 
-                                    c='grey', linestyle='--', linewidth=0.75, label=str(index)+'P')                
-                                    
-            
-            self.axes2.legend(bbox_to_anchor=(1, 0),loc=3)
-            cursor_upper = mplcursors.cursor(self.axes1,multiple=True) # , highlight=True
-            cursor_lower = mplcursors.cursor(self.axes2,multiple=True) # , highlight=True
-            @cursor_upper.connect("add")
-            def _(sel):
-                sel.annotation.get_bbox_patch().set(fc="grey")
-            @cursor_lower.connect("add")
-            def _(sel):
-                sel.annotation.get_bbox_patch().set(fc="grey")
-            self.canvas.draw()  
-            
-        else:
-            self.canvas.draw()
-            
-            
-            
-    def UpdateMainPlot(self,myarg='WS'):
-        '''Update main plot ''' 
+        freq_lines = []
+        damp_lines = []
+
+        for atool in view_cfg.active_data:
+            for ads in view_cfg.active_data[atool]:
+                if database[atool][ads]['frequency'] is not None:
+                    # set xaxis item
+                    if self.xaxis_item == 'WS':
+                        xaxis_values = database[atool][ads]['operating_points'].loc[:, 'wind speed [m/s]']
+                    else:
+                        xaxis_values = database[atool][ads]['operating_points'].loc[:, 'rot. speed [rpm]']
+
+                    # add active modes
+                    # this can probably also be done without a loop and just with the indices
+                    for mode_ID in view_cfg.active_data[atool][ads]:
+                        freq_line, = self.axes1.plot(xaxis_values,
+                                                     database[atool][ads].frequency.loc[:, mode_ID],
+                                                     linewidth=lw,
+                                                     label=ads + ': ' + database[atool][ads].modes.values[mode_ID].name,
+                                                     markersize=markersizedefault, picker=2)
+                        damp_line, = self.axes2.plot(xaxis_values,
+                                                     database[atool][ads].damping.loc[:, mode_ID],
+                                                     linewidth=lw,
+                                                     label=ads + ': ' + database[atool][ads].modes.values[mode_ID].name,
+                                                     markersize=markersizedefault, picker=2)
+                        freq_lines.append(freq_line)
+                        damp_lines.append(damp_line)
+
+                        if all(x in view_cfg.selected_branch for x in [atool, ads, mode_ID]):
+                            # this does not necessarily have to be done with mplcursors + not sure if this is the most
+                            # efficient way to do it
+                            cursor = mplcursors.cursor([freq_line, damp_line], multiple=True, highlight=True)
+                            cursor.add_highlight(freq_line)
+                            cursor.add_highlight(damp_line)
+
+                # plot p-harmonics if present
+                if database[atool][ads].operating_points is not None and self.pharmonics is True:
+                    P_harmonics = [1, 3, 6, 9, 12]
+                    for index in P_harmonics:
+                        P_hamonics_data = database[atool][ads].operating_points.loc[:, 'rot. speed [rpm]']/60*index  # rpm in Hz
+                        self.axes1.plot(xaxis_values, P_hamonics_data,
+                                        c='grey', linestyle='--', linewidth=0.75, label=str(index)+'P')
+
+        self.axes2.legend(bbox_to_anchor=(1, 0), loc=3)
+
+        # setup mplcursors behavior: multiple text boxes if lines are clicked, highlighting line, pairing of
+        # frequency and damping lines
+        cursor = mplcursors.cursor(freq_lines + damp_lines, multiple=True, highlight=True)
+        pairs = dict(zip(freq_lines, damp_lines))
+        pairs.update(zip(damp_lines, freq_lines))
+        @cursor.connect("add")
+        def on_add(sel):
+            sel.extras.append(cursor.add_highlight(pairs[sel.artist]))
+            sel.annotation.get_bbox_patch().set(fc="grey")
+            for line in sel.extras:
+                line.set(color="C3")
+
+        self.canvas.draw()
+
+    def UpdateMainPlot(self, myarg='WS'):
+        """ Update main plot """
         if myarg == 'RPM':
             myxlabel = 'RPM in $1/min$'
         else:
@@ -576,266 +600,186 @@ class ApplicationWindow(QMainWindow):
             uylim=self.axes1.get_ylim()
             uy2lim=self.axes2.get_ylim()
         else:        
-            uxlim  = [self.data["campbell_data"][0,0],self.data["campbell_data"][-1,0]]
-            uylim  = [ 0, 2]
-            uy2lim = [-1, 2]            
+            uxlim  = [3, 20]
+            uylim  = [0, 4]
+            uy2lim = [-1, 4]            
             self.initlimits = False
             
         self.main_plot(title='Campbell Diagram', xlabel=myxlabel, ylabel='Frequency in Hz', 
-                       y2label='Damping Ratio in %', xlim=uxlim, ylim=uylim, y2lim=uy2lim, xaxis_item=myarg) 
-                       
-    
-    def AddModeCMB(self):
-        ''' Add a mode to Campbell diagram'''       
-        self.ActiveModeList.append(max(self.ActiveModeList)+1)
-        self.UpdateMainPlot(self.xaxis_item) 
-    
-    def RemoveModeCMB(self):
-        ''' Remove a mode to Campbell diagram''' 
-        self.mode_max_cmb = self.mode_max_cmb - 1       
-        del self.ActiveModeList[-1]
-        self.UpdateMainPlot(self.xaxis_item)
-    
-    def RedrawCMBfromSelection(self):
-        ''' Redraw the Campbell diagram with selected mode list'''    
-        self.ActiveModeList = sorted(set(index.row() for index in self.myTable.selectedIndexes()))
-        self.UpdateMainPlot(self.xaxis_item)
-    
-    def RedrawCMBafterListChange(self):
-        ''' Redraw the Campbell diagram after renaming one element in mode list''' 
-        rows = sorted(set(index.row() for index in self.myTable.selectedIndexes()))
-        for row in rows:
-            self.AmpDataList.name[row]=self.myTable.item(row,0).text()
-        self.UpdateMainPlot(self.xaxis_item)
-        
-     
+                       y2label='Damping Ratio in %', xlim=uxlim, ylim=uylim, y2lim=uy2lim, xaxis_item=myarg)
+
+    def load_database(self):
+        """ Load data from database (and use default view settings) """
+        options = QFileDialog.Options()
+        options |= QFileDialog.DontUseNativeDialog
+        filter = "CampbellViewer Database file (*.nc);;All Files (*)"
+        fileName, _ = QFileDialog.getOpenFileName(self, "Open CampbellViewer Database", "", filter, options=options)
+
+        # save "old" database
+        old_database = copy.deepcopy(database)
+
+        loaded_datasets = database.load(fname=fileName)
+        for toolname in loaded_datasets:
+            for datasetname in loaded_datasets[toolname]:
+                if toolname not in view_cfg.active_data:
+                    view_cfg.active_data[toolname] = dict()
+                view_cfg.active_data[toolname][datasetname] = np.arange(self.mode_minpara_cmb-1,self.mode_maxpara_cmb,1).tolist()
+
+        self.dataset_tree_model.addModelData(old_database=old_database)
+        self.dataset_tree_model.layoutChanged.emit()
+
+    def save_database(self):
+        """ Save data to database """
+        options = QFileDialog.Options()
+        options |= QFileDialog.DontUseNativeDialog
+        filter = "CampbellViewer Database file (*.nc);;All Files (*)"
+        fileName, _ = QFileDialog.getSaveFileName(self, "Open CampbellViewer Database", "", filter, options=options)
+
+        database.save(fname=fileName)
+
+    def dataSelection(self):
+        """ Select to add HAWCStab2 or Bladed data """
+        self.popup = DataSelectionPopup()
+        tool, datasetname = self.popup.selectTool()
+
+        if '&' in datasetname:
+            print('& is not allowed in the datasetname')
+            datasetname = datasetname.replace('&', '_')
+
+        # A unique datasetname is enforced
+        if tool in database:
+            datasetname = assure_unique_name(datasetname, database[tool].keys())
+
+        # save "old" database (only the delta updated_database - old_database is added to tree model, this is done to
+        # retain the tree node properties of elements that were already loaded)
+        old_database = copy.deepcopy(database)
+
+        # load data in database
+        if tool == 'HAWCStab2':
+            self.openFileNameDialogHAWCStab2(datasetname)
+        elif tool == 'Bladed (lin.)':
+            self.openFileNameDialogBladedLin(datasetname)
+        else:
+            raise ValueError('Only HAWCStab2 and Bladed-Linearization data are allowed as input.')
+        del self.popup
+
+        # if the data is loaded successfully -> initialize the active modes
+        # update the tree model data
+        if tool in database:
+            if datasetname in database[tool]:
+                self.init_active_data(tool, datasetname)
+                self.dataset_tree_model.addModelData(old_database=old_database)
+                self.dataset_tree_model.layoutChanged.emit()
+
+    def init_active_data(self, toolname, datasetname):
+        """ Initialize the active_data global variable for this toolname/datasetname combination """
+        if toolname not in view_cfg.active_data:
+            view_cfg.active_data[toolname] = dict()
+        view_cfg.active_data[toolname][datasetname] = np.arange(self.mode_minpara_cmb-1,
+                                                                self.mode_maxpara_cmb, 1).tolist()
+
     ##############################################################
-    # Open File Dialog for HAWCStab2 Campbell diagramm files
-    def openFileNameDialogCMB(self):   
+    # Open File Dialog for HAWCStab2 result files
+    def openFileNameDialogHAWCStab2(self, datasetname='default'):
         '''Open File Dialog for HAWCStab2 Campbell diagramm files'''
-        options  = QFileDialog.Options()
-        options |= QFileDialog.DontUseNativeDialog 
-        filter   = "HAWCStab2 campbell result files (*.cmb);;All Files (*)"
-        fileName, _ = QFileDialog.getOpenFileName(self,"Open Campbell Files", "", filter, options=options)
-        if QFileInfo(fileName).exists():
-            # save info
-            self.cmb_filename = fileName
-            # get filename extension
-            fileNameExtension = QFileInfo(fileName).suffix()
-            # what kind of data are these
-            if fileNameExtension=='cmb':
-                # Get number of modes/damping values           
-                with open(fileName, 'r') as f:
-                    first_line = f.readlines()[0]
-                    split_line = first_line.split()
-                    self.num_modes_cmb      = int(split_line[len(split_line)-1])
-                    self.num_datablocks_cmb = split_line.count(split_line[len(split_line)-1])
-                with open(fileName, 'r') as f:
-                    self.data["campbell_data"] = np.genfromtxt(f,skip_header=self.skip_header_CMB)
-                    
-                self.button_cmb.setStyleSheet("background-color:rgb(0,255,0)")
-                last_backslash = fileName.rfind('/')
-                self.button_cmb.setText('Open HAWCStab2 Campbell diagramm result file \n'+fileName[last_backslash:])
-            else:
-                return  
-
-        
-        # Create a list of all mode numbers in File
-        # The Campbell files contain (mode number)*num_datablocks_cmb+1 columns
-        # num_datablocks_cmb = 2 for HS2 <= 2.13 from 2.14 on num_datablocks_cmb = 3
-        num_datablocks_cmb = self.num_datablocks_cmb
-        self.modeList=[]
-        data_shape=self.data["campbell_data"].shape
-        for counter in range(0,int((data_shape[1]-1)/num_datablocks_cmb)):
-            self.modeList.append("mode "+str(counter+1))       
-        self.myTable.blockSignals(True)
-        self.myTable.addList(self.modeList)       
-        self.myTable.blockSignals(False)
-                
-        # plot the data immediately 
-        self.ActiveModeList=np.arange(self.mode_minpara_cmb-1,self.mode_maxpara_cmb,1).tolist()
-        self.UpdateMainPlot(self.xaxis_item)
-        self.layout_mplib.addWidget(self.canvas)
-        
-        # get amp data with same name but different suffix
-        try:
-            suffix = QFileInfo(self.cmb_filename).suffix()
-            amp_filename = self.cmb_filename.rstrip(suffix)+'amp'
-            self.__get_amp_from_file(amp_filename)
-        except:            
-            QMessageBox.about(self, "WARNING","Filename root for amplitude file has different root name! Open separately!")
-            
-        # get op data with same name but different suffix
-        try:
-            suffix = QFileInfo(self.cmb_filename).suffix()
-            op_filename = self.cmb_filename.rstrip(suffix)+'opt'
-            self.__get_op_from_file(op_filename)
-        except:            
-            QMessageBox.about(self, "WARNING","Filename root for operational file has different root name! Open separately!")
-     
-     
-    ##############################################################
-    # Open File Dialog for HAWCStab2 Amplitude files
-    def openFileNameDialogAMP(self):   
-        ''' Open File Dialog for HAWCStab2 Amplitude files  
-            - The first 5 rows contains header text.
-            - Column 1 contains wind speeds.
-            - Every mode has got 30 columns of sensor data for 15 sensors, each sensor has a normalized deflection/rotation and a phase.
-              TWR x   [m]     phase [deg]     
-              TWR y   [m]     phase [deg] 
-              TWR yaw [rad]   phase [deg]     
-              SFT x   [m]     phase [deg]     
-              SFT y   [m]     phase [deg] 
-              SFT tor [rad]   phase [deg]  
-              Sym edge[m]     phase [deg]   
-              BW edge [m]     phase [deg]   
-              FW edge [m]     phase [deg]  
-              Sym flap[m]     phase [deg]   
-              BW flap [m]     phase [deg]   
-              FW flap [m]     phase [deg]
-              Sym tors[rad]   phase [deg] 
-              BW tors [rad]   phase [deg] 
-              FW tors [rad]   phase [deg]
-        '''
-        if "campbell_data" in self.data:
-            options  = QFileDialog.Options()
+        suffix_options = ['cmb', 'amp', 'opt']
+        file_name_descriptions = ['Campbell Result Files',
+                                  'Amplitude Result Files',
+                                  'Operational Data Files']
+        for suffix, descr in zip(suffix_options, file_name_descriptions):
+            options = QFileDialog.Options()
             options |= QFileDialog.DontUseNativeDialog
-            filter   = "HAWCStab2 amplitude result files (*.amp);;All Files (*)"
-            fileName, _ = QFileDialog.getOpenFileName(self,"Open Aplitude Files", "", filter, options=options)
-            if QFileInfo(fileName).exists():
-                # get filename extension
-                fileNameExtension = QFileInfo(fileName).suffix()
-                # what kind of data are these
-                if fileNameExtension=='amp':
-                    self.__get_amp_from_file(fileName)
-                else:
-                    return    
-        else:
-            QMessageBox.about(self, "WARNING","Campbell data file has to be loaded first!")
-            return 
-            
-    def __get_amp_from_file(self,fileName):
-        with open(fileName, 'r') as f:
-            self.data["amplitude_data"] = np.genfromtxt(f,skip_header=self.skip_header_AMP)
-        self.button_amp.setStyleSheet("background-color:rgb(0,255,0)")
-        last_backslash = fileName.rfind('/')
-        self.button_amp.setText('Open HAWCStab2 Amplitude result file \n'+fileName[last_backslash:])
-        
-                
-    ##############################################################
-    # Open File Dialog for HAWCStab2 operational data files
-    def openFileNameDialogOP(self):   
-        '''Open File Dialog for HAWCStab2 operational data files'''
-        if "campbell_data" in self.data and "amplitude_data" in self.data:
-            options  = QFileDialog.Options()
-            options |= QFileDialog.DontUseNativeDialog 
-            filter   = "HAWCStab2 operational data files (*.op *opt);;All Files (*)"
-            fileName, _ = QFileDialog.getOpenFileName(self,"Open Operational Data Files", "", filter, options=options)
-            if QFileInfo(fileName).exists():
-                # get filename extension
-                fileNameExtension = QFileInfo(fileName).suffix()
-                # what kind of data are these
-                if fileNameExtension=='op' or fileNameExtension=='opt':
-                    self.__get_op_from_file(fileName)
-                else:
-                    return  
-        else:
-            QMessageBox.about(self, "WARNING","Campbell and Amplitude files have to be loaded first!")
-            return
+            filter = "HAWCStab2 {} (*.{});;All Files (*)".format(descr, suffix)
+            fileName, _ = QFileDialog.getOpenFileName(self, "Open {}".format(descr), "", filter, options=options)
 
-    def __get_op_from_file(self,fileName):
-        with open(fileName, 'r') as f:
-            self.data["Operational_data"] = np.genfromtxt(f,skip_header=self.skip_header_OP)
-        self.button_op.setStyleSheet("background-color:rgb(0,255,0)")
-        last_backslash = fileName.rfind('/')
-        self.button_op.setText('Open HAWCStab2 operational data file \n'+fileName[last_backslash:])
-        self.plotPharmonics()
-        self.ExtractModeNames()
-        
-                    
-    ##################################################################
-    #
+            if QFileInfo(fileName).exists():
+                # get filename extension
+                fileNameExtension = QFileInfo(fileName).suffix()
+                # what kind of data are these
+                if fileNameExtension == suffix:
+                    database.add_data(datasetname, 'hawcstab2',
+                                      tool_specific_info={'filename{}'.format(suffix): fileName,
+                                                          'skip_header_CMB': self.skip_header_CMB,
+                                                          'skip_header_AMP': self.skip_header_AMP,
+                                                          'skip_header_OP': self.skip_header_OP})
+
+
+        # self.update_linestyledict()
+
+    def openFileNameDialogBladedLin(self, datasetname='default'):
+        '''Open File Dialog for Bladed Linearization result files'''
+        options = QFileDialog.Options()
+        options |= QFileDialog.DontUseNativeDialog
+        filter = "Bladed Linearization Result Files (*.$PJ);;All Files (*)"
+        fileName, _ = QFileDialog.getOpenFileName(self, "Open Bladed Linearization Result Files", "", filter, options=options)
+
+        if QFileInfo(fileName).exists():
+            result_dir = QFileInfo(fileName).absolutePath()
+            result_prefix = QFileInfo(fileName).baseName()
+            database.add_data(datasetname, 'bladed-lin',
+                              tool_specific_info={'result_dir': result_dir, 'result_prefix': result_prefix})
+
+        # self.update_linestyledict()
+
+    def update_linestyledict(self):
+        """
+        Formerly: Mirror the FullModesDict to a dictionary with linestyles. Currently not used.  This functionality has
+        to be updated to the current code structure.
+        """
+        color_sequence = ['r', 'g', 'b', 'y', 'c', 'm', 'k']
+        line_style_sequence = ['-', '--', '-.', ':']
+        filled_markers = ['o', 'v', '^', '<', '>', '8', 'p', 'h', 's', '*', 'H', 'D', 'd', 'P', 'X']
+        full_list = list()
+        for l in line_style_sequence:
+            for m in filled_markers:
+                for c in color_sequence:
+                    full_list.append(c + l + m)
+
+        view_cfg.LineStyleDict = dict()
+        counter = 0
+        for ds_name, mode_list in view_cfg.FullModesDict.items():
+            view_cfg.LineStyleDict[ds_name] = full_list[counter:counter+len(mode_list)]
+            counter = counter+len(mode_list)
+
     def plotPharmonics(self):
-        ''' Plot P-Harmonics in Campbell diagram''' 
-        if self.pharmonics==True:
-            self.pharmonics=False
+        """ Plot P-Harmonics in Campbell diagram """
+        if self.pharmonics == True:
+            self.pharmonics = False
         else:
-            self.pharmonics=True
-        self.UpdateMainPlot(self.xaxis_item)
+            self.pharmonics = True
+        self.UpdateMainPlot()
 
-    def ExtractModeNames(self):
-        '''This routine should interprete the amplitude result file, so that for 
-           every mode a dedicated name can be derived.'''
-        if "campbell_data" in self.data and "amplitude_data" in self.data:
-            # split array in chunks
-            (number_of_windspeeds, number_of_modes) = np.shape(self.data["amplitude_data"])
-            number_of_modes  = int((number_of_modes-1)/(self.numberDOFs*2))
-            if hasattr(self, 'AmpDataList'):
-                del self.AmpDataList
-            self.AmpDataList = AmpDataSensor(number_of_windspeeds, self.numberDOFs, number_of_modes)
-            for i in range(0,number_of_modes):
-                for j in range(0,self.numberDOFs):
-                    amp_index   = i*self.numberDOFs*2+1+2*j
-                    phase_index = i*self.numberDOFs*2+2+2*j
-                    self.AmpDataList.amplitude[:,j,i] = self.data["amplitude_data"][:,amp_index  ]
-                    self.AmpDataList.phase    [:,j,i] = self.data["amplitude_data"][:,phase_index]
-            
-            # determine dominant DOF per mode
-            for i in range(0,number_of_modes):
-                mean_DOF = np.mean(self.AmpDataList.amplitude[:,:,i],axis=0)
-                self.AmpDataList.name.append(self.sensorList[np.argmax(mean_DOF)])
-            
-            # Override data for first two modes, because in HAWCStab2 tower amplitudes are not 1.0 although it is a tower mode.
-            # Unfortunately, higher tower modes cannot be filtered easyly.
-            self.AmpDataList.name[0]='Tower SS'
-            self.AmpDataList.name[1]='Tower FA'
-            self.myTable.blockSignals(True)
-            self.myTable.renewListNames(self.AmpDataList.name)    
-            self.myTable.blockSignals(False)
-            self.UpdateMainPlot('WS')
-        else:
-            QMessageBox.about(self, "WARNING","Campbell and Amplitude files have to be loaded first!")
-            return 
-     
     ##############################################################
     # Open File Dialog for HAWCStab2 Campbell diagramm files
     def plotWSRPM(self):
         """ Switch between plot over wind speed or RPM"""
-        if "Operational_data" not in self.data:
-            QMessageBox.about(self, "WARNING","Operational data have to be loaded first!")
-            return
         try:
-          if self.xaxis_item == 'RPM':
-              myarg = 'WS'
-          elif self.xaxis_item == 'WS':            
-              myarg = 'RPM' 
-          self.xaxis_item = myarg
-          self.UpdateMainPlot(myarg)  
+            if self.xaxis_item == 'RPM':
+                myarg = 'WS'
+            elif self.xaxis_item == 'WS':
+                myarg = 'RPM'
+            self.UpdateMainPlot(myarg)
         except:
-          myarg = 'RPM' 
-          self.xaxis_item = myarg  
-          self.UpdateMainPlot(myarg)  
-          return
+            myarg = 'RPM'
+            self.UpdateMainPlot(myarg)
+            return
 
     ###################
     # save plot
     def savepdf(self):
-        """Saves the current plot to pdf with *.cmb filename"""
-        if self.cmb_filename != None:
-            # get filename extension
-            fileNameExtension = QFileInfo(self.cmb_filename).suffix()
-            pdf_filename = self.cmb_filename.strip(fileNameExtension)+'pdf'
-            
-            if QFileInfo(pdf_filename).exists():
-                msg = QMessageBox()
-                msg.setWindowTitle("WARNING")
-                msg.setIcon(QMessageBox.Critical)
-                msg.setText("File already exist! Overwrite?")
-                msg.setStandardButtons(QMessageBox.Ok | QMessageBox.Cancel)
-                if msg.exec_() == QMessageBox.Ok:
-                    self.fig.savefig(pdf_filename)
-            else:
+        """Saves the current plot to pdf. todo: FileDialog to set file name has to be added"""
+
+        pdf_filename = 'CampbellViewerPlot.pdf'
+        if QFileInfo(pdf_filename).exists():
+            msg = QMessageBox()
+            msg.setWindowTitle("WARNING")
+            msg.setIcon(QMessageBox.Critical)
+            msg.setText("File already exist! Overwrite?")
+            msg.setStandardButtons(QMessageBox.Ok | QMessageBox.Cancel)
+            if msg.exec_() == QMessageBox.Ok:
                 self.fig.savefig(pdf_filename)
+        else:
+            self.fig.savefig(pdf_filename)
             
         
 
@@ -851,24 +795,40 @@ class ApplicationWindow(QMainWindow):
     ##########
     # Tools
     ##########
-    def plotAmplitudes(self):
-        '''This routine plot participation factors on the amplitudes for a certain mode'''
-        if "campbell_data" in self.data and "amplitude_data" in self.data:
-            self.popupAMP=SettingsPopupAMP(self.settingsAMPmode)
-            (self.settingsAMPmode)=self.popupAMP.getNewSettings()
-            del self.popupAMP
-            
-            if self.settingsAMPmode > 0:
-                self.AmplitudeWindow = AmplitudeWindow(self.settingsAMPmode, self.data, self.numberDOFs, self.sensorList) 
-                self.AmplitudeWindow.show()
-            elif self.settingsAMPmode == 0:
-                QMessageBox.about(self, "WARNING","Mode numer has to be greater than 0!")
-                return
-            elif self.settingsAMPmode < 0:
-                return
+    def initAmplitudes(self):
+        """
+        This routine initializes the window/plot of the participation factors on the amplitudes for a
+        certain mode/dataset
+        """
+        self.popupAMP = SettingsPopupAMP()
+        self.settingsAMPtool, self.settingsAMPdataset, self.settingsAMPmode = self.popupAMP.getNewSettings()
+        del self.popupAMP
+
+        if database[self.settingsAMPtool][self.settingsAMPdataset].frequency is not None and \
+                database[self.settingsAMPtool][self.settingsAMPdataset].participation_factors_amp is not None:
+            self.AmplitudeWindow = AmplitudeWindow()
+            self.AmplitudeWindow.sigClosed.connect(self.deleteAmplitudes)
         else:
-            QMessageBox.about(self, "WARNING","Campbell and Amplitude files have to be loaded first!")
-            return 
+            QMessageBox.about(self, "WARNING", "Campbell and Amplitude files have to be loaded first!")
+            return
+
+        self.updateAmplitudes()
+
+    def deleteAmplitudes(self):
+        """ Deletes AmplitudeWindow attribute if Amplitude Window is closed """
+        del self.AmplitudeWindow
+
+    def updateAmplitudes(self):
+        """ Update Amplitude plot according to settingsAMPdataset and settingsAMPmode """
+        if database[self.settingsAMPtool][self.settingsAMPdataset].frequency is not None and \
+                database[self.settingsAMPtool][self.settingsAMPdataset].participation_factors_amp is not None:
+            self.AmplitudeWindow.configure_plotAMP(self.settingsAMPtool, self.settingsAMPdataset, self.settingsAMPmode,
+                                                   database[self.settingsAMPtool][self.settingsAMPdataset],
+                                                   self.AMPthreshold)
+            self.AmplitudeWindow.show()
+        else:
+            QMessageBox.about(self, "WARNING", "Campbell and Amplitude files have to be loaded first!")
+            return
 
     ##########
     # file
@@ -924,7 +884,7 @@ def my_excepthook(type, value, tback):
 if __name__ == '__main__':
     # enable error tracing
     sys.excepthook = my_excepthook
-    
+
     # define main app
     app = QApplication(sys.argv)
     app.setStyle('Fusion')
