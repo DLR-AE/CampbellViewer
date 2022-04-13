@@ -388,16 +388,19 @@ class TreeModel(QAbstractItemModel):
         Translate the data that is selected in the treeview to a list such that it can be used when
         plotting the data
         """
-        selected_index = selected.indexes()[0]
-        selected_node = self.getItem(selected_index)
-        # work way up the tree model
-        current_node = selected_node
-        view_cfg.selected_branch = []
-        while current_node.parentItem is not None:
-            view_cfg.selected_branch.append(current_node.itemName)
-            current_node = current_node.parentItem
+        if len(selected.indexes()) > 0:
+            selected_index = selected.indexes()[0]
+            selected_node = self.getItem(selected_index)
+            # work way up the tree model
+            current_node = selected_node
+            view_cfg.selected_branch = []
+            while current_node.parentItem is not None:
+                view_cfg.selected_branch.append(current_node.itemName)
+                current_node = current_node.parentItem
 
-        if len(view_cfg.selected_branch) == 3:  # a mode has been selected -> replace mode name by Mode_ID
-            view_cfg.selected_branch[0] = selected_node.row()
+            if len(view_cfg.selected_branch) == 3:  # a mode has been selected -> replace mode name by Mode_ID
+                view_cfg.selected_branch[0] = selected_node.row()
+        else:
+            view_cfg.selected_branch = []
         self.layoutChanged.emit()
 
