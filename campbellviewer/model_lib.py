@@ -168,6 +168,14 @@ class TreeItem(object):
 
         return 0
 
+    def removeChildren(self, position, count):
+        if position < 0 or position + count > len(self.childItems):
+            return False
+
+        for row in range(count):
+            self.childItems.pop(position)
+
+        return True
 
 class TreeModel(QAbstractItemModel):
     def __init__(self, parent=None):
@@ -222,6 +230,7 @@ class TreeModel(QAbstractItemModel):
             return False
 
         self.updateDatabase()  # The database has to be updated according to the modifications made to the tree model
+        self.updateViewCfg()
         self.layoutChanged.emit()  # Update the canvas
         return True
 
@@ -354,7 +363,7 @@ class TreeModel(QAbstractItemModel):
 
     def updateDatabase(self):
         """
-        Use data of the tree model to update the database and the view_config.
+        Use data of the tree model to update the database.
 
         For now I assume that the modifications are ONLY modifications of existing entries in the model by editing
         the text in the tree item or checking/unchecking the tick box. Other useful things such as deleting/adding/copy
@@ -369,6 +378,14 @@ class TreeModel(QAbstractItemModel):
                 for mode_ID, mode in enumerate(ds_node.childItems):
                     database[tool_node.itemName][ds_node.itemName]["modes"][mode_ID] = mode.itemData
 
+    def updateViewCfg(self):
+        """
+        Use data of the tree model to update the view_cfg.
+
+        For now I assume that the modifications are ONLY modifications of existing entries in the model by editing
+        the text in the tree item or checking/unchecking the tick box. Other useful things such as deleting/adding/copy
+        are not implemented
+        """
         # active_data is completely replaced!
         view_cfg.active_data = {}
         for tool_node in self.rootItem.childItems:
@@ -392,15 +409,52 @@ class TreeModel(QAbstractItemModel):
             selected_index = selected.indexes()[0]
             selected_node = self.getItem(selected_index)
             # work way up the tree model
-            current_node = selected_node
-            view_cfg.selected_branch = []
-            while current_node.parentItem is not None:
-                view_cfg.selected_branch.append(current_node.itemName)
-                current_node = current_node.parentItem
+            view_cfg.selected_branch = self.get_branch_from_item(selected_node)
 
-            if len(view_cfg.selected_branch) == 3:  # a mode has been selected -> replace mode name by Mode_ID
-                view_cfg.selected_branch[0] = selected_node.row()
         else:
             view_cfg.selected_branch = []
+        self.layoutChanged.emit()
+
+    def get_branch_from_item(self, item):
+        """
+        Returns a list with the names of the parent items. This is used to link the item to the database dictionary.
+        """
+        current_node = item
+        branch = []
+        while current_node.parentItem is not None:
+            branch.append(current_node.itemName)
+            current_node = current_node.parentItem
+
+        if len(branch) == 3:  # a mode has been selected -> replace mode name by Mode_ID
+            branch[0] = item.row()
+        return branch
+
+    def removeRows(self, position, rows, parent=QModelIndex()):
+        parentItem = self.getItem(parent)
+
+        self.beginRemoveRows(parent, position, position + rows - 1)
+        success = parentItem.removeChildren(position, rows)
+        self.updateDatabase()
+        self.updateViewCfg()
+        self.endRemoveRows()
+
+        return success
+
+    def delete_data(self, selected):
+        """
+        Delete data from the tree model and the database
+
+        Is it possible to only update the tree model and not modify the database? Do we want that? Probably having the
+        tow options: 'Delete from database' and 'Delete from view' would be nice.
+        """
+        if len(selected) > 0:
+            selected_index = selected[0]
+
+            branch = self.get_branch_from_item(self.getItem(selected_index))
+            self.removeRow(selected_index.row(), selected_index.parent())  # removeRow is a convenience function which uses removeRows
+            self.updateViewCfg()
+
+            database.remove_data(branch)
+
         self.layoutChanged.emit()
 

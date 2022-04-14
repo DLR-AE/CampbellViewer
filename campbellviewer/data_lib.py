@@ -50,16 +50,27 @@ class LinearizationDataWrapper(dict):
         else:
             raise NotImplementedError('Only reading of bladed and hawcstab2 data implemented.')
 
-    def remove_data(self, tool, name):
+    def remove_data(self, branch):
         """
-        Remove specified dataset
+        Remove data from the database
+
         Args:
-            name (str): string identifier of the dataset that should be removed
+            branch (list): list with mode_idx, dataset, tool that have to be removed. This list will have length 1 if
+                a tool has to be removed. It will have length 2 if a dataset has to be removed. And it will have length
+                3 if modes have to be removed.
+                Examples: branch = ['dataset_name', 'tool_name'] or branch = [[0, 1, 2, 3], 'dataset_name', 'tool_name']
         """
-        try:
-            del self[tool][name]
-        except KeyError:
-            print('Failed attempt to remove dataset which was not loaded')
+        if len(branch) == 1:
+            del self[branch[0]]
+        elif len(branch) == 2:
+            del self[branch[1]][branch[0]]
+        elif len(branch) == 3:
+            # I don't know how to do this without having to give back the modified
+            # database (so just database[...][...].remove_modes())
+            self[branch[2]][branch[1]] = self[branch[2]][branch[1]].remove_modes(branch[0])
+        else:
+            print('The list provided can only have 1, 2, or 3 values. Nothing removed from database')
+        return
 
     def save(self, fname='CampbellViewerDatabase.nc'):
         # IMPORTANT: the standard scipy netcdf backend does not support saving to a group and the h5netcdf engine
