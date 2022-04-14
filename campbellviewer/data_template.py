@@ -2,7 +2,7 @@
 This module contains data storing classes
 """
 # global libs
-import xarray as xr
+import xarray as xr  # minimal version 0.20.2 (to have drop_sel function)
 
 # local libs
 
@@ -28,3 +28,15 @@ class AbstractLinearizationData(xr.Dataset):
         self["participation_modes"] = None           # (["participation_mode_ID"], [])
         # self["operating_parameter"] = None           # []
         # self.set_coords(["operating_parameter"])
+
+    def remove_modes(self, mode_ids):
+        """
+        Remove modes (identified by their index) from the database
+        """
+        try:
+            return self.drop_sel(mode_ID=mode_ids)
+        except AttributeError:
+            print('Removing data from the xarray dataset did not succeed. '
+                  'This could be due to an outdated xarray version'
+                  'Please update to version >0.20.2')
+            print('Nothing has been removed from the database')

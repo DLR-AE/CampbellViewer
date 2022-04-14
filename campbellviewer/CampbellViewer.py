@@ -356,6 +356,19 @@ class AmplitudeWindow(QMainWindow):
         self.sigClosed.emit()
 
 
+class DatasetTree(QTreeView):
+    def __init__(self, tree_model):
+        super(DatasetTree, self).__init__()
+        self.tree_model = tree_model
+        self.setModel(tree_model)
+        # self.setSelectionMode(2)  # MultiSelection
+        self.selectionModel().selectionChanged.connect(tree_model.update_highlight)
+
+    def keyPressEvent(self, event):
+        if event.key() == QtCore.Qt.Key_Delete:
+            self.tree_model.delete_data(self.selectedIndexes())
+
+
 class ApplicationWindow(QMainWindow):
     def __init__(self):
         super(ApplicationWindow, self).__init__()
@@ -429,9 +442,7 @@ class ApplicationWindow(QMainWindow):
         ##############################################################
         # Treemodel of datasets
         self.dataset_tree_model = TreeModel()
-        self.dataset_tree = QTreeView()
-        self.dataset_tree.setModel(self.dataset_tree_model)
-        self.dataset_tree.selectionModel().selectionChanged.connect(self.dataset_tree_model.update_highlight)
+        self.dataset_tree = DatasetTree(self.dataset_tree_model)
         self.layout_list.addWidget(self.dataset_tree, 0)
 
         ##############################################################
