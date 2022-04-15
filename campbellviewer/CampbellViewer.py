@@ -361,8 +361,8 @@ class DatasetTree(QTreeView):
         super(DatasetTree, self).__init__()
         self.tree_model = tree_model
         self.setModel(tree_model)
-        # self.setSelectionMode(2)  # MultiSelection
-        self.selectionModel().selectionChanged.connect(tree_model.update_highlight)
+        self.setSelectionMode(3)  # ExtendedSelection
+        self.selectionModel().selectionChanged.connect(tree_model.updateSelectedData)
 
     def keyPressEvent(self, event):
         if event.key() == QtCore.Qt.Key_Delete:
@@ -568,7 +568,7 @@ class ApplicationWindow(QMainWindow):
                         freq_lines.append(freq_line)
                         damp_lines.append(damp_line)
 
-                        if all(x in view_cfg.selected_branch for x in [atool, ads, mode_ID]):
+                        if [[mode_ID], ads, atool] in view_cfg.selected_data:
                             # this does not necessarily have to be done with mplcursors + not sure if this is the most
                             # efficient way to do it
                             cursor = mplcursors.cursor([freq_line, damp_line], multiple=True, highlight=True)

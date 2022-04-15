@@ -4,6 +4,7 @@ This module contains data storing classes
 # global libs
 import numpy as np
 from PyQt5.QtCore import QAbstractItemModel, QAbstractTableModel, QAbstractListModel, Qt, QVariant, QModelIndex
+from PyQt5.QtCore import QPersistentModelIndex
 from PyQt5.QtGui import QBrush, QColor
 
 from globals import database, view_cfg
@@ -230,7 +231,7 @@ class TreeModel(QAbstractItemModel):
             return False
 
         self.updateDatabase()  # The database has to be updated according to the modifications made to the tree model
-        self.updateViewCfg()
+        self.updateActiveData()
         self.layoutChanged.emit()  # Update the canvas
         return True
 
@@ -378,7 +379,7 @@ class TreeModel(QAbstractItemModel):
                 for mode_ID, mode in enumerate(ds_node.childItems):
                     database[tool_node.itemName][ds_node.itemName]["modes"][mode_ID] = mode.itemData
 
-    def updateViewCfg(self):
+    def updateActiveData(self):
         """
         Use data of the tree model to update the view_cfg.
 
@@ -400,19 +401,18 @@ class TreeModel(QAbstractItemModel):
                         if mode.itemVisibleActivity == Qt.Checked:
                             view_cfg.active_data[tool_node.itemName][ds_node.itemName].append(mode_ID)
 
-    def update_highlight(self, selected, deselected):
+    def updateSelectedData(self, selected, deselected):
         """
-        Translate the data that is selected in the treeview to a list such that it can be used when
-        plotting the data
         """
         if len(selected.indexes()) > 0:
-            selected_index = selected.indexes()[0]
-            selected_node = self.getItem(selected_index)
-            # work way up the tree model
-            view_cfg.selected_branch = self.get_branch_from_item(selected_node)
+            for selected_index in selected.indexes():
+                view_cfg.selected_data.append(self.get_branch_from_item(self.getItem(selected_index)))
 
-        else:
-            view_cfg.selected_branch = []
+        if len(deselected.indexes()) > 0:
+            for deselected_index in deselected.indexes():
+                if self.get_branch_from_item(self.getItem(deselected_index)) in view_cfg.selected_data:
+                    view_cfg.selected_data.remove(self.get_branch_from_item(self.getItem(deselected_index)))
+
         self.layoutChanged.emit()
 
     def get_branch_from_item(self, item):
@@ -425,8 +425,9 @@ class TreeModel(QAbstractItemModel):
             branch.append(current_node.itemName)
             current_node = current_node.parentItem
 
-        if len(branch) == 3:  # a mode has been selected -> replace mode name by Mode_ID
-            branch[0] = item.row()
+        if len(branch) == 3:  # a mode has been selected -> replace mode name by [Mode_ID]
+            branch[0] = [item.row()]
+
         return branch
 
     def removeRows(self, position, rows, parent=QModelIndex()):
@@ -435,26 +436,74 @@ class TreeModel(QAbstractItemModel):
         self.beginRemoveRows(parent, position, position + rows - 1)
         success = parentItem.removeChildren(position, rows)
         self.updateDatabase()
-        self.updateViewCfg()
+        self.updateActiveData()
         self.endRemoveRows()
 
         return success
 
-    def delete_data(self, selected):
+    def remove_redundant_branches(self, branches):
+        """
+        It is possible to select multiple items in the tree. If a parent is selected, all children are also
+        automatically selected. The 'branches' of the children can therefore be removed.
+
+        Example:
+            branches = [['mode_1', 'dataset_2', 'tool_1'], ['mode_4', 'dataset_2', 'tool_1'], ['dataset_3', 'tool_1'],
+                        ['tool_1'], ['dataset_4', 'tool_2']]
+            -> reduced_branches = [['tool_1'], ['dataset_4', 'tool_2']]
+        """
+        unique_tool_branches = [branch for branch in branches if len(branch) == 1]
+        dataset_branches = [branch for branch in branches if len(branch) == 2]
+        mode_branches = [branch for branch in branches if len(branch) == 3]
+
+        unique_dataset_branches = [branch for branch in dataset_branches if
+                                   [branch[1]] not in unique_tool_branches]
+
+        # if there are more 'mode branches' of the same tool/dataset, they are combined. This way deleting these modes
+        if len(mode_branches) > 0:
+            unique_mode_branches = [mode_branches[0]]
+            for branch in mode_branches[1:]:
+                if [branch[2]] not in unique_tool_branches and [branch[1], branch[2]] not in unique_dataset_branches:
+                    for ii, x in enumerate(unique_mode_branches):
+                        if branch[1:] == x[1:]:
+                            unique_mode_branches[ii] = [x[0] + branch[0], x[1], x[2]]
+                            break
+                        if ii == len(unique_mode_branches):
+                            unique_mode_branches.append(branch)
+        else:
+            unique_mode_branches = []
+
+        return unique_tool_branches + unique_dataset_branches + unique_mode_branches
+
+    def delete_data(self, all_selected_indexes):
         """
         Delete data from the tree model and the database
 
         Is it possible to only update the tree model and not modify the database? Do we want that? Probably having the
         tow options: 'Delete from database' and 'Delete from view' would be nice.
         """
-        if len(selected) > 0:
-            selected_index = selected[0]
+        if len(all_selected_indexes) > 0:
+            # if a parent is selected to be deleted (e.g. a tool or a dataset), the branches to the children
+            # (e.g. dataset or modes) are redundant and have to be removed. Otherwise the model will try to remove
+            # data that is already removed.
+            unique_branches = self.remove_redundant_branches(view_cfg.selected_data)
 
-            branch = self.get_branch_from_item(self.getItem(selected_index))
-            self.removeRow(selected_index.row(), selected_index.parent())  # removeRow is a convenience function which uses removeRows
-            self.updateViewCfg()
+            # Persistent indices update automatically when other indices are removed
+            selected_persistent = [QPersistentModelIndex(selected_index) for selected_index in all_selected_indexes]
 
-            database.remove_data(branch)
+            for selected_index in selected_persistent:
+                if not selected_index.isValid():  # e.g. if the parent is already removed
+                    break
+                self.removeRow(selected_index.row(), selected_index.parent())  # removeRow is a convenience function which uses removeRows
+
+            # based on the new tree model update the active data dict
+            self.updateActiveData()
+
+            # remove data from the database
+            for branch in unique_branches:
+                database.remove_data(branch)
+
+            # all selected data has been removed, so set selected_data to an empty list
+            view_cfg.selected_data = []
 
         self.layoutChanged.emit()
 

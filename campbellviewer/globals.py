@@ -11,7 +11,7 @@ class ViewSettings:
      """
     def __init__(self):
         self.active_data = {}
-        self.selected_branch = []
+        self.selected_data = []
 
 
 global database
