@@ -38,7 +38,7 @@ from PyQt5.QtWidgets import QApplication, QMainWindow, QMenu, QVBoxLayout, QHBox
 from PyQt5.QtWidgets import QInputDialog, QLineEdit, QFileDialog, QPushButton, QLabel, QTableWidget, QTableWidgetItem, QSpinBox
 from PyQt5.QtWidgets import QStyleFactory, QCheckBox, QComboBox, QTableView, QListView, QTreeView
 from PyQt5.QtGui  import QIcon
-from PyQt5.QtCore import QFileInfo
+from PyQt5.QtCore import QFileInfo, Qt
 
 import matplotlib
 matplotlib.use("Qt5Agg")
@@ -235,8 +235,78 @@ class SettingsPopupAMP(QDialog):
 
     def ClosePopup(self):
         self.settingsAMPmode = -1
-        self.close()        
+        self.close()
 
+class SettingsPopupAEMode(QDialog):
+    """ Class for popup-window to modify the description of an aeroelastic mode """
+    def __init__(self, name, symmetry_type, whirl_type, wt_component):
+        QDialog.__init__(self)
+
+        self.name = name
+        self.symmetry_type = symmetry_type
+        self.whirl_type = whirl_type
+        self.wt_component = wt_component
+        self.setWindowTitle("Modify mode description")
+
+        popup_layoutV = QVBoxLayout(self)
+        popup_layoutNAME = QHBoxLayout(self)
+        popup_layoutSYM = QHBoxLayout(self)
+        popup_layoutWHIRL = QHBoxLayout(self)
+        popup_layoutWT = QHBoxLayout(self)
+        popup_layoutBttn = QHBoxLayout(self)
+
+        name_selection = QLabel('Mode name:')
+        self.__NameSelection = QLineEdit(self.name)
+        popup_layoutNAME.addWidget(name_selection)
+        popup_layoutNAME.addWidget(self.__NameSelection)
+
+        symmetry_type_selection = QLabel('Symmetry type:')
+        self.__SymTypeSelection = QComboBox()
+        self.__SymTypeSelection.addItems(['Symmetric', 'Asymmetric'])
+        self.__SymTypeSelection.setEditable(True)
+        popup_layoutSYM.addWidget(symmetry_type_selection)
+        popup_layoutSYM.addWidget(self.__SymTypeSelection)
+
+        whirl_type_selection = QLabel('Whirl type:')
+        self.__WhirlTypeSelection = QComboBox()
+        self.__WhirlTypeSelection.addItems(['BW', 'FW', 'Sym'])
+        self.__WhirlTypeSelection.setEditable(True)
+        popup_layoutWHIRL.addWidget(whirl_type_selection)
+        popup_layoutWHIRL.addWidget(self.__WhirlTypeSelection)
+
+        wt_component_selection = QLabel('Wint turbine component:')
+        self.__WTCompSelection = QComboBox()
+        self.__WTCompSelection.addItems(['tower', 'blade', 'drivetrain'])
+        self.__WTCompSelection.setEditable(True)
+        popup_layoutWT.addWidget(wt_component_selection)
+        popup_layoutWT.addWidget(self.__WTCompSelection)
+
+        button_OK = QPushButton('OK', self)
+        button_OK.clicked.connect(self.newSettings)
+        popup_layoutBttn.addWidget(button_OK)
+        button_Cancel = QPushButton('Cancel', self)
+        button_Cancel.clicked.connect(self.ClosePopup)
+        popup_layoutBttn.addWidget(button_Cancel)
+
+        popup_layoutV.addLayout(popup_layoutNAME)
+        popup_layoutV.addLayout(popup_layoutSYM)
+        popup_layoutV.addLayout(popup_layoutWHIRL)
+        popup_layoutV.addLayout(popup_layoutWT)
+        popup_layoutV.addLayout(popup_layoutBttn)
+        self.exec_()
+
+    def getNewSettings(self):
+        return (self.name, self.symmetry_type, self.whirl_type, self.wt_component)
+
+    def newSettings(self):
+        self.name = self.__NameSelection.text()
+        self.symmetry_type = self.__SymTypeSelection.currentText()
+        self.whirl_type = self.__WhirlTypeSelection.currentText()
+        self.wt_component = self.__WTCompSelection.currentText()
+        self.close()
+
+    def ClosePopup(self):
+        self.close()
 
 ####
 
@@ -363,9 +433,62 @@ class DatasetTree(QTreeView):
         self.setModel(tree_model)
         self.setSelectionMode(3)  # ExtendedSelection
         self.selectionModel().selectionChanged.connect(tree_model.updateSelectedData)
+        self.setContextMenuPolicy(Qt.CustomContextMenu)
+        self.customContextMenuRequested.connect(self.showContextMenu)
 
     def keyPressEvent(self, event):
         if event.key() == QtCore.Qt.Key_Delete:
+            self.tree_model.delete_data(self.selectedIndexes())
+
+    def showContextMenu(self, position):
+        idx = self.currentIndex()
+        if not idx.isValid():
+            return
+
+        menu = QMenu()
+
+        # todo: I don't know if it is possible write define the action and linked method in one lines (as in the
+        # file_menu definition below. This does not seem to work here. So for now first define actions then consequences
+        # First define all the actions
+        if idx.internalPointer().itemType == 'mode':
+            modifyModeDescr = menu.addAction('Modify mode description')
+            menu.addSeparator()
+        elif idx.internalPointer().itemType == 'dataset' or idx.internalPointer().itemType == 'tool':
+            checkAll = menu.addAction('Check all children')
+            uncheckAll = menu.addAction('Uncheck all children')
+
+        checkAllSelected = menu.addAction('Check all selected')
+        uncheckAllSelected = menu.addAction('Uncheck all selected')
+
+        menu.addSeparator()
+
+        deleteThisItem = menu.addAction('Delete this item')
+        deleteAllSelected = menu.addAction('Delete all selected items')
+
+        action = menu.exec_(self.viewport().mapToGlobal(position))
+
+        # Then define what happens if an action is clicked
+        if idx.internalPointer().itemType == 'mode':
+            if action == modifyModeDescr:
+                self.popupAEMode = SettingsPopupAEMode(idx.internalPointer().itemData.name,
+                                                       idx.internalPointer().itemData.symmetry_type,
+                                                       idx.internalPointer().itemData.whirl_type,
+                                                       idx.internalPointer().itemData.wt_component)
+                self.tree_model.modify_mode_description(idx.internalPointer(), self.popupAEMode.getNewSettings())
+                del self.popupAEMode
+        elif idx.internalPointer().itemType == 'dataset' or idx.internalPointer().itemType == 'tool':
+            if action == checkAll:
+                self.tree_model.set_checked(idx, Qt.Checked)
+            elif action == uncheckAll:
+                self.tree_model.set_checked(idx, Qt.Unchecked)
+
+        if action == checkAllSelected:
+            self.tree_model.set_checked(idx, Qt.Checked, only_selected=True, selection=self.selectedIndexes())
+        elif action == uncheckAllSelected:
+            self.tree_model.set_checked(idx, Qt.Unchecked, only_selected=True, selection=self.selectedIndexes())
+        elif action == deleteThisItem:
+            self.tree_model.delete_data([idx])
+        elif action == deleteAllSelected:
             self.tree_model.delete_data(self.selectedIndexes())
 
 

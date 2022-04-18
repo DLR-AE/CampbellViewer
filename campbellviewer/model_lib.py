@@ -123,8 +123,9 @@ class ModeTableModel(QAbstractTableModel):
 
 
 class TreeItem(object):
-    def __init__(self, name=None, checked_state=Qt.Checked, parent=None, branch_activity=True, data=None):
+    def __init__(self, name=None, checked_state=Qt.Checked, parent=None, branch_activity=True, data=None, item_type=None):
         self.parentItem = parent
+        self.itemType = item_type  # tool / dataset / mode
         self.itemName = name  # the string which will be used for visualization in the treeview
         self.itemData = data  # additional data for this node (e.g. further description of a mode)
         self.itemActivity = checked_state  # stores the activity of the node (even if the level above has been unchecked)
@@ -318,11 +319,20 @@ class TreeModel(QAbstractItemModel):
         if item.parent() is not None:  # the rootnode has no parent and always keeps the visibly active
             item.setVisibleActivity(item.parent().itemVisibleActivity and item.itemActivity)
 
+        # The loop through the tree has to go a maximum of three levels deep. If the item is already 'deeper' in the
+        # model the loops will stop earlier.
+        # todo: is there no better way to program this using recursion?
+        # this could be tools
         for child in item.childItems:
             child.setVisibleActivity((item.itemActivity and child.itemActivity))
 
+            # this could be datasets
             for grandchild in child.childItems:
                 grandchild.setVisibleActivity((item.itemActivity and child.itemActivity and grandchild.itemActivity))
+
+                # this could be modes
+                for grandgrandchild in grandchild.childItems:
+                    grandgrandchild.setVisibleActivity((item.itemActivity and child.itemActivity and grandchild.itemActivity and grandgrandchild.itemActivity))
 
     def addModelData(self, old_database=dict()):
         """
@@ -341,24 +351,24 @@ class TreeModel(QAbstractItemModel):
                 current_tool_node = self.rootItem.childItems[list(old_database.keys()).index(tool)]
             else:
                 if tool in view_cfg.active_data:
-                    self.rootItem.appendChild(TreeItem(tool, Qt.Checked, self.rootItem))
+                    self.rootItem.appendChild(TreeItem(tool, Qt.Checked, self.rootItem, item_type='tool'))
                 else:
-                    self.rootItem.appendChild(TreeItem(tool, Qt.Unchecked, self.rootItem))
+                    self.rootItem.appendChild(TreeItem(tool, Qt.Unchecked, self.rootItem, item_type='tool'))
                 current_tool_node = self.rootItem.childItems[-1]
                 old_database[tool] = {}
 
             for ds in database[tool]:
                 if ds not in old_database[tool]:
                     if ds in view_cfg.active_data[tool]:
-                        current_tool_node.appendChild(TreeItem(ds, Qt.Checked, current_tool_node))
+                        current_tool_node.appendChild(TreeItem(ds, Qt.Checked, current_tool_node, item_type='dataset'))
                     else:
-                        current_tool_node.appendChild(TreeItem(ds, Qt.Unchecked, current_tool_node))
+                        current_tool_node.appendChild(TreeItem(ds, Qt.Unchecked, current_tool_node, item_type='dataset'))
 
                     for mode_ID, ae_mode in enumerate(database[tool][ds].modes.values):
                         if mode_ID in view_cfg.active_data[tool][ds]:
-                            current_tool_node.childItems[-1].appendChild(TreeItem(ae_mode.name, Qt.Checked, current_tool_node.childItems[-1], data=ae_mode))
+                            current_tool_node.childItems[-1].appendChild(TreeItem(ae_mode.name, Qt.Checked, current_tool_node.childItems[-1], data=ae_mode, item_type='mode'))
                         else:
-                            current_tool_node.childItems[-1].appendChild(TreeItem(ae_mode.name, Qt.Unchecked, current_tool_node.childItems[-1], data=ae_mode))
+                            current_tool_node.childItems[-1].appendChild(TreeItem(ae_mode.name, Qt.Unchecked, current_tool_node.childItems[-1], data=ae_mode, item_type='mode'))
 
         self.updateActivityRepresentation(self.rootItem)
 
@@ -374,6 +384,8 @@ class TreeModel(QAbstractItemModel):
         # Because a direct link between the database and the tree model is not possible (it is not possible to link a
         # a node of the tree directly to a database entry), we have to loop over the full tree and update the full
         # database... -> this can not be optimal...
+
+        # todo: one way to make this faster is by only updating from the modified index onwards
         for tool_node in self.rootItem.childItems:
             for ds_node in tool_node.childItems:
                 for mode_ID, mode in enumerate(ds_node.childItems):
@@ -474,6 +486,33 @@ class TreeModel(QAbstractItemModel):
 
         return unique_tool_branches + unique_dataset_branches + unique_mode_branches
 
+    def set_checked(self, index, checked_state=Qt.Checked, only_selected=False, selection=[]):
+        """
+        Change checked state of multiple items in the tree model.
+
+        Args:
+            index : index of the item which will be modified, children might be modified as well according to 'only_selected'
+            checked_state (Qt.Checked or Qt.Unchecked) : Qt state which will be set on all chosen items
+            only_selected (Boolean) : If True, only the selected items in the tree model will be modified. If False,
+            all children of index will be modified.
+            selection (list) : list with the selected indices in the view
+        """
+        if only_selected:
+            for selected_index in selection:
+                self.getItem(selected_index).itemActivity = checked_state
+            self.updateActivityRepresentation(self.rootItem)
+        else:
+            base_node = self.getItem(index)
+            base_node.itemActivity = checked_state
+            for node in base_node.childItems:
+                node.itemActivity = checked_state
+                for node in node.childItems:
+                    node.itemActivity = checked_state
+            self.updateActivityRepresentation(base_node)
+
+        self.updateActiveData()
+        self.layoutChanged.emit()
+
     def delete_data(self, all_selected_indexes):
         """
         Delete data from the tree model and the database
@@ -507,3 +546,17 @@ class TreeModel(QAbstractItemModel):
 
         self.layoutChanged.emit()
 
+    def modify_mode_description(self, item, input):
+        """ Modify the mode description in the tree model and in the database """
+        # Modify the tree model
+        item.itemData.name = input[0]
+        item.itemData.symmetry_type = input[1]
+        item.itemData.whirl_type = input[2]
+        item.itemData.wt_component = input[3]
+
+        item.itemName = input[0]
+
+        # Update the database
+        self.updateDatabase()
+
+        self.layoutChanged.emit()
