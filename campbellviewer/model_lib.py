@@ -513,6 +513,29 @@ class TreeModel(QAbstractItemModel):
         self.updateActiveData()
         self.layoutChanged.emit()
 
+    def filter_checked(self, base_node, filter):
+        """
+        Change checked state of multiple items in the tree model based on a filter on the AEMode attributes
+
+        Args:
+            base_node (item) : base item which will be modified, this can be a tool, dataset or mode item. All
+                               'children modes' will be filtered.
+            filter (tuple) : AEMode attributes to filter for (symmetry_type, whirl_type, wt_component)
+        """
+        if base_node.itemType == 'mode':
+            base_node.itemActivity = base_node.itemData.filter(filter)
+
+        for node in base_node.childItems:
+            if node.itemType == 'mode':
+                node.itemActivity = node.itemData.filter(filter)
+            for node in node.childItems:
+                if node.itemType == 'mode':
+                    node.itemActivity = node.itemData.filter(filter)
+
+        self.updateActivityRepresentation(base_node)
+        self.updateActiveData()
+        self.layoutChanged.emit()
+
     def delete_data(self, all_selected_indexes):
         """
         Delete data from the tree model and the database
