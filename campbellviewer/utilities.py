@@ -1,5 +1,5 @@
 import re
-
+from PyQt5.QtCore import Qt
 
 def assure_unique_name(unique_name, occupied_names):
     """
@@ -34,4 +34,19 @@ class AEMode:
         return 'Name: {}\nSymmetry type: {}\nWhirl type: {}\nWT component: {}'.format(self.name, self.symmetry_type,
                                                                                       self.whirl_type,
                                                                                       self.wt_component)
+
+    def filter(self, filter):
+        """
+        Check if this AE mode matches with the filter
+
+        Args:
+            filter (tuple) : tuple with three entries (symmetry_type, whirl_type, wt_component). 'all' is used as
+            wildcard
+        """
+        if (self.symmetry_type == filter[0] or filter[0] == 'all') and \
+           (self.whirl_type == filter[1] or filter[1] == 'all') and \
+           (self.wt_component == filter[2] or filter[2] == 'all'):
+            return Qt.Checked
+        else:
+            return Qt.Unchecked
 

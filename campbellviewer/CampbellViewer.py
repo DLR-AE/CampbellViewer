@@ -264,6 +264,7 @@ class SettingsPopupAEMode(QDialog):
         self.__SymTypeSelection = QComboBox()
         self.__SymTypeSelection.addItems(['Symmetric', 'Asymmetric'])
         self.__SymTypeSelection.setEditable(True)
+        self.__SymTypeSelection.setCurrentText(self.symmetry_type)
         popup_layoutSYM.addWidget(symmetry_type_selection)
         popup_layoutSYM.addWidget(self.__SymTypeSelection)
 
@@ -271,13 +272,15 @@ class SettingsPopupAEMode(QDialog):
         self.__WhirlTypeSelection = QComboBox()
         self.__WhirlTypeSelection.addItems(['BW', 'FW', 'Sym'])
         self.__WhirlTypeSelection.setEditable(True)
+        self.__WhirlTypeSelection.setCurrentText(self.whirl_type)
         popup_layoutWHIRL.addWidget(whirl_type_selection)
         popup_layoutWHIRL.addWidget(self.__WhirlTypeSelection)
 
-        wt_component_selection = QLabel('Wint turbine component:')
+        wt_component_selection = QLabel('Wind turbine component:')
         self.__WTCompSelection = QComboBox()
         self.__WTCompSelection.addItems(['tower', 'blade', 'drivetrain'])
         self.__WTCompSelection.setEditable(True)
+        self.__WTCompSelection.setCurrentText(self.wt_component)
         popup_layoutWT.addWidget(wt_component_selection)
         popup_layoutWT.addWidget(self.__WTCompSelection)
 
@@ -300,6 +303,69 @@ class SettingsPopupAEMode(QDialog):
 
     def newSettings(self):
         self.name = self.__NameSelection.text()
+        self.symmetry_type = self.__SymTypeSelection.currentText()
+        self.whirl_type = self.__WhirlTypeSelection.currentText()
+        self.wt_component = self.__WTCompSelection.currentText()
+        self.close()
+
+    def ClosePopup(self):
+        self.close()
+
+
+class SettingsPopupModeFilter(QDialog):
+    """ Class for popup-window to filter aeroleastic modes """
+    def __init__(self):
+        QDialog.__init__(self)
+
+        self.symmetry_type = 'all'
+        self.whirl_type = 'all'
+        self.wt_component = 'all'
+        self.setWindowTitle("Filter modes")
+
+        popup_layoutV = QVBoxLayout(self)
+        popup_layoutSYM = QHBoxLayout(self)
+        popup_layoutWHIRL = QHBoxLayout(self)
+        popup_layoutWT = QHBoxLayout(self)
+        popup_layoutBttn = QHBoxLayout(self)
+
+        symmetry_type_selection = QLabel('Only show this symmetry type:')
+        self.__SymTypeSelection = QComboBox()
+        self.__SymTypeSelection.addItems(['all', 'Symmetric', 'Asymmetric'])
+        self.__SymTypeSelection.setEditable(True)
+        popup_layoutSYM.addWidget(symmetry_type_selection)
+        popup_layoutSYM.addWidget(self.__SymTypeSelection)
+
+        whirl_type_selection = QLabel('Only show this whirl type:')
+        self.__WhirlTypeSelection = QComboBox()
+        self.__WhirlTypeSelection.addItems(['all', 'BW', 'FW', 'Sym'])
+        self.__WhirlTypeSelection.setEditable(True)
+        popup_layoutWHIRL.addWidget(whirl_type_selection)
+        popup_layoutWHIRL.addWidget(self.__WhirlTypeSelection)
+
+        wt_component_selection = QLabel('Only show this wind turbine component:')
+        self.__WTCompSelection = QComboBox()
+        self.__WTCompSelection.addItems(['all', 'tower', 'blade', 'drivetrain'])
+        self.__WTCompSelection.setEditable(True)
+        popup_layoutWT.addWidget(wt_component_selection)
+        popup_layoutWT.addWidget(self.__WTCompSelection)
+
+        button_OK = QPushButton('OK', self)
+        button_OK.clicked.connect(self.newSettings)
+        popup_layoutBttn.addWidget(button_OK)
+        button_Cancel = QPushButton('Cancel', self)
+        button_Cancel.clicked.connect(self.ClosePopup)
+        popup_layoutBttn.addWidget(button_Cancel)
+
+        popup_layoutV.addLayout(popup_layoutSYM)
+        popup_layoutV.addLayout(popup_layoutWHIRL)
+        popup_layoutV.addLayout(popup_layoutWT)
+        popup_layoutV.addLayout(popup_layoutBttn)
+        self.exec_()
+
+    def getNewSettings(self):
+        return (self.symmetry_type, self.whirl_type, self.wt_component)
+
+    def newSettings(self):
         self.symmetry_type = self.__SymTypeSelection.currentText()
         self.whirl_type = self.__WhirlTypeSelection.currentText()
         self.wt_component = self.__WTCompSelection.currentText()
@@ -460,6 +526,8 @@ class DatasetTree(QTreeView):
         checkAllSelected = menu.addAction('Check all selected')
         uncheckAllSelected = menu.addAction('Uncheck all selected')
 
+        filterModes = menu.addAction('Filter modes')
+
         menu.addSeparator()
 
         deleteThisItem = menu.addAction('Delete this item')
@@ -486,6 +554,10 @@ class DatasetTree(QTreeView):
             self.tree_model.set_checked(idx, Qt.Checked, only_selected=True, selection=self.selectedIndexes())
         elif action == uncheckAllSelected:
             self.tree_model.set_checked(idx, Qt.Unchecked, only_selected=True, selection=self.selectedIndexes())
+        elif action == filterModes:
+            self.popupFilterModes = SettingsPopupModeFilter()
+            self.tree_model.filter_checked(idx.internalPointer(), self.popupFilterModes.getNewSettings())
+            del self.popupFilterModes
         elif action == deleteThisItem:
             self.tree_model.delete_data([idx])
         elif action == deleteAllSelected:
