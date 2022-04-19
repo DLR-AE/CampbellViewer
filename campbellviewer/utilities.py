@@ -23,7 +23,7 @@ def assure_unique_name(unique_name, occupied_names):
 
 class AEMode:
     """ Storage class for aeroelastic modes """
-    def __init__(self, name='', symmetry_type=None, whirl_type=None, wt_component=None):
+    def __init__(self, name='', symmetry_type='', whirl_type='', wt_component=''):
         self.name = name
         self.symmetry_type = symmetry_type
         self.whirl_type = whirl_type  # BW, FW,
@@ -50,3 +50,10 @@ class AEMode:
         else:
             return Qt.Unchecked
 
+    def to_plain_text(self):
+        return self.name + '$' + self.symmetry_type + '$' + self.whirl_type + '$' + self.wt_component
+
+    @classmethod
+    def from_plain_text(cls, plain_text):
+        return cls(name=plain_text.split('$')[0], symmetry_type=plain_text.split('$')[1],
+                   whirl_type=plain_text.split('$')[2], wt_component=plain_text.split('$')[3])
