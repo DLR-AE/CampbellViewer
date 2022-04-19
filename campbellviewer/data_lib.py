@@ -5,11 +5,12 @@ This module contains data storing classes
 import xarray as xr
 import h5py
 import os
+import copy
 
 # local libs
 from HAWCStab2_lib import HAWCStab2Data
 from BladedLin_lib import BladedLinData
-from utilities import assure_unique_name
+from utilities import assure_unique_name, AEMode
 
 class LinearizationDataWrapper(dict):
     """
@@ -79,10 +80,19 @@ class LinearizationDataWrapper(dict):
 
         for toolname in self:
             for datasetname, xr_dataset in self[toolname].items():
+                # The xarray datasets can be saved using the build-in to_netcdf methods of xarray.
+                # With one exeption: the AEMode class -> xarray cannot serialize arbitrary Python objects
+                # Therefore each AEMode instance is converted to a list with its attributes.
+                xr_dataset_to_save = copy.deepcopy(xr_dataset)
+                for ii, ae_mode in enumerate(xr_dataset_to_save.modes.values):
+                    xr_dataset_to_save['modes'][ii] = ae_mode.to_plain_text()
+                for ii, ae_mode in enumerate(xr_dataset_to_save.participation_modes.values):
+                    xr_dataset_to_save['participation_modes'][ii] = ae_mode.to_plain_text()
+
                 if os.path.exists(fname):
-                    xr_dataset.to_netcdf(fname, mode='a', group=toolname + '&' + datasetname)
+                    xr_dataset_to_save.to_netcdf(fname, mode='a', group=toolname + '&' + datasetname)
                 else:
-                    xr_dataset.to_netcdf(fname, mode='w', group=toolname + '&' + datasetname)
+                    xr_dataset_to_save.to_netcdf(fname, mode='w', group=toolname + '&' + datasetname)
 
     def load(self, fname='CampbellViewerDatabase.nc'):
         # xr.open_dataset can not automatically find all groups in a netCDF4 file. So first find the available
@@ -107,6 +117,12 @@ class LinearizationDataWrapper(dict):
                     print('Datasetname {} was already in use in tool {}. The loaded dataset will be renamed'.format(datasetname, toolname))
                     datasetname = assure_unique_name(datasetname, self[toolname].keys())
                 self[toolname][datasetname] = xr.open_dataset(fname, group=full_datasetname)
+
+                # convert AEModes saved as plain text to AEMode objects
+                for ii, ae_mode in enumerate(self[toolname][datasetname]['modes'].values):
+                    self[toolname][datasetname]['modes'][ii] = AEMode.from_plain_text(ae_mode)
+                for ii, ae_mode in enumerate(self[toolname][datasetname]['participation_modes'].values):
+                    self[toolname][datasetname]['participation_modes'][ii] = AEMode.from_plain_text(ae_mode)
         else:
             print('REQUESTED DATABASE FILE {} was not found'.format(fname))
             loaded_data = dict()

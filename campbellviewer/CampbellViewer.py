@@ -513,7 +513,7 @@ class DatasetTree(QTreeView):
 
         menu = QMenu()
 
-        # todo: I don't know if it is possible write define the action and linked method in one lines (as in the
+        # todo: I don't know if it is possible to define the action and the linked method in one line (as in the
         # file_menu definition below. This does not seem to work here. So for now first define actions then consequences
         # First define all the actions
         if idx.internalPointer().itemType == 'mode':
