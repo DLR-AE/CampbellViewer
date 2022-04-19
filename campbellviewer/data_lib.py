@@ -109,13 +109,13 @@ class LinearizationDataWrapper(dict):
                 datasetname = full_datasetname.split('&')[1]
                 if toolname not in loaded_data:
                     loaded_data[toolname] = []
-                loaded_data[toolname].append(datasetname)
                 if toolname not in self:
                     self[toolname] = dict()
                 if datasetname in self[toolname]:
                     # print('Careful! {} dataset will be overwritten'.format(toolname + ' ' + datasetname))
                     print('Datasetname {} was already in use in tool {}. The loaded dataset will be renamed'.format(datasetname, toolname))
                     datasetname = assure_unique_name(datasetname, self[toolname].keys())
+                loaded_data[toolname].append(datasetname)
                 self[toolname][datasetname] = xr.open_dataset(fname, group=full_datasetname)
 
                 # convert AEModes saved as plain text to AEMode objects

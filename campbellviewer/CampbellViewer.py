@@ -826,9 +826,10 @@ class ApplicationWindow(QMainWindow):
 
         loaded_datasets = database.load(fname=fileName)
         for toolname in loaded_datasets:
+            if toolname not in view_cfg.active_data:
+                view_cfg.active_data[toolname] = dict()
+
             for datasetname in loaded_datasets[toolname]:
-                if toolname not in view_cfg.active_data:
-                    view_cfg.active_data[toolname] = dict()
                 view_cfg.active_data[toolname][datasetname] = np.arange(self.mode_minpara_cmb-1,self.mode_maxpara_cmb,1).tolist()
 
         self.dataset_tree_model.addModelData(old_database=old_database)
