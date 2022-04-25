@@ -35,9 +35,9 @@ import copy
 
 from PyQt5 import QtCore
 from PyQt5.QtWidgets import QApplication, QMainWindow, QMenu, QVBoxLayout, QHBoxLayout, QSizePolicy, QMessageBox, QWidget, QDialog
-from PyQt5.QtWidgets import QInputDialog, QLineEdit, QFileDialog, QPushButton, QLabel, QTableWidget, QTableWidgetItem, QSpinBox
-from PyQt5.QtWidgets import QStyleFactory, QCheckBox, QComboBox, QTableView, QListView, QTreeView
-from PyQt5.QtGui  import QIcon
+from PyQt5.QtWidgets import QInputDialog, QLineEdit, QFileDialog, QPushButton, QLabel, QTableWidget, QTableWidgetItem, QSpinBox, QListWidget
+from PyQt5.QtWidgets import QStyleFactory, QCheckBox, QComboBox, QTableView, QListView, QTreeView, QAbstractItemView
+from PyQt5.QtGui  import QIcon, QDoubleValidator
 from PyQt5.QtCore import QFileInfo, Qt
 
 import matplotlib
@@ -237,6 +237,7 @@ class SettingsPopupAMP(QDialog):
         self.settingsAMPmode = -1
         self.close()
 
+
 class SettingsPopupAEMode(QDialog):
     """ Class for popup-window to modify the description of an aeroelastic mode """
     def __init__(self, name, symmetry_type, whirl_type, wt_component):
@@ -374,7 +375,136 @@ class SettingsPopupModeFilter(QDialog):
     def ClosePopup(self):
         self.close()
 
-####
+
+class SettingsPopupLinestyle(QDialog):
+    """ Class for popup-window to set linestyle behaviour """
+    def __init__(self, main_window):
+        QDialog.__init__(self)
+
+        self.main_window = main_window
+
+        popup_layoutV = QVBoxLayout(self)
+        popup_layoutCM = QHBoxLayout(self)
+        popup_layoutLS = QHBoxLayout(self)
+        popup_layoutMARKER = QHBoxLayout(self)
+        popup_layoutLW = QHBoxLayout(self)
+        popup_layoutMARKERSIZE = QHBoxLayout(self)
+        popup_layoutCM2 = QHBoxLayout(self)
+        popup_layoutSDO = QHBoxLayout(self)
+        popup_layoutBttn = QHBoxLayout(self)
+
+        self.__CMSelection = QComboBox()
+        self.__CMSelection.addItems(['tab10', 'tab20', 'tab20b', 'tab20c', 'Pastel1', 'Pastel2', 'Paired', 'Accent', 'Dark2', 'Set1', 'Set2', 'Set3'])
+        self.__CMSelection.setCurrentText(view_cfg.ls.colormap)
+        popup_layoutCM.addWidget(QLabel('Colormap:'), 1)
+        popup_layoutCM.addWidget(self.__CMSelection, 1)
+
+        self.__OverwriteSelection = QCheckBox()
+        self.__OverwriteSelection.stateChanged.connect(self.override_colormap)
+        self.__OverwriteListSelection = QLineEdit('r, g, b, y, c, m, k')
+        self.override_colormap(Qt.Unchecked)
+        popup_layoutCM2.addWidget(QLabel('Overwrite the standard colormap:'), 1)
+        popup_layoutCM2.addWidget(self.__OverwriteSelection, 0.1)
+        popup_layoutCM2.addWidget(self.__OverwriteListSelection, 0.9)
+
+        # It would be better to have an editable QListWidget, but that would generate more code, so just a line edit for now
+        # this line edit is very likely to give wrong input, this should be verified somewhere
+        self.__LSSelection = QLineEdit(','.join(view_cfg.ls.style_sequences['linestyle']))
+        popup_layoutLS.addWidget(QLabel('Linestyle list:'), 1)
+        popup_layoutLS.addWidget(self.__LSSelection, 1)
+
+        self.__LWSelection = QLineEdit(str(view_cfg.ls.lw))
+        self.onlyDouble = QDoubleValidator()
+        self.__LWSelection.setValidator(self.onlyDouble)
+        popup_layoutLW.addWidget(QLabel('Linewidth:'), 1)
+        popup_layoutLW.addWidget(self.__LWSelection, 1)
+
+        self.__MarkerSelection = QLineEdit(','.join(view_cfg.ls.style_sequences['marker']))
+        popup_layoutMARKER.addWidget(QLabel('Marker list:'), 1)
+        popup_layoutMARKER.addWidget(self.__MarkerSelection, 1)
+
+        self.__MarkerSizeSelection = QLineEdit(str(view_cfg.ls.markersizedefault))
+        self.__MarkerSizeSelection.setValidator(self.onlyDouble)
+        popup_layoutMARKERSIZE.addWidget(QLabel('Marker size default:'), 1)
+        popup_layoutMARKERSIZE.addWidget(self.__MarkerSizeSelection, 1)
+
+        self.__SDOSelection = QComboBox()
+        self.__SDOSelection.addItems(['1. Color, 2. Marker, 3. Linestyle',
+                                      '1. Color, 2. Linestyle, 3. Marker',
+                                      '1. Marker, 2. Color, 3. Linestyle',
+                                      '1. Marker, 2. Linestyle, 3. Color',
+                                      '1. Linestyle, 2. Color, 3. Marker',
+                                      '1. Linestyle, 2. Marker, 3. Color'])
+        popup_layoutSDO.addWidget(QLabel('Order in which linestyles are determined:'), 1)
+        popup_layoutSDO.addWidget(self.__SDOSelection, 1)
+
+        button_apply = QPushButton('Apply', self)
+        button_apply.clicked.connect(self.newSettings)
+        popup_layoutBttn.addWidget(button_apply)
+        button_OK = QPushButton('OK', self)
+        button_OK.clicked.connect(self.ok)
+        popup_layoutBttn.addWidget(button_OK)
+        button_Cancel = QPushButton('Cancel', self)
+        button_Cancel.clicked.connect(self.ClosePopup)
+        popup_layoutBttn.addWidget(button_Cancel)
+
+        popup_layoutV.addLayout(popup_layoutCM)
+        popup_layoutV.addLayout(popup_layoutCM2)
+        popup_layoutV.addLayout(popup_layoutLS)
+        popup_layoutV.addLayout(popup_layoutLW)
+        popup_layoutV.addLayout(popup_layoutMARKER)
+        popup_layoutV.addLayout(popup_layoutMARKERSIZE)
+        popup_layoutV.addLayout(popup_layoutSDO)
+        popup_layoutV.addLayout(popup_layoutBttn)
+        self.exec_()
+
+    def override_colormap(self, state):
+        if state == Qt.Checked:
+            self.__CMSelection.clear()
+            self.__OverwriteListSelection.setStyleSheet("QLineEdit{background : white;}")
+            self.__OverwriteListSelection.setReadOnly(False)
+        else:
+            self.__CMSelection.addItems(
+                ['tab10', 'tab20', 'tab20b', 'tab20c', 'Pastel1', 'Pastel2', 'Paired', 'Accent', 'Dark2', 'Set1',
+                 'Set2', 'Set3'])
+            self.__CMSelection.setCurrentText(view_cfg.ls.colormap)
+            self.__OverwriteListSelection.setStyleSheet("QLineEdit{background : grey;}")
+            self.__OverwriteListSelection.setReadOnly(True)
+
+    def ok(self):
+        self.newSettings()
+        self.close()
+
+    def newSettings(self):
+        view_cfg.ls.colormap = self.__CMSelection.currentText()
+        if self.__OverwriteSelection.checkState() == Qt.Checked:
+            view_cfg.ls.overwrite_cm_color_sequence = self.__OverwriteListSelection.text().split(',')
+        else:
+            view_cfg.ls.overwrite_cm_color_sequence = None
+        view_cfg.ls.style_sequences['linestyle'] = self.__LSSelection.text().split(',')
+        view_cfg.ls.lw = float(self.__LWSelection.text())
+        view_cfg.ls.style_sequences['marker'] = self.__MarkerSelection.text().split(',')
+        view_cfg.ls.markersizedefault = float(self.__MarkerSizeSelection.text())
+        view_cfg.ls.style_determination_order = [['color', 'marker', 'linestyle'],
+                                                 ['color', 'linestyle', 'marker'],
+                                                 ['marker', 'color', 'linestyle'],
+                                                 ['marker', 'linestyle', 'color'],
+                                                 ['linestyle', 'color', 'marker'],
+                                                 ['linestyle', 'marker', 'color']][self.__SDOSelection.currentIndex()]
+
+        view_cfg.lines = view_cfg.update_lines()
+        self.main_window.UpdateMainPlot()
+
+
+         # It seems that my new settings arrive in the view_cfg.lines, but the plotting does not show the changed color etc
+
+
+
+
+        print(view_cfg.ls.__dict__)
+
+    def ClosePopup(self):
+        self.close()
 
 
 class AmplitudeWindow(QMainWindow):
@@ -588,6 +718,7 @@ class ApplicationWindow(QMainWindow):
         self.menuBar().addSeparator()
         self.menuBar().addMenu(self.settings_menu)
         self.settings_menu.addAction('&Header Lines', self.setHeaderLines)
+        self.settings_menu.addAction('&Linestyle defaults', self.setLinestyleDefaults)
                 
         # Tools
         self.tools_menu = QMenu('&Tools', self)
@@ -738,8 +869,8 @@ class ApplicationWindow(QMainWindow):
         freq_lines = []
         damp_lines = []
 
-        for atool in view_cfg.active_data:
-            for ads in view_cfg.active_data[atool]:
+        for atool in view_cfg.active_data:  # active tool
+            for ads in view_cfg.active_data[atool]:  # active dataset
                 if database[atool][ads]['frequency'] is not None:
                     # set xaxis item
                     if self.xaxis_item == 'WS':
@@ -750,16 +881,29 @@ class ApplicationWindow(QMainWindow):
                     # add active modes
                     # this can probably also be done without a loop and just with the indices
                     for mode_ID in view_cfg.active_data[atool][ads]:
-                        freq_line, = self.axes1.plot(xaxis_values,
-                                                     database[atool][ads].frequency.loc[:, mode_ID],
-                                                     linewidth=lw,
-                                                     label=ads + ': ' + database[atool][ads].modes.values[mode_ID].name,
-                                                     markersize=markersizedefault, picker=2)
-                        damp_line, = self.axes2.plot(xaxis_values,
-                                                     database[atool][ads].damping.loc[:, mode_ID],
-                                                     linewidth=lw,
-                                                     label=ads + ': ' + database[atool][ads].modes.values[mode_ID].name,
-                                                     markersize=markersizedefault, picker=2)
+                        if view_cfg.lines['HAWCStab2']['default'][mode_ID] is None:
+                            ls = view_cfg.ls.ls()
+                            freq_line, = self.axes1.plot(xaxis_values,
+                                                         database[atool][ads].frequency.loc[:, mode_ID],
+                                                         color=ls['color'],
+                                                         linestyle=ls['linestyle'],
+                                                         marker=ls['marker'],
+                                                         linewidth=view_cfg.ls.lw,
+                                                         label=ads + ': ' + database[atool][ads].modes.values[mode_ID].name,
+                                                         markersize=view_cfg.ls.markersizedefault, picker=2)
+                            damp_line, = self.axes2.plot(xaxis_values,
+                                                         database[atool][ads].damping.loc[:, mode_ID],
+                                                         color=ls['color'],
+                                                         linestyle=ls['linestyle'],
+                                                         marker=ls['marker'],
+                                                         linewidth=view_cfg.ls.lw,
+                                                         label=ads + ': ' + database[atool][ads].modes.values[mode_ID].name,
+                                                         markersize=view_cfg.ls.markersizedefault, picker=2)
+                            view_cfg.lines['HAWCStab2']['default'][mode_ID] = [freq_line, damp_line]
+                        else:
+                            freq_line = self.axes1.add_line(view_cfg.lines[atool][ads][mode_ID][0])
+                            damp_line = self.axes2.add_line(view_cfg.lines[atool][ads][mode_ID][1])
+
                         freq_lines.append(freq_line)
                         damp_lines.append(damp_line)
 
@@ -882,8 +1026,10 @@ class ApplicationWindow(QMainWindow):
         """ Initialize the active_data global variable for this toolname/datasetname combination """
         if toolname not in view_cfg.active_data:
             view_cfg.active_data[toolname] = dict()
+            view_cfg.lines[toolname] = dict()
         view_cfg.active_data[toolname][datasetname] = np.arange(self.mode_minpara_cmb-1,
                                                                 self.mode_maxpara_cmb, 1).tolist()
+        view_cfg.lines[toolname][datasetname] = [None]*len(database[toolname][datasetname].modes)
 
     ##############################################################
     # Open File Dialog for HAWCStab2 result files
@@ -987,16 +1133,19 @@ class ApplicationWindow(QMainWindow):
                 self.fig.savefig(pdf_filename)
         else:
             self.fig.savefig(pdf_filename)
-            
-        
 
     ##########
     # Settings
     ##########
     def setHeaderLines(self):
-        '''This routine overrides the default header line numbers for Campbell and Amplitude files'''
-        self.popup=SettingsPopup(self.skip_header_CMB,self.skip_header_AMP,self.skip_header_OP)
-        (self.skip_header_CMB,self.skip_header_AMP,self.skip_header_OP)=self.popup.getNewSettings()
+        """ This routine overrides the default header line numbers for Campbell and Amplitude files """
+        self.popup = SettingsPopup(self.skip_header_CMB, self.skip_header_AMP, self.skip_header_OP)
+        (self.skip_header_CMB, self.skip_header_AMP, self.skip_header_OP) = self.popup.getNewSettings()
+        del self.popup
+
+    def setLinestyleDefaults(self):
+        """ This routine sets the default linestyle behaviour """
+        self.popup = SettingsPopupLinestyle(self)
         del self.popup
 
     ##########
