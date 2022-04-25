@@ -1,5 +1,6 @@
 import re
 from PyQt5.QtCore import Qt
+import matplotlib
 
 def assure_unique_name(unique_name, occupied_names):
     """
@@ -57,3 +58,53 @@ class AEMode:
     def from_plain_text(cls, plain_text):
         return cls(name=plain_text.split('$')[0], symmetry_type=plain_text.split('$')[1],
                    whirl_type=plain_text.split('$')[2], wt_component=plain_text.split('$')[3])
+
+class MPLLinestyle:
+    """ Storage class for linestyle selection in the Campbell plot """
+    def __init__(self,
+                 colormap='tab10',
+                 markersizedefault=3,
+                 style_sequences={'color': [],
+                                  'linestyle': ['-','--','-.',':'],
+                                  'marker': ['', 'o', 'v', '^', '<', '>', '8', 's', 'p', '*', 'h', 'H', 'D', 'd', 'P', 'X']},
+                 lw=1.0,
+                 overwrite_cm_color_sequence=None,  # ['r','g','b','y','c','m','k']
+                 style_determination_order=['color', 'marker', 'linestyle']
+                 ):
+
+        self.nr_lines_allocated = 0  # number of lines that already got a linestyle allocated, these lines are not necessarily
+
+        self.colormap = colormap  #
+        self.markersizedefault = markersizedefault
+        self.style_sequences = style_sequences
+        self.lw = lw
+        self.overwrite_cm_color_sequence = overwrite_cm_color_sequence
+        self.style_determination_order = style_determination_order
+
+    def ls(self):
+        """ Get the next linestyle and increase the nr_lines_allocated by one """
+
+        if self.overwrite_cm_color_sequence is not None:
+            self.style_sequences['color'] = self.overwrite_cm_color_sequence
+        else:
+            self.style_sequences['color'] = [matplotlib.colors.to_hex(color) for color in matplotlib.cm.get_cmap(self.colormap).colors]
+
+        counter = self.nr_lines_allocated
+
+        seq_0 = self.style_sequences[self.style_determination_order[0]]
+        seq_1 = self.style_sequences[self.style_determination_order[1]]
+        seq_2 = self.style_sequences[self.style_determination_order[2]]
+
+        idx_0 = counter % len(seq_0)
+        idx_1 = int(counter / len(seq_0)) % len(seq_1)
+        idx_2 = int(counter / (len(seq_0) * len(seq_1))) % len(seq_2)
+
+        self.nr_lines_allocated += 1
+
+        return {self.style_determination_order[0]: seq_0[idx_0],
+                self.style_determination_order[1]: seq_1[idx_1],
+                self.style_determination_order[2]: seq_2[idx_2],}
+
+    def verify_inputs(self):
+        raise NotImplementedError
+

@@ -1,5 +1,5 @@
 from data_lib import LinearizationDataWrapper
-
+from utilities import MPLLinestyle
 
 class ViewSettings:
     """
@@ -12,7 +12,23 @@ class ViewSettings:
     def __init__(self):
         self.active_data = {}
         self.selected_data = []
+        self.lines = {}
+        self.ls = MPLLinestyle()
 
+    def update_lines(self):
+        self.ls.nr_lines_allocated = 0
+        for atool in self.active_data:
+            for ads in self.active_data[atool]:
+                for mode_idx, line in enumerate(self.lines[atool][ads]):
+                    if line is not None:
+                        ls = self.ls.ls()
+                        for idx in [0, 1]:
+                            self.lines[atool][ads][mode_idx][idx].set_linewidth(self.ls.lw)
+                            self.lines[atool][ads][mode_idx][idx].set_linestyle(ls['linestyle'])
+                            self.lines[atool][ads][mode_idx][idx].set_color(ls['color'])
+                            self.lines[atool][ads][mode_idx][idx].set_marker(ls['marker'])
+                            self.lines[atool][ads][mode_idx][idx].set_markersize(self.ls.markersizedefault)
+        return self.lines
 
 global database
 database = LinearizationDataWrapper()
