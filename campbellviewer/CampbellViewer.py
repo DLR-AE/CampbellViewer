@@ -495,14 +495,6 @@ class SettingsPopupLinestyle(QDialog):
         view_cfg.lines = view_cfg.update_lines()
         self.main_window.UpdateMainPlot()
 
-
-         # It seems that my new settings arrive in the view_cfg.lines, but the plotting does not show the changed color etc
-
-
-
-
-        print(view_cfg.ls.__dict__)
-
     def ClosePopup(self):
         self.close()
 
