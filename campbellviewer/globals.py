@@ -30,6 +30,27 @@ class ViewSettings:
                             self.lines[atool][ads][mode_idx][idx].set_markersize(self.ls.markersizedefault)
         return self.lines
 
+    def remove_lines(self, branch):
+        """
+        Remove line2D objects of modes which are being deleted
+
+        Args:
+            branch (list): list with mode_idx, dataset, tool that have to be removed. This list will have length 1 if
+                a tool has to be removed. It will have length 2 if a dataset has to be removed. And it will have length
+                3 if modes have to be removed.
+                Examples: branch = ['dataset_name', 'tool_name'] or branch = [[0, 1, 3], 'dataset_name', 'tool_name']
+        """
+        if len(branch) == 1:
+            del self.lines[branch[0]]
+        elif len(branch) == 2:
+            del self.lines[branch[1]][branch[0]]
+        elif len(branch) == 3:
+            self.lines[branch[2]][branch[1]] = [line for mode_ID, line in enumerate(self.lines[branch[2]][branch[1]]) if
+                                                mode_ID not in branch[0]]
+        else:
+            print('The list provided can only have 1, 2, or 3 values. Nothing removed from ViewSettings.lines object')
+        return
+
 global database
 database = LinearizationDataWrapper()
 global view_cfg

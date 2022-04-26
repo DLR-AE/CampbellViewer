@@ -447,8 +447,6 @@ class TreeModel(QAbstractItemModel):
 
         self.beginRemoveRows(parent, position, position + rows - 1)
         success = parentItem.removeChildren(position, rows)
-        self.updateDatabase()
-        self.updateActiveData()
         self.endRemoveRows()
 
         return success
@@ -541,7 +539,7 @@ class TreeModel(QAbstractItemModel):
         Delete data from the tree model and the database
 
         Is it possible to only update the tree model and not modify the database? Do we want that? Probably having the
-        tow options: 'Delete from database' and 'Delete from view' would be nice.
+        two options: 'Delete from database' and 'Delete from view' would be nice.
         """
         if len(all_selected_indexes) > 0:
             # if a parent is selected to be deleted (e.g. a tool or a dataset), the branches to the children
@@ -563,6 +561,7 @@ class TreeModel(QAbstractItemModel):
             # remove data from the database
             for branch in unique_branches:
                 database.remove_data(branch)
+                view_cfg.remove_lines(branch)
 
             # all selected data has been removed, so set selected_data to an empty list
             view_cfg.selected_data = []
