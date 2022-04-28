@@ -954,7 +954,7 @@ class ApplicationWindow(QMainWindow):
         options = QFileDialog.Options()
         options |= QFileDialog.DontUseNativeDialog
         filter = "CampbellViewer Database file (*.nc);;All Files (*)"
-        fileName, _ = QFileDialog.getOpenFileName(self, "Open CampbellViewer Database", "", filter, options=options)
+        fileName, _ = QFileDialog.getOpenFileName(self, "Load CampbellViewer Database", "", filter, options=options)
 
         # save "old" database
         old_database = copy.deepcopy(database)
@@ -975,7 +975,7 @@ class ApplicationWindow(QMainWindow):
         options = QFileDialog.Options()
         options |= QFileDialog.DontUseNativeDialog
         filter = "CampbellViewer Database file (*.nc);;All Files (*)"
-        fileName, _ = QFileDialog.getSaveFileName(self, "Open CampbellViewer Database", "", filter, options=options)
+        fileName, _ = QFileDialog.getSaveFileName(self, "Save to CampbellViewer Database", "", filter, options=options)
 
         database.save(fname=fileName)
 
