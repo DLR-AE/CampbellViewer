@@ -776,7 +776,6 @@ class ApplicationWindow(QMainWindow):
         self.settingsAMPmode  = None           # default mode for which amplitude plot is made
         self.settingsAMPdataset = None         # which dataset to use for amplitude plot
         self.AMPthreshold     = 0.05           # only modes with 5% amplitude participation are shown in amplitude plot
-        # self.LineStyleDict = dict()
 
         ##############################################################
         # Figure settings
@@ -1048,9 +1047,6 @@ class ApplicationWindow(QMainWindow):
                                                           'skip_header_AMP': self.skip_header_AMP,
                                                           'skip_header_OP': self.skip_header_OP})
 
-
-        # self.update_linestyledict()
-
     def openFileNameDialogBladedLin(self, datasetname='default'):
         '''Open File Dialog for Bladed Linearization result files'''
         options = QFileDialog.Options()
@@ -1063,28 +1059,6 @@ class ApplicationWindow(QMainWindow):
             result_prefix = QFileInfo(fileName).baseName()
             database.add_data(datasetname, 'bladed-lin',
                               tool_specific_info={'result_dir': result_dir, 'result_prefix': result_prefix})
-
-        # self.update_linestyledict()
-
-    def update_linestyledict(self):
-        """
-        Formerly: Mirror the FullModesDict to a dictionary with linestyles. Currently not used.  This functionality has
-        to be updated to the current code structure.
-        """
-        color_sequence = ['r', 'g', 'b', 'y', 'c', 'm', 'k']
-        line_style_sequence = ['-', '--', '-.', ':']
-        filled_markers = ['o', 'v', '^', '<', '>', '8', 'p', 'h', 's', '*', 'H', 'D', 'd', 'P', 'X']
-        full_list = list()
-        for l in line_style_sequence:
-            for m in filled_markers:
-                for c in color_sequence:
-                    full_list.append(c + l + m)
-
-        view_cfg.LineStyleDict = dict()
-        counter = 0
-        for ds_name, mode_list in view_cfg.FullModesDict.items():
-            view_cfg.LineStyleDict[ds_name] = full_list[counter:counter+len(mode_list)]
-            counter = counter+len(mode_list)
 
     def plotPharmonics(self):
         """ Plot P-Harmonics in Campbell diagram """
