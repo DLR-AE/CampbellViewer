@@ -873,7 +873,7 @@ class ApplicationWindow(QMainWindow):
                     # add active modes
                     # this can probably also be done without a loop and just with the indices
                     for mode_ID in view_cfg.active_data[atool][ads]:
-                        if view_cfg.lines['HAWCStab2']['default'][mode_ID] is None:
+                        if view_cfg.lines[atool][ads][mode_ID] is None:
                             ls = view_cfg.ls.ls()
                             freq_line, = self.axes1.plot(xaxis_values,
                                                          database[atool][ads].frequency.loc[:, mode_ID],
@@ -891,7 +891,7 @@ class ApplicationWindow(QMainWindow):
                                                          linewidth=view_cfg.ls.lw,
                                                          label=ads + ': ' + database[atool][ads].modes.values[mode_ID].name,
                                                          markersize=view_cfg.ls.markersizedefault, picker=2)
-                            view_cfg.lines['HAWCStab2']['default'][mode_ID] = [freq_line, damp_line]
+                            view_cfg.lines[atool][ads][mode_ID] = [freq_line, damp_line]
                         else:
                             freq_line = self.axes1.add_line(view_cfg.lines[atool][ads][mode_ID][0])
                             damp_line = self.axes2.add_line(view_cfg.lines[atool][ads][mode_ID][1])
