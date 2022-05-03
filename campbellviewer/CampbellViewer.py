@@ -44,6 +44,7 @@ import matplotlib
 matplotlib.use("Qt5Agg")
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.backends.backend_qt5agg import NavigationToolbar2QT as NavigationToolbar
+from matplotlib.backend_bases import MouseButton
 from matplotlib.figure import Figure
 import mplcursors
 from model_lib import DatasetTableModel, ModeTableModel, TreeModel
@@ -790,6 +791,7 @@ class ApplicationWindow(QMainWindow):
         self.axes1      = self.fig.add_subplot(211)
         self.axes2      = self.fig.add_subplot(212, sharex=self.axes1)
         self.initlimits = True                                         # True for init
+        self.right_mouse_press = False
 
         ##############################################################
         # Set Main Widget
@@ -844,6 +846,8 @@ class ApplicationWindow(QMainWindow):
         self.axes2.set_ylim(y2lim)
         self.axes2.grid()
         self.axes2.fill_between([-10, 100], y1=0, y2=-10, where=None, facecolor='grey', alpha=0.1, hatch='/')
+        self.vline1 = None
+        self.vline2 = None
 
         # Set item of x-axis = wind speed or RPM
         if not hasattr(self, 'xaxis_item'):
@@ -855,8 +859,6 @@ class ApplicationWindow(QMainWindow):
             self.xaxis_item = 'RPM'
             
         # linewidth and markersizedefault
-        lw                  = 1.0
-        markersizedefault   = 3
         freq_lines = []
         damp_lines = []
 
@@ -928,6 +930,33 @@ class ApplicationWindow(QMainWindow):
                 line.set(color="C3")
 
         self.canvas.draw()
+        self.canvas.mpl_connect('button_press_event', self.on_press)
+        self.canvas.mpl_connect('button_release_event', self.on_release)
+        self.canvas.mpl_connect('motion_notify_event', self.on_motion)
+
+    def on_motion(self, event):
+        """
+        Matplotlib Callback function for mouse motion. A vertical line is plotted at the mouse position if the right
+        mouse button is pressed.
+        """
+        if self.right_mouse_press is False: return
+        if event.inaxes != self.axes1 and event.inaxes != self.axes2: return
+        if self.vline1 is not None:
+            self.vline1.remove()
+            self.vline2.remove()
+        self.vline1 = self.axes1.vlines(x=event.xdata, ymin=self.axes1.get_ylim()[0], ymax=self.axes1.get_ylim()[1])
+        self.vline2 = self.axes2.vlines(x=event.xdata, ymin=self.axes2.get_ylim()[0], ymax=self.axes2.get_ylim()[1])
+        self.canvas.draw()
+
+    def on_press(self, event):
+        """ Callback function for mouse press events. This does not necessarily have to be a matplotlib callback. """
+        if event.button is MouseButton.RIGHT:
+            self.right_mouse_press = True
+
+    def on_release(self, event):
+        """ Callback function for mouse release events. This does not necessarily have to be a matplotlib callback. """
+        if event.button is MouseButton.RIGHT:
+            self.right_mouse_press = False
 
     def UpdateMainPlot(self, myarg='WS'):
         """ Update main plot """
@@ -936,13 +965,13 @@ class ApplicationWindow(QMainWindow):
         else:
             myxlabel = 'Wind Speed in m/s'
             
-        if hasattr(self,'axes1') and self.initlimits==False:
-            uxlim=self.axes1.get_xlim()
-            uylim=self.axes1.get_ylim()
-            uy2lim=self.axes2.get_ylim()
+        if hasattr(self, 'axes1') and self.initlimits is False:
+            uxlim = self.axes1.get_xlim()
+            uylim = self.axes1.get_ylim()
+            uy2lim = self.axes2.get_ylim()
         else:        
-            uxlim  = [3, 20]
-            uylim  = [0, 4]
+            uxlim = [3, 20]
+            uylim = [0, 4]
             uy2lim = [-1, 4]            
             self.initlimits = False
             
