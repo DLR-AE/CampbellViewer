@@ -32,7 +32,7 @@ class BladedLinData(AbstractLinearizationData):
 
         self.read_op_data(bladed_result)
         self.read_coupled_modes(bladed_result)
-        # self.read_additional_cmb_data(bladed_result)
+        self.read_cmb_data(bladed_result)
 
     def read_op_data(self, bladed_result):
         """
@@ -64,133 +64,86 @@ class BladedLinData(AbstractLinearizationData):
         for mode_name in mode_names_orig:
             modes.append(AEMode(name=mode_name))
 
-        # self.coords["mode_names"] = mode_names
         self["modes"] = (["mode_ID"], modes)
         self["frequency"] = (["operating_point_ID", "mode_ID"], frequency.squeeze())
         self["damping"] = (["operating_point_ID", "mode_ID"], damping.squeeze())
 
-    def read_modal_participations(self, bladed_result):
+    def read_cmb_data(self, bladed_result):
         """
-        Extract the participation factors from the .$shape file
+        Read Campbell diagram data (participation factors)
 
-        This method is not finished yet...
-        """
-        # this is a dictionary with a key for each operating point, a sub-key for each mode and lists for the
-        # particip_mode_names, particip_amplitude and particip_phase
-        campbell_data_participations = bladed_result['Campbell diagram participations']
+        Data is parsed from the .$CM file, which contains all Campbell diagram data. This file contains frequency,
+        damping and participation factor results for all coupled modes. Unfortunately, it can happen that a specific
+        mode could not be found for some operating points. The only link between the freq/damp/part. factor
+        data and the operating point is the rotational speed, which is not a unique identifier. Therefore we need the
+        'coupled modes' results of the .$02 file, which contains frequency and damping progression for all operating
+        points. In this format, the operating points which did not create a result for a specific mode get a -1 value,
+        so it the link between the freq. and damping progression and the operating points is unique.
 
-        # CampbellViewer format = 3D array with # operating points, participation mode names, modes
-        # One issue: a maximum of 10 participation mode names are give per mode per operating point. All other
-        # participation modes are given a zero. The participation_factors_amp and participation_factors_phase are padded
-        # for each new participation mode name
-
-        participation_factors_amp = np.zeros((len(campbell_data_participations), 0, len(self["modes"])))
-        participation_factors_phase = np.zeros((len(campbell_data_participations), 0, len(self["modes"])))
-        # copy mode names as a first guess for participation mode names
-        all_participation_mode_names = list()
-
-        for op_ID, (op, op_data) in enumerate(campbell_data_participations.items()):
-            for mode_name, mode_data in op_data.items():
-
-                # todo: the mode name given in the shape file has to be linked to the mode name of the coupled modes
-                # main problem: some mode names seem to disappear for some operating points. Is a one-to-one
-                # with the coupled modes even possible?
-                # Outdated -> mode_idx = self["mode_names"].values.index(mode_name)
-
-                for particip_mode_iter, particip_mode_name in mode_data['particip_mode_names']:
-                    if particip_mode_name not in all_participation_mode_names:
-                        print('participation mode name (mode name in participation factor list): {}, could not yet '
-                              'be found in the overall mode name list'.format(particip_mode_name))
-                        all_participation_mode_names.append(particip_mode_name)
-                        participation_factors_amp = np.pad(participation_factors_amp, ((0, 0), (0, 1), (0, 0)),
-                                                           mode='constant', constant_values=0)
-                        participation_factors_phase = np.pad(participation_factors_phase, ((0, 0), (0, 1), (0, 0)),
-                                                             mode='constant', constant_values=0)
-
-                    participation_factors_amp[
-                        op_ID, all_participation_mode_names.index(particip_mode_name), mode_idx] = \
-                        mode_data['particip_amplitude'][particip_mode_iter]
-                    participation_factors_phase[
-                        op_ID, all_participation_mode_names.index(particip_mode_name), mode_idx] = \
-                        mode_data['particip_phase'][particip_mode_iter]
-
-        #self["participation_modes"] = (["participation_mode_ID"], [AEMode(name=name) for name in all_participation_mode_names])
-        #self["participation_factors_amp"] = (
-        #    ["operating_point_ID", "participation_mode_names", "mode_names"], participation_factors_amp)
-        #self["participation_factors_phase"] = (
-        #    ["operating_point_ID", "participation_mode_names", "mode_names"], participation_factors_phase)
-
-    def read_additional_cmb_data(self, bladed_result):
-        """
-        Read additional Campbell diagram data (participation factors)
-
-        Data is parsed from the .$CM file, which contains a full participation decomposition of each Campbell diagram
-        node. Downside is that I have to link each node to the correct tracked mode via the operating point, frequency
-        and damping.
-
-        It would have been better to use the .$shape file for this purpose -> TODO
-        It turns out the .$shape also has some problems of its own.
+        Therefore a link with the frequency and damping progression of file .$02 is made to uniquely determine for
+        which operating points the coupled mode of the .$CM file has valid entries.
 
         Args:
             bladed_result (obj.): Bladed result reader object
         """
-        campbell_data = bladed_result['Campbell diagram participations']
+        # coupled modes and operating points have to be read before
+        if self["modes"] is None:
+            self.read_coupled_modes(bladed_result)
+        if self["operating_points"] is None:
+            self.read_op_data(bladed_result)
 
-        # for each mode, for each wind speed -> get frequency and damping from mode tracked result, find entry in
-        # participation_info with same operating point (= rotational speed), frequency and damping
+        campbell_data, coupled_mode_names = bladed_result['Campbell diagram']
 
-        rotspeeds = np.array(self['operating_points'].loc[:, "rot. speed [rpm]"]) * 2 * np.pi / 60
+        if len(coupled_mode_names) != len(self["modes"]):
+            print('! Number of coupled modes  from .$CM file does not match with number of coupled modes from .$02 file')
+            return
 
-        # the number of modes in the participation factor data is variable.
-        participation_factors_amp = np.zeros((rotspeeds.size, 0, len(self["modes"])))
-        participation_factors_phase = np.zeros((rotspeeds.size, 0, len(self["modes"])))
-        # copy mode names as a first guess for participation mode names
-        participation_mode_names = list()
+        # obtain a list of all uncoupled modes in the bladed model. A list is given in the .$01 file. Unfortunately,
+        # this list does not seem to be fully consistent with the naming of the uncoupled modes in the .$CM file...
+        # So, instead all participation strings are read and all uncoupled mode names are gathered
+        uncoupled_mode_names_with_duplicates = list()
+        for i_mode, mode_cmb in enumerate(campbell_data):
+            for particip_str in mode_cmb['particip_str']:
+                for p_str in particip_str.strip(', ').split(','):
+                    uncoupled_mode_names_with_duplicates.append(' '.join(p_str.split()[:-2]))
+        uncoupled_mode_names = list(dict.fromkeys(uncoupled_mode_names_with_duplicates))
 
-        for i_rs, rotspeed in enumerate(rotspeeds):
-            for i_mode in range(len(self["modes"])):
-                freq = float(self["frequency"].loc[i_rs, i_mode]) * 2 * np.pi
-                damp = float(self["damping"].loc[i_rs, i_mode]) / 100
+        # initialize matrices for participation factors amplitude and phase
+        participation_factors_amp = np.zeros((len(self.operating_point_ID), len(uncoupled_mode_names), len(self["modes"])))
+        participation_factors_phase = np.zeros((len(self.operating_point_ID), len(uncoupled_mode_names), len(self["modes"])))
 
-                idx_op_point = np.where(abs(np.array(campbell_data['participation_info']['omega']) - rotspeed) < 0.001)[
-                    0]
-                idx_freq = np.where(abs(np.array(campbell_data['participation_info']['freq']) - freq) < 0.001)[0]
-                idx_damp = np.where(abs(np.array(campbell_data['participation_info']['damp']) - damp) < 0.001)[0]
+        for i_mode, mode_cmb in enumerate(campbell_data):
+            # CHECK THAT COUPLED MODE (MODE TRACK) (FILE .$CM) MATCHES WITH THE COUPLED MODE OUTPUT (FILE .$02)
+            used_operating_points = np.where(self["frequency"][:, i_mode].values != -1)[0]
+            if -1 in self["frequency"][:, 0].values:
+                print('The tracked coupled mode is not complete for all operating points')
 
-                unique_idx = np.intersect1d(idx_op_point, np.intersect1d(idx_freq, idx_damp))
+            if not np.allclose(np.array(mode_cmb['freq']), self["frequency"][used_operating_points, i_mode].values * 2 * np.pi, rtol=1e-02):
+                print('\nThe frequencies of the mode read from the .$CM file do not match with the frequencies from the '
+                      'coupled modes in the .$02 file')
 
-                if unique_idx.size == 0:
-                    print('Bladed linearization participation factor data could not be linked to coupled mode data for '
-                          'rotor speed = {} and mode name = {}'.format(rotspeed, self["modes"].values[i_mode].name))
-                elif unique_idx.size > 1:
-                    print('Bladed linearization participation factor data could not be UNIQUELY linked to coupled mode '
-                          'data for rotor speed = {} and mode name = {}'.format(rotspeed, self["modes"].values[i_mode].name))
-                else:
-                    particip_str = campbell_data['participation_info']['particip_str'][unique_idx[0]]
-                    for p_str in particip_str.strip(', ').split(','):  # first remove possible trailing ',' -> then split
-                        sensor_mode_name = ' '.join(p_str.split()[:-2])
-                        ampl = float(p_str.split()[-2][:-1]) / 100
-                        phase = float(p_str.split()[-1][:-1])
-                        if sensor_mode_name not in participation_mode_names:
-                            print('Sensor mode name (mode name in participation factor list): {}, could not yet be found '
-                                  'in the overall mode name list'.format(sensor_mode_name))
-                            participation_mode_names.append(sensor_mode_name)
-                            participation_factors_amp = np.pad(participation_factors_amp, ((0, 0), (0, 1), (0, 0)),
-                                                               mode='constant', constant_values=0)
-                            participation_factors_phase = np.pad(participation_factors_phase, ((0, 0), (0, 1), (0, 0)),
-                                                                 mode='constant', constant_values=0)
+            # ADD THE PARTICIPATION DATA
+            for particip_str, operating_point_id in zip(mode_cmb['particip_str'], used_operating_points):
+                for p_str in particip_str.strip(', ').split(','):  # first remove possible trailing ',' -> then split
+                    uncoupled_mode_name = ' '.join(p_str.split()[:-2])
+                    ampl = float(p_str.split()[-2][:-1]) / 100
+                    phase = float(p_str.split()[-1][:-1])
 
+                    if uncoupled_mode_name not in uncoupled_mode_names:
+                        print('Uncoupled mode name in the participation string (from .$CM file): {}, could not be found '
+                              'in the overall list of uncoupled mode names (from .$01 file)'.format(uncoupled_mode_name))
+                    else:
                         participation_factors_amp[
-                            i_rs, participation_mode_names.index(sensor_mode_name), i_mode] = ampl
+                            operating_point_id, uncoupled_mode_names.index(uncoupled_mode_name), i_mode] = ampl
                         participation_factors_phase[
-                            i_rs, participation_mode_names.index(sensor_mode_name), i_mode] = phase
+                            operating_point_id, uncoupled_mode_names.index(uncoupled_mode_name), i_mode] = phase
 
-        self["participation_modes"] = (["participation_mode_ID"], [AEMode(name=name) for name in participation_mode_names])
+        self["participation_modes"] = (
+            ["participation_mode_ID"], [AEMode(name=name) for name in uncoupled_mode_names])
         self["participation_factors_amp"] = (
-        ["operating_point_ID", "participation_mode_ID", "mode_ID"], participation_factors_amp)
+            ["operating_point_ID", "participation_mode_ID", "mode_ID"], participation_factors_amp)
         self["participation_factors_phase"] = (
-        ["operating_point_ID", "participation_mode_ID", "mode_ID"], participation_factors_phase)
-
+            ["operating_point_ID", "participation_mode_ID", "mode_ID"], participation_factors_phase)
 
 
 if __name__ == "__main__":
