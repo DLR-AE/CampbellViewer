@@ -179,6 +179,7 @@ class TreeItem(object):
 
         return True
 
+
 class TreeModel(QAbstractItemModel):
     def __init__(self, parent=None):
         super(TreeModel, self).__init__(parent)

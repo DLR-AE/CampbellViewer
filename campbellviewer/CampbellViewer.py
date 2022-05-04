@@ -34,9 +34,8 @@ import numpy as np
 import copy
 
 from PyQt5 import QtCore
-from PyQt5.QtWidgets import QApplication, QMainWindow, QMenu, QVBoxLayout, QHBoxLayout, QSizePolicy, QMessageBox, QWidget, QDialog
-from PyQt5.QtWidgets import QInputDialog, QLineEdit, QFileDialog, QPushButton, QLabel, QTableWidget, QTableWidgetItem, QSpinBox, QListWidget
-from PyQt5.QtWidgets import QStyleFactory, QCheckBox, QComboBox, QTableView, QListView, QTreeView, QAbstractItemView
+from PyQt5.QtWidgets import QApplication, QMainWindow, QMenu, QVBoxLayout, QHBoxLayout, QMessageBox, QWidget, QDialog
+from PyQt5.QtWidgets import QLineEdit, QFileDialog, QPushButton, QLabel, QSpinBox, QCheckBox, QComboBox, QTreeView
 from PyQt5.QtGui  import QIcon, QDoubleValidator
 from PyQt5.QtCore import QFileInfo, Qt
 
@@ -58,12 +57,15 @@ matplotlib.rcParams['hatch.linewidth'] = 0.2
 #~ matplotlib.rcParams['toolbar'] = 'toolmanager'
 
 ####
-# Popup
-class DataSelectionPopup(QDialog):
-    '''Class for popup-window to specify data type'''
-    def __init__(self, default='HAWCStab2'):
+# Popup setting dialogs
+####
+class SettingsPopupDataSelection(QDialog):
+    """ Class for popup-window to select data """
+    def __init__(self):
         QDialog.__init__(self)
-        self.selected_tool = default
+
+        # define initial tool and dataset
+        self.selected_tool = 'HAWCStab2'
         self.dataset_name = 'default'
 
         self.setWindowTitle("Tool selection")
@@ -72,15 +74,13 @@ class DataSelectionPopup(QDialog):
         popup_layoutName = QHBoxLayout(self)
         popup_layoutBttn = QHBoxLayout(self)
 
-        tool_selection = QLabel('Select which data type will be loaded (default=''HAWCStab2''):')
         self.__ToolSelection = QComboBox()
         self.__ToolSelection.addItems(['HAWCStab2', 'Bladed (lin.)'])
-        popup_layoutTool.addWidget(tool_selection)
+        popup_layoutTool.addWidget(QLabel('Select which data type will be loaded (default=''HAWCStab2''):'))
         popup_layoutTool.addWidget(self.__ToolSelection)
 
-        datasetname = QLabel('Specify dataset name:')
         self.__DataSetName = QLineEdit('default')
-        popup_layoutName.addWidget(datasetname)
+        popup_layoutName.addWidget(QLabel('Specify dataset name:'))
         popup_layoutName.addWidget(self.__DataSetName)
 
         button_OK = QPushButton('OK', self)
@@ -108,27 +108,29 @@ class DataSelectionPopup(QDialog):
 
 
 class SettingsPopup(QDialog):
-    '''Class for popup-window to modify the header lines in Campbell, Amplitude and operational 
-       data file as computed with HAWCStab2'''
+    """
+    Class for popup-window to modify the header lines in Campbell, Amplitude and operational data file which serve as
+    input for HAWCStab2
+    """
     def __init__(self, settingsCMB, settingsAMP, settingsOP):
         QDialog.__init__(self)
         
         self.settingsCMB = settingsCMB
         self.settingsAMP = settingsAMP
-        self.settingsOP  = settingsOP
+        self.settingsOP = settingsOP
         self.setWindowTitle("Settings for Header Lines")
-        popup_layoutV    = QVBoxLayout(self)
+        popup_layoutV = QVBoxLayout(self)
         popup_layoutHCMB = QHBoxLayout(self)
         popup_layoutHAMP = QHBoxLayout(self)
-        popup_layoutHOP  = QHBoxLayout(self)
+        popup_layoutHOP = QHBoxLayout(self)
         popup_layoutBttn = QHBoxLayout(self)
         
-        headerLinesCMBL   = QLabel('Number of header lines in Campbell file:')
-        headerLinesAMPL   = QLabel('Number of header lines in Amplitude file:')
-        headerLinesOPL    = QLabel('Number of header lines in Operational data file:')
-        self.__headerLinesCMBE   = QSpinBox()
-        self.__headerLinesAMPE   = QSpinBox()
-        self.__headerLinesOPE    = QSpinBox()
+        headerLinesCMBL = QLabel('Number of header lines in Campbell file:')
+        headerLinesAMPL = QLabel('Number of header lines in Amplitude file:')
+        headerLinesOPL = QLabel('Number of header lines in Operational data file:')
+        self.__headerLinesCMBE = QSpinBox()
+        self.__headerLinesAMPE = QSpinBox()
+        self.__headerLinesOPE = QSpinBox()
         self.__headerLinesCMBE.setValue(self.settingsCMB)
         self.__headerLinesAMPE.setValue(self.settingsAMP)
         self.__headerLinesOPE.setValue(self.settingsOP)
@@ -145,8 +147,7 @@ class SettingsPopup(QDialog):
         button_Cancel = QPushButton('Cancel', self)
         button_Cancel.clicked.connect(self.ClosePopup)
         popup_layoutBttn.addWidget(button_Cancel)
-        
-        
+
         popup_layoutV.addLayout(popup_layoutHCMB)
         popup_layoutV.addLayout(popup_layoutHAMP)
         popup_layoutV.addLayout(popup_layoutHOP)
@@ -154,20 +155,20 @@ class SettingsPopup(QDialog):
         self.exec_()
         
     def getNewSettings(self):
-        return(self.settingsCMB, self.settingsAMP, self.settingsOP)        
+        return self.settingsCMB, self.settingsAMP, self.settingsOP
 
     def newSettings(self):  
         self.settingsCMB = self.__headerLinesCMBE.value()
         self.settingsAMP = self.__headerLinesAMPE.value()  
-        self.settingsOP  = self.__headerLinesOPE.value()  
-        self.on_apply = False
-        self.close()        
+        self.settingsOP = self.__headerLinesOPE.value()
+        self.close()
 
     def ClosePopup(self):
         self.close()
         
 
 class SettingsPopupAMP(QDialog):
+    """ Class for popup-window to select for which mode the modal participations have to be shown """
     def __init__(self):
         QDialog.__init__(self)
         
@@ -175,30 +176,29 @@ class SettingsPopupAMP(QDialog):
         self.selected_tool = list(view_cfg.active_data.keys())[0]
         self.selected_dataset = list(view_cfg.active_data[self.selected_tool].keys())[0]
         self.setWindowTitle("Set mode number for Amplitude plot")
-        popup_layoutV        = QVBoxLayout(self)
-        popup_layoutAMPmode  = QHBoxLayout(self)
-        popup_layoutBttn     = QHBoxLayout(self)
-        popup_layoutDS       = QHBoxLayout(self)
-        popup_layouttool     = QHBoxLayout(self)
+        popup_layoutV = QVBoxLayout(self)
+        popup_layoutAMPmode = QHBoxLayout(self)
+        popup_layoutBttn = QHBoxLayout(self)
+        popup_layoutDS = QHBoxLayout(self)
+        popup_layouttool = QHBoxLayout(self)
 
-        tool_selection = QLabel('Select tool:')
         self.__ToolSelection = QComboBox()
         self.__ToolSelection.addItems(view_cfg.active_data.keys())
         self.__ToolSelection.currentTextChanged.connect(self.update_dataset_choice)
-        popup_layouttool.addWidget(tool_selection)
+        popup_layouttool.addWidget(QLabel('Select tool:'))
         popup_layouttool.addWidget(self.__ToolSelection)
 
-        dataset_selection = QLabel('Select dataset:')
         self.__DataSetSelection = QComboBox()
         self.__DataSetSelection.addItems(view_cfg.active_data[self.selected_tool].keys())
         self.__DataSetSelection.currentTextChanged.connect(self.update_mode_choice)
-        popup_layoutDS.addWidget(dataset_selection)
+        popup_layoutDS.addWidget(QLabel('Select dataset:'))
         popup_layoutDS.addWidget(self.__DataSetSelection)
 
-        AMPmode = QLabel('Amplitude mode to plot:')
         self.__AMPmode = QComboBox()
-        self.__AMPmode.addItems([str(database[self.selected_tool][self.selected_dataset].modes.values[mode_id].name) for mode_id in view_cfg.active_data[self.selected_tool][self.selected_dataset]])
-        popup_layoutAMPmode.addWidget(AMPmode)
+        self.__AMPmode.addItems(
+            [str(database[self.selected_tool][self.selected_dataset].modes.values[mode_id].name) for mode_id in
+             view_cfg.active_data[self.selected_tool][self.selected_dataset]])
+        popup_layoutAMPmode.addWidget(QLabel('Amplitude mode to plot:'))
         popup_layoutAMPmode.addWidget(self.__AMPmode)
         
         button_OK = QPushButton('OK', self)
@@ -230,9 +230,7 @@ class SettingsPopupAMP(QDialog):
         self.selected_tool = self.__ToolSelection.currentText()
         self.selected_dataset = self.__DataSetSelection.currentText()
         self.settingsAMPmode = view_cfg.active_data[self.selected_tool][self.selected_dataset][int(self.__AMPmode.currentIndex())]
-
-        self.on_apply = False
-        self.close()        
+        self.close()
 
     def ClosePopup(self):
         self.settingsAMPmode = -1
@@ -257,33 +255,29 @@ class SettingsPopupAEMode(QDialog):
         popup_layoutWT = QHBoxLayout(self)
         popup_layoutBttn = QHBoxLayout(self)
 
-        name_selection = QLabel('Mode name:')
         self.__NameSelection = QLineEdit(self.name)
-        popup_layoutNAME.addWidget(name_selection)
+        popup_layoutNAME.addWidget(QLabel('Mode name:'))
         popup_layoutNAME.addWidget(self.__NameSelection)
 
-        symmetry_type_selection = QLabel('Symmetry type:')
         self.__SymTypeSelection = QComboBox()
         self.__SymTypeSelection.addItems(['Symmetric', 'Asymmetric'])
         self.__SymTypeSelection.setEditable(True)
         self.__SymTypeSelection.setCurrentText(self.symmetry_type)
-        popup_layoutSYM.addWidget(symmetry_type_selection)
+        popup_layoutSYM.addWidget(QLabel('Symmetry type:'))
         popup_layoutSYM.addWidget(self.__SymTypeSelection)
 
-        whirl_type_selection = QLabel('Whirl type:')
         self.__WhirlTypeSelection = QComboBox()
         self.__WhirlTypeSelection.addItems(['BW', 'FW', 'Sym'])
         self.__WhirlTypeSelection.setEditable(True)
         self.__WhirlTypeSelection.setCurrentText(self.whirl_type)
-        popup_layoutWHIRL.addWidget(whirl_type_selection)
+        popup_layoutWHIRL.addWidget(QLabel('Whirl type:'))
         popup_layoutWHIRL.addWidget(self.__WhirlTypeSelection)
 
-        wt_component_selection = QLabel('Wind turbine component:')
         self.__WTCompSelection = QComboBox()
         self.__WTCompSelection.addItems(['tower', 'blade', 'drivetrain'])
         self.__WTCompSelection.setEditable(True)
         self.__WTCompSelection.setCurrentText(self.wt_component)
-        popup_layoutWT.addWidget(wt_component_selection)
+        popup_layoutWT.addWidget(QLabel('Wind turbine component:'))
         popup_layoutWT.addWidget(self.__WTCompSelection)
 
         button_OK = QPushButton('OK', self)
@@ -301,7 +295,7 @@ class SettingsPopupAEMode(QDialog):
         self.exec_()
 
     def getNewSettings(self):
-        return (self.name, self.symmetry_type, self.whirl_type, self.wt_component)
+        return self.name, self.symmetry_type, self.whirl_type, self.wt_component
 
     def newSettings(self):
         self.name = self.__NameSelection.text()
@@ -315,7 +309,7 @@ class SettingsPopupAEMode(QDialog):
 
 
 class SettingsPopupModeFilter(QDialog):
-    """ Class for popup-window to filter aeroleastic modes """
+    """ Class for popup-window to filter aeroelastic modes """
     def __init__(self):
         QDialog.__init__(self)
 
@@ -330,25 +324,22 @@ class SettingsPopupModeFilter(QDialog):
         popup_layoutWT = QHBoxLayout(self)
         popup_layoutBttn = QHBoxLayout(self)
 
-        symmetry_type_selection = QLabel('Only show this symmetry type:')
         self.__SymTypeSelection = QComboBox()
         self.__SymTypeSelection.addItems(['all', 'Symmetric', 'Asymmetric'])
         self.__SymTypeSelection.setEditable(True)
-        popup_layoutSYM.addWidget(symmetry_type_selection)
+        popup_layoutSYM.addWidget(QLabel('Only show this symmetry type:'))
         popup_layoutSYM.addWidget(self.__SymTypeSelection)
 
-        whirl_type_selection = QLabel('Only show this whirl type:')
         self.__WhirlTypeSelection = QComboBox()
         self.__WhirlTypeSelection.addItems(['all', 'BW', 'FW', 'Sym'])
         self.__WhirlTypeSelection.setEditable(True)
-        popup_layoutWHIRL.addWidget(whirl_type_selection)
+        popup_layoutWHIRL.addWidget(QLabel('Only show this whirl type:'))
         popup_layoutWHIRL.addWidget(self.__WhirlTypeSelection)
 
-        wt_component_selection = QLabel('Only show this wind turbine component:')
         self.__WTCompSelection = QComboBox()
         self.__WTCompSelection.addItems(['all', 'tower', 'blade', 'drivetrain'])
         self.__WTCompSelection.setEditable(True)
-        popup_layoutWT.addWidget(wt_component_selection)
+        popup_layoutWT.addWidget(QLabel('Only show this wind turbine component:'))
         popup_layoutWT.addWidget(self.__WTCompSelection)
 
         button_OK = QPushButton('OK', self)
@@ -365,7 +356,7 @@ class SettingsPopupModeFilter(QDialog):
         self.exec_()
 
     def getNewSettings(self):
-        return (self.symmetry_type, self.whirl_type, self.wt_component)
+        return self.symmetry_type, self.whirl_type, self.wt_component
 
     def newSettings(self):
         self.symmetry_type = self.__SymTypeSelection.currentText()
@@ -378,7 +369,7 @@ class SettingsPopupModeFilter(QDialog):
 
 
 class SettingsPopupLinestyle(QDialog):
-    """ Class for popup-window to set linestyle behaviour """
+    """ Class for popup-window to set linestyle behaviour of matplotlib plot """
     def __init__(self, main_window):
         QDialog.__init__(self)
 
@@ -395,7 +386,8 @@ class SettingsPopupLinestyle(QDialog):
         popup_layoutBttn = QHBoxLayout(self)
 
         self.__CMSelection = QComboBox()
-        self.__CMSelection.addItems(['tab10', 'tab20', 'tab20b', 'tab20c', 'Pastel1', 'Pastel2', 'Paired', 'Accent', 'Dark2', 'Set1', 'Set2', 'Set3'])
+        self.__CMSelection.addItems(['tab10', 'tab20', 'tab20b', 'tab20c', 'Pastel1', 'Pastel2', 'Paired',
+                                     'Accent', 'Dark2', 'Set1', 'Set2', 'Set3'])
         self.__CMSelection.setCurrentText(view_cfg.ls.colormap)
         popup_layoutCM.addWidget(QLabel('Colormap:'), 1)
         popup_layoutCM.addWidget(self.__CMSelection, 1)
@@ -409,7 +401,7 @@ class SettingsPopupLinestyle(QDialog):
         popup_layoutCM2.addWidget(self.__OverwriteListSelection, 0.9)
 
         # It would be better to have an editable QListWidget, but that would generate more code, so just a line edit for now
-        # this line edit is very likely to give wrong input, this should be verified somewhere
+        # this line edit is very likely to give wrong input, this should be validated somewhere...
         self.__LSSelection = QLineEdit(','.join(view_cfg.ls.style_sequences['linestyle']))
         popup_layoutLS.addWidget(QLabel('Linestyle list:'), 1)
         popup_layoutLS.addWidget(self.__LSSelection, 1)
@@ -1010,7 +1002,7 @@ class ApplicationWindow(QMainWindow):
 
     def dataSelection(self):
         """ Select to add HAWCStab2 or Bladed data """
-        self.popup = DataSelectionPopup()
+        self.popup = SettingsPopupDataSelection()
         tool, datasetname = self.popup.selectTool()
 
         if '&' in datasetname:
