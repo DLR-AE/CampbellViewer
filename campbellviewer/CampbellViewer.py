@@ -608,7 +608,7 @@ class AmplitudeWindow(QMainWindow):
 
 
 class DatasetTree(QTreeView):
-    def __init__(self, tree_model):
+    def __init__(self, tree_model, aw):
         super(DatasetTree, self).__init__()
         self.tree_model = tree_model
         self.setModel(tree_model)
@@ -633,6 +633,7 @@ class DatasetTree(QTreeView):
         # First define all the actions
         if idx.internalPointer().itemType == 'mode':
             modifyModeDescr = menu.addAction('Modify mode description')
+            showAmplitudes = menu.addAction('Show participation factors')
             menu.addSeparator()
         elif idx.internalPointer().itemType == 'dataset' or idx.internalPointer().itemType == 'tool':
             checkAll = menu.addAction('Check all children')
@@ -659,6 +660,12 @@ class DatasetTree(QTreeView):
                                                        idx.internalPointer().itemData.wt_component)
                 self.tree_model.modify_mode_description(idx.internalPointer(), self.popupAEMode.getNewSettings())
                 del self.popupAEMode
+            elif action == showAmplitudes:
+                modeID, dataset, tool = self.tree_model.get_branch_from_item(idx.internalPointer())
+                aw.settingsAMPtool = tool
+                aw.settingsAMPdataset = dataset
+                aw.settingsAMPmode = modeID[0]
+                aw.initAmplitudes(popup=False)
         elif idx.internalPointer().itemType == 'dataset' or idx.internalPointer().itemType == 'tool':
             if action == checkAll:
                 self.tree_model.set_checked(idx, Qt.Checked)
@@ -753,7 +760,7 @@ class ApplicationWindow(QMainWindow):
         ##############################################################
         # Treemodel of datasets
         self.dataset_tree_model = TreeModel()
-        self.dataset_tree = DatasetTree(self.dataset_tree_model)
+        self.dataset_tree = DatasetTree(self.dataset_tree_model, self)
         self.layout_list.addWidget(self.dataset_tree, 0)
 
         ##############################################################
@@ -1138,14 +1145,15 @@ class ApplicationWindow(QMainWindow):
     ##########
     # Tools
     ##########
-    def initAmplitudes(self):
+    def initAmplitudes(self, popup=True):
         """
         This routine initializes the window/plot of the participation factors on the amplitudes for a
         certain mode/dataset
         """
-        self.popupAMP = SettingsPopupAMP()
-        self.settingsAMPtool, self.settingsAMPdataset, self.settingsAMPmode = self.popupAMP.getNewSettings()
-        del self.popupAMP
+        if popup is True:
+            self.popupAMP = SettingsPopupAMP()
+            self.settingsAMPtool, self.settingsAMPdataset, self.settingsAMPmode = self.popupAMP.getNewSettings()
+            del self.popupAMP
 
         if database[self.settingsAMPtool][self.settingsAMPdataset].frequency is not None and \
                 database[self.settingsAMPtool][self.settingsAMPdataset].participation_factors_amp is not None:
