@@ -48,7 +48,7 @@ from matplotlib.figure import Figure
 import mplcursors
 from model_lib import DatasetTableModel, ModeTableModel, TreeModel
 from globals import database, view_cfg
-from utilities import assure_unique_name
+from utilities import assure_unique_name, MPLLinestyle
 
 matplotlib.rcParams['hatch.color']     = 'grey'
 matplotlib.rcParams['hatch.linewidth'] = 0.2
@@ -493,6 +493,7 @@ class SettingsPopupLinestyle(QDialog):
 
 
 class AmplitudeWindow(QMainWindow):
+    """ Separate window for participation factor plot """
     sigClosed = QtCore.pyqtSignal()
 
     def __init__(self):
@@ -526,17 +527,16 @@ class AmplitudeWindow(QMainWindow):
             uylim = self.axes1.get_ylim()
             uy2lim = self.axes2.get_ylim()
         else:            
-            uxlim  = [ 3,20]
-            #~ uxlim  = [self.data["campbell_data"][0,0],self.data["campbell_data"][-1,0]]
-            uylim  = [0,1.1]
-            uy2lim = [-180,180]
+            uxlim = [3, 20]
+            uylim = [0, 1.1]
+            uy2lim = [-180, 180]
  
         self.main_plotAMP(title='Amplitude participations for tool {}, dataset {}, {}, visibility threshold = {}'.format(requested_toolname, requested_datasetname, self.AMPmode_name, self.AMPthreshold),
                           xlabel='Wind Speed in m/s', ylabel='normalized participation',
                           y2label='phase angle in degree', xlim=uxlim, ylim=uylim, y2lim=uy2lim)
         
     def main_plotAMP(self, title='Amplitudes', xlabel='', ylabel='', y2label='',
-                     xlim=None, ylim=None, y2lim=None, xscale='linear', yscale='linear'):
+                     xlim=None, ylim=None, y2lim=None):
 
         # define figure with 2 subplots
         self.axes1 = self.AMPfig.add_subplot(211)
@@ -558,34 +558,23 @@ class AmplitudeWindow(QMainWindow):
         self.axes2.set_xlim(xlim)
         self.axes2.set_ylim(y2lim)
         self.axes2.grid()
-        
-        color_sequence      = ['r','g','b','y','c','m','k']
-        line_style_sequence = [ '-','--','-.',':']
-        lw                  = 1.0
-        filled_markers      = ['o', 'v', '^', '<', '>', '8', 's', 'p', '*', 'h', 'H', 'D', 'd', 'P', 'X']
-        markersizedefault   = 3
+
+        mpl_ls = MPLLinestyle()
         ampl_lines = []
         phase_lines = []
 
         for i, mode in enumerate(self.dataset.participation_modes.values):
-            csq  = color_sequence     [(i) % len(color_sequence)]
-            if i > len(color_sequence):
-                lssq = line_style_sequence[(i) % len(line_style_sequence)]
-                mssq = filled_markers     [(i) % len(filled_markers     )]
-            else:
-                lssq = '-'
-                mssq = ''
-
             # only show modes with a part. of minimum self.AMPthreshold (for at least one of the operating points)
             if max(self.dataset.participation_factors_amp.loc[:, i, self.settingsAMPmode]) > self.AMPthreshold:
+                ls = mpl_ls.new_ls()
                 ampl_line, = self.axes1.plot(self.dataset.operating_points.loc[:, 'wind speed [m/s]'],
                                 self.dataset.participation_factors_amp.loc[:, i, self.settingsAMPmode],
-                                label=mode.name, linewidth=lw, c=csq, linestyle=lssq,
-                                marker=mssq, markersize=markersizedefault)
+                                label=mode.name, linewidth=mpl_ls.lw, c=ls['color'], linestyle=ls['linestyle'],
+                                marker=ls['marker'], markersize=mpl_ls.markersizedefault)
                 phase_line, = self.axes2.plot(self.dataset.operating_points.loc[:, 'wind speed [m/s]'],
                                 self.dataset.participation_factors_phase.loc[:, i, self.settingsAMPmode],
-                                label=mode.name, linewidth=lw, c=csq, linestyle=lssq,
-                                marker=mssq, markersize=markersizedefault)
+                                label=mode.name, linewidth=mpl_ls.lw, c=ls['color'], linestyle=ls['linestyle'],
+                                marker=ls['marker'], markersize=mpl_ls.markersizedefault)
                 ampl_lines.append(ampl_line)
                 phase_lines.append(phase_line)
 
@@ -874,7 +863,7 @@ class ApplicationWindow(QMainWindow):
                     # this can probably also be done without a loop and just with the indices
                     for mode_ID in view_cfg.active_data[atool][ads]:
                         if view_cfg.lines[atool][ads][mode_ID] is None:
-                            ls = view_cfg.ls.ls()
+                            ls = view_cfg.ls.new_ls()
                             freq_line, = self.axes1.plot(xaxis_values,
                                                          database[atool][ads].frequency.loc[:, mode_ID],
                                                          color=ls['color'],

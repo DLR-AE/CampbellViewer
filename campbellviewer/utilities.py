@@ -81,7 +81,7 @@ class MPLLinestyle:
         self.overwrite_cm_color_sequence = overwrite_cm_color_sequence
         self.style_determination_order = style_determination_order
 
-    def ls(self):
+    def new_ls(self):
         """ Get the next linestyle and increase the nr_lines_allocated by one """
 
         if self.overwrite_cm_color_sequence is not None:
