@@ -171,7 +171,8 @@ class SettingsPopupAMP(QDialog):
     """ Class for popup-window to select for which mode the modal participations have to be shown """
     def __init__(self):
         QDialog.__init__(self)
-        
+
+        self.success = False
         self.settingsAMPmode = None
         self.selected_tool = list(view_cfg.active_data.keys())[0]
         self.selected_dataset = list(view_cfg.active_data[self.selected_tool].keys())[0]
@@ -220,20 +221,23 @@ class SettingsPopupAMP(QDialog):
 
     def update_mode_choice(self):
         self.__AMPmode.clear()
-        self.__AMPmode.addItems(view_cfg.active_data[self.__ToolSelection.currentText()]
-                                [self.__DataSetSelection.currentText()])
+        if self.__DataSetSelection.currentText() is not '':
+            self.__AMPmode.addItems(
+                [str(database[self.__ToolSelection.currentText()][self.__DataSetSelection.currentText()].modes.values[mode_id].name)
+                 for mode_id in view_cfg.active_data[self.__ToolSelection.currentText()][self.__DataSetSelection.currentText()]])
 
     def getNewSettings(self):
-        return self.selected_tool, self.selected_dataset, self.settingsAMPmode
+        return self.success, self.selected_tool, self.selected_dataset, self.settingsAMPmode
 
     def newSettings(self):
+        self.success = True
         self.selected_tool = self.__ToolSelection.currentText()
         self.selected_dataset = self.__DataSetSelection.currentText()
         self.settingsAMPmode = view_cfg.active_data[self.selected_tool][self.selected_dataset][int(self.__AMPmode.currentIndex())]
         self.close()
 
     def ClosePopup(self):
-        self.settingsAMPmode = -1
+        self.success = False
         self.close()
 
 
@@ -1144,8 +1148,10 @@ class ApplicationWindow(QMainWindow):
         """
         if popup is True:
             self.popupAMP = SettingsPopupAMP()
-            self.settingsAMPtool, self.settingsAMPdataset, self.settingsAMPmode = self.popupAMP.getNewSettings()
+            success, self.settingsAMPtool, self.settingsAMPdataset, self.settingsAMPmode = self.popupAMP.getNewSettings()
             del self.popupAMP
+            if success is False:
+                return
 
         if database[self.settingsAMPtool][self.settingsAMPdataset].frequency is not None and \
                 database[self.settingsAMPtool][self.settingsAMPdataset].participation_factors_amp is not None:
