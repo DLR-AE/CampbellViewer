@@ -768,7 +768,7 @@ class ApplicationWindow(QMainWindow):
 
         ##############################################################
         # Figure settings
-        self.fig = Figure(figsize=(6, 6), dpi=100)
+        self.fig = Figure(figsize=(6, 6), dpi=100, tight_layout=True)
         self.fig.subplots_adjust(0.06, 0.06, 0.88, 0.97)  # left,bottom,right,top
         self.canvas = FigureCanvas(self.fig)
         toolbar = NavigationToolbar(self.canvas, self)
@@ -904,6 +904,7 @@ class ApplicationWindow(QMainWindow):
                                         c='grey', linestyle='--', linewidth=0.75, label=str(index)+'P')
 
         self.axes2.legend(bbox_to_anchor=(1, 0), loc=3)
+        # self.axes2.legend(loc='upper center', bbox_to_anchor=(0.5, -0.05), ncol=5)
 
         # setup mplcursors behavior: multiple text boxes if lines are clicked, highlighting line, pairing of
         # frequency and damping lines
