@@ -51,6 +51,12 @@ class ViewSettings:
             print('The list provided can only have 1, 2, or 3 values. Nothing removed from ViewSettings.lines object')
         return
 
+    def reset_all_lines(self):
+        for tool in self.lines:
+            for ds in self.lines[tool]:
+                self.lines[tool][ds] = [None]*len(self.lines[tool][ds])
+        self.ls.nr_lines_allocated = 0
+
 global database
 database = LinearizationDataWrapper()
 global view_cfg
