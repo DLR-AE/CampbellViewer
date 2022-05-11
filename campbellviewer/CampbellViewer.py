@@ -759,7 +759,7 @@ class ApplicationWindow(QMainWindow):
         ##############################################################
         # Some defaults
         self.mode_minpara_cmb = 1
-        self.mode_maxpara_cmb = 10
+        self.mode_maxpara_cmb = 6
         self.mode_max_cmb     = self.mode_maxpara_cmb
         self.mode_min_cmb     = self.mode_minpara_cmb  
         self.pharmonics       = False
@@ -986,11 +986,8 @@ class ApplicationWindow(QMainWindow):
 
         loaded_datasets = database.load(fname=fileName)
         for toolname in loaded_datasets:
-            if toolname not in view_cfg.active_data:
-                view_cfg.active_data[toolname] = dict()
-
             for datasetname in loaded_datasets[toolname]:
-                view_cfg.active_data[toolname][datasetname] = np.arange(self.mode_minpara_cmb-1,self.mode_maxpara_cmb,1).tolist()
+                self.init_active_data(toolname, datasetname)
 
         self.dataset_tree_model.addModelData(old_database=old_database)
         self.dataset_tree_model.layoutChanged.emit()
