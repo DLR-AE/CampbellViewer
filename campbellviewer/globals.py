@@ -21,7 +21,7 @@ class ViewSettings:
             for ads in self.active_data[atool]:
                 for mode_idx, line in enumerate(self.lines[atool][ads]):
                     if line is not None:
-                        ls = self.ls.ls()
+                        ls = self.ls.new_ls()
                         for idx in [0, 1]:
                             self.lines[atool][ads][mode_idx][idx].set_linewidth(self.ls.lw)
                             self.lines[atool][ads][mode_idx][idx].set_linestyle(ls['linestyle'])
