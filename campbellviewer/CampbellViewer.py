@@ -802,6 +802,7 @@ class ApplicationWindow(QMainWindow):
         self.button_layout.addWidget(self.button_pharm)
         
         self.button_wsrpm = QPushButton('Switch plot over RPM/Windspeed', self)
+        self.button_wsrpm.clicked.connect(view_cfg.reset_all_lines)
         self.button_wsrpm.clicked.connect(self.plotWSRPM)
         self.button_layout.addWidget(self.button_wsrpm)
 
