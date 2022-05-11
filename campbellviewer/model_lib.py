@@ -223,16 +223,21 @@ class TreeModel(QAbstractItemModel):
         """ sets data in the tree model based on user modification in the tree view and updates database accordingly """
         item = self.getItem(index)
         if role == Qt.EditRole:
+            original_branch = self.get_branch_from_item(item)
             item.itemName = value
+            modified_branch = self.get_branch_from_item(item)
             if item.itemData is not None:
                 item.itemData.name = value
+
+            self.updateDatabase(original_branch, modified_branch, item.itemData)
+            self.updateLines(original_branch, modified_branch)
+
         elif role == Qt.CheckStateRole:
             item.itemActivity = value
             self.updateActivityRepresentation(item)
         else:
             return False
 
-        self.updateDatabase()  # The database has to be updated according to the modifications made to the tree model
         self.updateActiveData()
         self.layoutChanged.emit()  # Update the canvas
         return True
@@ -373,7 +378,7 @@ class TreeModel(QAbstractItemModel):
 
         self.updateActivityRepresentation(self.rootItem)
 
-    def updateDatabase(self):
+    def updateDatabase(self, original_branch, modified_branch, itemData=None):
         """
         Use data of the tree model to update the database.
 
@@ -382,15 +387,13 @@ class TreeModel(QAbstractItemModel):
         are not implemented
         """
 
-        # Because a direct link between the database and the tree model is not possible (it is not possible to link a
-        # a node of the tree directly to a database entry), we have to loop over the full tree and update the full
-        # database... -> this can not be optimal...
-
-        # todo: one way to make this faster is by only updating from the modified index onwards
-        for tool_node in self.rootItem.childItems:
-            for ds_node in tool_node.childItems:
-                for mode_ID, mode in enumerate(ds_node.childItems):
-                    database[tool_node.itemName][ds_node.itemName]["modes"][mode_ID] = mode.itemData
+        if len(original_branch) == 1 and len(modified_branch) == 1:
+            database[modified_branch[-1]] = database.pop(original_branch[-1])
+        elif len(original_branch) == 2 and len(modified_branch) == 2:
+            database[modified_branch[-1]][modified_branch[-2]] = database[original_branch[-1]].pop(
+                original_branch[-2])
+        elif len(original_branch) == 3 and len(modified_branch) == 3:
+            database[modified_branch[-1]][modified_branch[-2]]["modes"][modified_branch[0][0]] = itemData
 
     def updateActiveData(self):
         """
@@ -413,6 +416,16 @@ class TreeModel(QAbstractItemModel):
                     for mode_ID, mode in enumerate(ds_node.childItems):
                         if mode.itemVisibleActivity == Qt.Checked:
                             view_cfg.active_data[tool_node.itemName][ds_node.itemName].append(mode_ID)
+
+    def updateLines(self, original_branch, modified_branch):
+        """
+        """
+        if len(original_branch) == 1 and len(modified_branch) == 1:
+            view_cfg.lines[modified_branch[-1]] = view_cfg.lines.pop(original_branch[-1])
+        elif len(original_branch) == 2 and len(modified_branch) == 2:
+            view_cfg.lines[modified_branch[-1]][modified_branch[-2]] = view_cfg.lines[original_branch[-1]].pop(original_branch[-2])
+        elif len(original_branch) == 3 and len(modified_branch) == 3:
+            pass
 
     def updateSelectedData(self, selected, deselected):
         """
@@ -580,6 +593,6 @@ class TreeModel(QAbstractItemModel):
         item.itemName = input[0]
 
         # Update the database
-        self.updateDatabase()
+        self.updateDatabase(self.get_branch_from_item(item), self.get_branch_from_item(item), itemData=itemData)
 
         self.layoutChanged.emit()

@@ -883,7 +883,9 @@ class ApplicationWindow(QMainWindow):
                             view_cfg.lines[atool][ads][mode_ID] = [freq_line, damp_line]
                         else:
                             freq_line = self.axes1.add_line(view_cfg.lines[atool][ads][mode_ID][0])
+                            freq_line.set_label(ads + ': ' + database[atool][ads].modes.values[mode_ID].name)
                             damp_line = self.axes2.add_line(view_cfg.lines[atool][ads][mode_ID][1])
+                            damp_line.set_label(ads + ': ' + database[atool][ads].modes.values[mode_ID].name)
 
                         freq_lines.append(freq_line)
                         damp_lines.append(damp_line)
