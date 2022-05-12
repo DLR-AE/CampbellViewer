@@ -10,6 +10,7 @@ import copy
 # local libs
 from HAWCStab2_lib import HAWCStab2Data
 from BladedLin_lib import BladedLinData
+from data_template import AbstractLinearizationData
 from utilities import assure_unique_name, AEMode
 
 class LinearizationDataWrapper(dict):
@@ -68,7 +69,7 @@ class LinearizationDataWrapper(dict):
         elif len(branch) == 3:
             # I don't know how to do this without having to give back the modified
             # database (so just database[...][...].remove_modes())
-            self[branch[2]][branch[1]] = self[branch[2]][branch[1]].remove_modes(branch[0])
+            self[branch[2]][branch[1]].ds = self[branch[2]][branch[1]].remove_modes(branch[0])
         else:
             print('The list provided can only have 1, 2, or 3 values. Nothing removed from database')
         return
@@ -79,11 +80,11 @@ class LinearizationDataWrapper(dict):
         # netCDF4 has to be installed... (by default xarray will use netCDF4 if it is installed)
 
         for toolname in self:
-            for datasetname, xr_dataset in self[toolname].items():
+            for datasetname, dataset_obj in self[toolname].items():
                 # The xarray datasets can be saved using the build-in to_netcdf methods of xarray.
                 # With one exeption: the AEMode class -> xarray cannot serialize arbitrary Python objects
                 # Therefore each AEMode instance is converted to a list with its attributes.
-                xr_dataset_to_save = copy.deepcopy(xr_dataset)
+                xr_dataset_to_save = copy.deepcopy(dataset_obj.ds)
                 for ii, ae_mode in enumerate(xr_dataset_to_save.modes.values):
                     xr_dataset_to_save['modes'][ii] = ae_mode.to_plain_text()
                 for ii, ae_mode in enumerate(xr_dataset_to_save.participation_modes.values):
@@ -116,13 +117,21 @@ class LinearizationDataWrapper(dict):
                     print('Datasetname {} was already in use in tool {}. The loaded dataset will be renamed'.format(datasetname, toolname))
                     datasetname = assure_unique_name(datasetname, self[toolname].keys())
                 loaded_data[toolname].append(datasetname)
-                self[toolname][datasetname] = xr.open_dataset(fname, group=full_datasetname)
+
+                if toolname == 'HAWCStab2':
+                    self[toolname][datasetname] = HAWCStab2Data()
+                elif toolname == 'Bladed (lin.)':
+                    self[toolname][datasetname] = BladedLinData()
+                else:
+                    print('{} data is unknown, a standard AbstractLinearizationData object will be made'.format(toolname))
+                    self[toolname][datasetname] = AbstractLinearizationData()
+                self[toolname][datasetname].ds = xr.open_dataset(fname, group=full_datasetname)
 
                 # convert AEModes saved as plain text to AEMode objects
-                for ii, ae_mode in enumerate(self[toolname][datasetname]['modes'].values):
-                    self[toolname][datasetname]['modes'][ii] = AEMode.from_plain_text(ae_mode)
-                for ii, ae_mode in enumerate(self[toolname][datasetname]['participation_modes'].values):
-                    self[toolname][datasetname]['participation_modes'][ii] = AEMode.from_plain_text(ae_mode)
+                for ii, ae_mode in enumerate(self[toolname][datasetname].ds['modes'].values):
+                    self[toolname][datasetname].ds['modes'][ii] = AEMode.from_plain_text(ae_mode)
+                for ii, ae_mode in enumerate(self[toolname][datasetname].ds['participation_modes'].values):
+                    self[toolname][datasetname].ds['participation_modes'][ii] = AEMode.from_plain_text(ae_mode)
         else:
             print('REQUESTED DATABASE FILE {} was not found'.format(fname))
             loaded_data = dict()

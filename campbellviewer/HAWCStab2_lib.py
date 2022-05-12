@@ -18,9 +18,9 @@ class HAWCStab2Data(AbstractLinearizationData):
     def __init__(self, filenamecmb=None, filenameamp=None, filenameopt=None):
         super(HAWCStab2Data, self).__init__()
         
-        self.attrs["filenamecmb"] = filenamecmb
-        self.attrs["filenameamp"] = filenameamp
-        self.attrs["filenameopt"] = filenameopt
+        self.ds.attrs["filenamecmb"] = filenamecmb
+        self.ds.attrs["filenameamp"] = filenameamp
+        self.ds.attrs["filenameopt"] = filenameopt
 
     def read_cmb_data(self, filenamecmb=None, skip_header_lines=1):
         """ reads and parse the HS2 result cmb data
@@ -28,12 +28,12 @@ class HAWCStab2Data(AbstractLinearizationData):
             There are three blocks for freq./damping/real part.
         """
         if filenamecmb is not None:
-            self.attrs["filenamecmb"] = filenamecmb
+            self.ds.attrs["filenamecmb"] = filenamecmb
         # read file
         try:
-            hs2cmd = np.loadtxt(self.attrs["filenamecmb"], skiprows=skip_header_lines, dtype='float')
+            hs2cmd = np.loadtxt(self.ds.attrs["filenamecmb"], skiprows=skip_header_lines, dtype='float')
         except OSError:
-            print('ERROR: HAWCStab2 cmb file %s not found! Abort!' % self.attrs["filenamecmb"])
+            print('ERROR: HAWCStab2 cmb file %s not found! Abort!' % self.ds.attrs["filenamecmb"])
             return
         
         # reorder data
@@ -50,9 +50,9 @@ class HAWCStab2Data(AbstractLinearizationData):
             realpart [:, i_mode] = hs2cmd[:, i_mode+121]
 
         ws = hs2cmd[:, 0]
-        self["frequency"] = (["operating_point_ID", "mode_ID"], frequency)
-        self["damping"] = (["operating_point_ID", "mode_ID"], damping)
-        self["realpart"] = (["operating_point_ID", "mode_ID"], realpart)
+        self.ds["frequency"] = (["operating_point_ID", "mode_ID"], frequency)
+        self.ds["damping"] = (["operating_point_ID", "mode_ID"], damping)
+        self.ds["realpart"] = (["operating_point_ID", "mode_ID"], realpart)
 
         print('INFO: HS2 campbell data loaded successfully:')
         print('      - %4i modes' % num_modes)
@@ -86,18 +86,18 @@ class HAWCStab2Data(AbstractLinearizationData):
                         
         """
         if filenameamp is not None:
-            self.attrs["filenameamp"] = filenameamp
+            self.ds.attrs["filenameamp"] = filenameamp
 
         sensor_list = ['TWR SS', 'TWR FA', 'TWR yaw', 'SFT x', 'SFT y', 'SFT tor', 'Sym edge', 'BW edge', 'FW edge', 'Sym flap', 'BW flap', 'FW flap', 'Sym tors', 'BW tors', 'FW tors']
         # self.coords["participation_mode_names"] = sensor_list
-        self["participation_modes"] = (["participation_mode_ID"], [AEMode(name=name) for name in sensor_list])
+        self.ds["participation_modes"] = (["participation_mode_ID"], [AEMode(name=name) for name in sensor_list])
         num_sensors = len(sensor_list)
         
         # read file
         try:
-            hs2part = np.loadtxt(self.attrs["filenameamp"], skiprows=skip_header_lines, dtype='float')
+            hs2part = np.loadtxt(self.ds.attrs["filenameamp"], skiprows=skip_header_lines, dtype='float')
         except OSError:
-            print('ERROR: HAWCStab2 cmb file %s not found! Abort!' % self.attrs["filenameamp"])
+            print('ERROR: HAWCStab2 cmb file %s not found! Abort!' % self.ds.attrs["filenameamp"])
             return
         
         # reorder data
@@ -114,9 +114,9 @@ class HAWCStab2Data(AbstractLinearizationData):
                 amp_data[:, j, i] = hs2part[:, amp_index]
                 phase_data[:, j, i] = hs2part[:, phase_index]
 
-        self["participation_factors_amp"] = (
+        self.ds["participation_factors_amp"] = (
         ["operating_point_ID", "participation_mode_ID", "mode_ID"], amp_data)
-        self["participation_factors_phase"] = (
+        self.ds["participation_factors_phase"] = (
         ["operating_point_ID", "participation_mode_ID", "mode_ID"], phase_data)
 
         # determine dominant DOF per mode
@@ -134,7 +134,7 @@ class HAWCStab2Data(AbstractLinearizationData):
         # for mode_name in mode_names:
         #     unique_mode_names.append(assure_unique_name(mode_name, unique_mode_names))
         # self.coords["mode_names"] = unique_mode_names
-        self["modes"] = (["mode_ID"], [AEMode(name=name) for name in mode_names])
+        self.ds["modes"] = (["mode_ID"], [AEMode(name=name) for name in mode_names])
 
         print('INFO: HS2 amplitude data loaded successfully:')
         print('      - %4i modes' % num_modes)
@@ -143,15 +143,15 @@ class HAWCStab2Data(AbstractLinearizationData):
     def read_opt_data(self, filenameopt=None, skip_header_lines=1):
         """ reads the operational data from HS2 """
         if filenameopt is not None:
-            self.attrs["filenameopt"] = filenameopt
+            self.ds.attrs["filenameopt"] = filenameopt
         try:
-            HS2_optdata = np.loadtxt(self.attrs["filenameopt"], skiprows=skip_header_lines, dtype='float')
+            HS2_optdata = np.loadtxt(self.ds.attrs["filenameopt"], skiprows=skip_header_lines, dtype='float')
         except OSError:
-            print('ERROR: HAWCStab2 opt file %s not found! Abort!' % self.attrs["filenameopt"])
+            print('ERROR: HAWCStab2 opt file %s not found! Abort!' % self.ds.attrs["filenameopt"])
             return
 
-        self.coords["operating_parameter"] = ['wind speed [m/s]', 'pitch [deg]', 'rot. speed [rpm]', 'aero power [kw]', 'aero thrust [kn]']
-        self["operating_points"] = (["operating_point_ID", "operating_parameter"],
+        self.ds.coords["operating_parameter"] = ['wind speed [m/s]', 'pitch [deg]', 'rot. speed [rpm]', 'aero power [kw]', 'aero thrust [kn]']
+        self.ds["operating_points"] = (["operating_point_ID", "operating_parameter"],
                                     HS2_optdata)
 
     def read_data(self):

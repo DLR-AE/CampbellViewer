@@ -18,8 +18,8 @@ class BladedLinData(AbstractLinearizationData):
     def __init__(self, result_dir, result_prefix):
         super(BladedLinData, self).__init__()
 
-        self.attrs["result_dir"] = result_dir
-        self.attrs["result_prefix"] = result_prefix
+        self.ds.attrs["result_dir"] = result_dir
+        self.ds.attrs["result_prefix"] = result_prefix
 
     def read_data(self):
         """
@@ -27,7 +27,7 @@ class BladedLinData(AbstractLinearizationData):
         """
         print('Start reading Bladed data')
 
-        bladed_result = BladedResult(self.attrs["result_dir"], self.attrs["result_prefix"])
+        bladed_result = BladedResult(self.ds.attrs["result_dir"], self.ds.attrs["result_prefix"])
         bladed_result.scan()
 
         self.read_op_data(bladed_result)
@@ -45,8 +45,8 @@ class BladedLinData(AbstractLinearizationData):
         rpm = bladed_result['Rotor speed'].squeeze() * (60 / (2*np.pi))
         power = bladed_result['Electrical power'].squeeze() / 10**3
 
-        self.coords["operating_parameter"] = ['wind speed [m/s]', 'pitch [deg]', 'rot. speed [rpm]', 'Electrical power [kw]']
-        self["operating_points"] = (["operating_point_ID", "operating_parameter"],
+        self.ds.coords["operating_parameter"] = ['wind speed [m/s]', 'pitch [deg]', 'rot. speed [rpm]', 'Electrical power [kw]']
+        self.ds["operating_points"] = (["operating_point_ID", "operating_parameter"],
                                     np.array([windspeed.T, pitch.T, rpm.T, power.T]).T)
 
     def read_coupled_modes(self, bladed_result):
@@ -64,9 +64,9 @@ class BladedLinData(AbstractLinearizationData):
         for mode_name in mode_names_orig:
             modes.append(AEMode(name=mode_name))
 
-        self["modes"] = (["mode_ID"], modes)
-        self["frequency"] = (["operating_point_ID", "mode_ID"], frequency.squeeze())
-        self["damping"] = (["operating_point_ID", "mode_ID"], damping.squeeze())
+        self.ds["modes"] = (["mode_ID"], modes)
+        self.ds["frequency"] = (["operating_point_ID", "mode_ID"], frequency.squeeze())
+        self.ds["damping"] = (["operating_point_ID", "mode_ID"], damping.squeeze())
 
     def read_cmb_data(self, bladed_result):
         """
@@ -87,14 +87,14 @@ class BladedLinData(AbstractLinearizationData):
             bladed_result (obj.): Bladed result reader object
         """
         # coupled modes and operating points have to be read before
-        if self["modes"] is None:
+        if self.ds["modes"] is None:
             self.read_coupled_modes(bladed_result)
-        if self["operating_points"] is None:
+        if self.ds["operating_points"] is None:
             self.read_op_data(bladed_result)
 
         campbell_data, coupled_mode_names = bladed_result['Campbell diagram']
 
-        if len(coupled_mode_names) != len(self["modes"]):
+        if len(coupled_mode_names) != len(self.ds["modes"]):
             print('! Number of coupled modes  from .$CM file does not match with number of coupled modes from .$02 file')
             return
 
@@ -109,16 +109,16 @@ class BladedLinData(AbstractLinearizationData):
         uncoupled_mode_names = list(dict.fromkeys(uncoupled_mode_names_with_duplicates))
 
         # initialize matrices for participation factors amplitude and phase
-        participation_factors_amp = np.zeros((len(self.operating_point_ID), len(uncoupled_mode_names), len(self["modes"])))
-        participation_factors_phase = np.zeros((len(self.operating_point_ID), len(uncoupled_mode_names), len(self["modes"])))
+        participation_factors_amp = np.zeros((len(self.ds.operating_point_ID), len(uncoupled_mode_names), len(self.ds["modes"])))
+        participation_factors_phase = np.zeros((len(self.ds.operating_point_ID), len(uncoupled_mode_names), len(self.ds["modes"])))
 
         for i_mode, mode_cmb in enumerate(campbell_data):
             # CHECK THAT COUPLED MODE (MODE TRACK) (FILE .$CM) MATCHES WITH THE COUPLED MODE OUTPUT (FILE .$02)
-            used_operating_points = np.where(self["frequency"][:, i_mode].values != -1)[0]
-            if -1 in self["frequency"][:, 0].values:
+            used_operating_points = np.where(self.ds["frequency"][:, i_mode].values != -1)[0]
+            if -1 in self.ds["frequency"][:, 0].values:
                 print('The tracked coupled mode is not complete for all operating points')
 
-            if not np.allclose(np.array(mode_cmb['freq']), self["frequency"][used_operating_points, i_mode].values * 2 * np.pi, rtol=1e-02):
+            if not np.allclose(np.array(mode_cmb['freq']), self.ds["frequency"][used_operating_points, i_mode].values * 2 * np.pi, rtol=1e-02):
                 print('\nThe frequencies of the mode read from the .$CM file do not match with the frequencies from the '
                       'coupled modes in the .$02 file')
 
@@ -138,11 +138,11 @@ class BladedLinData(AbstractLinearizationData):
                         participation_factors_phase[
                             operating_point_id, uncoupled_mode_names.index(uncoupled_mode_name), i_mode] = phase
 
-        self["participation_modes"] = (
+        self.ds["participation_modes"] = (
             ["participation_mode_ID"], [AEMode(name=name) for name in uncoupled_mode_names])
-        self["participation_factors_amp"] = (
+        self.ds["participation_factors_amp"] = (
             ["operating_point_ID", "participation_mode_ID", "mode_ID"], participation_factors_amp)
-        self["participation_factors_phase"] = (
+        self.ds["participation_factors_phase"] = (
             ["operating_point_ID", "participation_mode_ID", "mode_ID"], participation_factors_phase)
 
 

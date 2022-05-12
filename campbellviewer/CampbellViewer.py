@@ -197,7 +197,7 @@ class SettingsPopupAMP(QDialog):
 
         self.__AMPmode = QComboBox()
         self.__AMPmode.addItems(
-            [str(database[self.selected_tool][self.selected_dataset].modes.values[mode_id].name) for mode_id in
+            [str(database[self.selected_tool][self.selected_dataset].ds.modes.values[mode_id].name) for mode_id in
              view_cfg.active_data[self.selected_tool][self.selected_dataset]])
         popup_layoutAMPmode.addWidget(QLabel('Amplitude mode to plot:'))
         popup_layoutAMPmode.addWidget(self.__AMPmode)
@@ -223,7 +223,7 @@ class SettingsPopupAMP(QDialog):
         self.__AMPmode.clear()
         if self.__DataSetSelection.currentText() is not '':
             self.__AMPmode.addItems(
-                [str(database[self.__ToolSelection.currentText()][self.__DataSetSelection.currentText()].modes.values[mode_id].name)
+                [str(database[self.__ToolSelection.currentText()][self.__DataSetSelection.currentText()].ds.modes.values[mode_id].name)
                  for mode_id in view_cfg.active_data[self.__ToolSelection.currentText()][self.__DataSetSelection.currentText()]])
 
     def getNewSettings(self):
@@ -509,7 +509,7 @@ class AmplitudeWindow(QMainWindow):
 
     def configure_plotAMP(self, requested_toolname, requested_datasetname, settingsAMPmode, dataset, AMPthreshold):
         self.settingsAMPmode = settingsAMPmode
-        self.AMPmode_name = database[requested_toolname][requested_datasetname].modes.values[settingsAMPmode].name
+        self.AMPmode_name = database[requested_toolname][requested_datasetname].ds.modes.values[settingsAMPmode].name
         self.dataset = dataset
         self.AMPthreshold = AMPthreshold
 
@@ -857,12 +857,12 @@ class ApplicationWindow(QMainWindow):
 
         for atool in view_cfg.active_data:  # active tool
             for ads in view_cfg.active_data[atool]:  # active dataset
-                if database[atool][ads]['frequency'] is not None:
+                if database[atool][ads].ds['frequency'] is not None:
                     # set xaxis item
                     if self.xaxis_item == 'WS':
-                        xaxis_values = database[atool][ads]['operating_points'].loc[:, 'wind speed [m/s]']
+                        xaxis_values = database[atool][ads].ds['operating_points'].loc[:, 'wind speed [m/s]']
                     else:
-                        xaxis_values = database[atool][ads]['operating_points'].loc[:, 'rot. speed [rpm]']
+                        xaxis_values = database[atool][ads].ds['operating_points'].loc[:, 'rot. speed [rpm]']
 
                     # add active modes
                     # this can probably also be done without a loop and just with the indices
@@ -870,27 +870,27 @@ class ApplicationWindow(QMainWindow):
                         if view_cfg.lines[atool][ads][mode_ID] is None:
                             ls = view_cfg.ls.new_ls()
                             freq_line, = self.axes1.plot(xaxis_values,
-                                                         database[atool][ads].frequency.loc[:, mode_ID],
+                                                         database[atool][ads].ds.frequency.loc[:, mode_ID],
                                                          color=ls['color'],
                                                          linestyle=ls['linestyle'],
                                                          marker=ls['marker'],
                                                          linewidth=view_cfg.ls.lw,
-                                                         label=ads + ': ' + database[atool][ads].modes.values[mode_ID].name,
+                                                         label=ads + ': ' + database[atool][ads].ds.modes.values[mode_ID].name,
                                                          markersize=view_cfg.ls.markersizedefault, picker=2)
                             damp_line, = self.axes2.plot(xaxis_values,
-                                                         database[atool][ads].damping.loc[:, mode_ID],
+                                                         database[atool][ads].ds.damping.loc[:, mode_ID],
                                                          color=ls['color'],
                                                          linestyle=ls['linestyle'],
                                                          marker=ls['marker'],
                                                          linewidth=view_cfg.ls.lw,
-                                                         label=ads + ': ' + database[atool][ads].modes.values[mode_ID].name,
+                                                         label=ads + ': ' + database[atool][ads].ds.modes.values[mode_ID].name,
                                                          markersize=view_cfg.ls.markersizedefault, picker=2)
                             view_cfg.lines[atool][ads][mode_ID] = [freq_line, damp_line]
                         else:
                             freq_line = self.axes1.add_line(view_cfg.lines[atool][ads][mode_ID][0])
-                            freq_line.set_label(ads + ': ' + database[atool][ads].modes.values[mode_ID].name)
+                            freq_line.set_label(ads + ': ' + database[atool][ads].ds.modes.values[mode_ID].name)
                             damp_line = self.axes2.add_line(view_cfg.lines[atool][ads][mode_ID][1])
-                            damp_line.set_label(ads + ': ' + database[atool][ads].modes.values[mode_ID].name)
+                            damp_line.set_label(ads + ': ' + database[atool][ads].ds.modes.values[mode_ID].name)
 
                         freq_lines.append(freq_line)
                         damp_lines.append(damp_line)
@@ -903,10 +903,10 @@ class ApplicationWindow(QMainWindow):
                             cursor.add_highlight(damp_line)
 
                 # plot p-harmonics if present
-                if database[atool][ads].operating_points is not None and self.pharmonics is True:
+                if database[atool][ads].ds.operating_points is not None and self.pharmonics is True:
                     P_harmonics = [1, 3, 6, 9, 12]
                     for index in P_harmonics:
-                        P_hamonics_data = database[atool][ads].operating_points.loc[:, 'rot. speed [rpm]']/60*index  # rpm in Hz
+                        P_hamonics_data = database[atool][ads].ds.operating_points.loc[:, 'rot. speed [rpm]']/60*index  # rpm in Hz
                         self.axes1.plot(xaxis_values, P_hamonics_data,
                                         c='grey', linestyle='--', linewidth=0.75, label=str(index)+'P')
 
@@ -1042,7 +1042,7 @@ class ApplicationWindow(QMainWindow):
             view_cfg.lines[toolname] = dict()
         view_cfg.active_data[toolname][datasetname] = np.arange(self.mode_minpara_cmb-1,
                                                                 self.mode_maxpara_cmb, 1).tolist()
-        view_cfg.lines[toolname][datasetname] = [None]*len(database[toolname][datasetname].modes)
+        view_cfg.lines[toolname][datasetname] = [None]*len(database[toolname][datasetname].ds.modes)
 
     ##############################################################
     # Open File Dialog for HAWCStab2 result files
@@ -1151,8 +1151,8 @@ class ApplicationWindow(QMainWindow):
             if success is False:
                 return
 
-        if database[self.settingsAMPtool][self.settingsAMPdataset].frequency is not None and \
-                database[self.settingsAMPtool][self.settingsAMPdataset].participation_factors_amp is not None:
+        if database[self.settingsAMPtool][self.settingsAMPdataset].ds.frequency is not None and \
+                database[self.settingsAMPtool][self.settingsAMPdataset].ds.participation_factors_amp is not None:
             self.AmplitudeWindow = AmplitudeWindow()
             self.AmplitudeWindow.sigClosed.connect(self.deleteAmplitudes)
         else:
@@ -1167,10 +1167,10 @@ class ApplicationWindow(QMainWindow):
 
     def updateAmplitudes(self):
         """ Update Amplitude plot according to settingsAMPdataset and settingsAMPmode """
-        if database[self.settingsAMPtool][self.settingsAMPdataset].frequency is not None and \
-                database[self.settingsAMPtool][self.settingsAMPdataset].participation_factors_amp is not None:
+        if database[self.settingsAMPtool][self.settingsAMPdataset].ds.frequency is not None and \
+                database[self.settingsAMPtool][self.settingsAMPdataset].ds.participation_factors_amp is not None:
             self.AmplitudeWindow.configure_plotAMP(self.settingsAMPtool, self.settingsAMPdataset, self.settingsAMPmode,
-                                                   database[self.settingsAMPtool][self.settingsAMPdataset],
+                                                   database[self.settingsAMPtool][self.settingsAMPdataset].ds,
                                                    self.AMPthreshold)
             self.AmplitudeWindow.show()
         else:
