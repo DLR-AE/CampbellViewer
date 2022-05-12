@@ -564,10 +564,16 @@ class TreeModel(QAbstractItemModel):
             # Persistent indices update automatically when other indices are removed
             selected_persistent = [QPersistentModelIndex(selected_index) for selected_index in all_selected_indexes]
 
-            for selected_index in selected_persistent:
-                if not selected_index.isValid():  # e.g. if the parent is already removed
-                    break
-                self.removeRow(selected_index.row(), selected_index.parent())  # removeRow is a convenience function which uses removeRows
+            # if the selected items are directly behind each other (same parent, number of rows=number of selected
+            # items), they can be removed by the quick removeRows method, otherwise they are removed slowly, one-by-one
+            # by a loop with the removeRow method.
+            if selected_persistent[0].parent() == selected_persistent[-1].parent() and selected_persistent[0].row() == selected_persistent[-1].row()-len(selected_persistent)+1:
+                self.removeRows(selected_persistent[0].row(), len(selected_persistent), selected_persistent[0].parent())
+            else:
+                for selected_index in selected_persistent:
+                    if not selected_index.isValid():  # e.g. if the parent is already removed
+                        break
+                    self.removeRow(selected_index.row(), selected_index.parent())  # removeRow is a convenience function which uses removeRows
 
             # based on the new tree model update the active data dict
             self.updateActiveData()
