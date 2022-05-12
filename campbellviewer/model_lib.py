@@ -370,7 +370,7 @@ class TreeModel(QAbstractItemModel):
                     else:
                         current_tool_node.appendChild(TreeItem(ds, Qt.Unchecked, current_tool_node, item_type='dataset'))
 
-                    for mode_ID, ae_mode in enumerate(database[tool][ds].modes.values):
+                    for mode_ID, ae_mode in enumerate(database[tool][ds].ds.modes.values):
                         if mode_ID in view_cfg.active_data[tool][ds]:
                             current_tool_node.childItems[-1].appendChild(TreeItem(ae_mode.name, Qt.Checked, current_tool_node.childItems[-1], data=ae_mode, item_type='mode'))
                         else:
@@ -393,7 +393,7 @@ class TreeModel(QAbstractItemModel):
             database[modified_branch[-1]][modified_branch[-2]] = database[original_branch[-1]].pop(
                 original_branch[-2])
         elif len(original_branch) == 3 and len(modified_branch) == 3:
-            database[modified_branch[-1]][modified_branch[-2]]["modes"][modified_branch[0][0]] = itemData
+            database[modified_branch[-1]][modified_branch[-2]].ds["modes"][modified_branch[0][0]] = itemData
 
     def updateActiveData(self):
         """
