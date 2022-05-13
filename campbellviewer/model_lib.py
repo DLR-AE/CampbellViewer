@@ -291,6 +291,19 @@ class TreeModel(QAbstractItemModel):
         else:
             return QModelIndex()
 
+    def getItem_from_branch(self, branch):
+        """ Returns the item of this branch """
+        for tool_node in self.rootItem.childItems:
+            if tool_node.itemName == branch[-1]:
+                if len(branch) == 1:
+                    return tool_node
+                for ds_node in tool_node.childItems:
+                    if ds_node.itemName == branch[-2]:
+                        if len(branch) == 2:
+                            return ds_node
+                        elif len(branch) == 3:
+                            return ds_node.childItems[branch[0][0]]
+
     def parent(self, index):
         """ Returns the index of the parent node """
         if not index.isValid():
@@ -429,6 +442,16 @@ class TreeModel(QAbstractItemModel):
 
     def updateSelectedData(self, selected, deselected):
         """
+        Slot called when the user selects or deselects an item in the tree view. The view_cfg will be updated and the
+        campbell plot will be repainted
+        """
+        self.updateViewCfgSelectedData(selected, deselected)
+        self.layoutChanged.emit()
+
+    def updateViewCfgSelectedData(self, selected, deselected):
+        """
+        Update the selected_data list of the view_cfg. This list stores which data is currently selected -> used for
+        highlighting in plot and the preselection of data for other actions (deleting, showing participations, etc.)
         """
         if len(selected.indexes()) > 0:
             for selected_index in selected.indexes():
@@ -438,8 +461,6 @@ class TreeModel(QAbstractItemModel):
             for deselected_index in deselected.indexes():
                 if self.get_branch_from_item(self.getItem(deselected_index)) in view_cfg.selected_data:
                     view_cfg.selected_data.remove(self.get_branch_from_item(self.getItem(deselected_index)))
-
-        self.layoutChanged.emit()
 
     def get_branch_from_item(self, item):
         """

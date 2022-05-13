@@ -36,8 +36,8 @@ import copy
 from PyQt5 import QtCore
 from PyQt5.QtWidgets import QApplication, QMainWindow, QMenu, QVBoxLayout, QHBoxLayout, QMessageBox, QWidget, QDialog
 from PyQt5.QtWidgets import QLineEdit, QFileDialog, QPushButton, QLabel, QSpinBox, QCheckBox, QComboBox, QTreeView
-from PyQt5.QtGui  import QIcon, QDoubleValidator
-from PyQt5.QtCore import QFileInfo, Qt
+from PyQt5.QtGui  import QIcon, QDoubleValidator, QMouseEvent
+from PyQt5.QtCore import QFileInfo, Qt, QItemSelectionModel
 
 import matplotlib
 matplotlib.use("Qt5Agg")
@@ -854,6 +854,7 @@ class ApplicationWindow(QMainWindow):
         # linewidth and markersizedefault
         freq_lines = []
         damp_lines = []
+        lines_to_be_selected = []
 
         for atool in view_cfg.active_data:  # active tool
             for ads in view_cfg.active_data[atool]:  # active dataset
@@ -896,11 +897,8 @@ class ApplicationWindow(QMainWindow):
                         damp_lines.append(damp_line)
 
                         if [[mode_ID], ads, atool] in view_cfg.selected_data:
-                            # this does not necessarily have to be done with mplcursors + not sure if this is the most
-                            # efficient way to do it
-                            cursor = mplcursors.cursor([freq_line, damp_line], multiple=True, highlight=True)
-                            cursor.add_highlight(freq_line)
-                            cursor.add_highlight(damp_line)
+                            lines_to_be_selected.append(freq_line)
+                            lines_to_be_selected.append(damp_line)
 
                 # plot p-harmonics if present
                 if database[atool][ads].ds.operating_points is not None and self.pharmonics is True:
@@ -915,20 +913,56 @@ class ApplicationWindow(QMainWindow):
 
         # setup mplcursors behavior: multiple text boxes if lines are clicked, highlighting line, pairing of
         # frequency and damping lines
-        cursor = mplcursors.cursor(freq_lines + damp_lines, multiple=True, highlight=True)
+        cursor = mplcursors.cursor(freq_lines + damp_lines, multiple=True, highlight=True,
+                                   highlight_kwargs={'color': 'C3', 'linewidth': view_cfg.ls.lw+2,
+                                                     'markeredgecolor': 'C3',
+                                                     'markeredgewidth': view_cfg.ls.markersizedefault+2})
+        for line in lines_to_be_selected:
+            cursor.add_highlight(line)
+
         pairs = dict(zip(freq_lines, damp_lines))
         pairs.update(zip(damp_lines, freq_lines))
+
         @cursor.connect("add")
         def on_add(sel):
+            self.on_mpl_cursors_pick(sel.artist, 'select')
             sel.extras.append(cursor.add_highlight(pairs[sel.artist]))
             sel.annotation.get_bbox_patch().set(fc="grey")
-            for line in sel.extras:
-                line.set(color="C3")
+
+        @cursor.connect("remove")
+        def on_remove(sel):
+            self.on_mpl_cursors_pick(sel.artist, 'deselect')
 
         self.canvas.draw()
         self.canvas.mpl_connect('button_press_event', self.on_press)
         self.canvas.mpl_connect('button_release_event', self.on_release)
         self.canvas.mpl_connect('motion_notify_event', self.on_motion)
+
+    def on_mpl_cursors_pick(self, artist, select):
+        if not isinstance(artist, matplotlib.lines.Line2D): return
+        for atool in view_cfg.lines:
+            for ads in view_cfg.lines[atool]:
+                for mode_ID, mode_lines in enumerate(view_cfg.lines[atool][ads]):
+                    if mode_lines is not None:
+                        if artist in mode_lines:
+                            # print('Dataset found: tool={}, dataset={}, mode={}'.format(atool, ads, database[atool][ads].ds.modes[mode_ID]))
+
+                            item = self.dataset_tree_model.getItem_from_branch([[mode_ID], ads, atool])
+
+                            # when the user selects a mode in the tree the full plot is reset and updated, this has to
+                            # be prevented when selecting a line with mplcursors. Therefore only update view_cfg.selected_data
+                            self.dataset_tree.selectionModel().selectionChanged.disconnect(self.dataset_tree.tree_model.updateSelectedData)
+                            self.dataset_tree.selectionModel().selectionChanged.connect(self.dataset_tree.tree_model.updateViewCfgSelectedData)
+
+                            if select == 'select':
+                                self.dataset_tree.selectionModel().select(self.dataset_tree_model.createIndex(item.row(), 0, item),
+                                                                          QItemSelectionModel.Select)  # Toggle
+                            elif select == 'deselect':
+                                self.dataset_tree.selectionModel().select(self.dataset_tree_model.createIndex(item.row(), 0, item),
+                                                                          QItemSelectionModel.Deselect)  # Toggle
+
+                            self.dataset_tree.selectionModel().selectionChanged.disconnect(self.dataset_tree.tree_model.updateViewCfgSelectedData)
+                            self.dataset_tree.selectionModel().selectionChanged.connect(self.dataset_tree.tree_model.updateSelectedData)
 
     def on_motion(self, event):
         """
