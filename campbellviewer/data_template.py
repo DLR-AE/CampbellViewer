@@ -3,6 +3,8 @@ This module contains data storing classes
 """
 # global libs
 import xarray as xr  # minimal version 0.20.2 (to have drop_sel function)
+from datetime import datetime
+import os
 
 # local libs
 
@@ -34,6 +36,10 @@ class AbstractLinearizationData:
         self.ds["participation_modes"] = None           # (["participation_mode_ID"], [])
         # self.ds["operating_parameter"] = None           # []
         # self.ds.set_coords(["operating_parameter"])
+
+        # Timestamp and user metadata are saved when the dataset class is initiated
+        self.ds.attrs["timestamp"] = datetime.now().strftime("%c")
+        self.ds.attrs["user"] = os.getlogin()
 
     def remove_modes(self, mode_ids):
         """

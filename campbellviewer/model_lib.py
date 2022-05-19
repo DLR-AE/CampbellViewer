@@ -8,7 +8,7 @@ from PyQt5.QtCore import QPersistentModelIndex
 from PyQt5.QtGui import QBrush, QColor
 
 from globals import database, view_cfg
-from utilities import assure_unique_name
+from utilities import assure_unique_name, DatasetMetaData
 
 
 class DatasetTableModel(QAbstractListModel):
@@ -379,9 +379,9 @@ class TreeModel(QAbstractItemModel):
             for ds in database[tool]:
                 if ds not in old_database[tool]:
                     if ds in view_cfg.active_data[tool]:
-                        current_tool_node.appendChild(TreeItem(ds, Qt.Checked, current_tool_node, item_type='dataset'))
+                        current_tool_node.appendChild(TreeItem(ds, Qt.Checked, current_tool_node, data=DatasetMetaData(database[tool][ds].ds.attrs), item_type='dataset'))
                     else:
-                        current_tool_node.appendChild(TreeItem(ds, Qt.Unchecked, current_tool_node, item_type='dataset'))
+                        current_tool_node.appendChild(TreeItem(ds, Qt.Unchecked, current_tool_node, data=DatasetMetaData(database[tool][ds].ds.attrs), item_type='dataset'))
 
                     for mode_ID, ae_mode in enumerate(database[tool][ds].ds.modes.values):
                         if mode_ID in view_cfg.active_data[tool][ds]:
