@@ -127,6 +127,9 @@ class LinearizationDataWrapper(dict):
                     self[toolname][datasetname] = AbstractLinearizationData()
                 self[toolname][datasetname].ds = xr.open_dataset(fname, group=full_datasetname)
 
+                # store the database path name as a xarray dataset attribute
+                self[toolname][datasetname].ds.attrs["database_file"] = fname
+
                 # convert AEModes saved as plain text to AEMode objects
                 for ii, ae_mode in enumerate(self[toolname][datasetname].ds['modes'].values):
                     self[toolname][datasetname].ds['modes'][ii] = AEMode.from_plain_text(ae_mode)

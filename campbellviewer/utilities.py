@@ -108,3 +108,22 @@ class MPLLinestyle:
     def verify_inputs(self):
         raise NotImplementedError
 
+
+class DatasetMetaData:
+    """
+    Storage class for dataset metadata. The initial idea was to have a dedicated storage class for metadata with
+     attributes for all metadata, but this requires the metadata of different tools to be in an identical format
+     (e.g. input data file names). This was not convenient. Instead, the xarray dataset attributes are directly used to
+     store the metadata. This class is just a wrapper around the xarray attributes. """
+    def __init__(self, xr_attrs=None):
+        self.xr_attrs = xr_attrs
+
+    def summary(self):
+        """ Return a formatted string with a summary of the mode information (e.g. for tooltip) """
+        summary_str = ''
+        for key, value in self.xr_attrs.items():
+            if type(value) is not str:
+                print('Metadata key {} can not be shown')
+            else:
+                summary_str += '{}: {}\n'.format(key, value)
+        return summary_str
