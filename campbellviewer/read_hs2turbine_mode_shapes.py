@@ -43,7 +43,7 @@ class SubstructureDataClass(object):
 
         # define list for data
         self.bodies  = []
-        self.opstate = []
+        self.opstate = {}
         
     def numbody(self):
         return len(self.bodies)        
@@ -208,33 +208,48 @@ class HS2BINReader(object):
         
         # read operation data map (N,3)
         self.operational_data = np.zeros([self.num_steps,3])
-        dummy = self.__read_data(dtype=float,count=1)
         
         # loop over states
-        #~ for i_state in range(self.num_steps):
-            #~ self.operational_data[i_state,:] = self.__read_data(dtype=float,count=3)
+        for i_state in range(self.num_steps):
+            dummy = self.__read_data(dtype=float,count=1)
+            self.operational_data[i_state,:] = self.__read_data(dtype=float,count=3)
             
-            # if non blade then
             # loop over substructures
-            # one have to know, which number the three-bladed substructure is!
-            
-                # loop over modes
+            for i_subs in range(self.numsubstr()):                
+                         
+                # one have to know, which number the three-bladed substructure is!
+                # This is not covering the general case! Be careful!
+                if i_subs < 2:    # ground_fixed_substructure and rotating_axissym_substructure             
+                    # loop over modes
+                    for i_mode in range(self.num_modes):                        
+                        #loop over bodies
+                        for i_body in range(self.substructure[i_subs].numbody()):
+                            num_elements = self.substructure[i_subs].bodies[i_body].numele()
+                            count = 2*self.__num_DOF*(num_elements+1)
+                            #~ print(count)
+                            data = -self.__read_data(dtype=float,count=count)
+                            #~ self.substructure[i_subs].opstate[istate].body_result(ibody).mode(imode).ua0=reshape(dat, 2, [])^T;
+                            
+                else:    # rotating_threebladed_substructure            
+                    # loop over modes
+                    for i_mode in range(self.num_modes):                        
+                        #loop over bodies
+                        for i_body in range(self.substructure[i_subs].numbody()):
+                            num_elements = self.substructure[i_subs].bodies[i_body].numele()
+                            
+                            data = -self.__read_data(dtype=float,count=2*self.__num_DOF*(num_elements+1))
+                            #~ substructure(isubs).opstate(istate).body_result(ibody).mode(imode).ua0=reshape(dat, 2, [])^T;
+                            data = -self.__read_data(dtype=float,count=2*self.__num_DOF*(num_elements+1))
+                            #~ substructure(isubs).opstate(istate).body_result(ibody).mode(imode).ua1=reshape(dat, 2, [])^T;
+                            data = -self.__read_data(dtype=float,count=2*self.__num_DOF*(num_elements+1))
+                            #~ substructure(isubs).opstate(istate).body_result(ibody).mode(imode).ub1=reshape(dat, 2, [])^T;
                     
-                    #loop over bodies
-                    
-            #else if blade substructure
-            # loop over substructures
-            # one have to know, which number the three-bladed substructure is!
+         
             
-                # loop over modes
-                    
-                    #loop over bodies
-            
-            
-        self.operational_data[0,:] = self.__read_data(dtype=float,count=3)
+        #~ self.operational_data[0,:] = self.__read_data(dtype=float,count=3)
         
         # switch sign for pitch and convert to degree
-        self.operational_data[1,:] = np.rad2deg(-self.operational_data[1,:])
+        self.operational_data[:,1] = np.rad2deg(-self.operational_data[:,1])
         print(self.operational_data)
         
      
