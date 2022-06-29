@@ -16,11 +16,23 @@ The HAWCStab2 model is set up hierarchically in this way:
                 |   |
                 |   --> body ii + 1
                 |       |
-                |       --> body data s (arc position for each element)
+                |       --> body data s (arc position for each element, 1d array)
                 |
-                --> opstate jj (states)
+                --> opstate jj (states, dictionary)
+                    |
+                    --> bodies (list)
+                        |
+                        --> body jjj
+                            |
+                            --> mode jjjj
+                                |
+                                --> ua0 (2d array)
+                            |
+                            --> mode jjjj + 1
+                                |
+                                --> ua0 (2d array)
                         
-
+Matlab struct: self.substructure[i_subs].opstate[istate].body_result(ibody).mode(imode).ua0
 
 
 
