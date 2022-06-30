@@ -25,8 +25,8 @@ The HAWCStab2 model is set up hierarchically in this way:
                         --> body jjj
                             |
                             --> mode jjjj
-                                |
-                                --> ua0 (2d array)
+                            |   |
+                            |   --> ua0 (2d array)
                             |
                             --> mode jjjj + 1
                                 |
@@ -78,6 +78,63 @@ class BodyDataClass(object):
             return len(self.s)
         else:
             return 0
+            
+            
+class OpstatesClass(object):
+    """ Main class for operational point data 
+    
+    Attributes:
+        bodies(list) : list of bodies
+    """
+    def __init__(self):
+        super(OpstatesClass, self).__init__()
+
+        # define list for data
+        self.bodies = []
+        
+    def num(self):
+        if not self.bodies is None:
+            return len(self.bodies)
+        else:
+            return 0
+            
+class ModesClass(object):
+    """ Main class for operational point data modes
+    
+    Attributes:
+        modes(list) : list of modes
+    """
+    def __init__(self):
+        super(ModesClass, self).__init__()
+
+        # define list for data
+        self.modes = []
+        
+    def num(self):
+        if not self.modes is None:
+            return len(self.modes)
+        else:
+            return 0
+            
+class ModeClass(object):
+    """ Main class for operational point data modes
+    
+    Attributes:
+        modes(list) : list of modes
+    """
+    def __init__(self):
+        super(ModeClass, self).__init__()
+
+        # define data
+        self.ua0 = None
+        self.ua1 = None
+        self.ub1 = None
+        
+    #~ def num(self):
+        #~ if not self.bodies is None:
+            #~ return len(self.bodies)
+        #~ else:
+            #~ return 0
 
 #########
 #
@@ -227,34 +284,50 @@ class HS2BINReader(object):
             self.operational_data[i_state,:] = self.__read_data(dtype=float,count=3)
             
             # loop over substructures
-            for i_subs in range(self.numsubstr()):                
+            for i_subs in range(self.numsubstr()):   
+                
+                #
+                self.substructure[i_subs].opstate[i_state] = OpstatesClass()
+                
+                # allocate data
+                for i_body in range(self.substructure[i_subs].numbody()):
+                    self.substructure[i_subs].opstate[i_state].bodies.append(ModesClass())
                          
                 # one have to know, which number the three-bladed substructure is!
                 # This is not covering the general case! Be careful!
-                if i_subs < 2:    # ground_fixed_substructure and rotating_axissym_substructure             
+                if i_subs < 2:    # ground_fixed_substructure and rotating_axissym_substructure   
+                    
+                        
                     # loop over modes
-                    for i_mode in range(self.num_modes):                        
+                    for i_mode in range(self.num_modes): 
+                        
+                        
                         #loop over bodies
                         for i_body in range(self.substructure[i_subs].numbody()):
+                            self.substructure[i_subs].opstate[i_state].bodies[i_body].modes.append(ModeClass())
                             num_elements = self.substructure[i_subs].bodies[i_body].numele()
                             count = 2*self.__num_DOF*(num_elements+1)
-                            #~ print(count)
                             data = -self.__read_data(dtype=float,count=count)
-                            #~ self.substructure[i_subs].opstate[istate].body_result(ibody).mode(imode).ua0=reshape(dat, 2, [])^T;
+                            self.substructure[i_subs].opstate[i_state].bodies[i_body].modes[i_mode].ua0 = data.reshape([2,int(data.size/2)]).T
                             
                 else:    # rotating_threebladed_substructure            
                     # loop over modes
-                    for i_mode in range(self.num_modes):                        
+                    for i_mode in range(self.num_modes):    
+                        
+                        
+                        self.substructure[i_subs].opstate[i_state].bodies[i_body].modes.append(ModeClass())
+                        
                         #loop over bodies
                         for i_body in range(self.substructure[i_subs].numbody()):
+                            self.substructure[i_subs].opstate[i_state].bodies[i_body].modes.append(ModeClass())
                             num_elements = self.substructure[i_subs].bodies[i_body].numele()
                             
                             data = -self.__read_data(dtype=float,count=2*self.__num_DOF*(num_elements+1))
-                            #~ substructure(isubs).opstate(istate).body_result(ibody).mode(imode).ua0=reshape(dat, 2, [])^T;
+                            self.substructure[i_subs].opstate[i_state].bodies[i_body].modes[i_mode].ua0 = data.reshape([2,int(data.size/2)]).T
                             data = -self.__read_data(dtype=float,count=2*self.__num_DOF*(num_elements+1))
-                            #~ substructure(isubs).opstate(istate).body_result(ibody).mode(imode).ua1=reshape(dat, 2, [])^T;
+                            self.substructure[i_subs].opstate[i_state].bodies[i_body].modes[i_mode].ua1 = data.reshape([2,int(data.size/2)]).T
                             data = -self.__read_data(dtype=float,count=2*self.__num_DOF*(num_elements+1))
-                            #~ substructure(isubs).opstate(istate).body_result(ibody).mode(imode).ub1=reshape(dat, 2, [])^T;
+                            self.substructure[i_subs].opstate[i_state].bodies[i_body].modes[i_mode].ub1 = data.reshape([2,int(data.size/2)]).T
                     
          
             
