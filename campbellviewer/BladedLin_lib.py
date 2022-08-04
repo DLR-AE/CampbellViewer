@@ -6,6 +6,7 @@
 
 # global libs
 import numpy as np
+import os
 
 from data_template import AbstractLinearizationData
 from pyBladed.results import BladedResult
@@ -21,6 +22,19 @@ class BladedLinData(AbstractLinearizationData):
         self.ds.attrs["result_dir"] = result_dir
         self.ds.attrs["result_prefix"] = result_prefix
 
+        self.ds.attrs["bladed_version"] = self.extract_bladed_version()
+
+    def extract_bladed_version(self):
+        """
+        Get the Bladed version from the header in the .$PJ file
+        """
+        with open(os.path.join(self.ds.attrs["result_dir"], self.ds.attrs["result_prefix"]+'.$PJ')) as f:
+            for line in f:
+                if 'ApplicationVersion' in line:
+                    version = line.split("\"")[1]
+                    return version
+        return None
+
     def read_data(self):
         """
         Read all available Campbell diagram data
@@ -28,11 +42,23 @@ class BladedLinData(AbstractLinearizationData):
         print('Start reading Bladed data')
 
         bladed_result = BladedResult(self.ds.attrs["result_dir"], self.ds.attrs["result_prefix"])
-        bladed_result.scan()
+        try:
+            bladed_result.scan()
+        except FileNotFoundError:
+            print('WARNING: There are no result files in the same directory as the .$PJ file. So no Bladed results '
+                  'can be loaded.')
+            raise
 
-        self.read_op_data(bladed_result)
-        self.read_coupled_modes(bladed_result)
-        self.read_cmb_data(bladed_result)
+        if int(self.ds.attrs["bladed_version"].split('.')[1]) <= 6:
+            self.read_coupled_modes_pre4p7(bladed_result)
+        elif 6 < int(self.ds.attrs["bladed_version"].split('.')[1]) <= 8:
+            self.read_op_data_4p7_4p8(bladed_result)
+            self.read_coupled_modes(bladed_result)
+            self.read_cmb_data(bladed_result)
+        else:
+            self.read_op_data(bladed_result)
+            self.read_coupled_modes(bladed_result)
+            self.read_cmb_data(bladed_result)
 
     def read_op_data(self, bladed_result):
         """
@@ -148,6 +174,98 @@ class BladedLinData(AbstractLinearizationData):
             ["operating_point_ID", "participation_mode_ID", "mode_ID"], participation_factors_amp)
         self.ds["participation_factors_phase"] = (
             ["operating_point_ID", "participation_mode_ID", "mode_ID"], participation_factors_phase)
+
+    def read_op_data_4p7_4p8(self, bladed_result):
+        """
+        Read operational data from Bladed results made by v4.7 and v4.8.
+        For these versions the operational data can not be directly obtained with pyBladed, but (normally) the wind
+        speed will be available in the .%02 file and the rotor speed can be extracted from the .$CM file.
+        So this method is a workaround specifically for these Bladed versions.
+        """
+        for result in bladed_result.results:
+            if result[-3:] == '%02':
+                if bladed_result.results[result]['AXISLAB']	== 'Wind Speed':  # this seems to be the standard case
+                    windspeed = np.array(bladed_result.results[result]['AXIVAL'])
+                    pitch = np.ones(windspeed.shape)
+                    power = np.ones(windspeed.shape)
+
+                    # get the rotor speed from the .$CM file
+                    campbell_data, _ = bladed_result['Campbell diagram']
+                    all_mode_track_rpms = [test['omegas'] for test in campbell_data]
+                    mode_track_lengths = [len(mode_track_rpm) for mode_track_rpm in all_mode_track_rpms]
+                    if not np.all(np.array(mode_track_lengths) == mode_track_lengths[0]):
+                        print('Not all mode tracks have the same length. The longest mode track will be used to get '
+                              'the rotor speed operational conditions.')
+                    rpm = np.array(all_mode_track_rpms[np.argmax(mode_track_lengths)])
+
+                    if windspeed.size != rpm.size:
+                        print('Wind speed vector obtained from .%02 does not have the same length as rotational speed '
+                              'vector obtained from .$CM file. Rotational speeds from .$CM will be disregarded')
+                        rpm = np.ones(windspeed.shape)
+
+                elif bladed_result.results[result]['AXISLAB'] == 'Rotor Speed':
+                    rpm = np.array(bladed_result.results[result]['AXIVAL']) * (60 / (2 * np.pi))
+                    windspeed = np.ones(rpm.shape)
+                    pitch = np.ones(rpm.shape)
+                    power = np.ones(rpm.shape)
+
+                self.ds.coords["operating_parameter"] = ['wind speed [m/s]', 'pitch [deg]', 'rot. speed [rpm]',
+                                                         'Electrical power [kw]']
+                self.ds["operating_points"] = (["operating_point_ID", "operating_parameter"],
+                                               np.array([windspeed.T, pitch.T, rpm.T, power.T]).T)
+
+    def read_coupled_modes_pre4p7(self, bladed_result):
+        """
+        The output of a Bladed Campbell Diagram Linearization is very different for versions <4.6. Some notable
+        differences:
+        - .$02 is an ascii file, instead of the standard binary format described by the .%02 file
+        - The rotor speed is given in the .%02 file as AXIVAL/AXISLAB, there does not seem to be the possibility to
+            get the other operational conditions (wind speed, etc.)
+        - The .$CM file has some different conventions compared to the newer versions:
+            - The points in the top section of the file are not organised by mode track -> operating point, but
+            organised by operating point -> mode track.
+            - Besides that not all points seem to reappear in the mode tracks in the bottom of the file.
+            - There are no phase angles in the participation factors
+        - There is the small bug that the Frequency value for the keyword VARIAB in the .%02 file is missing
+            parentheses. Therefore PyBladed will not recognise it as an actual keyword.
+        - The rotor harmonics are included as modes in the data (NaN damping)
+
+        Therefore we only read the frequency/damping from the .$02 file and the rotor speed + mode names from the .%02
+        file
+        """
+        print('WARNING: Reading the participation factors for Bladed Campbell <4.7 results has not been implemented '
+              'yet. (Because the format of the .$CM file differs from newer versions)')
+        for result in bladed_result.results:
+            if result[-3:] == '%02':
+
+                # operating data -> only rotor speed seems to be available
+                print('WARNING: Bladed Campbell <4.7 does not provide wind speed as operational condition. The '
+                      'Campbell diagram can only be visualized vs. rotor speed.')
+                rpm = np.array(bladed_result.results[result]['AXIVAL']) * (60 / (2 * np.pi))
+                windspeed = np.ones(rpm.shape)
+                pitch = np.ones(rpm.shape)
+                power = np.ones(rpm.shape)
+
+                self.ds.coords["operating_parameter"] = ['wind speed [m/s]', 'pitch [deg]', 'rot. speed [rpm]',
+                                                         'Electrical power [kw]']
+                self.ds["operating_points"] = (["operating_point_ID", "operating_parameter"],
+                                               np.array([windspeed.T, pitch.T, rpm.T, power.T]).T)
+
+                # The first 9 rotor harmonics (1P, 2P, etc.) are included in the data. Cut them away.
+                shape = [x for x in reversed(bladed_result.results[result]['DIMENS'])]
+                frequency = np.loadtxt(result[:-3] + '$02').reshape(shape)[:, :-9, 0]
+                damping = np.loadtxt(result[:-3] + '$02').reshape(shape)[:, :-9, 1]
+                mode_names_orig = bladed_result.results[result]['AXITICK']
+
+                damping = 100 * damping  # damping ratio in %
+                # make sure mode names are unique -> add numbers if identical names appear
+                modes = []
+                for mode_name in mode_names_orig:
+                    modes.append(AEMode(name=mode_name))
+
+                self.ds["modes"] = (["mode_ID"], modes)
+                self.ds["frequency"] = (["operating_point_ID", "mode_ID"], frequency)
+                self.ds["damping"] = (["operating_point_ID", "mode_ID"], damping)
 
 
 if __name__ == "__main__":
