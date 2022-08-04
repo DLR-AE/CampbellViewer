@@ -858,7 +858,7 @@ class ApplicationWindow(QMainWindow):
 
         for atool in view_cfg.active_data:  # active tool
             for ads in view_cfg.active_data[atool]:  # active dataset
-                if database[atool][ads].ds['frequency'] is not None:
+                if database[atool][ads].ds['frequency'].values.ndim is not 0:
                     # set xaxis item
                     if self.xaxis_item == 'WS':
                         xaxis_values = database[atool][ads].ds['operating_points'].loc[:, 'wind speed [m/s]']
@@ -901,7 +901,7 @@ class ApplicationWindow(QMainWindow):
                             lines_to_be_selected.append(damp_line)
 
                 # plot p-harmonics if present
-                if database[atool][ads].ds.operating_points is not None and self.pharmonics is True:
+                if database[atool][ads].ds.operating_points.values.ndim is not 0 and self.pharmonics is True:
                     P_harmonics = [1, 3, 6, 9, 12]
                     for index in P_harmonics:
                         P_hamonics_data = database[atool][ads].ds.operating_points.loc[:, 'rot. speed [rpm]']/60*index  # rpm in Hz
@@ -1185,8 +1185,8 @@ class ApplicationWindow(QMainWindow):
             if success is False:
                 return
 
-        if database[self.settingsAMPtool][self.settingsAMPdataset].ds.frequency is not None and \
-                database[self.settingsAMPtool][self.settingsAMPdataset].ds.participation_factors_amp is not None:
+        if database[self.settingsAMPtool][self.settingsAMPdataset].ds.frequency.values.ndim is not 0 and \
+                database[self.settingsAMPtool][self.settingsAMPdataset].ds.participation_factors_amp.values.ndim is not 0:
             self.AmplitudeWindow = AmplitudeWindow()
             self.AmplitudeWindow.sigClosed.connect(self.deleteAmplitudes)
         else:
@@ -1201,8 +1201,8 @@ class ApplicationWindow(QMainWindow):
 
     def updateAmplitudes(self):
         """ Update Amplitude plot according to settingsAMPdataset and settingsAMPmode """
-        if database[self.settingsAMPtool][self.settingsAMPdataset].ds.frequency is not None and \
-                database[self.settingsAMPtool][self.settingsAMPdataset].ds.participation_factors_amp is not None:
+        if database[self.settingsAMPtool][self.settingsAMPdataset].ds.frequency.values.ndim is not 0 and \
+                database[self.settingsAMPtool][self.settingsAMPdataset].ds.participation_factors_amp.values.ndim is not 0:
             self.AmplitudeWindow.configure_plotAMP(self.settingsAMPtool, self.settingsAMPdataset, self.settingsAMPmode,
                                                    database[self.settingsAMPtool][self.settingsAMPdataset].ds,
                                                    self.AMPthreshold)
