@@ -41,13 +41,17 @@ class BladedLinData(AbstractLinearizationData):
             bladed_result (obj.): Bladed result reader object
         """
         windspeed = bladed_result['Nominal wind speed at hub position'].squeeze()
-        pitch = bladed_result['Nominal pitch angle'].squeeze() * 180/np.pi
-        rpm = bladed_result['Rotor speed'].squeeze() * (60 / (2*np.pi))
-        power = bladed_result['Electrical power'].squeeze() / 10**3
+        pitch = np.array(bladed_result['Nominal pitch angle'].squeeze() * 180/np.pi)
+        rpm = np.array(bladed_result['Rotor speed'].squeeze() * (60 / (2*np.pi)))
+        power = np.array(bladed_result['Electrical power'].squeeze() / 10**3)
+
+        # The operating points have to be put in an array with at least 2 dimensions, even if there is only 1 op point
+        op_point_arr = np.array([windspeed.T, pitch.T, rpm.T, power.T]).T
+        if op_point_arr.ndim == 1:
+            op_point_arr = op_point_arr.reshape(1, op_point_arr.size)
 
         self.ds.coords["operating_parameter"] = ['wind speed [m/s]', 'pitch [deg]', 'rot. speed [rpm]', 'Electrical power [kw]']
-        self.ds["operating_points"] = (["operating_point_ID", "operating_parameter"],
-                                    np.array([windspeed.T, pitch.T, rpm.T, power.T]).T)
+        self.ds["operating_points"] = (["operating_point_ID", "operating_parameter"], op_point_arr)
 
     def read_coupled_modes(self, bladed_result):
         """
@@ -65,8 +69,8 @@ class BladedLinData(AbstractLinearizationData):
             modes.append(AEMode(name=mode_name))
 
         self.ds["modes"] = (["mode_ID"], modes)
-        self.ds["frequency"] = (["operating_point_ID", "mode_ID"], frequency.squeeze())
-        self.ds["damping"] = (["operating_point_ID", "mode_ID"], damping.squeeze())
+        self.ds["frequency"] = (["operating_point_ID", "mode_ID"], frequency[:, :, 0])
+        self.ds["damping"] = (["operating_point_ID", "mode_ID"], damping[:, :, 0])
 
     def read_cmb_data(self, bladed_result):
         """
