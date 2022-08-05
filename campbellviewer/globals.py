@@ -14,6 +14,9 @@ class ViewSettings:
         self.selected_data = []
         self.lines = {}
         self.ls = MPLLinestyle()
+        self.axes_limits = None
+        self.auto_scaling_x = True
+        self.auto_scaling_y = True
 
     def update_lines(self):
         self.ls.nr_lines_allocated = 0
@@ -79,6 +82,29 @@ class ViewSettings:
             return 'Pitch angle in $^\circ$'
         else:
             return xaxis_param
+
+    def get_axes_limits(self, xlim, ylim, y2lim):
+        """
+        Get the limits that matplotlib autoscale wants to give to the axes. Decide to use those, user_defined limits or
+        limits from previous refresh.
+        """
+        # some hardcoded limits
+        ylim = (max(0, ylim[0]), ylim[1])
+        y2lim = (max(-5, y2lim[0]), y2lim[1])
+
+        if self.axes_limits is None or (self.auto_scaling_x is True and self.auto_scaling_y is True):
+            self.axes_limits = (xlim, ylim, y2lim)
+            self.auto_scaling_x = False
+            self.auto_scaling_y = False
+        elif self.auto_scaling_x is True:
+            self.axes_limits = (xlim, self.axes_limits[1], self.axes_limits[2])
+            self.auto_scaling_x = False
+        elif self.auto_scaling_y is True:
+            self.axes_limits = (self.axes_limits[0], ylim, y2lim)
+            self.auto_scaling_y = False
+
+        return self.axes_limits
+
 
 global database
 database = LinearizationDataWrapper()

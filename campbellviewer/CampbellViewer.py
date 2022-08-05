@@ -529,17 +529,15 @@ class AmplitudeWindow(QMainWindow):
         self.setCentralWidget(self.main_widget)
 
         if hasattr(self, 'axes1'):
-            uxlim = self.axes1.get_xlim()
             uylim = self.axes1.get_ylim()
             uy2lim = self.axes2.get_ylim()
         else:            
-            uxlim = [3, 20]
             uylim = [0, 1.1]
             uy2lim = [-180, 180]
  
         self.main_plotAMP(title='Amplitude participations for tool {}, dataset {}, {}, visibility threshold = {}'.format(requested_toolname, requested_datasetname, self.AMPmode_name, self.AMPthreshold),
                           xlabel=view_cfg.xparam2xlabel(self.xaxis_param), ylabel='normalized participation',
-                          y2label='phase angle in degree', xlim=uxlim, ylim=uylim, y2lim=uy2lim)
+                          y2label='phase angle in degree', xlim=view_cfg.axes_limits[0], ylim=uylim, y2lim=uy2lim)
         
     def main_plotAMP(self, title='Amplitudes', xlabel='', ylabel='', y2label='',
                      xlim=None, ylim=None, y2lim=None):
@@ -822,10 +820,12 @@ class ApplicationWindow(QMainWindow):
 
     ##############################################################
     # Main plotting routine
-    def main_plot(self, title='Campbell', xlabel='', ylabel='', y2label='', xlim=None, ylim=None, y2lim=None,
-                  xscale='linear', yscale='linear'):
+    def main_plot(self, title='Campbell', xlabel='', ylabel='', y2label='', xscale='linear', yscale='linear'):
         """Ultimately, this is a QWidget (as well as a FigureCanvasAgg, etc.)."""
-                        
+
+        # get the possibly user-modified axes limits, it would be good to have a signal when the axes limits are changed
+        view_cfg.axes_limits = (self.axes1.get_xlim(), self.axes1.get_ylim(), self.axes2.get_ylim())
+
         # We want the axes cleared every time plot() is called
         self.axes1.clear()
         self.axes2.clear()
@@ -834,15 +834,10 @@ class ApplicationWindow(QMainWindow):
         self.axes1.set_title(title)
         self.axes1.set_xlabel(xlabel)
         self.axes1.set_ylabel(ylabel)
-        self.axes1.set_xlim(xlim)
-        self.axes1.set_ylim(ylim)
         self.axes1.grid()
         self.axes2.set_xlabel(xlabel)
         self.axes2.set_ylabel(y2label)
-        self.axes2.set_xlim(xlim)
-        self.axes2.set_ylim(y2lim)
         self.axes2.grid()
-        self.axes2.fill_between([-10, 100], y1=0, y2=-10, where=None, facecolor='grey', alpha=0.1, hatch='/')
         self.vline1 = None
         self.vline2 = None
             
@@ -887,8 +882,12 @@ class ApplicationWindow(QMainWindow):
                             view_cfg.lines[atool][ads][mode_ID] = [freq_line, damp_line]
                         else:
                             freq_line = self.axes1.add_line(view_cfg.lines[atool][ads][mode_ID][0])
+                            self.axes1.update_datalim(freq_line.get_xydata())  # add_line is not automatically used for autoscaling
+                            self.axes1.autoscale_view()
                             freq_line.set_label(ads + ': ' + database[atool][ads].ds.modes.values[mode_ID].name)
                             damp_line = self.axes2.add_line(view_cfg.lines[atool][ads][mode_ID][1])
+                            self.axes2.update_datalim(damp_line.get_xydata())
+                            self.axes2.autoscale_view()
                             damp_line.set_label(ads + ': ' + database[atool][ads].ds.modes.values[mode_ID].name)
 
                         freq_lines.append(freq_line)
@@ -908,6 +907,15 @@ class ApplicationWindow(QMainWindow):
 
         self.axes2.legend(bbox_to_anchor=(1, 0), loc=3)
         # self.axes2.legend(loc='upper center', bbox_to_anchor=(0.5, -0.05), ncol=5)
+
+        xlim, ylim, y2lim = view_cfg.get_axes_limits(self.axes1.get_xlim(), self.axes1.get_ylim(), self.axes2.get_ylim())
+        self.axes1.set_xlim(xlim)
+        self.axes2.set_xlim(xlim)
+        self.axes1.set_ylim(ylim)
+        self.axes2.set_ylim(y2lim)
+
+        # do fill_between after the limits
+        self.axes2.fill_between([-10, 100], y1=0, y2=-10, where=None, facecolor='grey', alpha=0.1, hatch='/')
 
         # setup mplcursors behavior: multiple text boxes if lines are clicked, highlighting line, pairing of
         # frequency and damping lines
@@ -987,19 +995,9 @@ class ApplicationWindow(QMainWindow):
             self.right_mouse_press = False
 
     def UpdateMainPlot(self):
-        """ Update main plot """
-        if hasattr(self, 'axes1') and self.initlimits is False:
-            uxlim = self.axes1.get_xlim()
-            uylim = self.axes1.get_ylim()
-            uy2lim = self.axes2.get_ylim()
-        else:        
-            uxlim = [3, 20]
-            uylim = [0, 4]
-            uy2lim = [-1, 4]            
-            self.initlimits = False
-            
+        """ Update main plot. This wrapping method currently does not make sense, but could be reimplemented later. """
         self.main_plot(title='Campbell Diagram', xlabel=view_cfg.xparam2xlabel(self.xaxis_param),
-                       ylabel='Frequency in Hz', y2label='Damping Ratio in %', xlim=uxlim, ylim=uylim, y2lim=uy2lim)
+                       ylabel='Frequency in Hz', y2label='Damping Ratio in %')
 
     def load_database(self):
         """ Load data from database (and use default view settings) """
@@ -1140,6 +1138,7 @@ class ApplicationWindow(QMainWindow):
                             for line in view_cfg.lines[atool][ads][mode_ID]:  # freq. and damp. lines
                                 line.set_xdata(database[atool][ads].ds["operating_points"].sel(operating_parameter=text))
 
+        view_cfg.auto_scaling_x = True
         self.UpdateMainPlot()
 
     ###################
@@ -1206,6 +1205,10 @@ class ApplicationWindow(QMainWindow):
         """ Update Amplitude plot according to settingsAMPdataset and settingsAMPmode """
         if database[self.settingsAMPtool][self.settingsAMPdataset].ds.frequency.values.ndim is not 0 and \
                 database[self.settingsAMPtool][self.settingsAMPdataset].ds.participation_factors_amp.values.ndim is not 0:
+
+            # get the possibly user-modified axes limits, it would be good to have a signal when the axes limits are changed
+            view_cfg.axes_limits = (self.axes1.get_xlim(), self.axes1.get_ylim(), self.axes2.get_ylim())
+
             self.AmplitudeWindow.configure_plotAMP(self.settingsAMPtool,
                                                    self.settingsAMPdataset,
                                                    self.settingsAMPmode,
