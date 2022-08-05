@@ -54,6 +54,11 @@ class BladedLinData(AbstractLinearizationData):
         elif 6 < int(self.ds.attrs["bladed_version"].split('.')[1]) <= 8:
             self.read_op_data_4p7_4p8(bladed_result)
             self.read_coupled_modes(bladed_result)
+            if int(self.ds.attrs["bladed_version"].split('.')[1]) == 7:
+                # v4.7 has the rotor harmonics ('Rotor speed (1P)' '2P' '3P' '4P' '5P' '6P' '9P' '12P') in the $02 file
+                # -> remove them
+                n = len(self.ds.mode_ID)
+                self.ds = self.ds.drop_sel(mode_ID=[n-1, n-2, n-3, n-4, n-5, n-6, n-7, n-8])
             self.read_cmb_data(bladed_result)
         else:
             self.read_op_data(bladed_result)
@@ -186,8 +191,6 @@ class BladedLinData(AbstractLinearizationData):
             if result[-3:] == '%02':
                 if bladed_result.results[result]['AXISLAB']	== 'Wind Speed':  # this seems to be the standard case
                     windspeed = np.array(bladed_result.results[result]['AXIVAL'])
-                    pitch = np.ones(windspeed.shape)
-                    power = np.ones(windspeed.shape)
 
                     # get the rotor speed from the .$CM file
                     campbell_data, _ = bladed_result['Campbell diagram']
@@ -206,13 +209,10 @@ class BladedLinData(AbstractLinearizationData):
                 elif bladed_result.results[result]['AXISLAB'] == 'Rotor Speed':
                     rpm = np.array(bladed_result.results[result]['AXIVAL']) * (60 / (2 * np.pi))
                     windspeed = np.ones(rpm.shape)
-                    pitch = np.ones(rpm.shape)
-                    power = np.ones(rpm.shape)
 
-                self.ds.coords["operating_parameter"] = ['wind speed [m/s]', 'pitch [deg]', 'rot. speed [rpm]',
-                                                         'Electrical power [kw]']
+                self.ds.coords["operating_parameter"] = ['wind speed [m/s]', 'rot. speed [rpm]']
                 self.ds["operating_points"] = (["operating_point_ID", "operating_parameter"],
-                                               np.array([windspeed.T, pitch.T, rpm.T, power.T]).T)
+                                               np.array([windspeed.T, rpm.T]).T)
 
     def read_coupled_modes_pre4p7(self, bladed_result):
         """
@@ -242,14 +242,10 @@ class BladedLinData(AbstractLinearizationData):
                 print('WARNING: Bladed Campbell <4.7 does not provide wind speed as operational condition. The '
                       'Campbell diagram can only be visualized vs. rotor speed.')
                 rpm = np.array(bladed_result.results[result]['AXIVAL']) * (60 / (2 * np.pi))
-                windspeed = np.ones(rpm.shape)
-                pitch = np.ones(rpm.shape)
-                power = np.ones(rpm.shape)
 
-                self.ds.coords["operating_parameter"] = ['wind speed [m/s]', 'pitch [deg]', 'rot. speed [rpm]',
-                                                         'Electrical power [kw]']
+                self.ds.coords["operating_parameter"] = ['rot. speed [rpm]']
                 self.ds["operating_points"] = (["operating_point_ID", "operating_parameter"],
-                                               np.array([windspeed.T, pitch.T, rpm.T, power.T]).T)
+                                               np.array([rpm.T]).T)
 
                 # The first 9 rotor harmonics (1P, 2P, etc.) are included in the data. Cut them away.
                 shape = [x for x in reversed(bladed_result.results[result]['DIMENS'])]

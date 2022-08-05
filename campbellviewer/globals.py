@@ -52,10 +52,21 @@ class ViewSettings:
         return
 
     def reset_all_lines(self):
+        """
+        Reset all the stored lines.
+        This method is currently no longer used, but can be useful later on.
+        """
         for tool in self.lines:
             for ds in self.lines[tool]:
                 self.lines[tool][ds] = [None]*len(self.lines[tool][ds])
         self.ls.nr_lines_allocated = 0
+
+    def reset_these_lines(self, tool, ds):
+        """
+        Reset the lines for this tool and dataset.
+        """
+        self.lines[tool][ds] = [None]*len(self.lines[tool][ds])
+
 
 global database
 database = LinearizationDataWrapper()

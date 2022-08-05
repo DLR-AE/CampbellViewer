@@ -684,8 +684,7 @@ class ApplicationWindow(QMainWindow):
         super(ApplicationWindow, self).__init__()
         self.setAttribute(QtCore.Qt.WA_DeleteOnClose)
         self.setWindowTitle("Application main window")
-        self.xaxis_item = 'WS'
-        
+
         ##############################################################
         # Menu items
         # FILE
@@ -801,10 +800,13 @@ class ApplicationWindow(QMainWindow):
         self.button_pharm.clicked.connect(self.plotPharmonics)
         self.button_layout.addWidget(self.button_pharm)
         
-        self.button_wsrpm = QPushButton('Switch plot over RPM/Windspeed', self)
-        self.button_wsrpm.clicked.connect(view_cfg.reset_all_lines)
-        self.button_wsrpm.clicked.connect(self.plotWSRPM)
-        self.button_layout.addWidget(self.button_wsrpm)
+        self.button_xaxis = QComboBox(self)
+        self.button_xaxis.currentTextChanged.connect(self.xaxis_change)
+        self.xaxis_param = self.button_xaxis.currentText()
+        self.xaxis_selection_box = QVBoxLayout()
+        self.xaxis_selection_box.addWidget(QLabel('x-axis operating parameter:'))
+        self.xaxis_selection_box.addWidget(self.button_xaxis)
+        self.button_layout.addLayout(self.xaxis_selection_box)
 
         self.button_savepdf = QPushButton('Quick Save to PDF', self)
         self.button_savepdf.clicked.connect(self.savepdf)
@@ -819,7 +821,7 @@ class ApplicationWindow(QMainWindow):
     ##############################################################
     # Main plotting routine
     def main_plot(self, title='Campbell', xlabel='', ylabel='', y2label='', xlim=None, ylim=None, y2lim=None,
-                  xscale='linear', yscale='linear', xaxis_item='WS'):
+                  xscale='linear', yscale='linear'):
         """Ultimately, this is a QWidget (as well as a FigureCanvasAgg, etc.)."""
                         
         # We want the axes cleared every time plot() is called
@@ -841,15 +843,6 @@ class ApplicationWindow(QMainWindow):
         self.axes2.fill_between([-10, 100], y1=0, y2=-10, where=None, facecolor='grey', alpha=0.1, hatch='/')
         self.vline1 = None
         self.vline2 = None
-
-        # Set item of x-axis = wind speed or RPM
-        if not hasattr(self, 'xaxis_item'):
-            self.xaxis_item = xaxis_item
-            
-        if self.xaxis_item == 'RPM' and xaxis_item == 'WS':
-            self.xaxis_item = 'WS'
-        elif self.xaxis_item == 'WS' and xaxis_item == 'RPM':
-            self.xaxis_item = 'RPM'
             
         # linewidth and markersizedefault
         freq_lines = []
@@ -859,11 +852,14 @@ class ApplicationWindow(QMainWindow):
         for atool in view_cfg.active_data:  # active tool
             for ads in view_cfg.active_data[atool]:  # active dataset
                 if database[atool][ads].ds['frequency'].values.ndim is not 0:
-                    # set xaxis item
-                    if self.xaxis_item == 'WS':
-                        xaxis_values = database[atool][ads].ds['operating_points'].loc[:, 'wind speed [m/s]']
+
+                    # get xaxis values
+                    if self.xaxis_param not in database[atool][ads].ds.operating_parameter:
+                        print('WARNING: Operating condition {} is not available in the {}-{} dataset. The data will '
+                              'not be plotted.'.format(self.xaxis_param, atool, ads))
+                        continue
                     else:
-                        xaxis_values = database[atool][ads].ds['operating_points'].loc[:, 'rot. speed [rpm]']
+                        xaxis_values = database[atool][ads].ds['operating_points'].loc[:, self.xaxis_param]
 
                     # add active modes
                     # this can probably also be done without a loop and just with the indices
@@ -988,13 +984,17 @@ class ApplicationWindow(QMainWindow):
         if event.button is MouseButton.RIGHT:
             self.right_mouse_press = False
 
-    def UpdateMainPlot(self, myarg='WS'):
+    def UpdateMainPlot(self):
         """ Update main plot """
-        if myarg == 'RPM':
+        if self.xaxis_param == 'rot. speed [rpm]':
             myxlabel = 'RPM in $1/min$'
-        else:
+        elif self.xaxis_param == 'wind speed [m/s]':
             myxlabel = 'Wind Speed in m/s'
-            
+        elif self.xaxis_param == 'pitch [deg]':
+            myxlabel = 'Pitch angle in $^\circ$'
+        else:
+            myxlabel = self.xaxis_param
+
         if hasattr(self, 'axes1') and self.initlimits is False:
             uxlim = self.axes1.get_xlim()
             uylim = self.axes1.get_ylim()
@@ -1006,7 +1006,7 @@ class ApplicationWindow(QMainWindow):
             self.initlimits = False
             
         self.main_plot(title='Campbell Diagram', xlabel=myxlabel, ylabel='Frequency in Hz', 
-                       y2label='Damping Ratio in %', xlim=uxlim, ylim=uylim, y2lim=uy2lim, xaxis_item=myarg)
+                       y2label='Damping Ratio in %', xlim=uxlim, ylim=uylim, y2lim=uy2lim)
 
     def load_database(self):
         """ Load data from database (and use default view settings) """
@@ -1078,6 +1078,11 @@ class ApplicationWindow(QMainWindow):
                                                                 self.mode_maxpara_cmb, 1).tolist()
         view_cfg.lines[toolname][datasetname] = [None]*len(database[toolname][datasetname].ds.modes)
 
+        # add the (unique) operating parameters of this dataset to the xaxis button.
+        self.button_xaxis.addItems(list(set(database[toolname][datasetname].ds.operating_parameter.data).difference(
+                                       set([self.button_xaxis.itemText(i) for i in range(self.button_xaxis.count())]))))
+        self.button_xaxis.model().sort(0)
+
     ##############################################################
     # Open File Dialog for HAWCStab2 result files
     def openFileNameDialogHAWCStab2(self, datasetname='default'):
@@ -1124,20 +1129,25 @@ class ApplicationWindow(QMainWindow):
             self.pharmonics = True
         self.UpdateMainPlot()
 
-    ##############################################################
-    # Open File Dialog for HAWCStab2 Campbell diagramm files
-    def plotWSRPM(self):
-        """ Switch between plot over wind speed or RPM"""
-        try:
-            if self.xaxis_item == 'RPM':
-                myarg = 'WS'
-            elif self.xaxis_item == 'WS':
-                myarg = 'RPM'
-            self.UpdateMainPlot(myarg)
-        except:
-            myarg = 'RPM'
-            self.UpdateMainPlot(myarg)
-            return
+    def xaxis_change(self, text):
+        """
+        - set the xaxis_param
+        - modify all xaxis values of the active lines
+        - update the main plot
+        """
+        self.xaxis_param = text
+        # modify the xaxis values of all visible lines
+        for atool in view_cfg.active_data:  # active tool
+            for ads in view_cfg.active_data[atool]:  # active dataset
+                if text not in database[atool][ads].ds.operating_parameter:
+                    view_cfg.reset_these_lines(tool=atool, ds=ads)
+                else:
+                    for mode_ID in view_cfg.active_data[atool][ads]:  # active mode tracks
+                        if view_cfg.lines[atool][ads][mode_ID] is not None:
+                            for line in view_cfg.lines[atool][ads][mode_ID]:  # freq. and damp. lines
+                                line.set_xdata(database[atool][ads].ds["operating_points"].sel(operating_parameter=text))
+
+        self.UpdateMainPlot()
 
     ###################
     # save plot
