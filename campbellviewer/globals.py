@@ -67,6 +67,18 @@ class ViewSettings:
         """
         self.lines[tool][ds] = [None]*len(self.lines[tool][ds])
 
+    def xparam2xlabel(self, xaxis_param):
+        """
+        Some default xlabels
+        """
+        if xaxis_param == 'rot. speed [rpm]':
+            return 'RPM in $1/min$'
+        elif xaxis_param == 'wind speed [m/s]':
+            return 'Wind Speed in m/s'
+        elif xaxis_param == 'pitch [deg]':
+            return 'Pitch angle in $^\circ$'
+        else:
+            return xaxis_param
 
 global database
 database = LinearizationDataWrapper()

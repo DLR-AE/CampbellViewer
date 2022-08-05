@@ -507,11 +507,13 @@ class AmplitudeWindow(QMainWindow):
         self.setMinimumWidth(1024)
         self.setMinimumHeight(800)
 
-    def configure_plotAMP(self, requested_toolname, requested_datasetname, settingsAMPmode, dataset, AMPthreshold):
+    def configure_plotAMP(self, requested_toolname, requested_datasetname, settingsAMPmode,
+                          dataset, AMPthreshold, xaxis_param):
         self.settingsAMPmode = settingsAMPmode
         self.AMPmode_name = database[requested_toolname][requested_datasetname].ds.modes.values[settingsAMPmode].name
         self.dataset = dataset
         self.AMPthreshold = AMPthreshold
+        self.xaxis_param = xaxis_param
 
         # Figure settings
         self.AMPfig = Figure(figsize=(6, 6), dpi=100, tight_layout=True)
@@ -536,7 +538,7 @@ class AmplitudeWindow(QMainWindow):
             uy2lim = [-180, 180]
  
         self.main_plotAMP(title='Amplitude participations for tool {}, dataset {}, {}, visibility threshold = {}'.format(requested_toolname, requested_datasetname, self.AMPmode_name, self.AMPthreshold),
-                          xlabel='Wind Speed in m/s', ylabel='normalized participation',
+                          xlabel=view_cfg.xparam2xlabel(self.xaxis_param), ylabel='normalized participation',
                           y2label='phase angle in degree', xlim=uxlim, ylim=uylim, y2lim=uy2lim)
         
     def main_plotAMP(self, title='Amplitudes', xlabel='', ylabel='', y2label='',
@@ -571,11 +573,11 @@ class AmplitudeWindow(QMainWindow):
             # only show modes with a part. of minimum self.AMPthreshold (for at least one of the operating points)
             if max(self.dataset.participation_factors_amp.loc[:, i, self.settingsAMPmode]) > self.AMPthreshold:
                 ls = mpl_ls.new_ls()
-                ampl_line, = self.axes1.plot(self.dataset.operating_points.loc[:, 'wind speed [m/s]'],
+                ampl_line, = self.axes1.plot(self.dataset.operating_points.loc[:, self.xaxis_param],
                                 self.dataset.participation_factors_amp.loc[:, i, self.settingsAMPmode],
                                 label=mode.name, linewidth=mpl_ls.lw, c=ls['color'], linestyle=ls['linestyle'],
                                 marker=ls['marker'], markersize=mpl_ls.markersizedefault)
-                phase_line, = self.axes2.plot(self.dataset.operating_points.loc[:, 'wind speed [m/s]'],
+                phase_line, = self.axes2.plot(self.dataset.operating_points.loc[:, self.xaxis_param],
                                 self.dataset.participation_factors_phase.loc[:, i, self.settingsAMPmode],
                                 label=mode.name, linewidth=mpl_ls.lw, c=ls['color'], linestyle=ls['linestyle'],
                                 marker=ls['marker'], markersize=mpl_ls.markersizedefault)
@@ -986,15 +988,6 @@ class ApplicationWindow(QMainWindow):
 
     def UpdateMainPlot(self):
         """ Update main plot """
-        if self.xaxis_param == 'rot. speed [rpm]':
-            myxlabel = 'RPM in $1/min$'
-        elif self.xaxis_param == 'wind speed [m/s]':
-            myxlabel = 'Wind Speed in m/s'
-        elif self.xaxis_param == 'pitch [deg]':
-            myxlabel = 'Pitch angle in $^\circ$'
-        else:
-            myxlabel = self.xaxis_param
-
         if hasattr(self, 'axes1') and self.initlimits is False:
             uxlim = self.axes1.get_xlim()
             uylim = self.axes1.get_ylim()
@@ -1005,8 +998,8 @@ class ApplicationWindow(QMainWindow):
             uy2lim = [-1, 4]            
             self.initlimits = False
             
-        self.main_plot(title='Campbell Diagram', xlabel=myxlabel, ylabel='Frequency in Hz', 
-                       y2label='Damping Ratio in %', xlim=uxlim, ylim=uylim, y2lim=uy2lim)
+        self.main_plot(title='Campbell Diagram', xlabel=view_cfg.xparam2xlabel(self.xaxis_param),
+                       ylabel='Frequency in Hz', y2label='Damping Ratio in %', xlim=uxlim, ylim=uylim, y2lim=uy2lim)
 
     def load_database(self):
         """ Load data from database (and use default view settings) """
@@ -1213,9 +1206,12 @@ class ApplicationWindow(QMainWindow):
         """ Update Amplitude plot according to settingsAMPdataset and settingsAMPmode """
         if database[self.settingsAMPtool][self.settingsAMPdataset].ds.frequency.values.ndim is not 0 and \
                 database[self.settingsAMPtool][self.settingsAMPdataset].ds.participation_factors_amp.values.ndim is not 0:
-            self.AmplitudeWindow.configure_plotAMP(self.settingsAMPtool, self.settingsAMPdataset, self.settingsAMPmode,
+            self.AmplitudeWindow.configure_plotAMP(self.settingsAMPtool,
+                                                   self.settingsAMPdataset,
+                                                   self.settingsAMPmode,
                                                    database[self.settingsAMPtool][self.settingsAMPdataset].ds,
-                                                   self.AMPthreshold)
+                                                   self.AMPthreshold,
+                                                   self.xaxis_param)
             self.AmplitudeWindow.show()
         else:
             QMessageBox.about(self, "WARNING", "Campbell and Amplitude files have to be loaded first!")
