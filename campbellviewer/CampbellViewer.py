@@ -783,6 +783,7 @@ class ApplicationWindow(QMainWindow):
         self.axes2      = self.fig.add_subplot(212, sharex=self.axes1)
         self.initlimits = True                                         # True for init
         self.right_mouse_press = False
+        self.cursor = None
 
         ##############################################################
         # Set Main Widget
@@ -815,6 +816,12 @@ class ApplicationWindow(QMainWindow):
         self.button_rescale = QPushButton('Rescale plot limits', self)
         self.button_rescale.clicked.connect(self.rescale_plot_limits)
         self.button_layout.addWidget(self.button_rescale)
+
+        self.pick_markers = False
+        self.pick_markers_box = QCheckBox('Pick markers', self)
+        self.pick_markers_box.clicked.connect(self.add_or_remove_scatter)
+        self.button_layout.addWidget(self.pick_markers_box)
+
         ##############################################################
         # Signals from the tree model.
         # -> layoutChanged signals are used to update the main plot
@@ -822,6 +829,29 @@ class ApplicationWindow(QMainWindow):
         self.dataset_tree_model.layoutChanged.connect(self.UpdateMainPlot)
 
     ##############################################################
+    def add_or_remove_scatter(self, tick_flag):
+        self.pick_markers = tick_flag
+        if tick_flag is True:
+            # add scatter plot on top of normal plot
+            for atool in view_cfg.lines:
+                for ads in view_cfg.lines[atool]:
+                    for mode_ID, mode_lines in enumerate(view_cfg.lines[atool][ads]):
+                        if mode_lines is not None:
+                            test = self.axes1.scatter(mode_lines[0].get_xdata(), mode_lines[0].get_ydata(),
+                                                      color='white', edgecolors=mode_lines[0].get_c())
+                            test2 = self.axes2.scatter(mode_lines[1].get_xdata(), mode_lines[1].get_ydata())
+                            view_cfg.lines[atool][ads][mode_ID].append(test)
+                            view_cfg.lines[atool][ads][mode_ID].append(test2)
+            self.UpdateMainPlot()
+
+        elif tick_flag is False:
+            for atool in view_cfg.lines:
+                for ads in view_cfg.lines[atool]:
+                    for mode_ID, mode_lines in enumerate(view_cfg.lines[atool][ads]):
+                        if mode_lines is not None:
+                            view_cfg.lines[atool][ads][mode_ID] = mode_lines[:2]
+            self.UpdateMainPlot()
+
     # Main plotting routine
     def main_plot(self, title='Campbell', xlabel='', ylabel='', y2label='', xscale='linear', yscale='linear'):
         """Ultimately, this is a QWidget (as well as a FigureCanvasAgg, etc.)."""
@@ -843,10 +873,11 @@ class ApplicationWindow(QMainWindow):
         self.axes2.grid()
         self.vline1 = None
         self.vline2 = None
-            
-        # linewidth and markersizedefault
+
         freq_lines = []
         damp_lines = []
+        freq_scatters = []
+        damp_scatters = []
         lines_to_be_selected = []
 
         for atool in view_cfg.active_data:  # active tool
@@ -883,6 +914,12 @@ class ApplicationWindow(QMainWindow):
                                                          label=ads + ': ' + database[atool][ads].ds.modes.values[mode_ID].name,
                                                          markersize=view_cfg.ls.markersizedefault, picker=2)
                             view_cfg.lines[atool][ads][mode_ID] = [freq_line, damp_line]
+                            if self.pick_markers is True:
+                                scat_collection_freq = self.axes1.scatter(xaxis_values,
+                                                             database[atool][ads].ds.frequency.loc[:, mode_ID])
+                                scat_collection_damp = self.axes2.plot(xaxis_values,
+                                                             database[atool][ads].ds.damping.loc[:, mode_ID])
+                                view_cfg.lines[atool][ads][mode_ID].extend([freq_line, damp_line])
                         else:
                             freq_line = self.axes1.add_line(view_cfg.lines[atool][ads][mode_ID][0])
                             self.axes1.update_datalim(freq_line.get_xydata())  # add_line is not automatically used for autoscaling
@@ -892,9 +929,15 @@ class ApplicationWindow(QMainWindow):
                             self.axes2.update_datalim(damp_line.get_xydata())
                             self.axes2.autoscale_view()
                             damp_line.set_label(ads + ': ' + database[atool][ads].ds.modes.values[mode_ID].name)
+                            if self.pick_markers is True:
+                                scat_collection_freq = self.axes1.add_collection(view_cfg.lines[atool][ads][mode_ID][2])
+                                scat_collection_damp = self.axes2.add_collection(view_cfg.lines[atool][ads][mode_ID][3])
 
                         freq_lines.append(freq_line)
                         damp_lines.append(damp_line)
+                        if self.pick_markers is True:
+                            freq_scatters.append(scat_collection_freq)
+                            damp_scatters.append(scat_collection_damp)
 
                         if [[mode_ID], ads, atool] in view_cfg.selected_data:
                             lines_to_be_selected.append(freq_line)
@@ -920,27 +963,44 @@ class ApplicationWindow(QMainWindow):
         # do fill_between after the limits
         self.axes2.fill_between([-10, 100], y1=0, y2=-10, where=None, facecolor='grey', alpha=0.1, hatch='/')
 
-        # setup mplcursors behavior: multiple text boxes if lines are clicked, highlighting line, pairing of
-        # frequency and damping lines
-        cursor = mplcursors.cursor(freq_lines + damp_lines, multiple=True, highlight=True,
-                                   highlight_kwargs={'color': 'C3', 'linewidth': view_cfg.ls.lw+2,
-                                                     'markeredgecolor': 'C3',
-                                                     'markeredgewidth': view_cfg.ls.markersizedefault+2})
-        for line in lines_to_be_selected:
-            cursor.add_highlight(line)
+        if self.pick_markers is True:
+            if self.cursor is not None:
+                self.cursor.remove()  # cleanup
+            self.cursor = mplcursors.cursor(freq_scatters + damp_scatters, multiple=True, highlight=True,
+                                       highlight_kwargs={'color': 'C3'})
 
-        pairs = dict(zip(freq_lines, damp_lines))
-        pairs.update(zip(damp_lines, freq_lines))
+            # does not function yet...
+            # pairs = dict(zip(freq_scatters, damp_scatters))
+            # pairs.update(zip(damp_scatters, freq_scatters))
 
-        @cursor.connect("add")
-        def on_add(sel):
-            self.on_mpl_cursors_pick(sel.artist, 'select')
-            sel.extras.append(cursor.add_highlight(pairs[sel.artist]))
-            sel.annotation.get_bbox_patch().set(fc="grey")
+            @self.cursor.connect("add")
+            def on_add(sel):
+                # sel.extras.append(self.cursor.add_highlight(pairs[sel.artist]))
+                sel.annotation.get_bbox_patch().set(fc="grey")
+        else:
+            # setup mplcursors behavior: multiple text boxes if lines are clicked, highlighting line, pairing of
+            # frequency and damping lines
+            if self.cursor is not None:
+                self.cursor.remove()  # cleanup
+            self.cursor = mplcursors.cursor(freq_lines + damp_lines, multiple=True, highlight=True,
+                                       highlight_kwargs={'color': 'C3', 'linewidth': view_cfg.ls.lw+2,
+                                                         'markeredgecolor': 'C3',
+                                                         'markeredgewidth': view_cfg.ls.markersizedefault+2})
+            for line in lines_to_be_selected:
+                self.cursor.add_highlight(line)
 
-        @cursor.connect("remove")
-        def on_remove(sel):
-            self.on_mpl_cursors_pick(sel.artist, 'deselect')
+            pairs = dict(zip(freq_lines, damp_lines))
+            pairs.update(zip(damp_lines, freq_lines))
+
+            @self.cursor.connect("add")
+            def on_add(sel):
+                self.on_mpl_cursors_pick(sel.artist, 'select')
+                sel.extras.append(self.cursor.add_highlight(pairs[sel.artist]))
+                sel.annotation.get_bbox_patch().set(fc="grey")
+
+            @self.cursor.connect("remove")
+            def on_remove(sel):
+                self.on_mpl_cursors_pick(sel.artist, 'deselect')
 
         self.canvas.draw()
         self.canvas.mpl_connect('button_press_event', self.on_press)
