@@ -812,6 +812,9 @@ class ApplicationWindow(QMainWindow):
         self.button_savepdf.clicked.connect(self.savepdf)
         self.button_layout.addWidget(self.button_savepdf)
 
+        self.button_rescale = QPushButton('Rescale plot limits', self)
+        self.button_rescale.clicked.connect(self.rescale_plot_limits)
+        self.button_layout.addWidget(self.button_rescale)
         ##############################################################
         # Signals from the tree model.
         # -> layoutChanged signals are used to update the main plot
@@ -1139,6 +1142,11 @@ class ApplicationWindow(QMainWindow):
                                 line.set_xdata(database[atool][ads].ds["operating_points"].sel(operating_parameter=text))
 
         view_cfg.auto_scaling_x = True
+        self.UpdateMainPlot()
+
+    def rescale_plot_limits(self):
+        view_cfg.auto_scaling_x = True
+        view_cfg.auto_scaling_y = True
         self.UpdateMainPlot()
 
     ###################
