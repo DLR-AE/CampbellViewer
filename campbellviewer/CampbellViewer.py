@@ -709,6 +709,7 @@ class ApplicationWindow(QMainWindow):
         self.menuBar().addSeparator()
         self.menuBar().addMenu(self.tools_menu)
         self.tools_menu.addAction('&Plot amplitudes of modes', self.initAmplitudes)
+        self.tools_menu.addAction('&Plot amplitudes of highlighted modes', self.amplitudes_of_highlights)
         
         # HELP
         self.help_menu = QMenu('&Help', self)
@@ -1052,6 +1053,21 @@ class ApplicationWindow(QMainWindow):
         if event.button is MouseButton.RIGHT:
             self.right_mouse_press = True
 
+            self.find_data_of_highlights()
+
+    def find_data_of_highlights(self):
+        for atool in view_cfg.lines:
+            for ads in view_cfg.lines[atool]:
+                for mode_ID, mode_lines in enumerate(view_cfg.lines[atool][ads]):
+                    if mode_lines is not None:
+
+                        for sel in self.cursor.selections:
+                            if sel.artist in mode_lines:
+                                print('Selections are:', atool, ads, mode_ID)
+                                self.settingsAMPtool = atool
+                                self.settingsAMPdataset = ads
+                                self.settingsAMPmode = mode_ID
+
     def on_release(self, event):
         """ Callback function for mouse release events. This does not necessarily have to be a matplotlib callback. """
         if event.button is MouseButton.RIGHT:
@@ -1243,6 +1259,10 @@ class ApplicationWindow(QMainWindow):
     ##########
     # Tools
     ##########
+    def amplitudes_of_highlights(self):
+        self.find_data_of_highlights()
+        self.initAmplitudes(popup=False)
+
     def initAmplitudes(self, popup=True):
         """
         This routine initializes the window/plot of the participation factors on the amplitudes for a
