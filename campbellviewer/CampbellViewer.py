@@ -46,7 +46,7 @@ from matplotlib.backends.backend_qt5agg import NavigationToolbar2QT as Navigatio
 from matplotlib.backend_bases import MouseButton
 from matplotlib.figure import Figure
 import mplcursors
-from model_lib import DatasetTableModel, ModeTableModel, TreeModel
+from model_lib import TreeModel
 from globals import database, view_cfg
 from utilities import assure_unique_name, MPLLinestyle
 
@@ -733,22 +733,6 @@ class ApplicationWindow(QMainWindow):
         self.main_layout.addLayout(self.layout_mpliblist)
         self.layout_mpliblist.addLayout(self.layout_mplib, 4)
         self.layout_mpliblist.addLayout(self.layout_list, 1)
-
-        """
-        ##############################################################
-        # Table as Selection List
-        self.mode_table_model = ModeTableModel()
-        self.mode_table = QTableView()
-        self.mode_table.setModel(self.mode_table_model)
-        self.layout_list.addWidget(self.mode_table, 0)
-
-        ##############################################################
-        # Table as Selection List
-        self.dataset_table_model = DatasetTableModel()
-        self.dataset_table = QTableView()
-        self.dataset_table.setModel(self.dataset_table_model)
-        self.layout_list.addWidget(self.dataset_table, 0)
-        """
 
         ##############################################################
         # Treemodel of datasets

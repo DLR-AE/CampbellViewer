@@ -2,124 +2,12 @@
 This module contains data storing classes
 """
 # global libs
-import numpy as np
-from PyQt5.QtCore import QAbstractItemModel, QAbstractTableModel, QAbstractListModel, Qt, QVariant, QModelIndex
+from PyQt5.QtCore import QAbstractItemModel, Qt, QModelIndex
 from PyQt5.QtCore import QPersistentModelIndex
 from PyQt5.QtGui import QBrush, QColor
 
 from globals import database, view_cfg
 from utilities import assure_unique_name, DatasetMetaData
-
-
-class DatasetTableModel(QAbstractListModel):
-    """
-    Model for a list with all loaded datasets. This list model is outdated and has been replaced by the tree model
-    """
-    def __init__(self, parent=None, *args):
-        super(DatasetTableModel, self).__init__()
-
-    def rowCount(self, parent=QModelIndex()):
-        return len(database)
-
-    def data(self, index, role=Qt.DisplayRole):
-        if role == Qt.DisplayRole:
-            return list(database.keys())[index.row()]
-        elif role == Qt.CheckStateRole:
-            if list(database.keys())[index.row()] in view_cfg.ActiveDataSets:
-                return Qt.Checked
-            else:
-                return Qt.Unchecked
-        else:
-            return QVariant()
-
-    def setData(self, index, value, role):
-        if role == Qt.EditRole:
-            old_name = list(database.keys())[index.row()]
-            view_cfg.ActiveDataSets = [value if old_name == ads else ads for ads in view_cfg.ActiveDataSets]
-            view_cfg.ActiveModesDict[value] = view_cfg.ActiveModesDict.pop(old_name)
-            # view_cfg.LineStyleDict[value] = view_cfg.LineStyleDict.pop(old_name)
-            database[value] = database.pop(old_name)
-            self.dataChanged.emit(index, index)
-            return True
-        elif role == Qt.CheckStateRole:
-            ds_name = list(database.keys())[index.row()]
-            if value == Qt.Checked and ds_name not in view_cfg.ActiveDataSets:
-                view_cfg.ActiveDataSets.append(ds_name)
-                self.dataChanged.emit(index, index)
-                return True
-            elif value == Qt.Unchecked and ds_name in view_cfg.ActiveDataSets:
-                view_cfg.ActiveDataSets.remove(ds_name)
-                self.dataChanged.emit(index, index)
-                return True
-        else:
-            return False
-
-    def flags(self, index):
-        return Qt.ItemIsSelectable | Qt.ItemIsEnabled | Qt.ItemIsEditable | Qt.ItemIsUserCheckable
-
-
-class ModeTableModel(QAbstractTableModel):
-    """ Model for a table with all loaded modes. This list model is outdated and has been replaced by the tree model """
-    def __init__(self, parent=None, *args):
-        super(ModeTableModel, self).__init__()
-
-    def rowCount(self, parent=QModelIndex()):
-        # todo: it would be better to not have a loop/computation here. This function is called very often
-        max_number_modes = 0
-        for ads in view_cfg.ActiveDataSets:
-            if len(database[ads]['mode_names']) > max_number_modes:
-                max_number_modes = len(database[ads]['mode_names'])
-        return max_number_modes
-
-    def columnCount(self, parent=QModelIndex()):
-        return len(view_cfg.ActiveDataSets)  # len(database)
-
-    def data(self, index, role=Qt.DisplayRole):
-        if role == Qt.DisplayRole:
-            selected_dataset = list(database.keys())[index.column()]
-            return str(np.array(database[selected_dataset]['mode_names'][index.row()]))
-        elif role == Qt.CheckStateRole:
-            # if mode name in ActiveModes
-            ds_name = list(database.keys())[index.column()]
-            if database[ds_name]['mode_names'][index.row()] in view_cfg.ActiveModesDict[ds_name]:
-                return Qt.Checked
-            else:
-                return Qt.Unchecked
-        else:
-            return QVariant()
-
-    def setData(self, index, value, role):
-        if role == Qt.EditRole:
-            ds_name = list(database.keys())[index.column()]
-            old_name = database[ds_name]['mode_names'][index.row()]
-
-            new_name = assure_unique_name(value, database[ds_name]['mode_names'])
-
-            # Is this really the best way to modify a value in an xarray?
-            # Is it not possible to directly modify the value itself?
-            new_mode_names = list(database[ds_name].mode_names.data)
-            new_mode_names[index.row()] = new_name
-            database[ds_name]['mode_names'] = new_mode_names
-            # database[ds_name].mode_names[index.row()].values = database[ds_name]['mode_names'].__setitem__(old_name, xr.DataArray('test'))
-
-            view_cfg.ActiveModesDict[ds_name] = [value if old_name == am else am for am in view_cfg.ActiveModesDict[ds_name]]
-            self.dataChanged.emit(index, index)
-            return True
-        elif role == Qt.CheckStateRole:
-            ds_name = list(database.keys())[index.column()]
-            if value == Qt.Checked and self.data(index) not in view_cfg.ActiveModesDict[ds_name]:
-                view_cfg.ActiveModesDict[ds_name].append(self.data(index))
-                self.dataChanged.emit(index, index)
-                return True
-            elif value == Qt.Unchecked and self.data(index) in view_cfg.ActiveModesDict[ds_name]:
-                view_cfg.ActiveModesDict[ds_name].remove(self.data(index))
-                self.dataChanged.emit(index, index)
-                return True
-        else:
-            return False
-
-    def flags(self, index):
-        return Qt.ItemIsSelectable | Qt.ItemIsEnabled | Qt.ItemIsEditable | Qt.ItemIsUserCheckable
 
 
 class TreeItem(object):
