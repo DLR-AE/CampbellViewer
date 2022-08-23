@@ -63,18 +63,17 @@ class MPLLinestyle:
     """ Storage class for linestyle selection in the Campbell plot """
     def __init__(self,
                  colormap='tab10',
-                 markersizedefault=3,
+                 markersizedefault=6,
                  style_sequences={'color': [],
-                                  'linestyle': ['-','--','-.',':'],
+                                  'linestyle': ['-', '--', '-.', ':'],
                                   'marker': ['', 'o', 'v', '^', '<', '>', '8', 's', 'p', '*', 'h', 'H', 'D', 'd', 'P', 'X']},
                  lw=1.0,
                  overwrite_cm_color_sequence=None,  # ['r','g','b','y','c','m','k']
                  style_determination_order=['color', 'marker', 'linestyle']
                  ):
 
-        self.nr_lines_allocated = 0  # number of lines that already got a linestyle allocated, these lines are not necessarily
-
-        self.colormap = colormap  #
+        self.nr_lines_allocated = 0  # number of lines that already got a linestyle allocated, these lines are not necessarily all visible
+        self.colormap = colormap
         self.markersizedefault = markersizedefault
         self.style_sequences = style_sequences
         self.lw = lw

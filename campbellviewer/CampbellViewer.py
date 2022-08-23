@@ -838,9 +838,16 @@ class ApplicationWindow(QMainWindow):
                 for ads in view_cfg.lines[atool]:
                     for mode_ID, mode_lines in enumerate(view_cfg.lines[atool][ads]):
                         if mode_lines is not None:
+                            marker_type = mode_lines[0].get_marker()
+                            if marker_type == '':
+                                marker_type = 'o'
+                            marker_size = max(view_cfg.ls.markersizedefault, (mode_lines[0].get_markersize()+1)**2)
                             test = self.axes1.scatter(mode_lines[0].get_xdata(), mode_lines[0].get_ydata(),
-                                                      color='white', edgecolors=mode_lines[0].get_c())
-                            test2 = self.axes2.scatter(mode_lines[1].get_xdata(), mode_lines[1].get_ydata())
+                                                      color='white', edgecolors=mode_lines[0].get_c(),
+                                                      marker=marker_type, s=marker_size, zorder=1E9)
+                            test2 = self.axes2.scatter(mode_lines[1].get_xdata(), mode_lines[1].get_ydata(),
+                                                       color='white', edgecolors=mode_lines[0].get_c(),
+                                                       marker=marker_type, s=marker_size, zorder=1E9)
                             view_cfg.lines[atool][ads][mode_ID].append(test)
                             view_cfg.lines[atool][ads][mode_ID].append(test2)
             self.UpdateMainPlot()
@@ -916,11 +923,18 @@ class ApplicationWindow(QMainWindow):
                                                          markersize=view_cfg.ls.markersizedefault, picker=2)
                             view_cfg.lines[atool][ads][mode_ID] = [freq_line, damp_line]
                             if self.pick_markers is True:
+                                marker_type = ls['marker']
+                                if marker_type == '':
+                                    marker_type = 'o'
                                 scat_collection_freq = self.axes1.scatter(xaxis_values,
-                                                             database[atool][ads].ds.frequency.loc[:, mode_ID])
-                                scat_collection_damp = self.axes2.plot(xaxis_values,
-                                                             database[atool][ads].ds.damping.loc[:, mode_ID])
-                                view_cfg.lines[atool][ads][mode_ID].extend([freq_line, damp_line])
+                                                             database[atool][ads].ds.frequency.loc[:, mode_ID],
+                                                             color='white', edgecolors=ls['color'], zorder=1E9,
+                                                             marker=marker_type, s=view_cfg.ls.markersizedefault**2)
+                                scat_collection_damp = self.axes2.scatter(xaxis_values,
+                                                             database[atool][ads].ds.damping.loc[:, mode_ID],
+                                                             color='white', edgecolors=ls['color'], zorder=1E9,
+                                                             marker=marker_type, s=view_cfg.ls.markersizedefault**2)
+                                view_cfg.lines[atool][ads][mode_ID].extend([scat_collection_freq, scat_collection_damp])
                         else:
                             freq_line = self.axes1.add_line(view_cfg.lines[atool][ads][mode_ID][0])
                             self.axes1.update_datalim(freq_line.get_xydata())  # add_line is not automatically used for autoscaling
@@ -970,14 +984,17 @@ class ApplicationWindow(QMainWindow):
             self.cursor = mplcursors.cursor(freq_scatters + damp_scatters, multiple=True, highlight=True,
                                        highlight_kwargs={'color': 'C3'})
 
-            # does not function yet...
-            # pairs = dict(zip(freq_scatters, damp_scatters))
-            # pairs.update(zip(damp_scatters, freq_scatters))
+            pairs = dict(zip(freq_scatters, damp_scatters))
+            pairs.update(zip(damp_scatters, freq_scatters))
 
             @self.cursor.connect("add")
             def on_add(sel):
-                # sel.extras.append(self.cursor.add_highlight(pairs[sel.artist]))
+                marker_index = sel.target.index
+                paired_target_marker = mplcursors._pick_info.AttrArray(pairs[sel.artist]._offsets[marker_index])
+                paired_target_marker.index = marker_index
+                sel.extras.append(self.cursor.add_highlight(pairs[sel.artist], paired_target_marker))
                 sel.annotation.get_bbox_patch().set(fc="grey")
+
         else:
             # setup mplcursors behavior: multiple text boxes if lines are clicked, highlighting line, pairing of
             # frequency and damping lines
@@ -985,8 +1002,8 @@ class ApplicationWindow(QMainWindow):
                 self.cursor.remove()  # cleanup
             self.cursor = mplcursors.cursor(freq_lines + damp_lines, multiple=True, highlight=True,
                                        highlight_kwargs={'color': 'C3', 'linewidth': view_cfg.ls.lw+2,
-                                                         'markeredgecolor': 'C3',
-                                                         'markeredgewidth': view_cfg.ls.markersizedefault+2})
+                                                         'markerfacecolor': 'C3',
+                                                         'markersize': view_cfg.ls.markersizedefault+2})
             for line in lines_to_be_selected:
                 self.cursor.add_highlight(line)
 
@@ -1214,8 +1231,13 @@ class ApplicationWindow(QMainWindow):
                 else:
                     for mode_ID in view_cfg.active_data[atool][ads]:  # active mode tracks
                         if view_cfg.lines[atool][ads][mode_ID] is not None:
-                            for line in view_cfg.lines[atool][ads][mode_ID]:  # freq. and damp. lines
-                                line.set_xdata(database[atool][ads].ds["operating_points"].sel(operating_parameter=text))
+                            for artist in view_cfg.lines[atool][ads][mode_ID]:  # freq. and damp. lines
+                                if isinstance(artist, matplotlib.lines.Line2D):
+                                    artist.set_xdata(database[atool][ads].ds["operating_points"].sel(operating_parameter=text))
+                                else:
+                                    scatter_offsets = artist.get_offsets()
+                                    scatter_offsets[:, 0] = database[atool][ads].ds["operating_points"].sel(operating_parameter=text)
+                                    artist.set_offsets(scatter_offsets)
 
         view_cfg.auto_scaling_x = True
         self.UpdateMainPlot()
