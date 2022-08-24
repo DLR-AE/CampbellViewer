@@ -72,10 +72,7 @@ class TreeModel(QAbstractItemModel):
     def __init__(self, parent=None):
         super(TreeModel, self).__init__(parent)
 
-        # self.rootItem = TreeItem('Loaded datasets')
-        # self.setupModelData(data.split('\n'), self.rootItem)
         self.rootItem = TreeItem('Loaded datasets')
-        # self.setupModelData()
 
     def columnCount(self, parent):
         """ Our data will only have one column """
@@ -299,10 +296,6 @@ class TreeModel(QAbstractItemModel):
     def updateActiveData(self):
         """
         Use data of the tree model to update the view_cfg.
-
-        For now I assume that the modifications are ONLY modifications of existing entries in the model by editing
-        the text in the tree item or checking/unchecking the tick box. Other useful things such as deleting/adding/copy
-        are not implemented
         """
         # active_data is completely replaced!
         view_cfg.active_data = {}

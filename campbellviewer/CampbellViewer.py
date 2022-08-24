@@ -107,7 +107,7 @@ class SettingsPopupDataSelection(QDialog):
         self.close()
 
 
-class SettingsPopup(QDialog):
+class SettingsPopupHS2Headers(QDialog):
     """
     Class for popup-window to modify the header lines in Campbell, Amplitude and operational data file which serve as
     input for HAWCStab2
@@ -1253,7 +1253,7 @@ class ApplicationWindow(QMainWindow):
     ##########
     def setHeaderLines(self):
         """ This routine overrides the default header line numbers for Campbell and Amplitude files """
-        self.popup = SettingsPopup(self.skip_header_CMB, self.skip_header_AMP, self.skip_header_OP)
+        self.popup = SettingsPopupHS2Headers(self.skip_header_CMB, self.skip_header_AMP, self.skip_header_OP)
         (self.skip_header_CMB, self.skip_header_AMP, self.skip_header_OP) = self.popup.getNewSettings()
         del self.popup
 
