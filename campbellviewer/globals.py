@@ -1,6 +1,7 @@
 from data_lib import LinearizationDataWrapper
 from utilities import MPLLinestyle
 
+
 class ViewSettings:
     """
     A class to gather all settings which manage the view of the GUI.

@@ -13,6 +13,7 @@ from BladedLin_lib import BladedLinData
 from data_template import AbstractLinearizationData
 from utilities import assure_unique_name, AEMode
 
+
 class LinearizationDataWrapper(dict):
     """
     A wrapping class to store data of different linearization tools (f.ex. HAWCStab2, Bladed-lin,...) and different
@@ -37,6 +38,7 @@ class LinearizationDataWrapper(dict):
                 self['Bladed (lin.)'] = dict()
             self['Bladed (lin.)'][name] = BladedLinData(tool_specific_info['result_dir'], tool_specific_info['result_prefix'])
             self['Bladed (lin.)'][name].read_data()
+
         elif tool == 'hawcstab2':
             if 'HAWCStab2' not in self:
                 self['HAWCStab2'] = dict()

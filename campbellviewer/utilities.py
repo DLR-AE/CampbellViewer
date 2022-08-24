@@ -2,6 +2,7 @@ import re
 from PyQt5.QtCore import Qt
 import matplotlib
 
+
 def assure_unique_name(unique_name, occupied_names):
     """
     Modify unique name until no duplicate exists in occupied_names. Modification is done by adding (1), (2), etc.
@@ -58,6 +59,7 @@ class AEMode:
     def from_plain_text(cls, plain_text):
         return cls(name=plain_text.split('$')[0], symmetry_type=plain_text.split('$')[1],
                    whirl_type=plain_text.split('$')[2], wt_component=plain_text.split('$')[3])
+
 
 class MPLLinestyle:
     """ Storage class for linestyle selection in the Campbell plot """
