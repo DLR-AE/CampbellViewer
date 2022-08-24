@@ -24,7 +24,8 @@ class LinearizationDataWrapper(dict):
         Args:
             name (str): string identifier for this run
             tool (str): tool identifier
-            tool_specific_info (dict): dictionary with specific info for the given tool
+            tool_specific_info (dict): dictionary with specific info for the given tool (e.g. which files have to be
+                used to load data)
 
         Returns:
             updates self.data attribute with available/requested data
@@ -77,10 +78,19 @@ class LinearizationDataWrapper(dict):
         return
 
     def save(self, fname='CampbellViewerDatabase.nc'):
-        # IMPORTANT: the standard scipy netcdf backend does not support saving to a group and the h5netcdf engine
-        # crashes for me...
-        # netCDF4 has to be installed... (by default xarray will use netCDF4 if it is installed)
+        """
+        Save the database to a file.
 
+        Xarray has the functionality to save datasets in netcdf format. The total database dictionary is saved by
+        saving each key-value pair as a separate group to the netcdf file.
+
+        IMPORTANT: the standard scipy netcdf backend does not support saving to a group and the h5netcdf engine
+        crashes for me.
+        -> netCDF4 has to be installed. (by default xarray will use netCDF4 if it is installed)
+
+        Args:
+            fname (str, optional): file to which database will be saved
+        """
         for toolname in self:
             for datasetname, dataset_obj in self[toolname].items():
                 # The xarray datasets can be saved using the build-in to_netcdf methods of xarray.
@@ -98,9 +108,15 @@ class LinearizationDataWrapper(dict):
                     xr_dataset_to_save.to_netcdf(fname, mode='w', group=toolname + '&' + datasetname)
 
     def load(self, fname='CampbellViewerDatabase.nc'):
-        # xr.open_dataset can not automatically find all groups in a netCDF4 file. So first find the available
-        # group names in the file, then load the xarray datasets
+        """
+        Load the database from a file.
 
+        xr.open_dataset can not automatically find all groups in a netCDF4 file. So we first find the available
+        group names in the file, then load the xarray datasets.
+
+        Args:
+            fname (str, optional): file from which the database will be loaded
+        """
         if os.path.exists(fname):
             with h5py.File(fname, 'r') as f:
                 group_names = list(f.keys())
@@ -115,7 +131,6 @@ class LinearizationDataWrapper(dict):
                 if toolname not in self:
                     self[toolname] = dict()
                 if datasetname in self[toolname]:
-                    # print('Careful! {} dataset will be overwritten'.format(toolname + ' ' + datasetname))
                     print('Datasetname {} was already in use in tool {}. The loaded dataset will be renamed'.format(datasetname, toolname))
                     datasetname = assure_unique_name(datasetname, self[toolname].keys())
                 loaded_data[toolname].append(datasetname)

@@ -69,6 +69,9 @@ class TreeItem(object):
 
 
 class TreeModel(QAbstractItemModel):
+    """
+    Model for the tree representing the loaded datasets in the GUI
+    """
     def __init__(self, parent=None):
         super(TreeModel, self).__init__(parent)
 
@@ -152,6 +155,7 @@ class TreeModel(QAbstractItemModel):
         return None
 
     def flags(self, index):
+        """ Returns Qt flags for a specific index """
         if not index.isValid():
             return Qt.NoItemFlags
 
@@ -313,6 +317,15 @@ class TreeModel(QAbstractItemModel):
 
     def updateLines(self, original_branch, modified_branch):
         """
+        Modify the view_cfg.lines dictionary based on a modification of the tree model.
+        E.g. if the name of a dataset is changed in the treeview the name has to be changed in the view_cfg.lines
+        dictionary which holds the line objects which are plotted.
+
+        Args:
+            original_branch : list
+                List with the original branch which has been modified
+            modified_branch : list
+                List with the modified branch
         """
         if len(original_branch) == 1 and len(modified_branch) == 1:
             view_cfg.lines[modified_branch[-1]] = view_cfg.lines.pop(original_branch[-1])

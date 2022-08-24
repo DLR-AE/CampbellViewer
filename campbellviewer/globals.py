@@ -11,6 +11,32 @@ class ViewSettings:
     Possible further developments: linestyles, all figure settings, etc.
      """
     def __init__(self):
+        """
+        Initializes the view settings
+
+        Attributes:
+            active_data : dict
+                dictionary which mimics the tree model and represents the items in the tree which are active.
+                e.g. {'Tool1': {'ds1': [0, 1, 2, 3], 'ds2': [2, 4]}} -> dictionary with tools on the first level ->
+                datasets on the second level, mode indices as a list on the third level
+            selected_data : list
+                list with each individual branch of the tree model which is selected.
+                e.g. [['ds1', 'tool1'], [[3], 'ds2', 'tool2'], [[5], 'ds2', 'tool1']]
+                -> dataset 1 of tool 1 is completely selected, mode 3 and mode 5 of dataset 2 are individually selected
+            lines : dict
+                dictionary which contains all artists of the Campbell plot which have been plotted before. They are used
+                to plot the artist if it is active and store the information such that the same line is plotted when
+                the used disables/enables a dataset
+            ls : MPLLinestyle
+                definition of the linestyles used in the Campbell plot
+            axes_limits : tuple
+                tuple with the the axis limits of both the frequency and damping plot
+                -> (axes1.get_xlim(), axes1.get_ylim(), axes2.get_ylim())
+            auto_scaling_x : boolean
+                flag whether xaxis limits have to be adjusted automatically
+            auto_scaling_y : boolean
+                flag whether yaxis limits have to be adjusted automatically
+        """
         self.active_data = {}
         self.selected_data = []
         self.lines = {}

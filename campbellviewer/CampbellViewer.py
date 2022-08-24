@@ -601,6 +601,7 @@ class AmplitudeWindow(QMainWindow):
 
 
 class DatasetTree(QTreeView):
+    """ QTreeView of the dataset tree (described by the TreeModel in model_lib) """
     def __init__(self, tree_model, aw):
         super(DatasetTree, self).__init__()
         self.tree_model = tree_model
@@ -680,6 +681,7 @@ class DatasetTree(QTreeView):
 
 
 class ApplicationWindow(QMainWindow):
+    """ Main window of the GUI """
     def __init__(self):
         super(ApplicationWindow, self).__init__()
         self.setAttribute(QtCore.Qt.WA_DeleteOnClose)
