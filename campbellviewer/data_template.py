@@ -1,17 +1,16 @@
 """
 This module contains data storing classes
 """
-# global libs
+# Global libs
 import xarray as xr  # minimal version 0.20.2 (to have drop_sel function)
 from datetime import datetime
 import os
 
-# local libs
+# Local libs
 
 
 class AbstractLinearizationData:
-    """
-    Abstract data class for linearization result data
+    """Abstract data class for linearization result data
 
     In the initial implementation, this class was a direct subclass of an xarray dataset. This worked, but subclassing
     of xarray datasets is not supported (https://github.com/pydata/xarray/issues/4660,
@@ -42,8 +41,7 @@ class AbstractLinearizationData:
         self.ds.attrs["user"] = os.getlogin()
 
     def remove_modes(self, mode_ids):
-        """
-        Remove modes (identified by their index) from the database
+        """Remove modes (identified by their index) from the database.
         """
         try:
             return self.ds.drop_sel(mode_ID=mode_ids)

@@ -1,7 +1,3 @@
-.. CampbellViewer documentation master file, created by
-   sphinx-quickstart on Fri Aug 26 16:03:42 2022.
-   You can adapt this file completely to your liking, but it should at least
-   contain the root `toctree` directive.
 
 CampbellViewer's documentation
 ==============================
@@ -21,45 +17,13 @@ Main building blocks
 - The interfaces will get information from the GUI such as the paths to result files and load data into the xarray dataset convention.
 
 
-Modules
--------
-
-.. note::
-   After packaging the CampbellViewer, modules should go to API reference.
-
-- CampbellViewer.py
-  - Main script of the GUI. Contains all QT5 Widgets.
-
-- globals.py
-  - The database and some settings which are used by the figures are stored in global variables. These are defined here.
-
-- model_lib.py
-  - This module contains the functional description of the tree model which is used to interact with the data.
-
-- data_lib.py
-  - This is our description of a database. In the end it is just a dictionary with different datasets. Data can be added through the interfaces of the different tools, data can be removed, databases can be saved to a file and databases can be loaded from these files.
-
-- data_template.py
-  - This module contains the abstract linearization data class.
-
-- BladedLin_lib.py
-  - Interface for parsing results made with Bladed
-
-- HAWCStab2_lib.py
-  - Interface for parsing results made with hs2
-
-- read_hs2turbine_mode_shapes.py
-  - Interface for parsing hs2 mode shapes
-
-- utilities.py
-  - Some useful methods and classes
-
-
 .. toctree::
    :maxdepth: 2
    :caption: Contents:
 
    installation
+   users_guide
+   api_ref/index
 
 
 Indices and tables
