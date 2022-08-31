@@ -240,7 +240,7 @@ class SettingsPopupAMP(QDialog):
 
     def update_mode_choice(self):
         self.__AMPmode.clear()
-        if self.__DataSetSelection.currentText() is not '':
+        if self.__DataSetSelection.currentText():
             self.__AMPmode.addItems(
                 [str(database[self.__ToolSelection.currentText()][self.__DataSetSelection.currentText()].ds.modes.values[mode_id].name)
                  for mode_id in view_cfg.active_data[self.__ToolSelection.currentText()][self.__DataSetSelection.currentText()]])
@@ -895,7 +895,7 @@ class ApplicationWindow(QMainWindow):
 
         for atool in view_cfg.active_data:  # active tool
             for ads in view_cfg.active_data[atool]:  # active dataset
-                if database[atool][ads].ds['frequency'].values.ndim is not 0:
+                if database[atool][ads].ds['frequency'].values.ndim != 0:
 
                     # get xaxis values
                     if self.xaxis_param not in database[atool][ads].ds.operating_parameter:
@@ -964,7 +964,7 @@ class ApplicationWindow(QMainWindow):
                             lines_to_be_selected.append(damp_line)
 
                 # plot p-harmonics if present
-                if database[atool][ads].ds.operating_points.values.ndim is not 0 and self.pharmonics is True:
+                if database[atool][ads].ds.operating_points.values.ndim != 0 and self.pharmonics:
                     P_harmonics = [1, 3, 6, 9, 12]
                     for index in P_harmonics:
                         P_hamonics_data = database[atool][ads].ds.operating_points.loc[:, 'rot. speed [rpm]']/60*index  # rpm in Hz
@@ -1302,8 +1302,8 @@ class ApplicationWindow(QMainWindow):
             if success is False:
                 return
 
-        if database[self.settingsAMPtool][self.settingsAMPdataset].ds.frequency.values.ndim is not 0 and \
-                database[self.settingsAMPtool][self.settingsAMPdataset].ds.participation_factors_amp.values.ndim is not 0:
+        if (database[self.settingsAMPtool][self.settingsAMPdataset].ds.frequency.values.ndim != 0 and
+            database[self.settingsAMPtool][self.settingsAMPdataset].ds.participation_factors_amp.values.ndim != 0):
             self.AmplitudeWindow = AmplitudeWindow()
             self.AmplitudeWindow.sigClosed.connect(self.deleteAmplitudes)
         else:
@@ -1318,8 +1318,8 @@ class ApplicationWindow(QMainWindow):
 
     def updateAmplitudes(self):
         """ Update Amplitude plot according to settingsAMPdataset and settingsAMPmode """
-        if database[self.settingsAMPtool][self.settingsAMPdataset].ds.frequency.values.ndim is not 0 and \
-                database[self.settingsAMPtool][self.settingsAMPdataset].ds.participation_factors_amp.values.ndim is not 0:
+        if (database[self.settingsAMPtool][self.settingsAMPdataset].ds.frequency.values.ndim != 0 and
+            database[self.settingsAMPtool][self.settingsAMPdataset].ds.participation_factors_amp.values.ndim != 0):
 
             # get the possibly user-modified axes limits, it would be good to have a signal when the axes limits are changed
             view_cfg.axes_limits = (self.axes1.get_xlim(), self.axes1.get_ylim(), self.axes2.get_ylim())
