@@ -1,8 +1,20 @@
 /* WARNING: This style sheet may not be compatible with `sphinx-rtd-theme >= 0.5.0` */
 
+/*Color palette taken from https://coolors.co/palettes/trending */
+/* #cad2c5 */
+/* #84a98c */
+/* #52796f */
+/* #354f52 */
+/* #2f3e46 */
+
+/* Main body */
+body {
+  color: #2f3e46;
+}
+
 /* Code-block for console */
 .highlight-console pre {
-  background: #d3d5d4;
+  background: #D6DCD2;
 }
 
 /* Parameter names and colons after them in a signature */
@@ -13,32 +25,32 @@ em.sig-param > span:nth-child(2) {
 
 /* Type hints and default values in a signature */
 em.sig-param > span:not(:nth-child(1)):not(:nth-child(2)) {
-  color: #2980b9;
+  color: #52796f;
 }
 
 /* Internal links in a signature */
 .rst-content dl.class > dt a.reference.internal,
 .rst-content dl.method > dt a.reference.internal,
 .rst-content dl.function > dt a.reference.internal {
-  color: #2980b9;
+  color: #84a98c;
 }
 
 /* External links in a signature */
 .rst-content dl.class > dt a.reference.external,
 .rst-content dl.method > dt a.reference.external,
 .rst-content dl.function > dt a.reference.external {
-  color: #2980b9;
+  color: #84a98c;
 }
 
 /* Containers for a signature */
 .rst-content dl.class > dt,
 .rst-content dl.function > dt {
-  background-color: #f0f0f0;
+  background-color: #2f3e46;
 }
 
 /* Containers for methods, properties, parameters, and returns */
 .rst-content dl:not(.docutils) dl dt {
-  border-left: solid 3px #6ab0de;
+  border-left: solid 3px #52796f;
 }
 
 /* Main content */
@@ -49,7 +61,7 @@ em.sig-param > span:not(:nth-child(1)):not(:nth-child(2)) {
 /* Sidebar header (and topbar for mobile) */
 .wy-side-nav-search,
 .wy-nav-top {
-  background: #f1f3f4;
+  background: #cad2c5;
 }
 .wy-side-nav-search div.version {
   color: #404040;
@@ -65,30 +77,30 @@ em.sig-param > span:not(:nth-child(1)):not(:nth-child(2)) {
 
 /* Sidebar */
 .wy-nav-side {
-  background: #f1f3f4;
+  background: #cad2c5;
 }
 
 /* A tag */
 .wy-menu-vertical a {
-  color: #707070;
+  color: #2f3e46;
 }
 
 a {
-  color: #2ba9cd;
+  color: #2f3e46;
 }
 
 .wy-menu-vertical a:active {
-  background-color: #2ba9cd;
+  background-color: #2f3e46;
   cursor: pointer;
-  color: #f1f3f4;
+  color: #2f3e46;
 }
 
 .highlight {
-  background: #f1f3f4;
+  background: #cad2c5;
 }
 
 .navbar {
-  background: #ffffff;
+  background: #cad2c5;
 }
 
 @media only screen and (max-width: 896px) {
@@ -98,7 +110,7 @@ a {
 }
 
 .navbar-nav {
-  background: #ffffff;
+  background: #2f3e46;
   list-style: none;
   display: flex;
   flex-direction: row;
@@ -120,12 +132,12 @@ a {
   font-family: "Helvetica";
   cursor: pointer;
   padding: 0.5rem 0.8rem 0.5rem 0.5rem;
-  color: #636a73;
+  color: #cad2c5;
 }
 
 .navbar-nav a:focus,
 a:hover {
-  color: #2ba9cd;
+  color: #cad2c5;
   text-decoration: none;
 }
 
@@ -161,7 +173,7 @@ a:hover {
 .rst-content .seealso .admonition-title,
 .rst-content .wy-alert-info.admonition-todo .admonition-title,
 .rst-content .wy-alert-info.admonition .admonition-title {
-  background: #2ba9cd;
+  background: #52796f;
 }
 
 .wy-alert,
@@ -177,11 +189,5 @@ a:hover {
 .rst-content .seealso,
 .rst-content .admonition-todo,
 .rst-content .admonition {
-  background: #f1f3f4;
-}
-
-/* This is the patch fix for tutorial page */
-/* TODO (himkt): Remove here after resolving https://github.com/optuna/optuna/pull/3322 */
-.sphx-glr-thumbcontainer {
-  min-width: 182px;
+  background: #cad2c5;
 }

@@ -3,7 +3,7 @@
 campbellviewer.data_template
 ============================
 
-The :mod:`~campbellviewer.data_template` is ...
+The :mod:`~campbellviewer.data_template` contains the abstract linearization data class.
 
 .. autosummary::
    :toctree: generated/
