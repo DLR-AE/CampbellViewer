@@ -5,3 +5,5 @@ mplcursors
 sphinx
 sphinx-rtd-theme
 autodoc
+xarray
+h5py
