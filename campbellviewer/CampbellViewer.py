@@ -1381,13 +1381,11 @@ def my_excepthook(type, value, tback):
     sys.__excepthook__(type, value, tback)
 
 
+def main():
+    """Main function to execute CampbellViewer.
 
+    """
 
-###################################################################
-# Main program
-###################################################################
-if __name__ == '__main__':
-    # enable error tracing
     sys.excepthook = my_excepthook
 
     # define main app
@@ -1404,3 +1402,7 @@ if __name__ == '__main__':
     aw.setMinimumSize(w, h)
     aw.show()
     sys.exit(app.exec_())
+
+
+if __name__ == '__main__':
+    main()
