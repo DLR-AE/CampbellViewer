@@ -1,16 +1,37 @@
 """
 This module contains data storing classes
 """
-# global libs
+# Global libs
 from PyQt5.QtCore import QAbstractItemModel, Qt, QModelIndex
 from PyQt5.QtCore import QPersistentModelIndex
 from PyQt5.QtGui import QBrush, QColor
 
-from globals import database, view_cfg
-from utilities import assure_unique_name, DatasetMetaData
+# Local libs
+from campbellviewer.globals import database, view_cfg
+from campbellviewer.utilities import assure_unique_name, DatasetMetaData
 
 
 class TreeItem(object):
+    """Short description goes here.
+
+    Detailed description goes here.
+
+    Args:
+        name:
+            Description...
+        checked_state:
+            Description...
+        parent:
+            Description...
+        branch_activity
+            Description...
+        data:
+            Description...
+        item_type:
+            Description...
+
+    """
+
     def __init__(self, name=None, checked_state=Qt.Checked, parent=None, branch_activity=True, data=None, item_type=None):
         self.parentItem = parent
         self.itemType = item_type  # tool / dataset / mode
@@ -25,6 +46,13 @@ class TreeItem(object):
         self.childItems = []
 
     def setVisibleActivity(self, visible_activity):
+        """Description...
+
+        Args:
+            visible_activity (type):
+                Description...
+
+        """
         self.itemVisibleActivity = visible_activity
         if visible_activity == Qt.Checked:
             self.color = QBrush(QColor(0, 0, 0))
@@ -71,7 +99,13 @@ class TreeItem(object):
 class TreeModel(QAbstractItemModel):
     """
     Model for the tree representing the loaded datasets in the GUI
+
+    Args:
+        parent (??):
+            Description...
+
     """
+
     def __init__(self, parent=None):
         super(TreeModel, self).__init__(parent)
 
@@ -144,11 +178,14 @@ class TreeModel(QAbstractItemModel):
         used
 
         Args:
-            section : int
+            section (int):
                 For horizontal headers, the section number corresponds to the column number.
                 Similarly, for vertical headers, the section number corresponds to the row number.
-            orientation : int
-            role : int
+            orientation (int):
+                Description...
+            role (int):
+                Description...
+
         """
         if orientation == Qt.Horizontal and role == Qt.DisplayRole:
             return self.rootItem.data()
@@ -207,9 +244,9 @@ class TreeModel(QAbstractItemModel):
         return self.createIndex(parentItem.row(), 0, parentItem)
 
     def rowCount(self, parent):
-        """
-        Returns number of childs for a given parent
-        -> e.g. number of datasets for a tool or number of modes for a dataset
+        """Returns number of childs for a given parent
+
+        E.g. number of datasets for a tool or number of modes for a dataset
         """
         if not parent.isValid():
             parentItem = self.rootItem
@@ -281,8 +318,7 @@ class TreeModel(QAbstractItemModel):
         self.updateActivityRepresentation(self.rootItem)
 
     def updateDatabase(self, original_branch, modified_branch, itemData=None):
-        """
-        Use data of the tree model to update the database.
+        """Use data of the tree model to update the database.
 
         For now I assume that the modifications are ONLY modifications of existing entries in the model by editing
         the text in the tree item or checking/unchecking the tick box. Other useful things such as deleting/adding/copy
@@ -326,6 +362,7 @@ class TreeModel(QAbstractItemModel):
                 List with the original branch which has been modified
             modified_branch : list
                 List with the modified branch
+
         """
         if len(original_branch) == 1 and len(modified_branch) == 1:
             view_cfg.lines[modified_branch[-1]] = view_cfg.lines.pop(original_branch[-1])
@@ -386,9 +423,13 @@ class TreeModel(QAbstractItemModel):
         automatically selected. The 'branches' of the children can therefore be removed.
 
         Example:
-            branches = [['mode_1', 'dataset_2', 'tool_1'], ['mode_4', 'dataset_2', 'tool_1'], ['dataset_3', 'tool_1'],
-                        ['tool_1'], ['dataset_4', 'tool_2']]
-            -> reduced_branches = [['tool_1'], ['dataset_4', 'tool_2']]
+
+            .. testcode::
+
+                branches = [['mode_1', 'dataset_2', 'tool_1'], ['mode_4', 'dataset_2', 'tool_1'],
+                            ['dataset_3', 'tool_1'], ['tool_1'], ['dataset_4', 'tool_2']]
+                reduced_branches = [['tool_1'], ['dataset_4', 'tool_2']]
+
         """
         unique_tool_branches = [branch for branch in branches if len(branch) == 1]
         dataset_branches = [branch for branch in branches if len(branch) == 2]
@@ -423,6 +464,7 @@ class TreeModel(QAbstractItemModel):
             only_selected (Boolean) : If True, only the selected items in the tree model will be modified. If False,
             all children of index will be modified.
             selection (list) : list with the selected indices in the view
+
         """
         if only_selected:
             for selected_index in selection:
@@ -445,9 +487,12 @@ class TreeModel(QAbstractItemModel):
         Change checked state of multiple items in the tree model based on a filter on the AEMode attributes
 
         Args:
-            base_node (item) : base item which will be modified, this can be a tool, dataset or mode item. All
-                               'children modes' will be filtered.
-            filter (tuple) : AEMode attributes to filter for (symmetry_type, whirl_type, wt_component)
+            base_node (item):
+                base item which will be modified, this can be a tool, dataset or mode item. All
+                'children modes' will be filtered.
+            filter (tuple):
+                AEMode attributes to filter for (symmetry_type, whirl_type, wt_component)
+
         """
         if base_node.itemType == 'mode':
             base_node.itemActivity = base_node.itemData.filter(filter)
@@ -464,8 +509,7 @@ class TreeModel(QAbstractItemModel):
         self.layoutChanged.emit()
 
     def delete_data(self, all_selected_indexes):
-        """
-        Delete data from the tree model and the database
+        """Delete data from the tree model and the database.
 
         Is it possible to only update the tree model and not modify the database? Do we want that? Probably having the
         two options: 'Delete from database' and 'Delete from view' would be nice.

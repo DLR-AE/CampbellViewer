@@ -1,17 +1,17 @@
 """
 This module contains data storing classes
 """
-# global libs
+# Global libs
 import xarray as xr
 import h5py
 import os
 import copy
 
-# local libs
-from HAWCStab2_lib import HAWCStab2Data
-from BladedLin_lib import BladedLinData
-from data_template import AbstractLinearizationData
-from utilities import assure_unique_name, AEMode
+# Local libs
+from campbellviewer.HAWCStab2_lib import HAWCStab2Data
+from campbellviewer.BladedLin_lib import BladedLinData
+from campbellviewer.data_template import AbstractLinearizationData
+from campbellviewer.utilities import assure_unique_name, AEMode
 
 
 class LinearizationDataWrapper(dict):
@@ -157,4 +157,3 @@ class LinearizationDataWrapper(dict):
             loaded_data = dict()
 
         return loaded_data
-

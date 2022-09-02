@@ -2,3 +2,8 @@ numpy
 PyQt5
 matplotlib
 mplcursors
+sphinx
+sphinx-rtd-theme
+autodoc
+xarray
+h5py
