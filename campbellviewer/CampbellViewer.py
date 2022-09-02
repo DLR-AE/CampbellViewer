@@ -1,16 +1,16 @@
 ########################################################################################
 # This file is part of CampbellViewer.
-# 
+#
 # CampbellViewer is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
 # the Free Software Foundation, either version 3 of the License, or
 # (at your option) any later version.
-# 
+#
 # CampbellViewer is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details.
-# 
+#
 # You should have received a copy of the GNU General Public License
 # along with CampbellViewer.  If not, see <http://www.gnu.org/licenses/>
 ########################################################################################
@@ -114,7 +114,7 @@ class SettingsPopupHS2Headers(QDialog):
     """
     def __init__(self, settingsCMB, settingsAMP, settingsOP):
         QDialog.__init__(self)
-        
+
         self.settingsCMB = settingsCMB
         self.settingsAMP = settingsAMP
         self.settingsOP = settingsOP
@@ -124,7 +124,7 @@ class SettingsPopupHS2Headers(QDialog):
         popup_layoutHAMP = QHBoxLayout(self)
         popup_layoutHOP = QHBoxLayout(self)
         popup_layoutBttn = QHBoxLayout(self)
-        
+
         headerLinesCMBL = QLabel('Number of header lines in Campbell file:')
         headerLinesAMPL = QLabel('Number of header lines in Amplitude file:')
         headerLinesOPL = QLabel('Number of header lines in Operational data file:')
@@ -140,7 +140,7 @@ class SettingsPopupHS2Headers(QDialog):
         popup_layoutHAMP.addWidget(self.__headerLinesAMPE)
         popup_layoutHOP.addWidget(headerLinesOPL)
         popup_layoutHOP.addWidget(self.__headerLinesOPE)
-        
+
         button_OK = QPushButton('OK', self)
         button_OK.clicked.connect(self.newSettings)
         popup_layoutBttn.addWidget(button_OK)
@@ -153,19 +153,19 @@ class SettingsPopupHS2Headers(QDialog):
         popup_layoutV.addLayout(popup_layoutHOP)
         popup_layoutV.addLayout(popup_layoutBttn)
         self.exec_()
-        
+
     def getNewSettings(self):
         return self.settingsCMB, self.settingsAMP, self.settingsOP
 
-    def newSettings(self):  
+    def newSettings(self):
         self.settingsCMB = self.__headerLinesCMBE.value()
-        self.settingsAMP = self.__headerLinesAMPE.value()  
+        self.settingsAMP = self.__headerLinesAMPE.value()
         self.settingsOP = self.__headerLinesOPE.value()
         self.close()
 
     def ClosePopup(self):
         self.close()
-        
+
 
 class SettingsPopupAMP(QDialog):
     """ Class for popup-window to select for which mode the modal participations have to be shown """
@@ -201,7 +201,7 @@ class SettingsPopupAMP(QDialog):
              view_cfg.active_data[self.selected_tool][self.selected_dataset]])
         popup_layoutAMPmode.addWidget(QLabel('Amplitude mode to plot:'))
         popup_layoutAMPmode.addWidget(self.__AMPmode)
-        
+
         button_OK = QPushButton('OK', self)
         button_OK.clicked.connect(self.newSettings)
         popup_layoutBttn.addWidget(button_OK)
@@ -531,21 +531,21 @@ class AmplitudeWindow(QMainWindow):
         if hasattr(self, 'axes1'):
             uylim = self.axes1.get_ylim()
             uy2lim = self.axes2.get_ylim()
-        else:            
+        else:
             uylim = [0, 1.1]
             uy2lim = [-180, 180]
- 
+
         self.main_plotAMP(title='Amplitude participations for tool {}, dataset {}, {}, visibility threshold = {}'.format(requested_toolname, requested_datasetname, self.AMPmode_name, self.AMPthreshold),
                           xlabel=view_cfg.xparam2xlabel(self.xaxis_param), ylabel='normalized participation',
                           y2label='phase angle in degree', xlim=view_cfg.axes_limits[0], ylim=uylim, y2lim=uy2lim)
-        
+
     def main_plotAMP(self, title='Amplitudes', xlabel='', ylabel='', y2label='',
                      xlim=None, ylim=None, y2lim=None):
 
         # define figure with 2 subplots
         self.axes1 = self.AMPfig.add_subplot(211)
         self.axes2 = self.AMPfig.add_subplot(212, sharex=self.axes1)
-        
+
         # We want the axes cleared every time plot() is called
         self.axes1.clear()
         self.axes2.clear()
@@ -698,21 +698,21 @@ class ApplicationWindow(QMainWindow):
         self.file_menu.addAction('&Quit', self.fileQuit,
                                  QtCore.Qt.CTRL + QtCore.Qt.Key_Q)
         self.menuBar().addMenu(self.file_menu)
-                
+
         # SETTINGS
         self.settings_menu = QMenu('&Settings', self)
         self.menuBar().addSeparator()
         self.menuBar().addMenu(self.settings_menu)
         self.settings_menu.addAction('&Header Lines', self.setHeaderLines)
         self.settings_menu.addAction('&Linestyle defaults', self.setLinestyleDefaults)
-                
+
         # Tools
         self.tools_menu = QMenu('&Tools', self)
         self.menuBar().addSeparator()
         self.menuBar().addMenu(self.tools_menu)
         self.tools_menu.addAction('&Plot amplitudes of modes', self.initAmplitudes)
         self.tools_menu.addAction('&Plot amplitudes of highlighted modes', self.amplitudes_of_highlights)
-        
+
         # HELP
         self.help_menu = QMenu('&Help', self)
         self.menuBar().addSeparator()
@@ -730,7 +730,7 @@ class ApplicationWindow(QMainWindow):
         self.layout_mplib     = QVBoxLayout(self.main_widget)
         self.layout_list      = QVBoxLayout(self.main_widget)
         self.layout_mpliblist = QHBoxLayout(self.main_widget)
-        
+
         self.main_layout.addLayout(self.button_layout)
         self.main_layout.addLayout(self.layout_mpliblist)
         self.layout_mpliblist.addLayout(self.layout_mplib, 4)
@@ -747,7 +747,7 @@ class ApplicationWindow(QMainWindow):
         self.mode_minpara_cmb = 1
         self.mode_maxpara_cmb = 6
         self.mode_max_cmb     = self.mode_maxpara_cmb
-        self.mode_min_cmb     = self.mode_minpara_cmb  
+        self.mode_min_cmb     = self.mode_minpara_cmb
         self.pharmonics       = False
         self.skip_header_CMB  = 1              # number of header lines in Campbell file
         self.skip_header_AMP  = 5              # number of header lines in Amplitude file
@@ -758,8 +758,9 @@ class ApplicationWindow(QMainWindow):
 
         ##############################################################
         # Figure settings
-        self.fig = Figure(figsize=(6, 6), dpi=100, tight_layout=True)
-        self.fig.subplots_adjust(0.06, 0.06, 0.88, 0.97)  # left,bottom,right,top
+        #self.fig = Figure(figsize=(6, 6), dpi=100, tight_layout=True)
+        self.fig = Figure(figsize=(6, 6), dpi=100)
+        #self.fig.subplots_adjust(0.06, 0.06, 0.88, 0.97)  # left,bottom,right,top
         self.canvas = FigureCanvas(self.fig)
         toolbar = NavigationToolbar(self.canvas, self)
         self.layout_mplib.addWidget(toolbar)
@@ -787,7 +788,7 @@ class ApplicationWindow(QMainWindow):
         self.button_pharm = QPushButton('Plot P-Harmonics', self)
         self.button_pharm.clicked.connect(self.plotPharmonics)
         self.button_layout.addWidget(self.button_pharm)
-        
+
         self.button_xaxis = QComboBox(self)
         self.button_xaxis.currentTextChanged.connect(self.xaxis_change)
         self.xaxis_param = self.button_xaxis.currentText()
@@ -952,7 +953,10 @@ class ApplicationWindow(QMainWindow):
                         self.axes1.plot(xaxis_values, P_hamonics_data,
                                         c='grey', linestyle='--', linewidth=0.75, label=str(index)+'P')
 
-        self.axes2.legend(bbox_to_anchor=(1, 0), loc=3)
+        # self.axes2.legend(bbox_to_anchor=(1, 0), loc=3)
+        self.fig.legend(bbox_to_anchor=(.75, 0, .25, 1), loc=1)
+        self.fig.tight_layout()
+        self.fig.subplots_adjust(right=0.75)
         # self.axes2.legend(loc='upper center', bbox_to_anchor=(0.5, -0.05), ncol=5)
 
         xlim, ylim, y2lim = view_cfg.get_axes_limits(self.axes1.get_xlim(), self.axes1.get_ylim(), self.axes2.get_ylim())
@@ -1359,7 +1363,7 @@ def my_excepthook(type, value, tback):
     '''
 
     # then call the default handler
-    sys.__excepthook__(type, value, tback)  
+    sys.__excepthook__(type, value, tback)
 
 
 
@@ -1378,7 +1382,7 @@ if __name__ == '__main__':
     aw = ApplicationWindow()
     aw.setWindowTitle("UniversalCampbellPlotter")
     aw.setWindowIcon(QIcon('../images/Campbell.PNG'))
-    
+
     # set initial size
     w = 1400
     h = 1000
