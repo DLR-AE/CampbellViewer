@@ -70,6 +70,7 @@ instance/
 
 # Sphinx documentation
 docs/_build/
+docs/source/api_ref/generated/
 
 # PyBuilder
 target/
@@ -127,6 +128,3 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
-
-# Sphinx
-docs/source/api_ref/generated/
