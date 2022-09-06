@@ -1,16 +1,16 @@
 ########################################################################################
 # This file is part of CampbellViewer.
-# 
+#
 # CampbellViewer is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
 # the Free Software Foundation, either version 3 of the License, or
 # (at your option) any later version.
-# 
+#
 # CampbellViewer is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details.
-# 
+#
 # You should have received a copy of the GNU General Public License
 # along with CampbellViewer.  If not, see <http://www.gnu.org/licenses/>
 ########################################################################################
@@ -29,6 +29,7 @@
 # There is NO warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 # --------------------------------------------------------------------------------------
 
+# Global libs
 import sys
 import numpy as np
 import copy
@@ -46,9 +47,12 @@ from matplotlib.backends.backend_qt5agg import NavigationToolbar2QT as Navigatio
 from matplotlib.backend_bases import MouseButton
 from matplotlib.figure import Figure
 import mplcursors
-from model_lib import TreeModel
-from globals import database, view_cfg
-from utilities import assure_unique_name, MPLLinestyle
+
+# Local libs
+from campbellviewer.model_lib import TreeModel
+from campbellviewer.globals import database, view_cfg
+from campbellviewer.utilities import assure_unique_name, MPLLinestyle
+
 
 matplotlib.rcParams['hatch.color']     = 'grey'
 matplotlib.rcParams['hatch.linewidth'] = 0.2
@@ -140,7 +144,10 @@ class SettingsPopupDataSelection(SettingsPopup):
         """ Updates the settings based on the current content of the popup """
         self.selected_tool = self.__ToolSelection.currentText()
         self.dataset_name = self.__DataSetName.text()
+        self.close()
 
+    def ClosePopup(self):
+        self.close()
 
 class SettingsPopupHS2Headers(SettingsPopup):
     """
@@ -175,7 +182,7 @@ class SettingsPopupHS2Headers(SettingsPopup):
         popup_layoutHAMP = QHBoxLayout(self)
         popup_layoutHOP = QHBoxLayout(self)
         popup_layoutBttn = QHBoxLayout(self)
-        
+
         headerLinesCMBL = QLabel('Number of header lines in Campbell file:')
         headerLinesAMPL = QLabel('Number of header lines in Amplitude file:')
         headerLinesOPL = QLabel('Number of header lines in Operational data file:')
@@ -191,7 +198,7 @@ class SettingsPopupHS2Headers(SettingsPopup):
         popup_layoutHAMP.addWidget(self.__headerLinesAMPE)
         popup_layoutHOP.addWidget(headerLinesOPL)
         popup_layoutHOP.addWidget(self.__headerLinesOPE)
-        
+
         button_OK = QPushButton('OK', self)
         button_OK.clicked.connect(self.ok_click)
         popup_layoutBttn.addWidget(button_OK)
@@ -291,7 +298,7 @@ class SettingsPopupAMP(SettingsPopup):
     def update_mode_choice(self):
         """ Update the options for the mode selection based on the currently selected tool and dataset """
         self.__AMPmode.clear()
-        if self.__DataSetSelection.currentText() is not '':
+        if self.__DataSetSelection.currentText():
             self.__AMPmode.addItems(
                 [str(database[self.__ToolSelection.currentText()][self.__DataSetSelection.currentText()].ds.modes.values[mode_id].name)
                  for mode_id in view_cfg.active_data[self.__ToolSelection.currentText()][self.__DataSetSelection.currentText()]])
@@ -676,21 +683,21 @@ class AmplitudeWindow(QMainWindow):
         if hasattr(self, 'axes1'):
             uylim = self.axes1.get_ylim()
             uy2lim = self.axes2.get_ylim()
-        else:            
+        else:
             uylim = [0, 1.1]
             uy2lim = [-180, 180]
- 
+
         self.main_plotAMP(title='Amplitude participations for tool {}, dataset {}, {}, visibility threshold = {}'.format(requested_toolname, requested_datasetname, self.AMPmode_name, self.AMPthreshold),
                           xlabel=view_cfg.xparam2xlabel(self.xaxis_param), ylabel='normalized participation',
                           y2label='phase angle in degree', xlim=view_cfg.axes_limits[0], ylim=uylim, y2lim=uy2lim)
-        
+
     def main_plotAMP(self, title='Amplitudes', xlabel='', ylabel='', y2label='',
                      xlim=None, ylim=None, y2lim=None):
 
         # define figure with 2 subplots
         self.axes1 = self.AMPfig.add_subplot(211)
         self.axes2 = self.AMPfig.add_subplot(212, sharex=self.axes1)
-        
+
         # We want the axes cleared every time plot() is called
         self.axes1.clear()
         self.axes2.clear()
@@ -843,21 +850,21 @@ class ApplicationWindow(QMainWindow):
         self.file_menu.addAction('&Quit', self.fileQuit,
                                  QtCore.Qt.CTRL + QtCore.Qt.Key_Q)
         self.menuBar().addMenu(self.file_menu)
-                
+
         # SETTINGS
         self.settings_menu = QMenu('&Settings', self)
         self.menuBar().addSeparator()
         self.menuBar().addMenu(self.settings_menu)
         self.settings_menu.addAction('&Header Lines', self.setHeaderLines)
         self.settings_menu.addAction('&Linestyle defaults', self.setLinestyleDefaults)
-                
+
         # Tools
         self.tools_menu = QMenu('&Tools', self)
         self.menuBar().addSeparator()
         self.menuBar().addMenu(self.tools_menu)
         self.tools_menu.addAction('&Plot amplitudes of modes', self.initAmplitudes)
         self.tools_menu.addAction('&Plot amplitudes of highlighted modes', self.amplitudes_of_highlights)
-        
+
         # HELP
         self.help_menu = QMenu('&Help', self)
         self.menuBar().addSeparator()
@@ -875,7 +882,7 @@ class ApplicationWindow(QMainWindow):
         self.layout_mplib     = QVBoxLayout(self.main_widget)
         self.layout_list      = QVBoxLayout(self.main_widget)
         self.layout_mpliblist = QHBoxLayout(self.main_widget)
-        
+
         self.main_layout.addLayout(self.button_layout)
         self.main_layout.addLayout(self.layout_mpliblist)
         self.layout_mpliblist.addLayout(self.layout_mplib, 4)
@@ -892,7 +899,7 @@ class ApplicationWindow(QMainWindow):
         self.mode_minpara_cmb = 1
         self.mode_maxpara_cmb = 6
         self.mode_max_cmb     = self.mode_maxpara_cmb
-        self.mode_min_cmb     = self.mode_minpara_cmb  
+        self.mode_min_cmb     = self.mode_minpara_cmb
         self.pharmonics       = False
         self.skip_header_CMB  = 1              # number of header lines in Campbell file
         self.skip_header_AMP  = 5              # number of header lines in Amplitude file
@@ -932,7 +939,7 @@ class ApplicationWindow(QMainWindow):
         self.button_pharm = QPushButton('Plot P-Harmonics', self)
         self.button_pharm.clicked.connect(self.plotPharmonics)
         self.button_layout.addWidget(self.button_pharm)
-        
+
         self.button_xaxis = QComboBox(self)
         self.button_xaxis.currentTextChanged.connect(self.xaxis_change)
         self.xaxis_param = self.button_xaxis.currentText()
@@ -1021,7 +1028,7 @@ class ApplicationWindow(QMainWindow):
 
         for atool in view_cfg.active_data:  # active tool
             for ads in view_cfg.active_data[atool]:  # active dataset
-                if database[atool][ads].ds['frequency'].values.ndim is not 0:
+                if database[atool][ads].ds['frequency'].values.ndim != 0:
 
                     # get xaxis values
                     if self.xaxis_param not in database[atool][ads].ds.operating_parameter:
@@ -1090,7 +1097,7 @@ class ApplicationWindow(QMainWindow):
                             lines_to_be_selected.append(damp_line)
 
                 # plot p-harmonics if present
-                if database[atool][ads].ds.operating_points.values.ndim is not 0 and self.pharmonics is True:
+                if database[atool][ads].ds.operating_points.values.ndim != 0 and self.pharmonics:
                     P_harmonics = [1, 3, 6, 9, 12]
                     for index in P_harmonics:
                         P_hamonics_data = database[atool][ads].ds.operating_points.loc[:, 'rot. speed [rpm]']/60*index  # rpm in Hz
@@ -1428,8 +1435,8 @@ class ApplicationWindow(QMainWindow):
             if success is False:
                 return
 
-        if database[self.settingsAMPtool][self.settingsAMPdataset].ds.frequency.values.ndim is not 0 and \
-                database[self.settingsAMPtool][self.settingsAMPdataset].ds.participation_factors_amp.values.ndim is not 0:
+        if (database[self.settingsAMPtool][self.settingsAMPdataset].ds.frequency.values.ndim != 0 and
+            database[self.settingsAMPtool][self.settingsAMPdataset].ds.participation_factors_amp.values.ndim != 0):
             self.AmplitudeWindow = AmplitudeWindow()
             self.AmplitudeWindow.sigClosed.connect(self.deleteAmplitudes)
         else:
@@ -1444,8 +1451,8 @@ class ApplicationWindow(QMainWindow):
 
     def updateAmplitudes(self):
         """ Update Amplitude plot according to settingsAMPdataset and settingsAMPmode """
-        if database[self.settingsAMPtool][self.settingsAMPdataset].ds.frequency.values.ndim is not 0 and \
-                database[self.settingsAMPtool][self.settingsAMPdataset].ds.participation_factors_amp.values.ndim is not 0:
+        if (database[self.settingsAMPtool][self.settingsAMPdataset].ds.frequency.values.ndim != 0 and
+            database[self.settingsAMPtool][self.settingsAMPdataset].ds.participation_factors_amp.values.ndim != 0):
 
             # get the possibly user-modified axes limits, it would be good to have a signal when the axes limits are changed
             view_cfg.axes_limits = (self.axes1.get_xlim(), self.axes1.get_ylim(), self.axes2.get_ylim())
@@ -1504,16 +1511,14 @@ def my_excepthook(type, value, tback):
     '''
 
     # then call the default handler
-    sys.__excepthook__(type, value, tback)  
+    sys.__excepthook__(type, value, tback)
 
 
+def main():
+    """Main function to execute CampbellViewer.
 
+    """
 
-###################################################################
-# Main program
-###################################################################
-if __name__ == '__main__':
-    # enable error tracing
     sys.excepthook = my_excepthook
 
     # define main app
@@ -1523,10 +1528,14 @@ if __name__ == '__main__':
     aw = ApplicationWindow()
     aw.setWindowTitle("UniversalCampbellPlotter")
     aw.setWindowIcon(QIcon('../images/Campbell.PNG'))
-    
+
     # set initial size
     w = 1400
     h = 1000
     aw.setMinimumSize(w, h)
     aw.show()
     sys.exit(app.exec_())
+
+
+if __name__ == '__main__':
+    main()
