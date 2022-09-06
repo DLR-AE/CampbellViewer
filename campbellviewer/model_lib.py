@@ -514,6 +514,6 @@ class TreeModel(QAbstractItemModel):
         item.itemName = input[0]
 
         # Update the database
-        self.updateDatabase(self.get_branch_from_item(item), self.get_branch_from_item(item), itemData=itemData)
+        self.updateDatabase(self.get_branch_from_item(item), self.get_branch_from_item(item), itemData=item.itemData)
 
         self.layoutChanged.emit()
