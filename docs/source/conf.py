@@ -11,8 +11,6 @@ copyright = "2022, J. Rieke, H. Verdonck, O. Hach, N. Joeres"
 author = "J. Rieke, H. Verdonck, O. Hach, N. Joeres"
 release = "0.0.1"
 
-
-
 # -- General configuration ---------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
 
@@ -21,6 +19,7 @@ extensions = [
     "sphinx.ext.doctest",
     "sphinx.ext.autosummary",
     "sphinx.ext.napoleon",
+    "myst_parser",
 ]
 
 templates_path = ["_templates"]
