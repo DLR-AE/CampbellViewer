@@ -21,7 +21,7 @@ Main building blocks
    :maxdepth: 2
    :caption: Contents:
 
-   installation
+   readme
    users_guide
    api_ref/index
 

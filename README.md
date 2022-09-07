@@ -1,8 +1,9 @@
 # CampbellViewer
+
 Unified plotting tool for Campbell diagrams, processing results of wind turbine simulation tools HAWCStab2 and Bladed
 
 
-# Main building blocks
+## Main building blocks
 - The GUI mainly contained in the CampbellViewer module
 - The tree model which allows interaction (enabling/disabling, highlighting, deleting) of the loaded datasets
 - The most important data structures are defined as globals, such that they can be accessed easily by all modules
@@ -11,33 +12,44 @@ Unified plotting tool for Campbell diagrams, processing results of wind turbine 
 - The individial datasets are xarray datasets, an abstract template is given in data_template.py
 - The interfaces will get information from the GUI such as the paths to result files and load data into the xarray dataset convention.
 
-# Modules
+## Requirements
 
-- CampbellViewer.py
-  - Main script of the GUI. Contains all QT5 Widgets.
-  
-- globals.py
-  - The database and some settings which are used by the figures are stored in global variables. These are defined here.
-  
-- model_lib.py
-  - This module contains the functional description of the tree model which is used to interact with the data.
-  
-- data_lib.py
-  - This is our description of a database. In the end it is just a dictionary with different datasets. Data can be added through the interfaces of the different tools, data can be removed, databases can be saved to a file and databases can be loaded from these files. 
-  
-- data_template.py
-  - This module contains the abstract linearization data class. 
-  
-- BladedLin_lib.py
-  - Interface for parsing results made with Bladed
+To run ``campbellviewer`` you need [pybladed](https://github.com/DLR-AE/pyBladed).
+You can install it using the following command
 
-- HAWCStab2_lib.py
-  - Interface for parsing results made with hs2
-  
-- read_hs2turbine_mode_shapes.py
-  - Interface for parsing hs2 mode shapes
+    $ pip install git+https://github.com/DLR-AE/pyBladed.git
 
-- utilities.py
-  - Some useful methods and classes
-  
+---
+**NOTE**
 
+If you're using Python >= 3.9 you might have trouble installing [pythonnet](https://pypi.org/project/pythonnet/).
+You can install it by downloading the wheel file [here](https://www.lfd.uci.edu/~gohlke/pythonlibs/#pythonnet),
+as suggested in this [discussion](https://stackoverflow.com/questions/67418533/how-to-fix-error-during-pythonnet-installation).
+
+---
+
+## Installation
+
+The ``campbellviewer`` supports Python 3.9 or newer.
+
+You can install the package using
+
+    $ pip install git+https://github.com/DLR-AE/CampbellViewer.git
+
+---
+**NOTE**
+
+If you want to install a certain branch add **@<branch_name>** to the end of
+the URL.
+
+---
+
+To start the ``campbellviewer`` just type
+
+    $ campbellviewer
+
+
+Developers can clone the git to a local directory and run the following command
+to install the package in development mode.
+
+    $ pip install -e .
