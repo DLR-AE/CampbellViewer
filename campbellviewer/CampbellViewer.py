@@ -994,10 +994,17 @@ class ApplicationWindow(QMainWindow):
 
             @self.cursor.connect("add")
             def on_add(sel):
-                marker_index = sel.target.index
-                paired_target_marker = mplcursors._pick_info.AttrArray(pairs[sel.artist]._offsets[marker_index])
-                paired_target_marker.index = marker_index
-                sel.extras.append(self.cursor.add_highlight(pairs[sel.artist], paired_target_marker))
+                """
+                Additional actions when a marker is selected
+
+                When a marker is selected (either in the frequency or damping diagram), the corresponding marker in the
+                other diagram has to be added to the mplcursors selection. The PathCollection objects (in this case
+                the scatters for each mode) of the frequency and damping diagram are linked through the pairs dict.
+                The linked artist is added here manually.
+                """
+                sel.extras.append(self.cursor.add_highlight(pairs[sel.artist],
+                                                            pairs[sel.artist]._offsets[sel.index],
+                                                            sel.index))
                 sel.annotation.get_bbox_patch().set(fc="grey")
 
         else:
