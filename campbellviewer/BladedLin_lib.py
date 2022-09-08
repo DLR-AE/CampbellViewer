@@ -24,13 +24,14 @@ class BladedLinData(AbstractLinearizationData):
             Description...
     """
 
-    def __init__(self, result_dir, result_prefix):
+    def __init__(self, result_dir=None, result_prefix=None):
         super(BladedLinData, self).__init__()
 
         self.ds.attrs["result_dir"] = result_dir
         self.ds.attrs["result_prefix"] = result_prefix
 
-        self.ds.attrs["bladed_version"] = self.extract_bladed_version()
+        if result_dir is not None and result_prefix is not None:
+            self.ds.attrs["bladed_version"] = self.extract_bladed_version()
 
     def extract_bladed_version(self):
         """Get the Bladed version from the header in the .$PJ file
