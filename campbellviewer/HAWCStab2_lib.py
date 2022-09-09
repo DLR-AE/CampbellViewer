@@ -4,27 +4,40 @@
 #
 ###########
 
-# global libs
+# Global libs
 import numpy as np
 
-# local libs
-from data_template import AbstractLinearizationData
-from utilities import assure_unique_name, AEMode
+# Local libs
+from campbellviewer.data_template import AbstractLinearizationData
+from campbellviewer.utilities import assure_unique_name, AEMode
 
 
 class HAWCStab2Data(AbstractLinearizationData):
-    """ This is a class for handling HAWCStab2 linearization data """
-    
+    """This is a class for handling HAWCStab2 linearization data.
+
+    Attributes:
+        ds (dict): Dictionary containing filenames of the \*.cmb, \*.amp, and \*.opt files.
+
+    Args:
+        filenamecmb (str):
+            Filename of \*.cmb file.
+        filenameamp (str):
+            Filename of \*.amp file.
+        filenameopt (str):
+            Filename of \*.opt file.
+
+    """
+
     def __init__(self, filenamecmb=None, filenameamp=None, filenameopt=None):
         super(HAWCStab2Data, self).__init__()
-        
+
         self.ds.attrs["filenamecmb"] = filenamecmb
         self.ds.attrs["filenameamp"] = filenameamp
         self.ds.attrs["filenameopt"] = filenameopt
 
     def read_cmb_data(self, filenamecmb=None, skip_header_lines=1):
         """ reads and parse the HS2 result cmb data
-        
+
             There are three blocks for freq./damping/real part.
         """
         if filenamecmb is not None:
@@ -35,7 +48,7 @@ class HAWCStab2Data(AbstractLinearizationData):
         except OSError:
             print('ERROR: HAWCStab2 cmb file %s not found! Abort!' % self.ds.attrs["filenamecmb"])
             return
-        
+
         # reorder data
         myshape = np.shape(hs2cmd)
         num_windspeeds = int(myshape[0])
@@ -57,7 +70,7 @@ class HAWCStab2Data(AbstractLinearizationData):
         print('INFO: HS2 campbell data loaded successfully:')
         print('      - %4i modes' % num_modes)
         print('      - %4i wind speeds' % num_windspeeds)
-        
+
     def read_amp_data(self, filenameamp=None, skip_header_lines=5):
         """ reads and parse the HS2 result amp data
 
@@ -80,10 +93,10 @@ class HAWCStab2Data(AbstractLinearizationData):
               BW tors [rad]   phase [deg]
               FW tors [rad]   phase [deg]
 
-            # Mode number:             1             1             1             1             1             1             1             1             1             1             1             1             1             1             1             1             1             1             1             1             1             1             1             1             1             1             1             1             1             1 
-            # Column num.:             2             3             4             5             6             7             8             9            10            11            12            13            14            15            16            17            18            19            20            21            22            23            24            25            26            27            28            29            30            31 
-            # Wind speed       TWR x [m]   phase [deg]     TWR y [m]   phase [deg] TWR yaw [rad]   phase [deg]     SFT x [m]   phase [deg]     SFT y [m]   phase [deg] SFT tor [rad]   phase [deg]  Sym edge [m]   phase [deg]   BW edge [m]   phase [deg]   FW edge [m]   phase [deg]  Sym flap [m]   phase [deg]   BW flap [m]   phase [deg]   FW flap [m]   phase [deg]Sym tors [rad]   phase [deg] BW tors [rad]   phase [deg] FW tors [rad]   phase [deg] 
-                        
+            # Mode number:             1             1             1             1             1             1             1             1             1             1             1             1             1             1             1             1             1             1             1             1             1             1             1             1             1             1             1             1             1             1
+            # Column num.:             2             3             4             5             6             7             8             9            10            11            12            13            14            15            16            17            18            19            20            21            22            23            24            25            26            27            28            29            30            31
+            # Wind speed       TWR x [m]   phase [deg]     TWR y [m]   phase [deg] TWR yaw [rad]   phase [deg]     SFT x [m]   phase [deg]     SFT y [m]   phase [deg] SFT tor [rad]   phase [deg]  Sym edge [m]   phase [deg]   BW edge [m]   phase [deg]   FW edge [m]   phase [deg]  Sym flap [m]   phase [deg]   BW flap [m]   phase [deg]   FW flap [m]   phase [deg]Sym tors [rad]   phase [deg] BW tors [rad]   phase [deg] FW tors [rad]   phase [deg]
+
         """
         if filenameamp is not None:
             self.ds.attrs["filenameamp"] = filenameamp
@@ -92,14 +105,14 @@ class HAWCStab2Data(AbstractLinearizationData):
         # self.coords["participation_mode_names"] = sensor_list
         self.ds["participation_modes"] = (["participation_mode_ID"], [AEMode(name=name) for name in sensor_list])
         num_sensors = len(sensor_list)
-        
+
         # read file
         try:
             hs2part = np.loadtxt(self.ds.attrs["filenameamp"], skiprows=skip_header_lines, dtype='float')
         except OSError:
             print('ERROR: HAWCStab2 cmb file %s not found! Abort!' % self.ds.attrs["filenameamp"])
             return
-        
+
         # reorder data
         myshape = np.shape(hs2part)
         num_windspeeds = int(myshape[0])
@@ -124,7 +137,7 @@ class HAWCStab2Data(AbstractLinearizationData):
         for i in range(0, num_modes):
             mean_DOF = np.mean(amp_data[:, :, i], axis=0)
             mode_names.append(sensor_list[np.argmax(mean_DOF)])
-        
+
         # override first tower mode
         if mode_names[2] == sensor_list[0]:
             mode_names[1] = sensor_list[1]

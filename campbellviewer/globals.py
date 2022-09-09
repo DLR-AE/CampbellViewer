@@ -1,5 +1,6 @@
-from data_lib import LinearizationDataWrapper
-from utilities import MPLLinestyle
+# Local libs
+from campbellviewer.data_lib import LinearizationDataWrapper
+from campbellviewer.utilities import MPLLinestyle
 
 
 class ViewSettings:

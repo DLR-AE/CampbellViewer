@@ -7,15 +7,23 @@
 # global libs
 import numpy as np
 import os
-
-from data_template import AbstractLinearizationData
 from pyBladed.results import BladedResult
-from utilities import assure_unique_name, AEMode
+
+# Local libs
+from campbellviewer.data_template import AbstractLinearizationData
+from campbellviewer.utilities import assure_unique_name, AEMode
 
 
 class BladedLinData(AbstractLinearizationData):
-    """ This is a class for handling Bladed linearization result data """
-    
+    """This is a class for handling Bladed linearization result data.
+
+    Args:
+        result_dir ():
+            Description...
+        result_prefix ():
+            Description...
+    """
+
     def __init__(self, result_dir, result_prefix):
         super(BladedLinData, self).__init__()
 
@@ -25,8 +33,7 @@ class BladedLinData(AbstractLinearizationData):
         self.ds.attrs["bladed_version"] = self.extract_bladed_version()
 
     def extract_bladed_version(self):
-        """
-        Get the Bladed version from the header in the .$PJ file
+        """Get the Bladed version from the header in the .$PJ file
         """
         with open(os.path.join(self.ds.attrs["result_dir"], self.ds.attrs["result_prefix"]+'.$PJ')) as f:
             for line in f:
@@ -36,9 +43,9 @@ class BladedLinData(AbstractLinearizationData):
         return None
 
     def read_data(self):
+        """Read all available Campbell diagram data.
         """
-        Read all available Campbell diagram data
-        """
+
         print('Start reading Bladed data')
 
         bladed_result = BladedResult(self.ds.attrs["result_dir"], self.ds.attrs["result_prefix"])
@@ -66,11 +73,12 @@ class BladedLinData(AbstractLinearizationData):
             self.read_cmb_data(bladed_result)
 
     def read_op_data(self, bladed_result):
-        """
-        Read operational data
+        """Read operational data.
+
         Args:
             bladed_result (obj.): Bladed result reader object
         """
+
         windspeed = bladed_result['Nominal wind speed at hub position'].squeeze()
         pitch = np.array(bladed_result['Nominal pitch angle'].squeeze() * 180/np.pi)
         rpm = np.array(bladed_result['Rotor speed'].squeeze() * (60 / (2*np.pi)))
@@ -85,11 +93,14 @@ class BladedLinData(AbstractLinearizationData):
         self.ds["operating_points"] = (["operating_point_ID", "operating_parameter"], op_point_arr)
 
     def read_coupled_modes(self, bladed_result):
-        """
-        Read coupled data (mode tracked frequency and damping curves)
+        """Read coupled data (mode tracked frequency and damping curves).
+
         Args:
-            bladed_result (obj.): Bladed result reader object
+            bladed_result (obj.):
+                Bladed result reader object.
+
         """
+
         frequency, frequency_metadata = bladed_result['Frequency (undamped)']
         damping, damping_metadata = bladed_result['Damping']
         damping = 100 * damping  # damping ratio in %
@@ -104,8 +115,7 @@ class BladedLinData(AbstractLinearizationData):
         self.ds["damping"] = (["operating_point_ID", "mode_ID"], damping[:, :, 0])
 
     def read_cmb_data(self, bladed_result):
-        """
-        Read Campbell diagram data (participation factors)
+        """Read Campbell diagram data (participation factors).
 
         Data is parsed from the .$CM file, which contains all Campbell diagram data. This file contains frequency,
         damping and participation factor results for all coupled modes. Unfortunately, it can happen that a specific
@@ -218,20 +228,24 @@ class BladedLinData(AbstractLinearizationData):
         """
         The output of a Bladed Campbell Diagram Linearization is very different for versions <4.6. Some notable
         differences:
+
         - .$02 is an ascii file, instead of the standard binary format described by the .%02 file
         - The rotor speed is given in the .%02 file as AXIVAL/AXISLAB, there does not seem to be the possibility to
-            get the other operational conditions (wind speed, etc.)
+          get the other operational conditions (wind speed, etc.)
         - The .$CM file has some different conventions compared to the newer versions:
-            - The points in the top section of the file are not organised by mode track -> operating point, but
-            organised by operating point -> mode track.
+
+            - The points in the top section of the file are not organised by mode track -> operating point,
+              but organised by operating point -> mode track.
             - Besides that not all points seem to reappear in the mode tracks in the bottom of the file.
             - There are no phase angles in the participation factors
+
         - There is the small bug that the Frequency value for the keyword VARIAB in the .%02 file is missing
-            parentheses. Therefore PyBladed will not recognise it as an actual keyword.
+          parentheses. Therefore PyBladed will not recognise it as an actual keyword.
         - The rotor harmonics are included as modes in the data (NaN damping)
 
         Therefore we only read the frequency/damping from the .$02 file and the rotor speed + mode names from the .%02
         file
+
         """
         print('WARNING: Reading the participation factors for Bladed Campbell <4.7 results has not been implemented '
               'yet. (Because the format of the .$CM file differs from newer versions)')

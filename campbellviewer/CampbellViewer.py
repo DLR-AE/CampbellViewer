@@ -29,6 +29,7 @@
 # There is NO warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 # --------------------------------------------------------------------------------------
 
+# Global libs
 import sys
 import numpy as np
 import copy
@@ -46,9 +47,12 @@ from matplotlib.backends.backend_qt5agg import NavigationToolbar2QT as Navigatio
 from matplotlib.backend_bases import MouseButton
 from matplotlib.figure import Figure
 import mplcursors
-from model_lib import TreeModel
-from globals import database, view_cfg
-from utilities import assure_unique_name, MPLLinestyle
+
+# Local libs
+from campbellviewer.model_lib import TreeModel
+from campbellviewer.globals import database, view_cfg
+from campbellviewer.utilities import assure_unique_name, MPLLinestyle
+
 
 matplotlib.rcParams['hatch.color']     = 'grey'
 matplotlib.rcParams['hatch.linewidth'] = 0.2
@@ -155,15 +159,30 @@ class SettingsPopupHS2Headers(QDialog):
         self.exec_()
 
     def getNewSettings(self):
+        """Test
+
+        Returns:
+            _type_: _description_
+        """
         return self.settingsCMB, self.settingsAMP, self.settingsOP
 
     def newSettings(self):
+        """Test
+
+        Returns:
+            _type_: _description_
+        """
         self.settingsCMB = self.__headerLinesCMBE.value()
         self.settingsAMP = self.__headerLinesAMPE.value()
         self.settingsOP = self.__headerLinesOPE.value()
         self.close()
 
     def ClosePopup(self):
+        """Test
+
+        Returns:
+            _type_: _description_
+        """
         self.close()
 
 
@@ -221,7 +240,7 @@ class SettingsPopupAMP(QDialog):
 
     def update_mode_choice(self):
         self.__AMPmode.clear()
-        if self.__DataSetSelection.currentText() is not '':
+        if self.__DataSetSelection.currentText():
             self.__AMPmode.addItems(
                 [str(database[self.__ToolSelection.currentText()][self.__DataSetSelection.currentText()].ds.modes.values[mode_id].name)
                  for mode_id in view_cfg.active_data[self.__ToolSelection.currentText()][self.__DataSetSelection.currentText()]])
@@ -761,9 +780,7 @@ class ApplicationWindow(QMainWindow):
 
         ##############################################################
         # Figure settings
-        #self.fig = Figure(figsize=(6, 6), dpi=100, tight_layout=True)
         self.fig = Figure(figsize=(6, 6), dpi=100)
-        #self.fig.subplots_adjust(0.06, 0.06, 0.88, 0.97)  # left,bottom,right,top
         self.canvas = FigureCanvas(self.fig)
         toolbar = NavigationToolbar(self.canvas, self)
         self.layout_mplib.addWidget(toolbar)
@@ -886,7 +903,7 @@ class ApplicationWindow(QMainWindow):
 
         for atool in view_cfg.active_data:  # active tool
             for ads in view_cfg.active_data[atool]:  # active dataset
-                if database[atool][ads].ds['frequency'].values.ndim is not 0:
+                if database[atool][ads].ds['frequency'].values.ndim != 0:
 
                     # get xaxis values
                     if self.xaxis_param not in database[atool][ads].ds.operating_parameter:
@@ -955,7 +972,7 @@ class ApplicationWindow(QMainWindow):
                             lines_to_be_selected.append(damp_line)
 
                 # plot p-harmonics if present
-                if database[atool][ads].ds.operating_points.values.ndim is not 0 and self.pharmonics is True:
+                if database[atool][ads].ds.operating_points.values.ndim != 0 and self.pharmonics:
                     P_harmonics = [1, 3, 6, 9, 12]
                     for index in P_harmonics:
                         P_hamonics_data = database[atool][ads].ds.operating_points.loc[:, 'rot. speed [rpm]']/60*index  # rpm in Hz
@@ -987,10 +1004,17 @@ class ApplicationWindow(QMainWindow):
 
             @self.cursor.connect("add")
             def on_add(sel):
-                marker_index = sel.target.index
-                paired_target_marker = mplcursors._pick_info.AttrArray(pairs[sel.artist]._offsets[marker_index])
-                paired_target_marker.index = marker_index
-                sel.extras.append(self.cursor.add_highlight(pairs[sel.artist], paired_target_marker))
+                """
+                Additional actions when a marker is selected
+
+                When a marker is selected (either in the frequency or damping diagram), the corresponding marker in the
+                other diagram has to be added to the mplcursors selection. The PathCollection objects (in this case
+                the scatters for each mode) of the frequency and damping diagram are linked through the pairs dict.
+                The linked artist is added here manually.
+                """
+                sel.extras.append(self.cursor.add_highlight(pairs[sel.artist],
+                                                            pairs[sel.artist]._offsets[sel.index],
+                                                            sel.index))
                 sel.annotation.get_bbox_patch().set(fc="grey")
 
         else:
@@ -1295,8 +1319,8 @@ class ApplicationWindow(QMainWindow):
             if success is False:
                 return
 
-        if database[self.settingsAMPtool][self.settingsAMPdataset].ds.frequency.values.ndim is not 0 and \
-                database[self.settingsAMPtool][self.settingsAMPdataset].ds.participation_factors_amp.values.ndim is not 0:
+        if (database[self.settingsAMPtool][self.settingsAMPdataset].ds.frequency.values.ndim != 0 and
+            database[self.settingsAMPtool][self.settingsAMPdataset].ds.participation_factors_amp.values.ndim != 0):
             self.AmplitudeWindow = AmplitudeWindow()
             self.AmplitudeWindow.sigClosed.connect(self.deleteAmplitudes)
         else:
@@ -1311,8 +1335,8 @@ class ApplicationWindow(QMainWindow):
 
     def updateAmplitudes(self):
         """ Update Amplitude plot according to settingsAMPdataset and settingsAMPmode """
-        if database[self.settingsAMPtool][self.settingsAMPdataset].ds.frequency.values.ndim is not 0 and \
-                database[self.settingsAMPtool][self.settingsAMPdataset].ds.participation_factors_amp.values.ndim is not 0:
+        if (database[self.settingsAMPtool][self.settingsAMPdataset].ds.frequency.values.ndim != 0 and
+            database[self.settingsAMPtool][self.settingsAMPdataset].ds.participation_factors_amp.values.ndim != 0):
 
             # get the possibly user-modified axes limits, it would be good to have a signal when the axes limits are changed
             view_cfg.axes_limits = (self.axes1.get_xlim(), self.axes1.get_ylim(), self.axes2.get_ylim())
@@ -1374,13 +1398,11 @@ def my_excepthook(type, value, tback):
     sys.__excepthook__(type, value, tback)
 
 
+def main():
+    """Main function to execute CampbellViewer.
 
+    """
 
-###################################################################
-# Main program
-###################################################################
-if __name__ == '__main__':
-    # enable error tracing
     sys.excepthook = my_excepthook
 
     # define main app
@@ -1397,3 +1419,7 @@ if __name__ == '__main__':
     aw.setMinimumSize(w, h)
     aw.show()
     sys.exit(app.exec_())
+
+
+if __name__ == '__main__':
+    main()
