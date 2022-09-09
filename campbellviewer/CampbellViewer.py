@@ -516,8 +516,7 @@ class AmplitudeWindow(QMainWindow):
         self.xaxis_param = xaxis_param
 
         # Figure settings
-        self.AMPfig = Figure(figsize=(6, 6), dpi=100, tight_layout=True)
-        self.AMPfig.subplots_adjust(0.06, 0.06, 0.88, 0.97) # left,bottom,right,top
+        self.AMPfig = Figure(figsize=(6, 6), dpi=100)
         self.AMPcanvas = FigureCanvas(self.AMPfig)
         toolbar = NavigationToolbar(self.AMPcanvas, self)
 
@@ -535,7 +534,7 @@ class AmplitudeWindow(QMainWindow):
             uylim = [0, 1.1]
             uy2lim = [-180, 180]
 
-        self.main_plotAMP(title='Amplitude participations for tool {}, dataset {}, {}, visibility threshold = {}'.format(requested_toolname, requested_datasetname, self.AMPmode_name, self.AMPthreshold),
+        self.main_plotAMP(title='Amplitude participations for tool {}, \ndataset {}, {}, visibility threshold = {}'.format(requested_toolname, requested_datasetname, self.AMPmode_name, self.AMPthreshold),
                           xlabel=view_cfg.xparam2xlabel(self.xaxis_param), ylabel='normalized participation',
                           y2label='phase angle in degree', xlim=view_cfg.axes_limits[0], ylim=uylim, y2lim=uy2lim)
 
@@ -551,7 +550,7 @@ class AmplitudeWindow(QMainWindow):
         self.axes2.clear()
 
         # Set label, grid, etc...
-        self.axes1.set_title(title)
+        self.AMPfig.suptitle(title)
         self.axes1.set_xlabel(xlabel)
         self.axes1.set_ylabel(ylabel)
         self.axes1.set_xlim(xlim)
@@ -582,7 +581,11 @@ class AmplitudeWindow(QMainWindow):
                 ampl_lines.append(ampl_line)
                 phase_lines.append(phase_line)
 
-        self.axes2.legend(bbox_to_anchor=(1, 0), loc=3)
+        legend = self.AMPfig.legend(loc='center right')
+        bbox = legend.get_window_extent(self.AMPfig.canvas.get_renderer()).transformed(
+            self.AMPfig.transFigure.inverted())
+        # increasing the box by 20% since tight_layout is not effectively working
+        self.AMPfig.tight_layout(rect=(0, 0, bbox.x0*1.2, 1), h_pad=0.5, w_pad=0.5)
 
         cursor = mplcursors.cursor(ampl_lines + phase_lines, multiple=True, highlight=True)
         pairs = dict(zip(ampl_lines, phase_lines))
@@ -765,6 +768,7 @@ class ApplicationWindow(QMainWindow):
         toolbar = NavigationToolbar(self.canvas, self)
         self.layout_mplib.addWidget(toolbar)
         self.layout_mplib.addWidget(self.canvas)
+        self.legend = None
 
         # create figure with two axis
         self.axes1      = self.fig.add_subplot(211)
@@ -849,7 +853,10 @@ class ApplicationWindow(QMainWindow):
 
     # Main plotting routine
     def main_plot(self, title='Campbell', xlabel='', ylabel='', y2label='', xscale='linear', yscale='linear'):
-        """Ultimately, this is a QWidget (as well as a FigureCanvasAgg, etc.)."""
+        """Ultimately, this is a QWidget (as well as a FigureCanvasAgg, etc.).
+
+        Plots the actual Campbell diagram (frequencies and damping).
+        """
 
         # get the possibly user-modified axes limits, it would be good to have a signal when the axes limits are changed
         view_cfg.axes_limits = (self.axes1.get_xlim(), self.axes1.get_ylim(), self.axes2.get_ylim())
@@ -857,6 +864,8 @@ class ApplicationWindow(QMainWindow):
         # We want the axes cleared every time plot() is called
         self.axes1.clear()
         self.axes2.clear()
+        if self.legend is not None:
+            self.legend.remove()
 
         # Set label, grid, etc...
         self.axes1.set_title(title)
@@ -953,11 +962,10 @@ class ApplicationWindow(QMainWindow):
                         self.axes1.plot(xaxis_values, P_hamonics_data,
                                         c='grey', linestyle='--', linewidth=0.75, label=str(index)+'P')
 
-        # self.axes2.legend(bbox_to_anchor=(1, 0), loc=3)
-        self.fig.legend(bbox_to_anchor=(.75, 0, .25, 1), loc=1)
-        self.fig.tight_layout()
-        self.fig.subplots_adjust(right=0.75)
-        # self.axes2.legend(loc='upper center', bbox_to_anchor=(0.5, -0.05), ncol=5)
+        # create a figure legend on the right edge and shrink the axes box accordingly
+        self.legend = self.fig.legend(loc='center right')
+        bbox = self.legend.get_window_extent(self.fig.canvas.get_renderer()).transformed(self.fig.transFigure.inverted())
+        self.fig.tight_layout(rect=(0, 0, bbox.x0, 1), h_pad=0.5, w_pad=0.5)
 
         xlim, ylim, y2lim = view_cfg.get_axes_limits(self.axes1.get_xlim(), self.axes1.get_ylim(), self.axes2.get_ylim())
         self.axes1.set_xlim(xlim)
