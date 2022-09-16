@@ -1,13 +1,14 @@
 """
 This module contains data storing classes
 """
-
+# Global libs
 from PyQt5.QtCore import QAbstractItemModel, Qt, QModelIndex
 from PyQt5.QtCore import QPersistentModelIndex
 from PyQt5.QtGui import QBrush, QColor
 
-from campbellviewer.settings.view import database, view_cfg
-from campbellviewer.utilities import DatasetMetaData
+# Local libs
+from campbellviewer.globals import database, view_cfg
+from campbellviewer.utilities import assure_unique_name, DatasetMetaData
 
 
 class TreeItem(object):
