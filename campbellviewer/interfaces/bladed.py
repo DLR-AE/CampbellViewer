@@ -1,17 +1,13 @@
-###########
-#
-# Lib for reading Bladed linearization results
-#
-###########
+"""
+Module for reading Bladed linearization results.
+"""
 
-# global libs
 import numpy as np
 import os
 from pyBladed.results import BladedResult
 
-# Local libs
-from campbellviewer.data_template import AbstractLinearizationData
-from campbellviewer.utilities import assure_unique_name, AEMode
+from campbellviewer.data_storage.data_template import AbstractLinearizationData
+from campbellviewer.utilities import AEMode
 
 
 class BladedLinData(AbstractLinearizationData):

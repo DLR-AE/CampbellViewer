@@ -1,5 +1,9 @@
-# Local libs
-from campbellviewer.data_lib import LinearizationDataWrapper
+"""
+Module for settings of view in the main application.
+"""
+
+
+from campbellviewer.data_storage.data import LinearizationDataWrapper
 from campbellviewer.utilities import MPLLinestyle
 
 

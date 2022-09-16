@@ -1,3 +1,7 @@
+"""
+Module containing utilities for the campbellviewer.
+"""
+
 import re
 from PyQt5.QtCore import Qt
 import matplotlib
