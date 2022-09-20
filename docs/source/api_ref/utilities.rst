@@ -3,12 +3,9 @@
 campbellviewer.utilities
 ========================
 
-The :mod:`~campbellviewer.utilities` contains some useful methods and classes.
-
 .. autosummary::
-   :toctree: generated/
-   :nosignatures:
+    :toctree: generated
+    :nosignatures:
 
-   campbellviewer.utilities.AEMode
-   campbellviewer.utilities.MPLLinestyle
-   campbellviewer.utilities.DatasetMetaData
+    campbellviewer.utilities.DatasetMetaData
+    campbellviewer.utilities.AEMode

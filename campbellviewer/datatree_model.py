@@ -6,7 +6,7 @@ from PyQt5.QtCore import QAbstractItemModel, Qt, QModelIndex
 from PyQt5.QtCore import QPersistentModelIndex
 from PyQt5.QtGui import QBrush, QColor
 
-from campbellviewer.settings.view import database, view_cfg
+from campbellviewer.settings.globals import database, view_cfg
 from campbellviewer.utilities import DatasetMetaData
 
 

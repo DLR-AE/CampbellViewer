@@ -274,34 +274,36 @@ class HS2BINReader(object):
 
     The HAWCStab2 model is set up hierarchically in this way:
 
-    TURBNINE
-        |
-        --> substructure i
-                |
-                |
-                --> bodies
-                |   |
-                |   --> body ii
-                |   |        |
-                |   |        --> body data s (arc position for each element)
-                |   |
-                |   --> body ii + 1
-                |       |
-                |       --> body data s (arc position for each element, 1d array)
-                |
-                --> opstate jj (states, dictionary)
+    .. code-block:: text
+
+        TURBINE
+            |
+            --> substructure i
                     |
-                    --> bodies (list)
+                    |
+                    --> bodies
+                    |   |
+                    |   --> body ii
+                    |   |        |
+                    |   |        --> body data s (arc position for each element)
+                    |   |
+                    |   --> body ii + 1
+                    |       |
+                    |       --> body data s (arc position for each element, 1d array)
+                    |
+                    --> opstate jj (states, dictionary)
                         |
-                        --> body jjj
+                        --> bodies (list)
                             |
-                            --> mode jjjj
-                            |   |
-                            |   --> ua0 (2d array)
-                            |
-                            --> mode jjjj + 1
+                            --> body jjj
                                 |
-                                --> ua0 (2d array)
+                                --> mode jjjj
+                                |   |
+                                |   --> ua0 (2d array)
+                                |
+                                --> mode jjjj + 1
+                                    |
+                                    --> ua0 (2d array)
 
     Matlab struct: self.substructure[i_subs].opstate[istate].body_result(ibody).mode(imode).ua0
 

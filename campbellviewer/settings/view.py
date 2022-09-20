@@ -2,11 +2,6 @@
 Module for settings of view in the main application.
 """
 
-
-from campbellviewer.data_storage.data import LinearizationDataWrapper
-from campbellviewer.utilities import MPLLinestyle
-
-
 class ViewSettings:
     """
     A class to gather all settings which manage the view of the GUI.
@@ -137,8 +132,73 @@ class ViewSettings:
 
         return self.axes_limits
 
+class MPLLinestyle:
+    """Storage class for linestyle selection in the Campbell plot.
+    """
+    def __init__(self,
+                 colormap='tab10',
+                 markersizedefault=6,
+                 style_sequences={'color': [],
+                                  'linestyle': ['-', '--', '-.', ':'],
+                                  'marker': ['', 'o', 'v', '^', '<', '>', '8', 's', 'p', '*', 'h', 'H', 'D', 'd', 'P', 'X']},
+                 lw=1.0,
+                 overwrite_cm_color_sequence=None,  # ['r','g','b','y','c','m','k']
+                 style_determination_order=['color', 'marker', 'linestyle']
+                 ):
+        """
+        Args:
+            colormap : string
+                name of the matplotlib colormap which will be used to select colors
+            markersizedefault : float
+                marker size
+            style_sequences : dict
+                dictionary with lists for the color, linestyle and marker type which will be used to define the
+                linestyles
+            lw : float
+                linewidth
+            overwrite_cm_color_sequence : list
+                overwrite the color sequence given by the matplotlib colormap
+            style_determination_order : list
+                order in which new linestyles are chosen -> list with 'color', 'marker', 'linestyle'.
+                E.g. if ['color', 'marker', 'linestyle'] -> first the lines will be differentiated by color, then by
+                marker, then by linestyle
+        """
+        self.nr_lines_allocated = 0  # number of lines that already got a linestyle allocated, these lines are not necessarily all visible
+        self.colormap = colormap
+        self.markersizedefault = markersizedefault
+        self.style_sequences = style_sequences
+        self.lw = lw
+        self.overwrite_cm_color_sequence = overwrite_cm_color_sequence
+        self.style_determination_order = style_determination_order
 
-global database
-database = LinearizationDataWrapper()
-global view_cfg
-view_cfg = ViewSettings()
+    def new_ls(self):
+        """
+        Get the next linestyle and increase the nr_lines_allocated by one
+
+        Returns:
+            linestyle : dict
+                Dictionary with keywords 'color', 'marker', 'linestyle' and the selected values for each of them
+        """
+        if self.overwrite_cm_color_sequence is not None:
+            self.style_sequences['color'] = self.overwrite_cm_color_sequence
+        else:
+            self.style_sequences['color'] = [matplotlib.colors.to_hex(color) for color in matplotlib.cm.get_cmap(self.colormap).colors]
+
+        counter = self.nr_lines_allocated
+
+        seq_0 = self.style_sequences[self.style_determination_order[0]]
+        seq_1 = self.style_sequences[self.style_determination_order[1]]
+        seq_2 = self.style_sequences[self.style_determination_order[2]]
+
+        idx_0 = counter % len(seq_0)
+        idx_1 = int(counter / len(seq_0)) % len(seq_1)
+        idx_2 = int(counter / (len(seq_0) * len(seq_1))) % len(seq_2)
+
+        self.nr_lines_allocated += 1
+
+        return {self.style_determination_order[0]: seq_0[idx_0],
+                self.style_determination_order[1]: seq_1[idx_1],
+                self.style_determination_order[2]: seq_2[idx_2],}
+
+    def verify_inputs(self):
+        raise NotImplementedError
