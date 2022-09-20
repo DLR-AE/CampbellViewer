@@ -1,35 +1,36 @@
-########################################################################################
+# """
+# #######################################################################################
 # This file is part of CampbellViewer.
-#
+
 # CampbellViewer is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
 # the Free Software Foundation, either version 3 of the License, or
 # (at your option) any later version.
-#
+
 # CampbellViewer is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details.
-#
+
 # You should have received a copy of the GNU General Public License
-# along with CampbellViewer.  If not, see <http://www.gnu.org/licenses/>
-########################################################################################
-#
+# along with CampbellViewer. If not, see <http://www.gnu.org/licenses/>
+# #######################################################################################
+
 # --------------------------------------------------------------------------------------
 # Simple postprocessing GUI for wind turbine linearization results.
-#
-#
+
+
 # Purpose: Create Interactive Campbell-Plots, participation plots, mode visualizations, etc.
-#
+
 # author: J.Rieke - Nordex Energy GmbH
 #         H.Verdonck - DLR
 #         O.Hach - DLR
-#
+
 # --------------------------------------------------------------------------------------
 # There is NO warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 # --------------------------------------------------------------------------------------
+# """
 
-# Global libs
 import sys
 import numpy as np
 import copy
@@ -37,23 +38,22 @@ import copy
 from PyQt5 import QtCore
 from PyQt5.QtWidgets import QApplication, QMainWindow, QMenu, QVBoxLayout, QHBoxLayout, QMessageBox, QWidget, QDialog
 from PyQt5.QtWidgets import QLineEdit, QFileDialog, QPushButton, QLabel, QSpinBox, QCheckBox, QComboBox, QTreeView
-from PyQt5.QtGui  import QIcon, QDoubleValidator, QMouseEvent
+from PyQt5.QtGui  import QIcon, QDoubleValidator
 from PyQt5.QtCore import QFileInfo, Qt, QItemSelectionModel
 
 import matplotlib
-matplotlib.use("Qt5Agg")
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.backends.backend_qt5agg import NavigationToolbar2QT as NavigationToolbar
 from matplotlib.backend_bases import MouseButton
 from matplotlib.figure import Figure
 import mplcursors
 
-# Local libs
-from campbellviewer.model_lib import TreeModel
-from campbellviewer.globals import database, view_cfg
-from campbellviewer.utilities import assure_unique_name, MPLLinestyle
+from campbellviewer.datatree_model import TreeModel
+from campbellviewer.settings.globals import database, view_cfg
+from campbellviewer.settings.view import MPLLinestyle
+from campbellviewer.utilities import assure_unique_name
 
-
+matplotlib.use("Qt5Agg")
 matplotlib.rcParams['hatch.color']     = 'grey'
 matplotlib.rcParams['hatch.linewidth'] = 0.2
 

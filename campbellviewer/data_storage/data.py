@@ -8,9 +8,9 @@ import os
 import copy
 
 # Local libs
-from campbellviewer.HAWCStab2_lib import HAWCStab2Data
-from campbellviewer.BladedLin_lib import BladedLinData
-from campbellviewer.data_template import AbstractLinearizationData
+from campbellviewer.interfaces.hawcstab2 import HAWCStab2Data
+from campbellviewer.interfaces.bladed import BladedLinData
+from campbellviewer.data_storage.data_template import AbstractLinearizationData
 from campbellviewer.utilities import assure_unique_name, AEMode
 
 
@@ -19,7 +19,7 @@ class LinearizationDataWrapper(dict):
     A wrapping class to store data of different linearization tools (f.ex. HAWCStab2, Bladed-lin,...) and different
     runs (f.ex. different turbine settings) in a uniform way
     """
-    def add_data(self, name, tool, tool_specific_info=dict()):
+    def add_data(self, name, tool, tool_specific_info={}):
         """
         Args:
             name (str): string identifier for this run
@@ -36,13 +36,13 @@ class LinearizationDataWrapper(dict):
 
         if tool == 'bladed-lin':
             if 'Bladed (lin.)' not in self:
-                self['Bladed (lin.)'] = dict()
+                self['Bladed (lin.)'] = {}
             self['Bladed (lin.)'][name] = BladedLinData(tool_specific_info['result_dir'], tool_specific_info['result_prefix'])
             self['Bladed (lin.)'][name].read_data()
 
         elif tool == 'hawcstab2':
             if 'HAWCStab2' not in self:
-                self['HAWCStab2'] = dict()
+                self['HAWCStab2'] = {}
             if name not in self['HAWCStab2']:
                 self['HAWCStab2'][name] = HAWCStab2Data()
             for key, value in tool_specific_info.items():
@@ -75,7 +75,7 @@ class LinearizationDataWrapper(dict):
             self[branch[2]][branch[1]].ds = self[branch[2]][branch[1]].remove_modes(branch[0])
         else:
             print('The list provided can only have 1, 2, or 3 values. Nothing removed from database')
-        return
+
 
     def save(self, fname='CampbellViewerDatabase.nc'):
         """
@@ -106,6 +106,7 @@ class LinearizationDataWrapper(dict):
                     xr_dataset_to_save.to_netcdf(fname, mode='a', group=toolname + '&' + datasetname)
                 else:
                     xr_dataset_to_save.to_netcdf(fname, mode='w', group=toolname + '&' + datasetname)
+
 
     def load(self, fname='CampbellViewerDatabase.nc'):
         """
