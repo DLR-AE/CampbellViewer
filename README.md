@@ -12,22 +12,6 @@ Unified plotting tool for Campbell diagrams, processing results of wind turbine 
 - The individial datasets are xarray datasets, an abstract template is given in data_template.py
 - The interfaces will get information from the GUI such as the paths to result files and load data into the xarray dataset convention.
 
-## Requirements
-
-To run ``campbellviewer`` you need [pybladed](https://github.com/DLR-AE/pyBladed).
-You can install it using the following command
-
-    $ pip install git+https://github.com/DLR-AE/pyBladed.git
-
----
-**NOTE**
-
-If you're using Python >= 3.9 you might have trouble installing [pythonnet](https://pypi.org/project/pythonnet/).
-You can install it by downloading the wheel file [here](https://www.lfd.uci.edu/~gohlke/pythonlibs/#pythonnet),
-as suggested in this [discussion](https://stackoverflow.com/questions/67418533/how-to-fix-error-during-pythonnet-installation).
-
----
-
 ## Installation
 
 The ``campbellviewer`` supports Python 3.9 or newer.
