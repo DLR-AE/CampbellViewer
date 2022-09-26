@@ -84,9 +84,8 @@ class LinearizationDataWrapper(dict):
         Xarray has the functionality to save datasets in netcdf format. The total database dictionary is saved by
         saving each key-value pair as a separate group to the netcdf file.
 
-        IMPORTANT: the standard scipy netcdf backend does not support saving to a group and the h5netcdf engine
-        crashes for me.
-        -> netCDF4 has to be installed. (by default xarray will use netCDF4 if it is installed)
+        IMPORTANT: the standard scipy netcdf backend does not support saving to a group
+                -> netCDF4 has to be installed. (by default xarray will use netCDF4 if it is installed)
 
         Args:
             fname (str, optional): file to which database will be saved
@@ -94,7 +93,7 @@ class LinearizationDataWrapper(dict):
         for toolname in self:
             for datasetname, dataset_obj in self[toolname].items():
                 # The xarray datasets can be saved using the build-in to_netcdf methods of xarray.
-                # With one exeption: the AEMode class -> xarray cannot serialize arbitrary Python objects
+                # With one exception: the AEMode class -> xarray cannot serialize arbitrary Python objects
                 # Therefore each AEMode instance is converted to a list with its attributes.
                 xr_dataset_to_save = copy.deepcopy(dataset_obj.ds)
                 for ii, ae_mode in enumerate(xr_dataset_to_save.modes.values):
