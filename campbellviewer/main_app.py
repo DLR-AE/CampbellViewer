@@ -32,8 +32,10 @@
 # """
 
 import sys
+import os
 import numpy as np
 import copy
+import argparse
 
 from PyQt5 import QtCore
 from PyQt5.QtWidgets import QApplication, QMainWindow, QMenu, QVBoxLayout, QHBoxLayout, QMessageBox, QWidget, QDialog
@@ -1240,17 +1242,42 @@ class ApplicationWindow(QMainWindow):
         self.main_plot(title='Campbell Diagram', xlabel=view_cfg.xparam2xlabel(self.xaxis_param),
                        ylabel='Frequency in Hz', y2label='Damping Ratio in %')
 
-    def load_database(self):
-        """ Load data from database (and use default view settings) """
+    def get_database_filename(self, mode):
+        """
+        Use a QFileDialog to get the filename where the database can be loaded or saved.
+
+        Args:
+            mode : 'load' or 'save' -> identifier if a database filename has to be found to load or save a database
+
+        Raises:
+            ValueError : if mode is not 'load' or 'save'
+
+        Returns:
+            db_filename : string with database filename
+        """
         options = QFileDialog.Options()
         options |= QFileDialog.DontUseNativeDialog
         filter = "CampbellViewer Database file (*.nc);;All Files (*)"
-        fileName, _ = QFileDialog.getOpenFileName(self, "Load CampbellViewer Database", "", filter, options=options)
+        if mode == 'load':
+            db_filename, _ = QFileDialog.getOpenFileName(self, "Load CampbellViewer Database", "", filter, options=options)
+        elif mode == 'save':
+            db_filename, _ = QFileDialog.getSaveFileName(self, "Save to CampbellViewer Database", "", filter, options=options)
+        else:
+            raise ValueError('mode to get a database filename can only be \'load\' or \'save\'')
 
+        return db_filename
+
+    def apply_database(self, db_filename):
+        """
+        Load the database from the db_filename and apply it in the CampbellViewer
+
+        Args:
+            db_filename : string with the path to the database file which has to be applied
+        """
         # save "old" database
         old_database = copy.deepcopy(database)
 
-        loaded_datasets = database.load(fname=fileName)
+        loaded_datasets = database.load(fname=db_filename)
         for toolname in loaded_datasets:
             for datasetname in loaded_datasets[toolname]:
                 self.init_active_data(toolname, datasetname)
@@ -1258,17 +1285,19 @@ class ApplicationWindow(QMainWindow):
         self.dataset_tree_model.addModelData(old_database=old_database)
         self.dataset_tree_model.layoutChanged.emit()
 
+    def load_database(self):
+        """ Load data from database (and use default view settings) """
+        db_filename = self.get_database_filename(mode='load')
+        self.apply_database(db_filename)
+
     def save_database(self):
         """ Save data to database """
-        options = QFileDialog.Options()
-        options |= QFileDialog.DontUseNativeDialog
-        filter = "CampbellViewer Database file (*.nc);;All Files (*)"
-        fileName, _ = QFileDialog.getSaveFileName(self, "Save to CampbellViewer Database", "", filter, options=options)
+        db_filename = self.get_database_filename(mode='save')
 
-        if fileName[-3:] != ".nc":
-            fileName = fileName + ".nc"
+        if db_filename[-3:] != ".nc":
+            db_filename = db_filename + ".nc"
 
-        database.save(fname=fileName)
+        database.save(fname=db_filename)
 
     def dataSelection(self):
         """ Select to add HAWCStab2 or Bladed data """
@@ -1524,6 +1553,30 @@ def my_excepthook(type, value, tback):
     sys.__excepthook__(type, value, tback)
 
 
+def process_cl_args():
+    """
+    Process the command line arguments
+
+    PyQT has default arguments, additional arguments for the CampbellViewer can be defined here
+
+    Returns:
+          cv_specific_args: argparse Namespace with CampbellViewer specific command line arguments
+          qt_default_args: optional list with the default pyqt command line arguments
+    """
+    parser = argparse.ArgumentParser()
+    parser.add_argument('-d', '--database', action='store')  # optional flag
+
+    cv_specific_args, qt_default_args = parser.parse_known_args()
+
+    # check that requested database exists
+    if cv_specific_args.database is not None:
+        if not os.path.exists(cv_specific_args.database):
+            print('Requested database in command line does not exist.')
+            cv_specific_args.database = None
+
+    return cv_specific_args, qt_default_args
+
+
 def main():
     """Main function to execute CampbellViewer.
 
@@ -1531,8 +1584,12 @@ def main():
 
     sys.excepthook = my_excepthook
 
+    # distinguish between CampbellViewer specific and PyQt command line arguments
+    cv_specific_args, qt_default_args = process_cl_args()
+    qt_args = sys.argv[:1] + qt_default_args
+
     # define main app
-    app = QApplication(sys.argv)
+    app = QApplication(qt_args)
     app.setStyle('Fusion')
 
     aw = ApplicationWindow()
@@ -1543,6 +1600,8 @@ def main():
     w = 1400
     h = 1000
     aw.setMinimumSize(w, h)
+    if cv_specific_args.database is not None:
+        aw.apply_database(cv_specific_args.database)
     aw.show()
     sys.exit(app.exec_())
 
