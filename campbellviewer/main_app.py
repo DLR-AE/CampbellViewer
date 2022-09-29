@@ -1265,6 +1265,9 @@ class ApplicationWindow(QMainWindow):
         filter = "CampbellViewer Database file (*.nc);;All Files (*)"
         fileName, _ = QFileDialog.getSaveFileName(self, "Save to CampbellViewer Database", "", filter, options=options)
 
+        if fileName[-3:] != ".nc":
+            fileName = fileName + ".nc"
+
         database.save(fname=fileName)
 
     def dataSelection(self):
