@@ -1,14 +1,13 @@
 """
 This module contains data storing classes
 """
-# Global libs
+
 from PyQt5.QtCore import QAbstractItemModel, Qt, QModelIndex
 from PyQt5.QtCore import QPersistentModelIndex
 from PyQt5.QtGui import QBrush, QColor
 
-# Local libs
-from campbellviewer.globals import database, view_cfg
-from campbellviewer.utilities import assure_unique_name, DatasetMetaData
+from campbellviewer.settings.globals import database, view_cfg
+from campbellviewer.utilities import DatasetMetaData
 
 
 class TreeItem(object):
@@ -558,6 +557,6 @@ class TreeModel(QAbstractItemModel):
         item.itemName = input[0]
 
         # Update the database
-        self.updateDatabase(self.get_branch_from_item(item), self.get_branch_from_item(item), itemData=itemData)
+        self.updateDatabase(self.get_branch_from_item(item), self.get_branch_from_item(item), itemData=item.itemData)
 
         self.layoutChanged.emit()

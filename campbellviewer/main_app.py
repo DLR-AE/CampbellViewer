@@ -1,35 +1,36 @@
-########################################################################################
+# """
+# #######################################################################################
 # This file is part of CampbellViewer.
-#
+
 # CampbellViewer is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
 # the Free Software Foundation, either version 3 of the License, or
 # (at your option) any later version.
-#
+
 # CampbellViewer is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details.
-#
+
 # You should have received a copy of the GNU General Public License
-# along with CampbellViewer.  If not, see <http://www.gnu.org/licenses/>
-########################################################################################
-#
+# along with CampbellViewer. If not, see <http://www.gnu.org/licenses/>
+# #######################################################################################
+
 # --------------------------------------------------------------------------------------
 # Simple postprocessing GUI for wind turbine linearization results.
-#
-#
+
+
 # Purpose: Create Interactive Campbell-Plots, participation plots, mode visualizations, etc.
-#
+
 # author: J.Rieke - Nordex Energy GmbH
 #         H.Verdonck - DLR
 #         O.Hach - DLR
-#
+
 # --------------------------------------------------------------------------------------
 # There is NO warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 # --------------------------------------------------------------------------------------
+# """
 
-# Global libs
 import sys
 import numpy as np
 import copy
@@ -37,23 +38,22 @@ import copy
 from PyQt5 import QtCore
 from PyQt5.QtWidgets import QApplication, QMainWindow, QMenu, QVBoxLayout, QHBoxLayout, QMessageBox, QWidget, QDialog
 from PyQt5.QtWidgets import QLineEdit, QFileDialog, QPushButton, QLabel, QSpinBox, QCheckBox, QComboBox, QTreeView
-from PyQt5.QtGui  import QIcon, QDoubleValidator, QMouseEvent
+from PyQt5.QtGui  import QIcon, QDoubleValidator
 from PyQt5.QtCore import QFileInfo, Qt, QItemSelectionModel
 
 import matplotlib
-matplotlib.use("Qt5Agg")
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.backends.backend_qt5agg import NavigationToolbar2QT as NavigationToolbar
 from matplotlib.backend_bases import MouseButton
 from matplotlib.figure import Figure
 import mplcursors
 
-# Local libs
-from campbellviewer.model_lib import TreeModel
-from campbellviewer.globals import database, view_cfg
-from campbellviewer.utilities import assure_unique_name, MPLLinestyle
+from campbellviewer.datatree_model import TreeModel
+from campbellviewer.settings.globals import database, view_cfg
+from campbellviewer.settings.view import MPLLinestyle
+from campbellviewer.utilities import assure_unique_name
 
-
+matplotlib.use("Qt5Agg")
 matplotlib.rcParams['hatch.color']     = 'grey'
 matplotlib.rcParams['hatch.linewidth'] = 0.2
 
@@ -63,10 +63,41 @@ matplotlib.rcParams['hatch.linewidth'] = 0.2
 ####
 # Popup setting dialogs
 ####
-class SettingsPopupDataSelection(QDialog):
-    """ Class for popup-window to select data """
+class SettingsPopup(QDialog):
+    """ Base class for a QDialog popup window where the user can modify settings """
     def __init__(self):
         QDialog.__init__(self)
+
+    def update_settings(self):
+        """ Update the settings based on the input given by the user """
+        pass
+
+    def get_settings(self):
+        """ Get the settings inserted by the user in this popup """
+        pass
+
+    def ok_click(self):
+        """ User clicked ok button -> update settings -> close popup """
+        self.update_settings()
+        self.close_popup()
+
+    def close_popup(self):
+        """ Close popup """
+        self.close()
+
+class SettingsPopupDataSelection(SettingsPopup):
+    """
+    Class for popup-window to select data
+
+    Attributes:
+        selected_tool: A string indicating which tool the data will come from, HAWCStab2 or Bladed (lin.)
+        dataset_name: Name of the dataset
+        __ToolSelection: QCombobox to select tool
+        __DataSetName: QLineEdit to insert dataset name as string
+    """
+    def __init__(self):
+        """ Initializes data selection popup """
+        super(SettingsPopupDataSelection, self).__init__()
 
         # define initial tool and dataset
         self.selected_tool = 'HAWCStab2'
@@ -88,10 +119,10 @@ class SettingsPopupDataSelection(QDialog):
         popup_layoutName.addWidget(self.__DataSetName)
 
         button_OK = QPushButton('OK', self)
-        button_OK.clicked.connect(self.newDataSelected)
+        button_OK.clicked.connect(self.ok_click)
         popup_layoutBttn.addWidget(button_OK)
         button_Cancel = QPushButton('Cancel', self)
-        button_Cancel.clicked.connect(self.ClosePopup)
+        button_Cancel.clicked.connect(self.close_popup)
         popup_layoutBttn.addWidget(button_Cancel)
 
         popup_layoutV.addLayout(popup_layoutTool)
@@ -99,10 +130,18 @@ class SettingsPopupDataSelection(QDialog):
         popup_layoutV.addLayout(popup_layoutBttn)
         self.exec_()
 
-    def selectTool(self):
+    def get_settings(self):
+        """
+        Gives the current selected settings
+
+        Returns:
+          selected_tool: string indicating from which tool data will be selected
+          dataset_name: string with user specified name for the dataset
+        """
         return self.selected_tool, self.dataset_name
 
-    def newDataSelected(self):
+    def update_settings(self):
+        """ Updates the settings based on the current content of the popup """
         self.selected_tool = self.__ToolSelection.currentText()
         self.dataset_name = self.__DataSetName.text()
         self.close()
@@ -110,15 +149,30 @@ class SettingsPopupDataSelection(QDialog):
     def ClosePopup(self):
         self.close()
 
-
-class SettingsPopupHS2Headers(QDialog):
+class SettingsPopupHS2Headers(SettingsPopup):
     """
     Class for popup-window to modify the header lines in Campbell, Amplitude and operational data file which serve as
     input for HAWCStab2
+
+    Attributes:
+        settingsCMB: Number of header lines in the .cmb file
+        settingsAMP: Number of header lines in the .amp file
+        settingsOP: Number of header lines in the .opt file
+        __headerLinesCMBE: QSpinBox to select the number of header lines in .cmb file
+        __headerLinesAMPE: QSpinBox to select the number of header lines in .amp file
+        __headerLinesOPE: QSpinBox to select the number of header lines in .opt file
     """
     def __init__(self, settingsCMB, settingsAMP, settingsOP):
-        QDialog.__init__(self)
+        """
+        Initializes popup for HAWCStab2 input file header line definitions
 
+        Args:
+          settingsCMB: integer for initial definition of the number of header lines in the .cmb file
+          settingsAMP: integer for initial definition of the number of header lines in the .amp file
+          settingsOP: integer for initial definition of the number of header lines in the .opt file
+        """
+        super(SettingsPopupHS2Headers, self).__init__()
+        
         self.settingsCMB = settingsCMB
         self.settingsAMP = settingsAMP
         self.settingsOP = settingsOP
@@ -146,10 +200,10 @@ class SettingsPopupHS2Headers(QDialog):
         popup_layoutHOP.addWidget(self.__headerLinesOPE)
 
         button_OK = QPushButton('OK', self)
-        button_OK.clicked.connect(self.newSettings)
+        button_OK.clicked.connect(self.ok_click)
         popup_layoutBttn.addWidget(button_OK)
         button_Cancel = QPushButton('Cancel', self)
-        button_Cancel.clicked.connect(self.ClosePopup)
+        button_Cancel.clicked.connect(self.close_popup)
         popup_layoutBttn.addWidget(button_Cancel)
 
         popup_layoutV.addLayout(popup_layoutHCMB)
@@ -157,39 +211,41 @@ class SettingsPopupHS2Headers(QDialog):
         popup_layoutV.addLayout(popup_layoutHOP)
         popup_layoutV.addLayout(popup_layoutBttn)
         self.exec_()
-
-    def getNewSettings(self):
-        """Test
+        
+    def get_settings(self):
+        """
+        Gives the current selected settings
 
         Returns:
-            _type_: _description_
+          settingsCMB: user-defined number of header lines in the .cmb file
+          settingsAMP: user-defined number of header lines in the .amp file
+          settingsOP: user-defined number of header lines in the .opt file
         """
         return self.settingsCMB, self.settingsAMP, self.settingsOP
 
-    def newSettings(self):
-        """Test
-
-        Returns:
-            _type_: _description_
-        """
+    def update_settings(self):
+        """ Updates the settings based on the current content of the popup """
         self.settingsCMB = self.__headerLinesCMBE.value()
-        self.settingsAMP = self.__headerLinesAMPE.value()
+        self.settingsAMP = self.__headerLinesAMPE.value()  
         self.settingsOP = self.__headerLinesOPE.value()
-        self.close()
-
-    def ClosePopup(self):
-        """Test
-
-        Returns:
-            _type_: _description_
-        """
-        self.close()
 
 
-class SettingsPopupAMP(QDialog):
-    """ Class for popup-window to select for which mode the modal participations have to be shown """
+class SettingsPopupAMP(SettingsPopup):
+    """
+    Class for popup-window to select for which mode the modal participations have to be shown
+
+    Attributes:
+        success: Boolean indicating if user wants to continue -> if the user presses cancel -> success = false
+        settingsAMPmode: integer indicating which mode has to be used for the modal participation plot
+        selected_tool: string indicating from which tool the data has to be shown
+        selected_dataset: string indicating from which dataset the data has to be shown
+        __ToolSelection: QComboBox to select the tool for the modal participation plot
+        __DataSetSelection: QComboBox to select the dataset for the modal participation plot
+        __AMPmode: QComboBox to select the mode for the modal participation plot
+    """
     def __init__(self):
-        QDialog.__init__(self)
+        """ Initializes popup for mode selection for modal participation plot """
+        super(SettingsPopupAMP, self).__init__()
 
         self.success = False
         self.settingsAMPmode = None
@@ -220,12 +276,12 @@ class SettingsPopupAMP(QDialog):
              view_cfg.active_data[self.selected_tool][self.selected_dataset]])
         popup_layoutAMPmode.addWidget(QLabel('Amplitude mode to plot:'))
         popup_layoutAMPmode.addWidget(self.__AMPmode)
-
+        
         button_OK = QPushButton('OK', self)
-        button_OK.clicked.connect(self.newSettings)
+        button_OK.clicked.connect(self.ok_click)
         popup_layoutBttn.addWidget(button_OK)
         button_Cancel = QPushButton('Cancel', self)
-        button_Cancel.clicked.connect(self.ClosePopup)
+        button_Cancel.clicked.connect(self.cancel)
         popup_layoutBttn.addWidget(button_Cancel)
 
         popup_layoutV.addLayout(popup_layouttool)
@@ -235,35 +291,68 @@ class SettingsPopupAMP(QDialog):
         self.exec_()
 
     def update_dataset_choice(self):
+        """ Update the options for the dataset selection based on the currently selected tool """
         self.__DataSetSelection.clear()
         self.__DataSetSelection.addItems(view_cfg.active_data[self.__ToolSelection.currentText()].keys())
 
     def update_mode_choice(self):
+        """ Update the options for the mode selection based on the currently selected tool and dataset """
         self.__AMPmode.clear()
         if self.__DataSetSelection.currentText():
             self.__AMPmode.addItems(
                 [str(database[self.__ToolSelection.currentText()][self.__DataSetSelection.currentText()].ds.modes.values[mode_id].name)
                  for mode_id in view_cfg.active_data[self.__ToolSelection.currentText()][self.__DataSetSelection.currentText()]])
 
-    def getNewSettings(self):
+    def get_settings(self):
+        """
+        Gives the current selected settings
+
+        Returns:
+          success: boolean indicating if the user wants to continue with the selection
+          selected_tool: string indicating which tool will be used
+          selected_dataset: string indicating which dataset will be used
+          settings_AMPmode: string indicating which mode index will be used
+        """
         return self.success, self.selected_tool, self.selected_dataset, self.settingsAMPmode
 
-    def newSettings(self):
+    def update_settings(self):
+        """ Updates the settings based on the current content of the popup """
         self.success = True
         self.selected_tool = self.__ToolSelection.currentText()
         self.selected_dataset = self.__DataSetSelection.currentText()
         self.settingsAMPmode = view_cfg.active_data[self.selected_tool][self.selected_dataset][int(self.__AMPmode.currentIndex())]
-        self.close()
 
-    def ClosePopup(self):
+    def cancel(self):
+        """ Action if user presses cancel. Do not continue with the modal participation plotting. """
         self.success = False
         self.close()
 
 
-class SettingsPopupAEMode(QDialog):
-    """ Class for popup-window to modify the description of an aeroelastic mode """
+class SettingsPopupAEMode(SettingsPopup):
+    """
+    Class for popup-window to modify the description of an aeroelastic mode
+
+    Attributes:
+        name: string with full name of the aeroelastic mode
+        symmetry_type: string with indication of the symmetry type of the aeroelastic mode
+        whirl_type: string with indication of the whirling type of the aeroelastic mode
+        wt_component: string with indication of the main wind turbine component of the aeroelastic mode
+        __NameSelection: QLineEdit to insert the full name of the mode
+        __SymTypeSelection: QComboBox to select the symmetry type of the mode
+        __WhirlTypeSelection: QComboBox to select the whirling type of the mode
+        __WTCompSelection: QComboBox to select the main wind turbine component of the mode
+    """
     def __init__(self, name, symmetry_type, whirl_type, wt_component):
-        QDialog.__init__(self)
+        """
+        Initializes popup for modification of an aeroelastic mode description
+
+        Args:
+          name: full name of the aeroelastic mode
+          symmetry_type: symmetry type of the aeroelastic mode
+          whirl_type: whirl type of the aeroelastic mode
+          wt_component: wind turbine component of the aeroelastic mode
+        """
+        super(SettingsPopupAEMode, self).__init__()
 
         self.name = name
         self.symmetry_type = symmetry_type
@@ -304,10 +393,10 @@ class SettingsPopupAEMode(QDialog):
         popup_layoutWT.addWidget(self.__WTCompSelection)
 
         button_OK = QPushButton('OK', self)
-        button_OK.clicked.connect(self.newSettings)
+        button_OK.clicked.connect(self.ok_click)
         popup_layoutBttn.addWidget(button_OK)
         button_Cancel = QPushButton('Cancel', self)
-        button_Cancel.clicked.connect(self.ClosePopup)
+        button_Cancel.clicked.connect(self.close_popup)
         popup_layoutBttn.addWidget(button_Cancel)
 
         popup_layoutV.addLayout(popup_layoutNAME)
@@ -317,24 +406,41 @@ class SettingsPopupAEMode(QDialog):
         popup_layoutV.addLayout(popup_layoutBttn)
         self.exec_()
 
-    def getNewSettings(self):
+    def get_settings(self):
+        """
+        Gives the current selected settings
+
+        Returns:
+          name: user-defined full name of the aeroelastic mode
+          symmetry_type: user-defined symmetry type of the aeroelastic mode
+          whirl_type: user-defined whirl type of the aeroelastic mode
+          wt_component: user-defined wind turbine component of the aeroelastic mode
+        """
         return self.name, self.symmetry_type, self.whirl_type, self.wt_component
 
-    def newSettings(self):
+    def update_settings(self):
+        """ Updates the settings based on the current content of the popup """
         self.name = self.__NameSelection.text()
         self.symmetry_type = self.__SymTypeSelection.currentText()
         self.whirl_type = self.__WhirlTypeSelection.currentText()
         self.wt_component = self.__WTCompSelection.currentText()
-        self.close()
-
-    def ClosePopup(self):
-        self.close()
 
 
-class SettingsPopupModeFilter(QDialog):
-    """ Class for popup-window to filter aeroelastic modes """
+class SettingsPopupModeFilter(SettingsPopup):
+    """
+    Class for popup-window to filter aeroelastic modes
+
+    Attributes:
+        symmetry_type: string with indication of the symmetry type of the aeroelastic mode for the filter
+        whirl_type: string with indication of the whirling type of the aeroelastic mode for the filter
+        wt_component: string with indication of the main wind turbine component of the aeroelastic mode for the filter
+        __SymTypeSelection: QComboBox to select the symmetry type of the mode for the filter
+        __WhirlTypeSelection: QComboBox to select the whirling type of the mode for the filter
+        __WTCompSelection: QComboBox to select the main wind turbine component of the mode for the filter
+    """
     def __init__(self):
-        QDialog.__init__(self)
+        """ Initializes popup to select a filter for the aeroelastic modes """
+        super(SettingsPopupModeFilter, self).__init__()
 
         self.symmetry_type = 'all'
         self.whirl_type = 'all'
@@ -366,10 +472,10 @@ class SettingsPopupModeFilter(QDialog):
         popup_layoutWT.addWidget(self.__WTCompSelection)
 
         button_OK = QPushButton('OK', self)
-        button_OK.clicked.connect(self.newSettings)
+        button_OK.clicked.connect(self.ok_click)
         popup_layoutBttn.addWidget(button_OK)
         button_Cancel = QPushButton('Cancel', self)
-        button_Cancel.clicked.connect(self.ClosePopup)
+        button_Cancel.clicked.connect(self.close_popup)
         popup_layoutBttn.addWidget(button_Cancel)
 
         popup_layoutV.addLayout(popup_layoutSYM)
@@ -378,23 +484,49 @@ class SettingsPopupModeFilter(QDialog):
         popup_layoutV.addLayout(popup_layoutBttn)
         self.exec_()
 
-    def getNewSettings(self):
+    def get_settings(self):
+        """
+        Gives the current selected settings
+
+        Returns:
+          symmetry_type: user-defined symmetry type of the aeroelastic mode for filtering
+          whirl_type: user-defined whirl type of the aeroelastic mode for filtering
+          wt_component: user-defined wind turbine component of the aeroelastic mode for filtering
+        """
         return self.symmetry_type, self.whirl_type, self.wt_component
 
-    def newSettings(self):
+    def update_settings(self):
+        """ Updates the settings based on the current content of the popup """
         self.symmetry_type = self.__SymTypeSelection.currentText()
         self.whirl_type = self.__WhirlTypeSelection.currentText()
         self.wt_component = self.__WTCompSelection.currentText()
-        self.close()
-
-    def ClosePopup(self):
-        self.close()
 
 
-class SettingsPopupLinestyle(QDialog):
-    """ Class for popup-window to set linestyle behaviour of matplotlib plot """
+class SettingsPopupLinestyle(SettingsPopup):
+    """
+    Class for popup-window to set linestyle behaviour of matplotlib plot
+
+    Attributes:
+        main_window: QMainWindow which can be updated based on the user settings
+        __CMSelection: QComboBox to select the colormap for the matplotlib plot
+        __OverwriteSelection: QCheckBox to allow the user to overwrite the colormap with a user-defined list of colors
+        __OverwriteListSelection: QLineEdit where the user can define a list of colors to overwrite the standard colormap
+        __LSSelection: QLineEdit where the user can define a list of linestyles
+        __LWSelection: QLineEdit to set the default linewidth size
+        __MarkerSelection: QLineEdit where the user can define a list of marker types
+        __MarkerSizeSelection: QLineEdit to set the default marker size
+        __SDOSelection: QComboBox to define in which order the lines are diversified
+            e.g. [1. Color, 2. Marker, 3. Linestyle] will first make lines with different colors, until all colors are
+            used, then use new markers, until all markers are used, then use new linestyle
+    """
     def __init__(self, main_window):
-        QDialog.__init__(self)
+        """
+        Initializes popup to set the default linestyle selection behaviour
+
+        Args:
+             main_window: QMainWindow which will be updated based on the settings
+        """
+        super(SettingsPopupLinestyle, self).__init__()
 
         self.main_window = main_window
 
@@ -455,13 +587,13 @@ class SettingsPopupLinestyle(QDialog):
         popup_layoutSDO.addWidget(self.__SDOSelection, 1)
 
         button_apply = QPushButton('Apply', self)
-        button_apply.clicked.connect(self.newSettings)
+        button_apply.clicked.connect(self.update_settings)
         popup_layoutBttn.addWidget(button_apply)
         button_OK = QPushButton('OK', self)
-        button_OK.clicked.connect(self.ok)
+        button_OK.clicked.connect(self.ok_click)
         popup_layoutBttn.addWidget(button_OK)
         button_Cancel = QPushButton('Cancel', self)
-        button_Cancel.clicked.connect(self.ClosePopup)
+        button_Cancel.clicked.connect(self.close_popup)
         popup_layoutBttn.addWidget(button_Cancel)
 
         popup_layoutV.addLayout(popup_layoutCM)
@@ -475,6 +607,13 @@ class SettingsPopupLinestyle(QDialog):
         self.exec_()
 
     def override_colormap(self, state):
+        """
+        Based on the state of self.__OverwriteSelection, either overwrite the self.__CMSelection or not
+
+        Args:
+            state: Qt.Checked or Qt.Unchecked to indicate if colormap will be overwritten by user-specified colormap
+                list or not
+        """
         if state == Qt.Checked:
             self.__CMSelection.clear()
             self.__OverwriteListSelection.setStyleSheet("QLineEdit{background : white;}")
@@ -487,11 +626,8 @@ class SettingsPopupLinestyle(QDialog):
             self.__OverwriteListSelection.setStyleSheet("QLineEdit{background : grey;}")
             self.__OverwriteListSelection.setReadOnly(True)
 
-    def ok(self):
-        self.newSettings()
-        self.close()
-
-    def newSettings(self):
+    def update_settings(self):
+        """ Updates the settings based on the current content of the popup """
         view_cfg.ls.colormap = self.__CMSelection.currentText()
         if self.__OverwriteSelection.checkState() == Qt.Checked:
             view_cfg.ls.overwrite_cm_color_sequence = self.__OverwriteListSelection.text().split(',')
@@ -510,9 +646,6 @@ class SettingsPopupLinestyle(QDialog):
 
         view_cfg.lines = view_cfg.update_lines()
         self.main_window.UpdateMainPlot()
-
-    def ClosePopup(self):
-        self.close()
 
 
 class AmplitudeWindow(QMainWindow):
@@ -674,7 +807,7 @@ class DatasetTree(QTreeView):
                                                        idx.internalPointer().itemData.symmetry_type,
                                                        idx.internalPointer().itemData.whirl_type,
                                                        idx.internalPointer().itemData.wt_component)
-                self.tree_model.modify_mode_description(idx.internalPointer(), self.popupAEMode.getNewSettings())
+                self.tree_model.modify_mode_description(idx.internalPointer(), self.popupAEMode.get_settings())
                 del self.popupAEMode
             elif action == showAmplitudes:
                 modeID, dataset, tool = self.tree_model.get_branch_from_item(idx.internalPointer())
@@ -694,7 +827,7 @@ class DatasetTree(QTreeView):
             self.tree_model.set_checked(idx, Qt.Unchecked, only_selected=True, selection=self.selectedIndexes())
         elif action == filterModes:
             self.popupFilterModes = SettingsPopupModeFilter()
-            self.tree_model.filter_checked(idx.internalPointer(), self.popupFilterModes.getNewSettings())
+            self.tree_model.filter_checked(idx.internalPointer(), self.popupFilterModes.get_settings())
             del self.popupFilterModes
         elif action == deleteThisItem:
             self.tree_model.delete_data([idx])
@@ -1147,7 +1280,7 @@ class ApplicationWindow(QMainWindow):
     def dataSelection(self):
         """ Select to add HAWCStab2 or Bladed data """
         self.popup = SettingsPopupDataSelection()
-        tool, datasetname = self.popup.selectTool()
+        tool, datasetname = self.popup.get_settings()
 
         if '&' in datasetname:
             print('& is not allowed in the datasetname')
@@ -1292,7 +1425,7 @@ class ApplicationWindow(QMainWindow):
     def setHeaderLines(self):
         """ This routine overrides the default header line numbers for Campbell and Amplitude files """
         self.popup = SettingsPopupHS2Headers(self.skip_header_CMB, self.skip_header_AMP, self.skip_header_OP)
-        (self.skip_header_CMB, self.skip_header_AMP, self.skip_header_OP) = self.popup.getNewSettings()
+        (self.skip_header_CMB, self.skip_header_AMP, self.skip_header_OP) = self.popup.get_settings()
         del self.popup
 
     def setLinestyleDefaults(self):
@@ -1314,7 +1447,7 @@ class ApplicationWindow(QMainWindow):
         """
         if popup is True:
             self.popupAMP = SettingsPopupAMP()
-            success, self.settingsAMPtool, self.settingsAMPdataset, self.settingsAMPmode = self.popupAMP.getNewSettings()
+            success, self.settingsAMPtool, self.settingsAMPdataset, self.settingsAMPmode = self.popupAMP.get_settings()
             del self.popupAMP
             if success is False:
                 return
