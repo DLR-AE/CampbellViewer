@@ -172,7 +172,7 @@ class SettingsPopupHS2Headers(SettingsPopup):
           settingsOP: integer for initial definition of the number of header lines in the .opt file
         """
         super(SettingsPopupHS2Headers, self).__init__()
-        
+
         self.settingsCMB = settingsCMB
         self.settingsAMP = settingsAMP
         self.settingsOP = settingsOP
@@ -211,7 +211,7 @@ class SettingsPopupHS2Headers(SettingsPopup):
         popup_layoutV.addLayout(popup_layoutHOP)
         popup_layoutV.addLayout(popup_layoutBttn)
         self.exec_()
-        
+
     def get_settings(self):
         """
         Gives the current selected settings
@@ -226,7 +226,7 @@ class SettingsPopupHS2Headers(SettingsPopup):
     def update_settings(self):
         """ Updates the settings based on the current content of the popup """
         self.settingsCMB = self.__headerLinesCMBE.value()
-        self.settingsAMP = self.__headerLinesAMPE.value()  
+        self.settingsAMP = self.__headerLinesAMPE.value()
         self.settingsOP = self.__headerLinesOPE.value()
 
 
@@ -276,7 +276,7 @@ class SettingsPopupAMP(SettingsPopup):
              view_cfg.active_data[self.selected_tool][self.selected_dataset]])
         popup_layoutAMPmode.addWidget(QLabel('Amplitude mode to plot:'))
         popup_layoutAMPmode.addWidget(self.__AMPmode)
-        
+
         button_OK = QPushButton('OK', self)
         button_OK.clicked.connect(self.ok_click)
         popup_layoutBttn.addWidget(button_OK)
@@ -1113,8 +1113,18 @@ class ApplicationWindow(QMainWindow):
                                         c='grey', linestyle='--', linewidth=0.75, label=str(index)+'P')
 
         # create a figure legend on the right edge and shrink the axes box accordingly
-        self.legend = self.fig.legend(loc='center right')
-        bbox = self.legend.get_window_extent(self.fig.canvas.get_renderer()).transformed(self.fig.transFigure.inverted())
+        # legend font size is decreased to make it fit - or disabled
+        for fontsize in ['medium', 'small', 'x-small', 'xx-small', None]:
+            if fontsize is None:
+                bbox.x0 = 1
+                break
+            self.legend = self.fig.legend(loc='center right', fontsize=fontsize)
+            bbox = self.legend.get_window_extent(self.fig.canvas.get_renderer()).transformed(self.fig.transFigure.inverted())
+            if bbox.y1 < 1:
+                break
+            # print('  ', fontsize, ': bbox', bbox, 'too big, decreasing legend font size')
+            self.legend.remove()
+            self.legend = None
         self.fig.tight_layout(rect=(0, 0, bbox.x0, 1), h_pad=0.5, w_pad=0.5)
 
         xlim, ylim, y2lim = view_cfg.get_axes_limits(self.axes1.get_xlim(), self.axes1.get_ylim(), self.axes2.get_ylim())
