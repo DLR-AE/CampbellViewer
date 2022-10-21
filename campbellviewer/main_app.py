@@ -1067,7 +1067,8 @@ class ApplicationWindow(QMainWindow):
                                                          linestyle=ls['linestyle'],
                                                          marker=ls['marker'],
                                                          linewidth=view_cfg.ls.lw,
-                                                         label=ads + ': ' + database[atool][ads].ds.modes.values[mode_ID].name,
+                                                         # disabled to avoid double entries in legend
+                                                         # label=ads + ': ' + database[atool][ads].ds.modes.values[mode_ID].name,
                                                          markersize=view_cfg.ls.markersizedefault, picker=2)
                             view_cfg.lines[atool][ads][mode_ID] = [freq_line, damp_line]
                             if self.pick_markers is True:
@@ -1091,7 +1092,8 @@ class ApplicationWindow(QMainWindow):
                             damp_line = self.axes2.add_line(view_cfg.lines[atool][ads][mode_ID][1])
                             self.axes2.update_datalim(damp_line.get_xydata())
                             self.axes2.autoscale_view()
-                            damp_line.set_label(ads + ': ' + database[atool][ads].ds.modes.values[mode_ID].name)
+                            # disabled to avoid double entries in legend
+                            # damp_line.set_label(ads + ': ' + database[atool][ads].ds.modes.values[mode_ID].name)
                             if self.pick_markers is True:
                                 scat_collection_freq = self.axes1.add_collection(view_cfg.lines[atool][ads][mode_ID][2])
                                 scat_collection_damp = self.axes2.add_collection(view_cfg.lines[atool][ads][mode_ID][3])
@@ -1127,6 +1129,8 @@ class ApplicationWindow(QMainWindow):
             # print('  ', fontsize, ': bbox', bbox, 'too big, decreasing legend font size')
             self.legend.remove()
             self.legend = None
+        if self.legend is None:
+            print('Legend disabled (too big for canvas)')
         self.fig.tight_layout(rect=(0, 0, bbox.x0, 1), h_pad=0.5, w_pad=0.5)
 
         xlim, ylim, y2lim = view_cfg.get_axes_limits(self.axes1.get_xlim(), self.axes1.get_ylim(), self.axes2.get_ylim())
