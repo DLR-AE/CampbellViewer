@@ -3,7 +3,7 @@ This module contains data storing classes
 """
 # Global libs
 import xarray as xr
-import h5py
+from netCDF4 import Dataset
 import os
 import copy
 
@@ -118,8 +118,8 @@ class LinearizationDataWrapper(dict):
             fname (str, optional): file from which the database will be loaded
         """
         if os.path.exists(fname):
-            with h5py.File(fname, 'r') as f:
-                group_names = list(f.keys())
+            rootgrp = Dataset(fname, "r")
+            group_names = list(rootgrp.groups)
 
             loaded_data = dict()
             # full_datasetname = toolname + '&' + datasetname

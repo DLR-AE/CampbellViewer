@@ -32,8 +32,10 @@
 # """
 
 import sys
+import os
 import numpy as np
 import copy
+import argparse
 
 from PyQt5 import QtCore
 from PyQt5.QtWidgets import QApplication, QMainWindow, QMenu, QVBoxLayout, QHBoxLayout, QMessageBox, QWidget, QDialog
@@ -172,7 +174,7 @@ class SettingsPopupHS2Headers(SettingsPopup):
           settingsOP: integer for initial definition of the number of header lines in the .opt file
         """
         super(SettingsPopupHS2Headers, self).__init__()
-        
+
         self.settingsCMB = settingsCMB
         self.settingsAMP = settingsAMP
         self.settingsOP = settingsOP
@@ -211,7 +213,7 @@ class SettingsPopupHS2Headers(SettingsPopup):
         popup_layoutV.addLayout(popup_layoutHOP)
         popup_layoutV.addLayout(popup_layoutBttn)
         self.exec_()
-        
+
     def get_settings(self):
         """
         Gives the current selected settings
@@ -226,7 +228,7 @@ class SettingsPopupHS2Headers(SettingsPopup):
     def update_settings(self):
         """ Updates the settings based on the current content of the popup """
         self.settingsCMB = self.__headerLinesCMBE.value()
-        self.settingsAMP = self.__headerLinesAMPE.value()  
+        self.settingsAMP = self.__headerLinesAMPE.value()
         self.settingsOP = self.__headerLinesOPE.value()
 
 
@@ -276,7 +278,7 @@ class SettingsPopupAMP(SettingsPopup):
              view_cfg.active_data[self.selected_tool][self.selected_dataset]])
         popup_layoutAMPmode.addWidget(QLabel('Amplitude mode to plot:'))
         popup_layoutAMPmode.addWidget(self.__AMPmode)
-        
+
         button_OK = QPushButton('OK', self)
         button_OK.clicked.connect(self.ok_click)
         popup_layoutBttn.addWidget(button_OK)
@@ -668,8 +670,7 @@ class AmplitudeWindow(QMainWindow):
         self.xaxis_param = xaxis_param
 
         # Figure settings
-        self.AMPfig = Figure(figsize=(6, 6), dpi=100, tight_layout=True)
-        self.AMPfig.subplots_adjust(0.06, 0.06, 0.88, 0.97) # left,bottom,right,top
+        self.AMPfig = Figure(figsize=(6, 6), dpi=100)
         self.AMPcanvas = FigureCanvas(self.AMPfig)
         toolbar = NavigationToolbar(self.AMPcanvas, self)
 
@@ -687,7 +688,7 @@ class AmplitudeWindow(QMainWindow):
             uylim = [0, 1.1]
             uy2lim = [-180, 180]
 
-        self.main_plotAMP(title='Amplitude participations for tool {}, dataset {}, {}, visibility threshold = {}'.format(requested_toolname, requested_datasetname, self.AMPmode_name, self.AMPthreshold),
+        self.main_plotAMP(title='Amplitude participations for tool {}, \ndataset {}, {}, visibility threshold = {}'.format(requested_toolname, requested_datasetname, self.AMPmode_name, self.AMPthreshold),
                           xlabel=view_cfg.xparam2xlabel(self.xaxis_param), ylabel='normalized participation',
                           y2label='phase angle in degree', xlim=view_cfg.axes_limits[0], ylim=uylim, y2lim=uy2lim)
 
@@ -703,7 +704,7 @@ class AmplitudeWindow(QMainWindow):
         self.axes2.clear()
 
         # Set label, grid, etc...
-        self.axes1.set_title(title)
+        self.AMPfig.suptitle(title)
         self.axes1.set_xlabel(xlabel)
         self.axes1.set_ylabel(ylabel)
         self.axes1.set_xlim(xlim)
@@ -734,7 +735,11 @@ class AmplitudeWindow(QMainWindow):
                 ampl_lines.append(ampl_line)
                 phase_lines.append(phase_line)
 
-        self.axes2.legend(bbox_to_anchor=(1, 0), loc=3)
+        legend = self.AMPfig.legend(loc='center right')
+        bbox = legend.get_window_extent(self.AMPfig.canvas.get_renderer()).transformed(
+            self.AMPfig.transFigure.inverted())
+        # increasing the box by 20% since tight_layout is not effectively working
+        self.AMPfig.tight_layout(rect=(0, 0, bbox.x0*1.2, 1), h_pad=0.5, w_pad=0.5)
 
         cursor = mplcursors.cursor(ampl_lines + phase_lines, multiple=True, highlight=True)
         pairs = dict(zip(ampl_lines, phase_lines))
@@ -910,12 +915,12 @@ class ApplicationWindow(QMainWindow):
 
         ##############################################################
         # Figure settings
-        self.fig = Figure(figsize=(6, 6), dpi=100, tight_layout=True)
-        self.fig.subplots_adjust(0.06, 0.06, 0.88, 0.97)  # left,bottom,right,top
+        self.fig = Figure(figsize=(6, 6), dpi=100)
         self.canvas = FigureCanvas(self.fig)
         toolbar = NavigationToolbar(self.canvas, self)
         self.layout_mplib.addWidget(toolbar)
         self.layout_mplib.addWidget(self.canvas)
+        self.legend = None
 
         # create figure with two axis
         self.axes1      = self.fig.add_subplot(211)
@@ -1000,7 +1005,10 @@ class ApplicationWindow(QMainWindow):
 
     # Main plotting routine
     def main_plot(self, title='Campbell', xlabel='', ylabel='', y2label='', xscale='linear', yscale='linear'):
-        """Ultimately, this is a QWidget (as well as a FigureCanvasAgg, etc.)."""
+        """Ultimately, this is a QWidget (as well as a FigureCanvasAgg, etc.).
+
+        Plots the actual Campbell diagram (frequencies and damping).
+        """
 
         # get the possibly user-modified axes limits, it would be good to have a signal when the axes limits are changed
         view_cfg.axes_limits = (self.axes1.get_xlim(), self.axes1.get_ylim(), self.axes2.get_ylim())
@@ -1008,6 +1016,8 @@ class ApplicationWindow(QMainWindow):
         # We want the axes cleared every time plot() is called
         self.axes1.clear()
         self.axes2.clear()
+        if self.legend is not None:
+            self.legend.remove()
 
         # Set label, grid, etc...
         self.axes1.set_title(title)
@@ -1057,7 +1067,8 @@ class ApplicationWindow(QMainWindow):
                                                          linestyle=ls['linestyle'],
                                                          marker=ls['marker'],
                                                          linewidth=view_cfg.ls.lw,
-                                                         label=ads + ': ' + database[atool][ads].ds.modes.values[mode_ID].name,
+                                                         # disabled to avoid double entries in legend
+                                                         # label=ads + ': ' + database[atool][ads].ds.modes.values[mode_ID].name,
                                                          markersize=view_cfg.ls.markersizedefault, picker=2)
                             view_cfg.lines[atool][ads][mode_ID] = [freq_line, damp_line]
                             if self.pick_markers is True:
@@ -1081,7 +1092,8 @@ class ApplicationWindow(QMainWindow):
                             damp_line = self.axes2.add_line(view_cfg.lines[atool][ads][mode_ID][1])
                             self.axes2.update_datalim(damp_line.get_xydata())
                             self.axes2.autoscale_view()
-                            damp_line.set_label(ads + ': ' + database[atool][ads].ds.modes.values[mode_ID].name)
+                            # disabled to avoid double entries in legend
+                            # damp_line.set_label(ads + ': ' + database[atool][ads].ds.modes.values[mode_ID].name)
                             if self.pick_markers is True:
                                 scat_collection_freq = self.axes1.add_collection(view_cfg.lines[atool][ads][mode_ID][2])
                                 scat_collection_damp = self.axes2.add_collection(view_cfg.lines[atool][ads][mode_ID][3])
@@ -1104,8 +1116,22 @@ class ApplicationWindow(QMainWindow):
                         self.axes1.plot(xaxis_values, P_hamonics_data,
                                         c='grey', linestyle='--', linewidth=0.75, label=str(index)+'P')
 
-        self.axes2.legend(bbox_to_anchor=(1, 0), loc=3)
-        # self.axes2.legend(loc='upper center', bbox_to_anchor=(0.5, -0.05), ncol=5)
+        # create a figure legend on the right edge and shrink the axes box accordingly
+        # legend font size is decreased to make it fit - or disabled
+        for fontsize in ['medium', 'small', 'x-small', 'xx-small', None]:
+            if fontsize is None:
+                bbox.x0 = 1
+                break
+            self.legend = self.fig.legend(loc='center right', fontsize=fontsize)
+            bbox = self.legend.get_window_extent(self.fig.canvas.get_renderer()).transformed(self.fig.transFigure.inverted())
+            if bbox.y1 < 1:
+                break
+            # print('  ', fontsize, ': bbox', bbox, 'too big, decreasing legend font size')
+            self.legend.remove()
+            self.legend = None
+        if self.legend is None:
+            print('Legend disabled (too big for canvas)')
+        self.fig.tight_layout(rect=(0, 0, bbox.x0, 1), h_pad=0.5, w_pad=0.5)
 
         xlim, ylim, y2lim = view_cfg.get_axes_limits(self.axes1.get_xlim(), self.axes1.get_ylim(), self.axes2.get_ylim())
         self.axes1.set_xlim(xlim)
@@ -1240,17 +1266,42 @@ class ApplicationWindow(QMainWindow):
         self.main_plot(title='Campbell Diagram', xlabel=view_cfg.xparam2xlabel(self.xaxis_param),
                        ylabel='Frequency in Hz', y2label='Damping Ratio in %')
 
-    def load_database(self):
-        """ Load data from database (and use default view settings) """
+    def get_database_filename(self, mode):
+        """
+        Use a QFileDialog to get the filename where the database can be loaded or saved.
+
+        Args:
+            mode : 'load' or 'save' -> identifier if a database filename has to be found to load or save a database
+
+        Raises:
+            ValueError : if mode is not 'load' or 'save'
+
+        Returns:
+            db_filename : string with database filename
+        """
         options = QFileDialog.Options()
         options |= QFileDialog.DontUseNativeDialog
         filter = "CampbellViewer Database file (*.nc);;All Files (*)"
-        fileName, _ = QFileDialog.getOpenFileName(self, "Load CampbellViewer Database", "", filter, options=options)
+        if mode == 'load':
+            db_filename, _ = QFileDialog.getOpenFileName(self, "Load CampbellViewer Database", "", filter, options=options)
+        elif mode == 'save':
+            db_filename, _ = QFileDialog.getSaveFileName(self, "Save to CampbellViewer Database", "", filter, options=options)
+        else:
+            raise ValueError('mode to get a database filename can only be \'load\' or \'save\'')
 
+        return db_filename
+
+    def apply_database(self, db_filename):
+        """
+        Load the database from the db_filename and apply it in the CampbellViewer
+
+        Args:
+            db_filename : string with the path to the database file which has to be applied
+        """
         # save "old" database
         old_database = copy.deepcopy(database)
 
-        loaded_datasets = database.load(fname=fileName)
+        loaded_datasets = database.load(fname=db_filename)
         for toolname in loaded_datasets:
             for datasetname in loaded_datasets[toolname]:
                 self.init_active_data(toolname, datasetname)
@@ -1258,14 +1309,19 @@ class ApplicationWindow(QMainWindow):
         self.dataset_tree_model.addModelData(old_database=old_database)
         self.dataset_tree_model.layoutChanged.emit()
 
+    def load_database(self):
+        """ Load data from database (and use default view settings) """
+        db_filename = self.get_database_filename(mode='load')
+        self.apply_database(db_filename)
+
     def save_database(self):
         """ Save data to database """
-        options = QFileDialog.Options()
-        options |= QFileDialog.DontUseNativeDialog
-        filter = "CampbellViewer Database file (*.nc);;All Files (*)"
-        fileName, _ = QFileDialog.getSaveFileName(self, "Save to CampbellViewer Database", "", filter, options=options)
+        db_filename = self.get_database_filename(mode='save')
 
-        database.save(fname=fileName)
+        if db_filename[-3:] != ".nc":
+            db_filename = db_filename + ".nc"
+
+        database.save(fname=db_filename)
 
     def dataSelection(self):
         """ Select to add HAWCStab2 or Bladed data """
@@ -1521,6 +1577,30 @@ def my_excepthook(type, value, tback):
     sys.__excepthook__(type, value, tback)
 
 
+def process_cl_args():
+    """
+    Process the command line arguments
+
+    PyQT has default arguments, additional arguments for the CampbellViewer can be defined here
+
+    Returns:
+          cv_specific_args: argparse Namespace with CampbellViewer specific command line arguments
+          qt_default_args: optional list with the default pyqt command line arguments
+    """
+    parser = argparse.ArgumentParser()
+    parser.add_argument('-d', '--database', action='store')  # optional flag
+
+    cv_specific_args, qt_default_args = parser.parse_known_args()
+
+    # check that requested database exists
+    if cv_specific_args.database is not None:
+        if not os.path.exists(cv_specific_args.database):
+            print('Requested database in command line does not exist.')
+            cv_specific_args.database = None
+
+    return cv_specific_args, qt_default_args
+
+
 def main():
     """Main function to execute CampbellViewer.
 
@@ -1528,8 +1608,12 @@ def main():
 
     sys.excepthook = my_excepthook
 
+    # distinguish between CampbellViewer specific and PyQt command line arguments
+    cv_specific_args, qt_default_args = process_cl_args()
+    qt_args = sys.argv[:1] + qt_default_args
+
     # define main app
-    app = QApplication(sys.argv)
+    app = QApplication(qt_args)
     app.setStyle('Fusion')
 
     aw = ApplicationWindow()
@@ -1541,6 +1625,8 @@ def main():
     h = 1000
     aw.setMinimumSize(w, h)
     aw.show()
+    if cv_specific_args.database is not None:
+        aw.apply_database(cv_specific_args.database)
     sys.exit(app.exec_())
 
 
