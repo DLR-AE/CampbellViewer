@@ -1624,9 +1624,9 @@ def main():
     w = 1400
     h = 1000
     aw.setMinimumSize(w, h)
+    aw.show()
     if cv_specific_args.database is not None:
         aw.apply_database(cv_specific_args.database)
-    aw.show()
     sys.exit(app.exec_())
 
 
