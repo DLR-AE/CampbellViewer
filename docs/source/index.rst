@@ -23,7 +23,7 @@ Main building blocks
 
    readme
    users_guide
-   api_ref/index
+   api
 
 
 Indices and tables
