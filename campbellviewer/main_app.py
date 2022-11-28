@@ -661,12 +661,12 @@ class AmplitudeWindow(QMainWindow):
         self.setMinimumWidth(1024)
         self.setMinimumHeight(800)
 
-    def configure_plotAMP(self, requested_toolname, requested_datasetname, settingsAMPmode,
-                          dataset, AMPthreshold, xaxis_param):
-        self.settingsAMPmode = settingsAMPmode
-        self.AMPmode_name = database[requested_toolname][requested_datasetname].ds.modes.values[settingsAMPmode].name
+    def configure_plotAMP(self, requested_toolname, requested_datasetname, requested_mode_id,
+                          dataset, xaxis_param, threshold=0.05):
+        self.settingsAMPmode = requested_mode_id
+        self.AMPmode_name = database[requested_toolname][requested_datasetname].ds.modes.values[requested_mode_id].name
         self.dataset = dataset
-        self.AMPthreshold = AMPthreshold
+        self.AMPthreshold = threshold  # only modes with (threshold*100)% amplitude participation are shown in amplitude plot
         self.xaxis_param = xaxis_param
 
         # Figure settings
@@ -761,6 +761,7 @@ class DatasetTree(QTreeView):
     """ QTreeView of the dataset tree (described by the TreeModel in model_lib) """
     def __init__(self, tree_model, aw):
         super(DatasetTree, self).__init__()
+        self.aw = aw
         self.tree_model = tree_model
         self.setModel(tree_model)
         self.setSelectionMode(3)  # ExtendedSelection
@@ -813,10 +814,7 @@ class DatasetTree(QTreeView):
                 del self.popupAEMode
             elif action == showAmplitudes:
                 modeID, dataset, tool = self.tree_model.get_branch_from_item(idx.internalPointer())
-                aw.settingsAMPtool = tool
-                aw.settingsAMPdataset = dataset
-                aw.settingsAMPmode = modeID[0]
-                aw.initAmplitudes(popup=False)
+                self.aw.initAmplitudes(popup=False, chosen_mode=[tool, dataset, modeID[0]])
         elif idx.internalPointer().itemType == 'dataset' or idx.internalPointer().itemType == 'tool':
             if action == checkAll:
                 self.tree_model.set_checked(idx, Qt.Checked)
@@ -909,9 +907,6 @@ class ApplicationWindow(QMainWindow):
         self.skip_header_CMB  = 1              # number of header lines in Campbell file
         self.skip_header_AMP  = 5              # number of header lines in Amplitude file
         self.skip_header_OP   = 1              # number of header lines in operational data file
-        self.settingsAMPmode  = None           # default mode for which amplitude plot is made
-        self.settingsAMPdataset = None         # which dataset to use for amplitude plot
-        self.AMPthreshold     = 0.05           # only modes with 5% amplitude participation are shown in amplitude plot
 
         ##############################################################
         # Figure settings
@@ -1244,6 +1239,15 @@ class ApplicationWindow(QMainWindow):
             self.find_data_of_highlights()
 
     def find_data_of_highlights(self):
+        """
+        Gives a list with identification of all lines which are highlighted in the plot. Note that this is not
+        necessarily the same as the selected_data in the ViewSettings.
+
+        Returns:
+            selected_lines (list) : List of lists with name of the tool, name of the dataset and mode ID for each
+                highlighted line
+        """
+        selected_lines = []
         for atool in view_cfg.lines:
             for ads in view_cfg.lines[atool]:
                 for mode_ID, mode_lines in enumerate(view_cfg.lines[atool][ads]):
@@ -1252,9 +1256,9 @@ class ApplicationWindow(QMainWindow):
                         for sel in self.cursor.selections:
                             if sel.artist in mode_lines:
                                 print('Selections are:', atool, ads, mode_ID)
-                                self.settingsAMPtool = atool
-                                self.settingsAMPdataset = ads
-                                self.settingsAMPmode = mode_ID
+                                selected_lines.append([atool, ads, mode_ID])
+
+        return selected_lines
 
     def on_release(self, event):
         """ Callback function for mouse release events. This does not necessarily have to be a matplotlib callback. """
@@ -1483,48 +1487,73 @@ class ApplicationWindow(QMainWindow):
     # Tools
     ##########
     def amplitudes_of_highlights(self):
-        self.find_data_of_highlights()
-        self.initAmplitudes(popup=False)
+        """ Create a window for the participation factors of the highlighted mode in the diagram """
+        selected_lines = self.find_data_of_highlights()
+        if selected_lines == []:
+            print('WARNING: There are no lines selected in the diagram, so no amplitude plot will be made')
+        else:
+            if len(selected_lines) > 1:
+                print('WARNING: Multiple lines are selected in the diagram, but only one amplitude plot will be made')
+            self.initAmplitudes(popup=False, chosen_mode=selected_lines[0])
 
-    def initAmplitudes(self, popup=True):
+    def initAmplitudes(self, popup=True, chosen_mode=None):
         """
         This routine initializes the window/plot of the participation factors on the amplitudes for a
-        certain mode/dataset
+        certain mode/dataset. Either a popup is used to select the mode which will be analyzed or the chosen_mode
+        argument is used (which can be the result of amplitudes_of_highlights or the result when using the context menu
+        for a mode in the tree view)
+
+        Args:
+            popup (bool): Flag to indicate if a popup is used to select the mode which will be analyzed
+            chosen_mode (list): List with toolname, dataset name and mode ID which will be analyzed (if popup = False)
         """
         if popup is True:
             self.popupAMP = SettingsPopupAMP()
-            success, self.settingsAMPtool, self.settingsAMPdataset, self.settingsAMPmode = self.popupAMP.get_settings()
+            success, amp_tool, amp_dataset, amp_modeid = self.popupAMP.get_settings()
             del self.popupAMP
             if success is False:
                 return
+        else:
+            if chosen_mode is None:
+                return
+            else:
+                amp_tool = chosen_mode[0]
+                amp_dataset = chosen_mode[1]
+                amp_modeid = chosen_mode[2]
 
-        if (database[self.settingsAMPtool][self.settingsAMPdataset].ds.frequency.values.ndim != 0 and
-            database[self.settingsAMPtool][self.settingsAMPdataset].ds.participation_factors_amp.values.ndim != 0):
+        if (database[amp_tool][amp_dataset].ds.frequency.values.ndim != 0 and
+            database[amp_tool][amp_dataset].ds.participation_factors_amp.values.ndim != 0):
             self.AmplitudeWindow = AmplitudeWindow()
             self.AmplitudeWindow.sigClosed.connect(self.deleteAmplitudes)
         else:
             QMessageBox.about(self, "WARNING", "Campbell and Amplitude files have to be loaded first!")
             return
 
-        self.updateAmplitudes()
+        self.updateAmplitudes(amp_tool, amp_dataset, amp_modeid)
 
     def deleteAmplitudes(self):
         """ Deletes AmplitudeWindow attribute if Amplitude Window is closed """
         del self.AmplitudeWindow
 
-    def updateAmplitudes(self):
-        """ Update Amplitude plot according to settingsAMPdataset and settingsAMPmode """
-        if (database[self.settingsAMPtool][self.settingsAMPdataset].ds.frequency.values.ndim != 0 and
-            database[self.settingsAMPtool][self.settingsAMPdataset].ds.participation_factors_amp.values.ndim != 0):
+    def updateAmplitudes(self, amp_tool, amp_dataset, amp_modeid):
+        """
+        Update Amplitude plot for the chosen tool, dataset, mode_ID combination
+
+        Args:
+            amp_tool (string): Name of the tool
+            amp_dataset (string): Name of the dataset
+            amp_modeid (int): ID of the mode
+        """
+        if (database[amp_tool][amp_dataset].ds.frequency.values.ndim != 0 and
+            database[amp_tool][amp_dataset].ds.participation_factors_amp.values.ndim != 0):
 
             # get the possibly user-modified axes limits, it would be good to have a signal when the axes limits are changed
             view_cfg.axes_limits = (self.axes1.get_xlim(), self.axes1.get_ylim(), self.axes2.get_ylim())
 
-            self.AmplitudeWindow.configure_plotAMP(self.settingsAMPtool,
-                                                   self.settingsAMPdataset,
-                                                   self.settingsAMPmode,
-                                                   database[self.settingsAMPtool][self.settingsAMPdataset].ds,
-                                                   self.AMPthreshold,
+            self.AmplitudeWindow.configure_plotAMP(amp_tool,
+                                                   amp_dataset,
+                                                   amp_modeid,
+                                                   database[amp_tool][amp_dataset].ds,
                                                    self.xaxis_param)
             self.AmplitudeWindow.show()
         else:
