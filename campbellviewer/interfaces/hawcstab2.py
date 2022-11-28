@@ -155,7 +155,6 @@ class HAWCStab2Data(AbstractLinearizationData):
         i_start = 1
         i_end = 2*num_sensors+2
         for i_mode in range(0, num_modes-1):
-            print(i_mode)
             amp_data[:, :, i_mode] = hs2part[:,i_start:i_end][:,1::2]
             phase_data[:,:, i_mode] = hs2part[:,i_start:i_end][:,2::2]
             i_start = i_end-1
