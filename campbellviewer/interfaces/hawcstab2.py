@@ -76,15 +76,16 @@ class HAWCStab2Data(AbstractLinearizationData):
             frequency  = hs2cmd[:,1:num_modes+1]
             damping    = hs2cmd[:,num_modes+1:2*num_modes+1]
             realpart   = hs2cmd[:,2*num_modes+1::]
+            self.ds['frequency'] = (['operating_point_ID', 'mode_ID'], frequency)
+            self.ds['damping'] = (['operating_point_ID', 'mode_ID'], damping)
+            self.ds['realpart'] = (['operating_point_ID', 'mode_ID'], realpart)
         else:
             # Structural analysis
             num_modes = int((myshape[1]-1)/2)
             frequency  = hs2cmd[:,1:num_modes+1]
             damping    = hs2cmd[:,num_modes+1:2*num_modes+1]
-
-        self.ds['frequency'] = (['operating_point_ID', 'mode_ID'], frequency)
-        self.ds['damping'] = (['operating_point_ID', 'mode_ID'], damping)
-        self.ds['realpart'] = (['operating_point_ID', 'mode_ID'], realpart)
+            self.ds['frequency'] = (['operating_point_ID', 'mode_ID'], frequency)
+            self.ds['damping'] = (['operating_point_ID', 'mode_ID'], damping)
 
         print(
             f'INFO: HS2 campbell data loaded successfully: \n'
