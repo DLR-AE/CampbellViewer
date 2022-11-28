@@ -152,13 +152,27 @@ class HAWCStab2Data(AbstractLinearizationData):
         amp_data = np.zeros([num_windspeeds, num_sensors, num_modes])
         phase_data = np.zeros([num_windspeeds, num_sensors, num_modes])
 
-        i_start = 1
-        i_end = 2*num_sensors+2
-        for i_mode in range(0, num_modes-1):
+        i_start = 0
+        i_end = 2*num_sensors+1
+        for i_mode in range(0, num_modes):
             amp_data[:, :, i_mode] = hs2part[:,i_start:i_end][:,1::2]
             phase_data[:,:, i_mode] = hs2part[:,i_start:i_end][:,2::2]
             i_start = i_end-1
             i_end = i_end + 2*num_sensors
+
+        # reorder data
+        myshape_1 = np.shape(hs2part)
+        num_windspeeds_1 = int(myshape_1[0])
+        num_modes_1 = int((myshape_1[1]-1)/num_sensors/2)
+        amp_data_1 = np.zeros([num_windspeeds_1, num_sensors, num_modes_1])
+        phase_data_1 = np.zeros([num_windspeeds_1, num_sensors, num_modes_1])
+
+        for i in range(0, num_modes_1):
+            for j in range(0, num_sensors):
+                amp_index   = i * num_sensors * 2 + 1 + 2 * j
+                phase_index = i * num_sensors * 2 + 2 + 2 * j
+                amp_data_1[:, j, i] = hs2part[:, amp_index]
+                phase_data_1[:, j, i] = hs2part[:, phase_index]
 
         self.ds['participation_factors_amp'] = (
             ['operating_point_ID', 'participation_mode_ID', 'mode_ID'], amp_data
