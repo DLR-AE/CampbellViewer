@@ -554,8 +554,8 @@ class SettingsPopupLinestyle(SettingsPopup):
         self.__OverwriteListSelection = QLineEdit('r, g, b, y, c, m, k')
         self.override_colormap(Qt.Unchecked)
         popup_layoutCM2.addWidget(QLabel('Overwrite the standard colormap:'), 1)
-        popup_layoutCM2.addWidget(self.__OverwriteSelection, 0.1)
-        popup_layoutCM2.addWidget(self.__OverwriteListSelection, 0.9)
+        popup_layoutCM2.addWidget(self.__OverwriteSelection, 0)
+        popup_layoutCM2.addWidget(self.__OverwriteListSelection, 0)
 
         # It would be better to have an editable QListWidget, but that would generate more code, so just a line edit for now
         # this line edit is very likely to give wrong input, this should be validated somewhere...
@@ -579,12 +579,12 @@ class SettingsPopupLinestyle(SettingsPopup):
         popup_layoutMARKERSIZE.addWidget(self.__MarkerSizeSelection, 1)
 
         self.__SDOSelection = QComboBox()
-        self.__SDOSelection.addItems(['1. Color, 2. Marker, 3. Linestyle',
-                                      '1. Color, 2. Linestyle, 3. Marker',
-                                      '1. Marker, 2. Color, 3. Linestyle',
-                                      '1. Marker, 2. Linestyle, 3. Color',
-                                      '1. Linestyle, 2. Color, 3. Marker',
-                                      '1. Linestyle, 2. Marker, 3. Color'])
+        self.__SDOSelection.addItems(['Marker: 1. Color, 2. Linestyle',
+                                      'Marker: 1. Linestyle, 2. Color',
+                                      'Linestyle: 1. Color, 2. Marker',
+                                      'Linestyle: 1. Marker, 2. Color',
+                                      'Color: 1. Marker, 2. Linestyle',
+                                      'Color: 1. Linestyle, 2. Marker'])
         popup_layoutSDO.addWidget(QLabel('Order in which linestyles are determined:'), 1)
         popup_layoutSDO.addWidget(self.__SDOSelection, 1)
 
@@ -640,11 +640,11 @@ class SettingsPopupLinestyle(SettingsPopup):
         view_cfg.ls.style_sequences['marker'] = self.__MarkerSelection.text().split(',')
         view_cfg.ls.markersizedefault = float(self.__MarkerSizeSelection.text())
         view_cfg.ls.style_determination_order = [['color', 'marker', 'linestyle'],
+                                                 ['linestyle', 'marker', 'color'],
                                                  ['color', 'linestyle', 'marker'],
-                                                 ['marker', 'color', 'linestyle'],
                                                  ['marker', 'linestyle', 'color'],
-                                                 ['linestyle', 'color', 'marker'],
-                                                 ['linestyle', 'marker', 'color']][self.__SDOSelection.currentIndex()]
+                                                 ['marker', 'color', 'linestyle'],
+                                                 ['linestyle', 'color', 'marker']][self.__SDOSelection.currentIndex()]
 
         view_cfg.lines = view_cfg.update_lines()
         self.main_window.UpdateMainPlot()
@@ -1047,7 +1047,7 @@ class ApplicationWindow(QMainWindow):
                     # this can probably also be done without a loop and just with the indices
                     for mode_ID in view_cfg.active_data[atool][ads]:
                         if view_cfg.lines[atool][ads][mode_ID] is None:
-                            ls = view_cfg.ls.new_ls()
+                            ls = view_cfg.ls.new_ls(atool)
                             freq_line, = self.axes1.plot(xaxis_values,
                                                          database[atool][ads].ds.frequency.loc[:, mode_ID],
                                                          color=ls['color'],
