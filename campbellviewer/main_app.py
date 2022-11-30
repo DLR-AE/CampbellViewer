@@ -36,6 +36,7 @@ import os
 import numpy as np
 import copy
 import argparse
+from typing import Type
 
 from PyQt5 import QtCore
 from PyQt5.QtWidgets import QApplication, QMainWindow, QMenu, QVBoxLayout, QHBoxLayout, QMessageBox, QWidget, QDialog
@@ -87,15 +88,16 @@ class SettingsPopup(QDialog):
         """ Close popup """
         self.close()
 
+
 class SettingsPopupDataSelection(SettingsPopup):
     """
     Class for popup-window to select data
 
     Attributes:
-        selected_tool: A string indicating which tool the data will come from, HAWCStab2 or Bladed (lin.)
-        dataset_name: Name of the dataset
-        __ToolSelection: QCombobox to select tool
-        __DataSetName: QLineEdit to insert dataset name as string
+        selected_tool (str): A string indicating which tool the data will come from, HAWCStab2 or Bladed (lin.)
+        dataset_name (str): Name of the dataset
+        __ToolSelection (QComboBox): QCombobox to select tool
+        __DataSetName (QLineEdit): QLineEdit to insert dataset name as string
     """
     def __init__(self):
         """ Initializes data selection popup """
@@ -132,7 +134,7 @@ class SettingsPopupDataSelection(SettingsPopup):
         popup_layoutV.addLayout(popup_layoutBttn)
         self.exec_()
 
-    def get_settings(self):
+    def get_settings(self) -> tuple[str, str]:
         """
         Gives the current selected settings
 
@@ -148,8 +150,6 @@ class SettingsPopupDataSelection(SettingsPopup):
         self.dataset_name = self.__DataSetName.text()
         self.close()
 
-    def ClosePopup(self):
-        self.close()
 
 class SettingsPopupHS2Headers(SettingsPopup):
     """
@@ -157,21 +157,21 @@ class SettingsPopupHS2Headers(SettingsPopup):
     input for HAWCStab2
 
     Attributes:
-        settingsCMB: Number of header lines in the .cmb file
-        settingsAMP: Number of header lines in the .amp file
-        settingsOP: Number of header lines in the .opt file
-        __headerLinesCMBE: QSpinBox to select the number of header lines in .cmb file
-        __headerLinesAMPE: QSpinBox to select the number of header lines in .amp file
-        __headerLinesOPE: QSpinBox to select the number of header lines in .opt file
+        settingsCMB (int): Number of header lines in the .cmb file
+        settingsAMP (int): Number of header lines in the .amp file
+        settingsOP (int): Number of header lines in the .opt file
+        __headerLinesCMBE (QSpinBox): QSpinBox to select the number of header lines in .cmb file
+        __headerLinesAMPE (QSpinBox): QSpinBox to select the number of header lines in .amp file
+        __headerLinesOPE (QSpinBox): QSpinBox to select the number of header lines in .opt file
     """
-    def __init__(self, settingsCMB, settingsAMP, settingsOP):
+    def __init__(self, settingsCMB: int, settingsAMP: int, settingsOP: int):
         """
         Initializes popup for HAWCStab2 input file header line definitions
 
         Args:
-          settingsCMB: integer for initial definition of the number of header lines in the .cmb file
-          settingsAMP: integer for initial definition of the number of header lines in the .amp file
-          settingsOP: integer for initial definition of the number of header lines in the .opt file
+            settingsCMB: integer for initial definition of the number of header lines in the .cmb file
+            settingsAMP: integer for initial definition of the number of header lines in the .amp file
+            settingsOP: integer for initial definition of the number of header lines in the .opt file
         """
         super(SettingsPopupHS2Headers, self).__init__()
 
@@ -214,14 +214,14 @@ class SettingsPopupHS2Headers(SettingsPopup):
         popup_layoutV.addLayout(popup_layoutBttn)
         self.exec_()
 
-    def get_settings(self):
+    def get_settings(self) -> tuple[int, int, int]:
         """
         Gives the current selected settings
 
         Returns:
-          settingsCMB: user-defined number of header lines in the .cmb file
-          settingsAMP: user-defined number of header lines in the .amp file
-          settingsOP: user-defined number of header lines in the .opt file
+            settingsCMB: user-defined number of header lines in the .cmb file
+            settingsAMP: user-defined number of header lines in the .amp file
+            settingsOP: user-defined number of header lines in the .opt file
         """
         return self.settingsCMB, self.settingsAMP, self.settingsOP
 
@@ -237,13 +237,13 @@ class SettingsPopupAMP(SettingsPopup):
     Class for popup-window to select for which mode the modal participations have to be shown
 
     Attributes:
-        success: Boolean indicating if user wants to continue -> if the user presses cancel -> success = false
-        settingsAMPmode: integer indicating which mode has to be used for the modal participation plot
-        selected_tool: string indicating from which tool the data has to be shown
-        selected_dataset: string indicating from which dataset the data has to be shown
-        __ToolSelection: QComboBox to select the tool for the modal participation plot
-        __DataSetSelection: QComboBox to select the dataset for the modal participation plot
-        __AMPmode: QComboBox to select the mode for the modal participation plot
+        success (bool): Boolean indicating if user wants to continue -> if the user presses cancel -> success = false
+        settingsAMPmode (int): integer indicating which mode has to be used for the modal participation plot
+        selected_tool (str): string indicating from which tool the data has to be shown
+        selected_dataset (str): string indicating from which dataset the data has to be shown
+        __ToolSelection (QComboBox): QComboBox to select the tool for the modal participation plot
+        __DataSetSelection (QComboBox): QComboBox to select the dataset for the modal participation plot
+        __AMPmode (QComboBox): QComboBox to select the mode for the modal participation plot
     """
     def __init__(self):
         """ Initializes popup for mode selection for modal participation plot """
@@ -305,15 +305,15 @@ class SettingsPopupAMP(SettingsPopup):
                 [str(database[self.__ToolSelection.currentText()][self.__DataSetSelection.currentText()].ds.modes.values[mode_id].name)
                  for mode_id in view_cfg.active_data[self.__ToolSelection.currentText()][self.__DataSetSelection.currentText()]])
 
-    def get_settings(self):
+    def get_settings(self) -> tuple[bool, str, str, str]:
         """
         Gives the current selected settings
 
         Returns:
-          success: boolean indicating if the user wants to continue with the selection
-          selected_tool: string indicating which tool will be used
-          selected_dataset: string indicating which dataset will be used
-          settings_AMPmode: string indicating which mode index will be used
+            success: boolean indicating if the user wants to continue with the selection
+            selected_tool: string indicating which tool will be used
+            selected_dataset: string indicating which dataset will be used
+            settings_AMPmode: string indicating which mode index will be used
         """
         return self.success, self.selected_tool, self.selected_dataset, self.settingsAMPmode
 
@@ -335,16 +335,16 @@ class SettingsPopupAEMode(SettingsPopup):
     Class for popup-window to modify the description of an aeroelastic mode
 
     Attributes:
-        name: string with full name of the aeroelastic mode
-        symmetry_type: string with indication of the symmetry type of the aeroelastic mode
-        whirl_type: string with indication of the whirling type of the aeroelastic mode
-        wt_component: string with indication of the main wind turbine component of the aeroelastic mode
-        __NameSelection: QLineEdit to insert the full name of the mode
-        __SymTypeSelection: QComboBox to select the symmetry type of the mode
-        __WhirlTypeSelection: QComboBox to select the whirling type of the mode
-        __WTCompSelection: QComboBox to select the main wind turbine component of the mode
+        name (str): string with full name of the aeroelastic mode
+        symmetry_type (str): string with indication of the symmetry type of the aeroelastic mode
+        whirl_type (str): string with indication of the whirling type of the aeroelastic mode
+        wt_component (str): string with indication of the main wind turbine component of the aeroelastic mode
+        __NameSelection (QLineEdit): QLineEdit to insert the full name of the mode
+        __SymTypeSelection (QComboBox): QComboBox to select the symmetry type of the mode
+        __WhirlTypeSelection (QComboBox): QComboBox to select the whirling type of the mode
+        __WTCompSelection (QComboBox): QComboBox to select the main wind turbine component of the mode
     """
-    def __init__(self, name, symmetry_type, whirl_type, wt_component):
+    def __init__(self, name: str, symmetry_type: str, whirl_type: str, wt_component: str):
         """
         Initializes popup for modification of an aeroelastic mode description
 
@@ -408,7 +408,7 @@ class SettingsPopupAEMode(SettingsPopup):
         popup_layoutV.addLayout(popup_layoutBttn)
         self.exec_()
 
-    def get_settings(self):
+    def get_settings(self) -> tuple[str, str, str, str]:
         """
         Gives the current selected settings
 
@@ -433,12 +433,12 @@ class SettingsPopupModeFilter(SettingsPopup):
     Class for popup-window to filter aeroelastic modes
 
     Attributes:
-        symmetry_type: string with indication of the symmetry type of the aeroelastic mode for the filter
-        whirl_type: string with indication of the whirling type of the aeroelastic mode for the filter
-        wt_component: string with indication of the main wind turbine component of the aeroelastic mode for the filter
-        __SymTypeSelection: QComboBox to select the symmetry type of the mode for the filter
-        __WhirlTypeSelection: QComboBox to select the whirling type of the mode for the filter
-        __WTCompSelection: QComboBox to select the main wind turbine component of the mode for the filter
+        symmetry_type (str): string with indication of the symmetry type of the aeroelastic mode for the filter
+        whirl_type (str): string with indication of the whirling type of the aeroelastic mode for the filter
+        wt_component (str): string with indication of the main wind turbine component of the aeroelastic mode for the filter
+        __SymTypeSelection (QComboBox): QComboBox to select the symmetry type of the mode for the filter
+        __WhirlTypeSelection (QComboBox): QComboBox to select the whirling type of the mode for the filter
+        __WTCompSelection (QComboBox): QComboBox to select the main wind turbine component of the mode for the filter
     """
     def __init__(self):
         """ Initializes popup to select a filter for the aeroelastic modes """
@@ -486,14 +486,14 @@ class SettingsPopupModeFilter(SettingsPopup):
         popup_layoutV.addLayout(popup_layoutBttn)
         self.exec_()
 
-    def get_settings(self):
+    def get_settings(self) -> tuple[str, str, str]:
         """
         Gives the current selected settings
 
         Returns:
-          symmetry_type: user-defined symmetry type of the aeroelastic mode for filtering
-          whirl_type: user-defined whirl type of the aeroelastic mode for filtering
-          wt_component: user-defined wind turbine component of the aeroelastic mode for filtering
+            symmetry_type: user-defined symmetry type of the aeroelastic mode for filtering
+            whirl_type: user-defined whirl type of the aeroelastic mode for filtering
+            wt_component: user-defined wind turbine component of the aeroelastic mode for filtering
         """
         return self.symmetry_type, self.whirl_type, self.wt_component
 
@@ -509,15 +509,17 @@ class SettingsPopupLinestyle(SettingsPopup):
     Class for popup-window to set linestyle behaviour of matplotlib plot
 
     Attributes:
-        main_window: QMainWindow which can be updated based on the user settings
-        __CMSelection: QComboBox to select the colormap for the matplotlib plot
-        __OverwriteSelection: QCheckBox to allow the user to overwrite the colormap with a user-defined list of colors
-        __OverwriteListSelection: QLineEdit where the user can define a list of colors to overwrite the standard colormap
-        __LSSelection: QLineEdit where the user can define a list of linestyles
-        __LWSelection: QLineEdit to set the default linewidth size
-        __MarkerSelection: QLineEdit where the user can define a list of marker types
-        __MarkerSizeSelection: QLineEdit to set the default marker size
-        __SDOSelection: QComboBox to define in which order the lines are diversified
+        main_window (QMainWindow): QMainWindow which can be updated based on the user settings
+        __CMSelection (QComboBox): QComboBox to select the colormap for the matplotlib plot
+        __OverwriteSelection (QCheckBox):
+            QCheckBox to allow the user to overwrite the colormap with a user-defined list of colors
+        __OverwriteListSelection (QLineEdit):
+            QLineEdit where the user can define a list of colors to overwrite the standard colormap
+        __LSSelection (QLineEdit): QLineEdit where the user can define a list of linestyles
+        __LWSelection (QLineEdit): QLineEdit to set the default linewidth size
+        __MarkerSelection (QLineEdit): QLineEdit where the user can define a list of marker types
+        __MarkerSizeSelection (QLineEdit): QLineEdit to set the default marker size
+        __SDOSelection (QComboBox): QComboBox to define in which order the lines are diversified
             e.g. [1. Color, 2. Marker, 3. Linestyle] will first make lines with different colors, until all colors are
             used, then use new markers, until all markers are used, then use new linestyle
     """
@@ -651,18 +653,48 @@ class SettingsPopupLinestyle(SettingsPopup):
 
 
 class AmplitudeWindow(QMainWindow):
-    """ Separate window for participation factor plot """
+    """
+    Separate window for participation factor plot
+
+    Attributes:
+        settingsAMPmode (int): ID of the mode which is analysed
+        AMPmode_name (str): Name of the mode which is analysed
+        dataset (AbstractLinearizationData): Dataset to be analysed
+        AMPthreshold (float): Threshold determining which participation modes are visualized, i.e. only modes with
+            a significant participation are shown.
+            e.g. threshold = 0.05 = only modes with more than 5% amplitude participation are shown in amplitude plot
+        xaxis_param (str): string defining which operating parameter is on the x axis
+        AMPfig: Matplotlib figure
+        AMPcanvas: Matplotlib figure canvas
+        main_widget (QWidget): Main widget
+        layout_mplib (QVBoxLayout): Layout for the participation diagram widget
+        axes1: matplotlib axes for the magnitude of the participation modes
+        axes2: matplotlib axes for the phase of the participation modes
+    """
     sigClosed = QtCore.pyqtSignal()
 
     def __init__(self):
+        """ Initializes QMainWindow for the participation plots"""
         super(AmplitudeWindow, self).__init__()
         self.setAttribute(QtCore.Qt.WA_DeleteOnClose)
         self.setWindowTitle("Amplitude Plot window")
         self.setMinimumWidth(1024)
         self.setMinimumHeight(800)
 
-    def configure_plotAMP(self, requested_toolname, requested_datasetname, requested_mode_id,
-                          dataset, xaxis_param, threshold=0.05):
+    def configure_plotAMP(self, requested_toolname: str, requested_datasetname: str, requested_mode_id: int,
+                          dataset, xaxis_param: str, threshold: float=0.05):
+        """
+        Configures matplotlib figure for participation plot
+
+        Args:
+            requested_toolname: name of the tool which will be analysed
+            requested_datasetname: name of the dataset which will be analysed
+            requested_mode_id: index of the mode which will be analysed
+            dataset: AbstractLinearizationData dataset to be analysed
+            xaxis_param: string defining which operating parameter is on the x axis
+            threshold: Threshold determining which participation modes are visualized, i.e. only modes with
+                a significant participation are shown.
+        """
         self.settingsAMPmode = requested_mode_id
         self.AMPmode_name = database[requested_toolname][requested_datasetname].ds.modes.values[requested_mode_id].name
         self.dataset = dataset
@@ -692,8 +724,20 @@ class AmplitudeWindow(QMainWindow):
                           xlabel=view_cfg.xparam2xlabel(self.xaxis_param), ylabel='normalized participation',
                           y2label='phase angle in degree', xlim=view_cfg.axes_limits[0], ylim=uylim, y2lim=uy2lim)
 
-    def main_plotAMP(self, title='Amplitudes', xlabel='', ylabel='', y2label='',
-                     xlim=None, ylim=None, y2lim=None):
+    def main_plotAMP(self, title: str='Amplitudes', xlabel: str='', ylabel: str='', y2label: str='',
+                     xlim: list=None, ylim: list=None, y2lim: list=None):
+        """
+        Fill the participation plot
+
+        Args:
+            title: title for the participation factors plot
+            xlabel: label for the x-axis of the participation factors plot
+            ylabel: label for the y-axis of the magnitude participation factors plot
+            y2label: label for the y-axis of the phase participation factors plot
+            xlim: limits for the x-axis of the participation factors plot
+            ylim: limits for the y-axis of the magnitude participation factors plot
+            y2lim: limits for the x-axis of the phase participation factors plot
+        """
 
         # define figure with 2 subplots
         self.axes1 = self.AMPfig.add_subplot(211)
@@ -770,10 +814,12 @@ class DatasetTree(QTreeView):
         self.customContextMenuRequested.connect(self.showContextMenu)
 
     def keyPressEvent(self, event):
+        """ If the delete key is pressed on the datatree, all selected data has to be deleted """
         if event.key() == QtCore.Qt.Key_Delete:
             self.tree_model.delete_data(self.selectedIndexes())
 
     def showContextMenu(self, position):
+        """ A context menu is shown for the TreeView """
         idx = self.currentIndex()
         if not idx.isValid():
             return
@@ -806,12 +852,12 @@ class DatasetTree(QTreeView):
         # Then define what happens if an action is clicked
         if idx.internalPointer().itemType == 'mode':
             if action == modifyModeDescr:
-                self.popupAEMode = SettingsPopupAEMode(idx.internalPointer().itemData.name,
-                                                       idx.internalPointer().itemData.symmetry_type,
-                                                       idx.internalPointer().itemData.whirl_type,
-                                                       idx.internalPointer().itemData.wt_component)
-                self.tree_model.modify_mode_description(idx.internalPointer(), self.popupAEMode.get_settings())
-                del self.popupAEMode
+                popupAEMode = SettingsPopupAEMode(idx.internalPointer().itemData.name,
+                                                  idx.internalPointer().itemData.symmetry_type,
+                                                  idx.internalPointer().itemData.whirl_type,
+                                                  idx.internalPointer().itemData.wt_component)
+                self.tree_model.modify_mode_description(idx.internalPointer(), popupAEMode.get_settings())
+                del popupAEMode
             elif action == showAmplitudes:
                 modeID, dataset, tool = self.tree_model.get_branch_from_item(idx.internalPointer())
                 self.aw.initAmplitudes(popup=False, chosen_mode=[tool, dataset, modeID[0]])
