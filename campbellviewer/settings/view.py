@@ -4,6 +4,7 @@ Module for settings of view in the main application.
 
 import matplotlib
 
+
 class ViewSettings:
     """
     A class to gather all settings which manage the view of the GUI.
@@ -133,6 +134,7 @@ class ViewSettings:
             self.auto_scaling_y = False
 
         return self.axes_limits
+
 
 class MPLLinestyle:
     """Storage class for linestyle selection in the Campbell plot.

@@ -31,12 +31,12 @@
 # --------------------------------------------------------------------------------------
 # """
 
+from __future__ import annotations
 import sys
 import os
 import numpy as np
 import copy
 import argparse
-from typing import Type
 
 from PyQt5 import QtCore
 from PyQt5.QtWidgets import QApplication, QMainWindow, QMenu, QVBoxLayout, QHBoxLayout, QMessageBox, QWidget, QDialog
@@ -523,7 +523,7 @@ class SettingsPopupLinestyle(SettingsPopup):
             e.g. [1. Color, 2. Marker, 3. Linestyle] will first make lines with different colors, until all colors are
             used, then use new markers, until all markers are used, then use new linestyle
     """
-    def __init__(self, main_window):
+    def __init__(self, main_window: QMainWindow):
         """
         Initializes popup to set the default linestyle selection behaviour
 
@@ -802,8 +802,14 @@ class AmplitudeWindow(QMainWindow):
 
 
 class DatasetTree(QTreeView):
-    """ QTreeView of the dataset tree (described by the TreeModel in model_lib) """
-    def __init__(self, tree_model, aw):
+    """
+    QTreeView of the dataset tree (described by the TreeModel in model_lib)
+
+    Attributes:
+        aw (ApplicationWindow): ApplicationWindow in which tree is embedded
+        tree_model (TreeModel): QAbstractItemModel which governs all the functionalities of the datatree
+    """
+    def __init__(self, tree_model: TreeModel, aw: ApplicationWindow):
         super(DatasetTree, self).__init__()
         self.aw = aw
         self.tree_model = tree_model
@@ -882,7 +888,44 @@ class DatasetTree(QTreeView):
 
 
 class ApplicationWindow(QMainWindow):
-    """ Main window of the GUI """
+    """
+    Main window of the GUI
+
+    Attributes:
+        file_menu (QMenu): Dropdown menu for file operations (loading/saving data)
+        settings_menu (QMenu): Dropdown menu for managing GUI settings
+        tools_menu (QMenu): Dropdown menu for additional tools to interact or visualize data
+        help_menu (QMenu): Dropdown help menu
+        main_layout (QVBoxLayout): Layout widget containing all widgets
+        button_layout (QHBoxLayout): Layout widget containing interactive buttons
+        layout_mplib (QVBoxLayout): Layout widget containing matplotlib plot
+        layout_list (QVBoxLayout): Layout widget containing data tree
+        layout_mpliblist (QHBoxLayout): Layout widget containing matplotlib and data tree
+        dataset_tree_model (TreeModel): Model for the dataset tree
+        dataset_tree (DatasetTree): View for the dataset tree
+        mode_minpara_cmb (int): Default minimum mode index to be shown when loading new data
+        mode_maxpara_cmb (int): Default maximum mode index to be shown when loading new data
+        pharmonics (bool): Flag for showing P harmonics
+        skip_header_CMB (int): Number of header lines in HAWCStab2 Campbell file
+        skip_header_AMP (int): Number of header lines in HAWCStab2 Amplitude file
+        skip_header_OP (int): Number of header lines in HAWCStab2 Operational file
+        fig (Figure): Matplotlib figure
+        canvas (FigureCanvas): Canvas of the matplotlib figure
+        legend (mpl.legend): Legend of the Matplotlib plot
+        axes1 (mpl.ax): frequency plot axes of the matplotlib figure
+        axes2 (mpl.ax): damping plot axes of the matplotlib figure
+        right_mouse_press (bool): Flag for storing right mouse press on matplotlib figure
+        cursor (mplcursors.cursor): Cursor object
+        button_pharm (QPushButton): Button to toggle plotting P-harmonics
+        button_xaxis (QComboBox): Button to select xaxis parameter
+        xaxis_param (str): xaxis parameter
+        xaxis_selection_box (QVBoxLayout): Layout for xaxis button + text
+        button_savepdf (QPushButton): Button to save matplotlib figure to pdf
+        button_rescale (QPushButton): Button to rescale Matplotlib figure
+        pick_markers (bool): Flag whether markers in the matplotlib plot can be picked by mplcursors
+        pick_markers_box (QCheckBox): Toggling picking markers or picking lines
+    """
+
     def __init__(self):
         super(ApplicationWindow, self).__init__()
         self.setAttribute(QtCore.Qt.WA_DeleteOnClose)
@@ -947,8 +990,6 @@ class ApplicationWindow(QMainWindow):
         # Some defaults
         self.mode_minpara_cmb = 1
         self.mode_maxpara_cmb = 6
-        self.mode_max_cmb     = self.mode_maxpara_cmb
-        self.mode_min_cmb     = self.mode_minpara_cmb
         self.pharmonics       = False
         self.skip_header_CMB  = 1              # number of header lines in Campbell file
         self.skip_header_AMP  = 5              # number of header lines in Amplitude file
@@ -966,7 +1007,6 @@ class ApplicationWindow(QMainWindow):
         # create figure with two axis
         self.axes1      = self.fig.add_subplot(211)
         self.axes2      = self.fig.add_subplot(212, sharex=self.axes1)
-        self.initlimits = True                                         # True for init
         self.right_mouse_press = False
         self.cursor = None
 
@@ -1015,6 +1055,16 @@ class ApplicationWindow(QMainWindow):
 
     ##############################################################
     def add_or_remove_scatter(self, tick_flag):
+        """ Add or remove scatter points to the matplotlib plot
+
+        Normally the modes in the frequency and damping diagram are shown as Line2D objects. These lines can be
+        highlighted by clicking on them (mplcursors). In order to be able to select individual points in the
+        Campbell diagram (e.g. as input for mode visualization), an additional scatter plot can be overlayed on the
+        Line2D objects.
+
+        Args:
+            tick_flag: Qt.Checked or Qt.Unchecked flag
+        """
         self.pick_markers = tick_flag
         if tick_flag is True:
             # add scatter plot on top of normal plot
@@ -1044,11 +1094,17 @@ class ApplicationWindow(QMainWindow):
                             view_cfg.lines[atool][ads][mode_ID] = mode_lines[:2]
             self.UpdateMainPlot()
 
-    # Main plotting routine
-    def main_plot(self, title='Campbell', xlabel='', ylabel='', y2label='', xscale='linear', yscale='linear'):
-        """Ultimately, this is a QWidget (as well as a FigureCanvasAgg, etc.).
+    def main_plot(self, title: str='Campbell', xlabel: str='', ylabel: str='', y2label: str=''):
+        """ Main plotting routine for the Campbell diagram
 
-        Plots the actual Campbell diagram (frequencies and damping).
+        Uses the information in the database and the view_cfg settings to make matplotlib plot. Matplotlib axes are
+        completely cleared and re-filled.
+
+        Args:
+            title: Title for the plot
+            xlabel: X-label for the Campbell diagram axes
+            ylabel: Y-label for the frequency diagram
+            y2label: Y-label for the damping diagram
         """
 
         # get the possibly user-modified axes limits, it would be good to have a signal when the axes limits are changed
@@ -1237,7 +1293,17 @@ class ApplicationWindow(QMainWindow):
         self.canvas.mpl_connect('button_release_event', self.on_release)
         self.canvas.mpl_connect('motion_notify_event', self.on_motion)
 
-    def on_mpl_cursors_pick(self, artist, select):
+    def on_mpl_cursors_pick(self, artist: matplotlib.artist.Artist, select: str):
+        """ Callback function for picking matplotlib artists
+
+        This function will update the selection in the dataset_tree based on the highlighting of lines in the
+        matplotlib plots.
+
+        Args:
+            artist: Element of the matplotlib plot that has been picked
+            select: String indicating if the artist is selected or deselected
+        """
+
         if not isinstance(artist, matplotlib.lines.Line2D): return
         for atool in view_cfg.lines:
             for ads in view_cfg.lines[atool]:
@@ -1264,8 +1330,9 @@ class ApplicationWindow(QMainWindow):
                             self.dataset_tree.selectionModel().selectionChanged.connect(self.dataset_tree.tree_model.updateSelectedData)
 
     def on_motion(self, event):
-        """
-        Matplotlib Callback function for mouse motion. A vertical line is plotted at the mouse position if the right
+        """ Matplotlib Callback function for mouse motion.
+
+        A vertical line is plotted at the mouse position if the right
         mouse button is pressed.
         """
         if self.right_mouse_press is False: return
@@ -1316,9 +1383,8 @@ class ApplicationWindow(QMainWindow):
         self.main_plot(title='Campbell Diagram', xlabel=view_cfg.xparam2xlabel(self.xaxis_param),
                        ylabel='Frequency in Hz', y2label='Damping Ratio in %')
 
-    def get_database_filename(self, mode):
-        """
-        Use a QFileDialog to get the filename where the database can be loaded or saved.
+    def get_database_filename(self, mode: str) -> str:
+        """ Use a QFileDialog to get the filename where the database can be loaded or saved.
 
         Args:
             mode : 'load' or 'save' -> identifier if a database filename has to be found to load or save a database
@@ -1341,9 +1407,8 @@ class ApplicationWindow(QMainWindow):
 
         return db_filename
 
-    def apply_database(self, db_filename):
-        """
-        Load the database from the db_filename and apply it in the CampbellViewer
+    def apply_database(self, db_filename: str):
+        """ Load the database from the db_filename and apply it in the CampbellViewer
 
         Args:
             db_filename : string with the path to the database file which has to be applied
@@ -1374,7 +1439,13 @@ class ApplicationWindow(QMainWindow):
         database.save(fname=db_filename)
 
     def dataSelection(self):
-        """ Select to add HAWCStab2 or Bladed data """
+        """ Select HAWCStab2 or Bladed data to add to GUI
+
+        - Uses a SettingsPopupDataSelection popup to select from which tool data will be loaded and which (unique) name
+        the dataset will get.
+        - Loads the data through a fileDialog.
+        - Adds the data the dataset tree model
+        """
         self.popup = SettingsPopupDataSelection()
         tool, datasetname = self.popup.get_settings()
 
@@ -1407,8 +1478,12 @@ class ApplicationWindow(QMainWindow):
                 self.dataset_tree_model.addModelData(old_database=old_database)
                 self.dataset_tree_model.layoutChanged.emit()
 
-    def init_active_data(self, toolname, datasetname):
-        """ Initialize the active_data global variable for this toolname/datasetname combination """
+    def init_active_data(self, toolname: str, datasetname: str):
+        """ Initialize the active_data and lines global variables for this toolname/datasetname combination
+
+        The active_data global variable is a dictionary storing the information which modes currently have to be
+        plotted. The lines global variable will store the Line2D objects when the data has been plotted.
+        """
         if toolname not in view_cfg.active_data:
             view_cfg.active_data[toolname] = dict()
             view_cfg.lines[toolname] = dict()
@@ -1423,8 +1498,12 @@ class ApplicationWindow(QMainWindow):
 
     ##############################################################
     # Open File Dialog for HAWCStab2 result files
-    def openFileNameDialogHAWCStab2(self, datasetname='default'):
-        '''Open File Dialog for HAWCStab2 Campbell diagramm files'''
+    def openFileNameDialogHAWCStab2(self, datasetname: str='default'):
+        """ Open File Dialog for HAWCStab2 Campbell diagramm files
+
+        Args:
+            datasetname: Name that will be given to the selected dataset in the database
+        """
         suffix_options = ['cmb', 'amp', 'opt']
         file_name_descriptions = ['Campbell Result Files',
                                   'Amplitude Result Files',
@@ -1446,8 +1525,12 @@ class ApplicationWindow(QMainWindow):
                                                           'skip_header_AMP': self.skip_header_AMP,
                                                           'skip_header_OP': self.skip_header_OP})
 
-    def openFileNameDialogBladedLin(self, datasetname='default'):
-        '''Open File Dialog for Bladed Linearization result files'''
+    def openFileNameDialogBladedLin(self, datasetname: str='default'):
+        """ Open File Dialog for Bladed linearization Campbell diagramm files
+
+        Args:
+            datasetname: Name that will be given to the selected dataset in the database
+        """
         options = QFileDialog.Options()
         options |= QFileDialog.DontUseNativeDialog
         filter = "Bladed Linearization Result Files (*.$PJ);;All Files (*)"
@@ -1467,11 +1550,15 @@ class ApplicationWindow(QMainWindow):
             self.pharmonics = True
         self.UpdateMainPlot()
 
-    def xaxis_change(self, text):
-        """
+    def xaxis_change(self, text: str):
+        """ Modify the data if the user requests a different variable on the x-axis
+
         - set the xaxis_param
         - modify all xaxis values of the active lines
         - update the main plot
+
+        Args:
+            text: Identifier for the x-axis parameter
         """
         self.xaxis_param = text
         # modify the xaxis values of all visible lines
@@ -1494,6 +1581,7 @@ class ApplicationWindow(QMainWindow):
         self.UpdateMainPlot()
 
     def rescale_plot_limits(self):
+        """ Rescale the limits of the Matplotlib plot to make all data fit """
         view_cfg.auto_scaling_x = True
         view_cfg.auto_scaling_y = True
         self.UpdateMainPlot()
@@ -1501,7 +1589,7 @@ class ApplicationWindow(QMainWindow):
     ###################
     # save plot
     def savepdf(self):
-        """Saves the current plot to pdf. todo: FileDialog to set file name has to be added"""
+        """ Saves the current plot to pdf. todo: FileDialog to set file name has to be added """
 
         pdf_filename = 'CampbellViewerPlot.pdf'
         if QFileInfo(pdf_filename).exists():
@@ -1519,7 +1607,7 @@ class ApplicationWindow(QMainWindow):
     # Settings
     ##########
     def setHeaderLines(self):
-        """ This routine overrides the default header line numbers for Campbell and Amplitude files """
+        """ This routine overrides the default header line numbers for HAWCStab2 Campbell and Amplitude files """
         self.popup = SettingsPopupHS2Headers(self.skip_header_CMB, self.skip_header_AMP, self.skip_header_OP)
         (self.skip_header_CMB, self.skip_header_AMP, self.skip_header_OP) = self.popup.get_settings()
         del self.popup
@@ -1542,16 +1630,17 @@ class ApplicationWindow(QMainWindow):
                 print('WARNING: Multiple lines are selected in the diagram, but only one amplitude plot will be made')
             self.initAmplitudes(popup=False, chosen_mode=selected_lines[0])
 
-    def initAmplitudes(self, popup=True, chosen_mode=None):
-        """
+    def initAmplitudes(self, popup: bool=True, chosen_mode: list=None):
+        """ Initialize the participation diagram
+
         This routine initializes the window/plot of the participation factors on the amplitudes for a
         certain mode/dataset. Either a popup is used to select the mode which will be analyzed or the chosen_mode
         argument is used (which can be the result of amplitudes_of_highlights or the result when using the context menu
         for a mode in the tree view)
 
         Args:
-            popup (bool): Flag to indicate if a popup is used to select the mode which will be analyzed
-            chosen_mode (list): List with toolname, dataset name and mode ID which will be analyzed (if popup = False)
+            popup: Flag to indicate if a popup is used to select the mode which will be analyzed
+            chosen_mode: List with toolname, dataset name and mode ID which will be analyzed (if popup = False)
         """
         if popup is True:
             self.popupAMP = SettingsPopupAMP()
@@ -1581,14 +1670,13 @@ class ApplicationWindow(QMainWindow):
         """ Deletes AmplitudeWindow attribute if Amplitude Window is closed """
         del self.AmplitudeWindow
 
-    def updateAmplitudes(self, amp_tool, amp_dataset, amp_modeid):
-        """
-        Update Amplitude plot for the chosen tool, dataset, mode_ID combination
+    def updateAmplitudes(self, amp_tool: str, amp_dataset: str, amp_modeid: int):
+        """ Update Amplitude plot for the chosen tool, dataset, mode_ID combination
 
         Args:
-            amp_tool (string): Name of the tool
-            amp_dataset (string): Name of the dataset
-            amp_modeid (int): ID of the mode
+            amp_tool: Name of the tool
+            amp_dataset: Name of the dataset
+            amp_modeid: ID of the mode
         """
         if (database[amp_tool][amp_dataset].ds.frequency.values.ndim != 0 and
             database[amp_tool][amp_dataset].ds.participation_factors_amp.values.ndim != 0):
