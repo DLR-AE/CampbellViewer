@@ -935,7 +935,7 @@ class ApplicationWindow(QMainWindow):
         # Menu items
         # FILE
         self.file_menu = QMenu('&File', self)
-        self.file_menu.addAction('&Add Dataset', self.dataSelection,
+        self.file_menu.addAction('&Add New Dataset', self.dataSelection,
                                  QtCore.Qt.CTRL + QtCore.Qt.Key_O)
         self.file_menu.addAction('&Load Database', self.load_database)
         self.file_menu.addAction('&Save to Database', self.save_database)
@@ -987,6 +987,12 @@ class ApplicationWindow(QMainWindow):
         self.layout_list.addWidget(self.dataset_tree, 0)
 
         ##############################################################
+        # Signals from the tree model.
+        # -> layoutChanged signals are used to update the main plot
+        # -> dataChanged signals are used to update the tree view
+        self.dataset_tree_model.layoutChanged.connect(self.UpdateMainPlot)
+
+        ##############################################################
         # Some defaults
         self.mode_minpara_cmb = 1
         self.mode_maxpara_cmb = 6
@@ -1018,7 +1024,7 @@ class ApplicationWindow(QMainWindow):
         self.main_widget.setFocus()
         self.setCentralWidget(self.main_widget)
 
-        self.statusBar().showMessage("Let the fun begin!", 2000)
+        self.statusBar().showMessage("GUI started", 2000)
 
         ##############################################################
         # Set buttons
@@ -1047,52 +1053,13 @@ class ApplicationWindow(QMainWindow):
         self.pick_markers_box.clicked.connect(self.add_or_remove_scatter)
         self.button_layout.addWidget(self.pick_markers_box)
 
-        ##############################################################
-        # Signals from the tree model.
-        # -> layoutChanged signals are used to update the main plot
-        # -> dataChanged signals are used to update the tree view
-        self.dataset_tree_model.layoutChanged.connect(self.UpdateMainPlot)
-
     ##############################################################
-    def add_or_remove_scatter(self, tick_flag):
-        """ Add or remove scatter points to the matplotlib plot
-
-        Normally the modes in the frequency and damping diagram are shown as Line2D objects. These lines can be
-        highlighted by clicking on them (mplcursors). In order to be able to select individual points in the
-        Campbell diagram (e.g. as input for mode visualization), an additional scatter plot can be overlayed on the
-        Line2D objects.
-
-        Args:
-            tick_flag: Qt.Checked or Qt.Unchecked flag
-        """
-        self.pick_markers = tick_flag
-        if tick_flag is True:
-            # add scatter plot on top of normal plot
-            for atool in view_cfg.lines:
-                for ads in view_cfg.lines[atool]:
-                    for mode_ID, mode_lines in enumerate(view_cfg.lines[atool][ads]):
-                        if mode_lines is not None:
-                            marker_type = mode_lines[0].get_marker()
-                            if marker_type == '':
-                                marker_type = 'o'
-                            marker_size = max(view_cfg.ls.markersizedefault, (mode_lines[0].get_markersize()+1)**2)
-                            test = self.axes1.scatter(mode_lines[0].get_xdata(), mode_lines[0].get_ydata(),
-                                                      color='white', edgecolors=mode_lines[0].get_c(),
-                                                      marker=marker_type, s=marker_size, zorder=1E9)
-                            test2 = self.axes2.scatter(mode_lines[1].get_xdata(), mode_lines[1].get_ydata(),
-                                                       color='white', edgecolors=mode_lines[0].get_c(),
-                                                       marker=marker_type, s=marker_size, zorder=1E9)
-                            view_cfg.lines[atool][ads][mode_ID].append(test)
-                            view_cfg.lines[atool][ads][mode_ID].append(test2)
-            self.UpdateMainPlot()
-
-        elif tick_flag is False:
-            for atool in view_cfg.lines:
-                for ads in view_cfg.lines[atool]:
-                    for mode_ID, mode_lines in enumerate(view_cfg.lines[atool][ads]):
-                        if mode_lines is not None:
-                            view_cfg.lines[atool][ads][mode_ID] = mode_lines[:2]
-            self.UpdateMainPlot()
+    # Matplotlib and Matplotlib callback methods
+    ##############################################################
+    def UpdateMainPlot(self):
+        """ Update main plot. This wrapping method currently does not make sense, but could be reimplemented later. """
+        self.main_plot(title='Campbell Diagram', xlabel=view_cfg.xparam2xlabel(self.xaxis_param),
+                       ylabel='Frequency in Hz', y2label='Damping Ratio in %')
 
     def main_plot(self, title: str='Campbell', xlabel: str='', ylabel: str='', y2label: str=''):
         """ Main plotting routine for the Campbell diagram
@@ -1351,6 +1318,11 @@ class ApplicationWindow(QMainWindow):
 
             self.find_data_of_highlights()
 
+    def on_release(self, event):
+        """ Callback function for mouse release events. This does not necessarily have to be a matplotlib callback. """
+        if event.button is MouseButton.RIGHT:
+            self.right_mouse_press = False
+
     def find_data_of_highlights(self):
         """
         Gives a list with identification of all lines which are highlighted in the plot. Note that this is not
@@ -1373,15 +1345,62 @@ class ApplicationWindow(QMainWindow):
 
         return selected_lines
 
-    def on_release(self, event):
-        """ Callback function for mouse release events. This does not necessarily have to be a matplotlib callback. """
-        if event.button is MouseButton.RIGHT:
-            self.right_mouse_press = False
+    def add_or_remove_scatter(self, tick_flag):
+        """ Add or remove scatter points to the matplotlib plot
 
-    def UpdateMainPlot(self):
-        """ Update main plot. This wrapping method currently does not make sense, but could be reimplemented later. """
-        self.main_plot(title='Campbell Diagram', xlabel=view_cfg.xparam2xlabel(self.xaxis_param),
-                       ylabel='Frequency in Hz', y2label='Damping Ratio in %')
+        Normally the modes in the frequency and damping diagram are shown as Line2D objects. These lines can be
+        highlighted by clicking on them (mplcursors). In order to be able to select individual points in the
+        Campbell diagram (e.g. as input for mode visualization), an additional scatter plot can be overlayed on the
+        Line2D objects.
+
+        Args:
+            tick_flag: Qt.Checked or Qt.Unchecked flag
+        """
+        self.pick_markers = tick_flag
+        if tick_flag is True:
+            # add scatter plot on top of normal plot
+            for atool in view_cfg.lines:
+                for ads in view_cfg.lines[atool]:
+                    for mode_ID, mode_lines in enumerate(view_cfg.lines[atool][ads]):
+                        if mode_lines is not None:
+                            marker_type = mode_lines[0].get_marker()
+                            if marker_type == '':
+                                marker_type = 'o'
+                            marker_size = max(view_cfg.ls.markersizedefault, (mode_lines[0].get_markersize()+1)**2)
+                            test = self.axes1.scatter(mode_lines[0].get_xdata(), mode_lines[0].get_ydata(),
+                                                      color='white', edgecolors=mode_lines[0].get_c(),
+                                                      marker=marker_type, s=marker_size, zorder=1E9)
+                            test2 = self.axes2.scatter(mode_lines[1].get_xdata(), mode_lines[1].get_ydata(),
+                                                       color='white', edgecolors=mode_lines[0].get_c(),
+                                                       marker=marker_type, s=marker_size, zorder=1E9)
+                            view_cfg.lines[atool][ads][mode_ID].append(test)
+                            view_cfg.lines[atool][ads][mode_ID].append(test2)
+            self.UpdateMainPlot()
+
+        elif tick_flag is False:
+            for atool in view_cfg.lines:
+                for ads in view_cfg.lines[atool]:
+                    for mode_ID, mode_lines in enumerate(view_cfg.lines[atool][ads]):
+                        if mode_lines is not None:
+                            view_cfg.lines[atool][ads][mode_ID] = mode_lines[:2]
+            self.UpdateMainPlot()
+
+    ##############################################################
+    # Database methods
+    ##############################################################
+    def load_database(self):
+        """ Load data from database (and use default view settings) """
+        db_filename = self.get_database_filename(mode='load')
+        self.apply_database(db_filename)
+
+    def save_database(self):
+        """ Save data to database """
+        db_filename = self.get_database_filename(mode='save')
+
+        if db_filename[-3:] != ".nc":
+            db_filename = db_filename + ".nc"
+
+        database.save(fname=db_filename)
 
     def get_database_filename(self, mode: str) -> str:
         """ Use a QFileDialog to get the filename where the database can be loaded or saved.
@@ -1424,20 +1443,9 @@ class ApplicationWindow(QMainWindow):
         self.dataset_tree_model.addModelData(old_database=old_database)
         self.dataset_tree_model.layoutChanged.emit()
 
-    def load_database(self):
-        """ Load data from database (and use default view settings) """
-        db_filename = self.get_database_filename(mode='load')
-        self.apply_database(db_filename)
-
-    def save_database(self):
-        """ Save data to database """
-        db_filename = self.get_database_filename(mode='save')
-
-        if db_filename[-3:] != ".nc":
-            db_filename = db_filename + ".nc"
-
-        database.save(fname=db_filename)
-
+    ##############################################################
+    # Adding new data methods
+    ##############################################################
     def dataSelection(self):
         """ Select HAWCStab2 or Bladed data to add to GUI
 
@@ -1496,8 +1504,6 @@ class ApplicationWindow(QMainWindow):
                                        set([self.button_xaxis.itemText(i) for i in range(self.button_xaxis.count())]))))
         self.button_xaxis.model().sort(0)
 
-    ##############################################################
-    # Open File Dialog for HAWCStab2 result files
     def openFileNameDialogHAWCStab2(self, datasetname: str='default'):
         """ Open File Dialog for HAWCStab2 Campbell diagramm files
 
@@ -1542,6 +1548,9 @@ class ApplicationWindow(QMainWindow):
             database.add_data(datasetname, 'bladed-lin',
                               tool_specific_info={'result_dir': result_dir, 'result_prefix': result_prefix})
 
+    ##############################################################
+    # Button action methods
+    ##############################################################
     def plotPharmonics(self):
         """ Plot P-Harmonics in Campbell diagram """
         if self.pharmonics == True:
@@ -1586,8 +1595,6 @@ class ApplicationWindow(QMainWindow):
         view_cfg.auto_scaling_y = True
         self.UpdateMainPlot()
 
-    ###################
-    # save plot
     def savepdf(self):
         """ Saves the current plot to pdf. todo: FileDialog to set file name has to be added """
 
@@ -1666,10 +1673,6 @@ class ApplicationWindow(QMainWindow):
 
         self.updateAmplitudes(amp_tool, amp_dataset, amp_modeid)
 
-    def deleteAmplitudes(self):
-        """ Deletes AmplitudeWindow attribute if Amplitude Window is closed """
-        del self.AmplitudeWindow
-
     def updateAmplitudes(self, amp_tool: str, amp_dataset: str, amp_modeid: int):
         """ Update Amplitude plot for the chosen tool, dataset, mode_ID combination
 
@@ -1694,6 +1697,10 @@ class ApplicationWindow(QMainWindow):
             QMessageBox.about(self, "WARNING", "Campbell and Amplitude files have to be loaded first!")
             return
 
+    def deleteAmplitudes(self):
+        """ Deletes AmplitudeWindow attribute if Amplitude Window is closed """
+        del self.AmplitudeWindow
+
     ##########
     # file
     ##########
@@ -1717,8 +1724,6 @@ class ApplicationWindow(QMainWindow):
         """GNU General Public License for more details.\n\n"""+
         """You should have received a copy of the GNU General Public License\n"""+
         """along with CampbellViewer.  If not, see <http://www.gnu.org/licenses/>""")
-
-
 
 
 ##########
