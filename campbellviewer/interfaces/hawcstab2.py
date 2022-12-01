@@ -12,8 +12,7 @@ class HAWCStab2Data(AbstractLinearizationData):
     """This is a class for handling HAWCStab2 linearization data.
 
     Attributes:
-        ds (dict): Dictionary containing filenames of the *.cmb, *.amp, and
-        *.opt files.
+        ds (xarray.Dataset): xarray Dataset containing all linearization data
 
     Args:
         filenamecmb (str):
