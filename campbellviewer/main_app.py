@@ -1729,17 +1729,14 @@ class ApplicationWindow(QMainWindow):
 ##########
 # Exception handling
 ##########
-def my_excepthook(type, value, tback):
-    '''
-    FUNCTION my_excepthook
+def my_excepthook(type, value: str, tback):
+    """ Ensures the error tracing in combination with pyQt.
 
-    Ensures the error tracing in combination with pyQt.
-
-    :param type: type-object containing the exception type
-    :param value: string containing the error message
-    :param trb: traceback-object
-    :return: Nothing
-    '''
+    Args:
+        type: type-object containing the exception type
+        value: string containing the error message
+        trb: traceback-object
+    """
 
     # then call the default handler
     sys.__excepthook__(type, value, tback)
