@@ -294,7 +294,7 @@ class TreeModel(QAbstractItemModel):
 
         for tool in database:
             if tool in old_database:
-                current_tool_node = self.rootItem.childItems[list(old_database.keys()).index(tool)]
+                current_tool_node = self.rootItem.childItems[[item.itemName for item in self.rootItem.childItems].index(tool)]
             else:
                 if tool in view_cfg.active_data:
                     self.rootItem.appendChild(TreeItem(tool, Qt.Checked, self.rootItem, item_type='tool'))
