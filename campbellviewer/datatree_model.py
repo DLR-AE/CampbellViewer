@@ -144,6 +144,8 @@ class TreeModel(QAbstractItemModel):
         """ sets data in the tree model based on user modification in the tree view and updates database accordingly """
         item = self.getItem(index)
         if role == Qt.EditRole:
+            if value == '':
+                return False  # return and do not change item if it is left blank
             original_branch = self.get_branch_from_item(item)
             item.itemName = value
             modified_branch = self.get_branch_from_item(item)
