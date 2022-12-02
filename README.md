@@ -22,10 +22,12 @@ You can install the package using
 
 
 ```{note}
-If you want to install a certain branch add **@<branch_name>** to the end of
-the URL.
+
 ```
 
+> :heavy_exclamation_mark: **Note**
+If you want to install a certain branch add **@<branch_name>** to the end of
+the URL.
 
 To start the ``campbellviewer`` just type
 ```{code-block} console
