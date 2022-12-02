@@ -20,20 +20,21 @@ You can install the package using
 
     $ pip install git+https://github.com/DLR-AE/CampbellViewer.git
 
----
-**NOTE**
 
+```{note}
 If you want to install a certain branch add **@<branch_name>** to the end of
 the URL.
+```
 
----
 
 To start the ``campbellviewer`` just type
-
-    $ campbellviewer
-
+```{code-block} console
+campbellviewer
+```
 
 Developers can clone the git to a local directory and run the following command
 to install the package in development mode.
 
-    $ pip install -e .
+```{code-block} console
+pip install -e .
+```
