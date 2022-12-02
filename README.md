@@ -17,15 +17,11 @@ Unified plotting tool for Campbell diagrams, processing results of wind turbine 
 The ``campbellviewer`` supports Python 3.9 or newer.
 
 You can install the package using
-
-    $ pip install git+https://github.com/DLR-AE/CampbellViewer.git
-
-
-```{note}
-
+```{code-block} console
+pip install git+https://github.com/DLR-AE/CampbellViewer.git
 ```
 
-> :heavy_exclamation_mark: **Note**
+> **Note**
 If you want to install a certain branch add **@<branch_name>** to the end of
 the URL.
 
@@ -40,3 +36,13 @@ to install the package in development mode.
 ```{code-block} console
 pip install -e .
 ```
+
+## Building the docs
+
+If you want to build the documentation locally, navigate to the `.\docs` folder and type
+
+```{code-block} console
+make html
+```
+
+After building find the file `.\docs\build\html\index.html` and open it in a browser.
