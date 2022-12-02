@@ -1502,8 +1502,16 @@ class ApplicationWindow(QMainWindow):
         view_cfg.lines[toolname][datasetname] = [None]*len(database[toolname][datasetname].ds.modes)
 
         # add the (unique) operating parameters of this dataset to the xaxis button.
-        self.button_xaxis.addItems(list(set(database[toolname][datasetname].ds.operating_parameter.data).difference(
-                                       set([self.button_xaxis.itemText(i) for i in range(self.button_xaxis.count())]))))
+        if len(self.button_xaxis) == 0:
+            # this is first data added -> Use "wind speed [m/s]" as default operating parameter if it is in the
+            # operating parameter list of the dataset.
+            self.button_xaxis.addItems(database[toolname][datasetname].ds.operating_parameter.data)
+            if 'wind speed [m/s]' in database[toolname][datasetname].ds.operating_parameter.data:
+                self.button_xaxis.setCurrentText('wind speed [m/s]')
+        else:
+            # only add unique parameters
+            self.button_xaxis.addItems(list(set(database[toolname][datasetname].ds.operating_parameter.data).difference(
+                                           set([self.button_xaxis.itemText(i) for i in range(self.button_xaxis.count())]))))
         self.button_xaxis.model().sort(0)
 
     def openFileNameDialogHAWCStab2(self, datasetname: str='default'):
