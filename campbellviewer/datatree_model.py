@@ -147,6 +147,9 @@ class TreeModel(QAbstractItemModel):
             if value == '':
                 return False  # return and do not change item if it is left blank
             original_branch = self.get_branch_from_item(item)
+            if len(original_branch) == 2 and value in database[original_branch[-1]]:
+                print('This dataset name already exists, please specify a unique dataset name')
+                return False
             item.itemName = value
             modified_branch = self.get_branch_from_item(item)
             if item.itemData is not None:
