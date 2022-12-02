@@ -657,6 +657,7 @@ class AmplitudeWindow(QMainWindow):
     Separate window for participation factor plot
 
     Attributes:
+        requested_toolname (str): Name of the tool which is analysed
         settingsAMPmode (int): ID of the mode which is analysed
         AMPmode_name (str): Name of the mode which is analysed
         dataset (AbstractLinearizationData): Dataset to be analysed
@@ -695,6 +696,7 @@ class AmplitudeWindow(QMainWindow):
             threshold: Threshold determining which participation modes are visualized, i.e. only modes with
                 a significant participation are shown.
         """
+        self.requested_toolname = requested_toolname
         self.settingsAMPmode = requested_mode_id
         self.AMPmode_name = database[requested_toolname][requested_datasetname].ds.modes.values[requested_mode_id].name
         self.dataset = dataset
@@ -767,7 +769,7 @@ class AmplitudeWindow(QMainWindow):
         for i, mode in enumerate(self.dataset.participation_modes.values):
             # only show modes with a part. of minimum self.AMPthreshold (for at least one of the operating points)
             if max(self.dataset.participation_factors_amp.loc[:, i, self.settingsAMPmode]) > self.AMPthreshold:
-                ls = mpl_ls.new_ls()
+                ls = mpl_ls.new_ls(self.requested_toolname)
                 ampl_line, = self.axes1.plot(self.dataset.operating_points.loc[:, self.xaxis_param],
                                 self.dataset.participation_factors_amp.loc[:, i, self.settingsAMPmode],
                                 label=mode.name, linewidth=mpl_ls.lw, c=ls['color'], linestyle=ls['linestyle'],
