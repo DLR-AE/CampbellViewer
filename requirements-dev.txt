@@ -1,0 +1,5 @@
+sphinx
+sphinx_design
+pydata-sphinx-theme
+autodoc
+myst-parser
