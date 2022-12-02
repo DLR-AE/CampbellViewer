@@ -1565,27 +1565,27 @@ class ApplicationWindow(QMainWindow):
         """ Modify the data if the user requests a different variable on the x-axis
 
         - set the xaxis_param
-        - modify all xaxis values of the active lines
+        - modify all xaxis values of all lines
         - update the main plot
 
         Args:
             text: Identifier for the x-axis parameter
         """
         self.xaxis_param = text
-        # modify the xaxis values of all visible lines
-        for atool in view_cfg.active_data:  # active tool
-            for ads in view_cfg.active_data[atool]:  # active dataset
-                if text not in database[atool][ads].ds.operating_parameter:
-                    view_cfg.reset_these_lines(tool=atool, ds=ads)
+        # modify the xaxis values of all lines
+        for tool in view_cfg.lines:
+            for ds in view_cfg.lines[tool]:
+                if text not in database[tool][ds].ds.operating_parameter:
+                    view_cfg.reset_these_lines(tool=tool, ds=ds)
                 else:
-                    for mode_ID in view_cfg.active_data[atool][ads]:  # active mode tracks
-                        if view_cfg.lines[atool][ads][mode_ID] is not None:
-                            for artist in view_cfg.lines[atool][ads][mode_ID]:  # freq. and damp. lines
+                    for mode_lines in view_cfg.lines[tool][ds]:
+                        if mode_lines is not None:
+                            for artist in mode_lines:  # freq. and damp. lines
                                 if isinstance(artist, matplotlib.lines.Line2D):
-                                    artist.set_xdata(database[atool][ads].ds["operating_points"].sel(operating_parameter=text))
+                                    artist.set_xdata(database[tool][ds].ds["operating_points"].sel(operating_parameter=text))
                                 else:
                                     scatter_offsets = artist.get_offsets()
-                                    scatter_offsets[:, 0] = database[atool][ads].ds["operating_points"].sel(operating_parameter=text)
+                                    scatter_offsets[:, 0] = database[tool][ds].ds["operating_points"].sel(operating_parameter=text)
                                     artist.set_offsets(scatter_offsets)
 
         view_cfg.auto_scaling_x = True
