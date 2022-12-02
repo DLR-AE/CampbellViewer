@@ -35,9 +35,6 @@ html_theme = "pydata_sphinx_theme"
 # html_theme_options = {"logo_only": True}
 html_theme_options = {
         "show_prev_next": False,
-        # search bar
-        "search_bar_position": "navbar",
-        "search_bar_text": "Search text...",
         "navigation_with_keys": False
     }
 
