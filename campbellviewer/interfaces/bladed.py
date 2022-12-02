@@ -13,14 +13,15 @@ from campbellviewer.utilities import AEMode
 class BladedLinData(AbstractLinearizationData):
     """This is a class for handling Bladed linearization result data.
 
+    Attributes:
+        ds (xarray.Dataset): xarray Dataset containing all linearization data
+
     Args:
-        result_dir ():
-            Description...
-        result_prefix ():
-            Description...
+        result_dir: Path to directory with Bladed Linearization results
+        result_prefix: Name of the Bladed output files
     """
 
-    def __init__(self, result_dir=None, result_prefix=None):
+    def __init__(self, result_dir: str=None, result_prefix: str=None):
         super(BladedLinData, self).__init__()
 
         self.ds.attrs["result_dir"] = result_dir
@@ -29,9 +30,8 @@ class BladedLinData(AbstractLinearizationData):
         if result_dir is not None and result_prefix is not None:
             self.ds.attrs["bladed_version"] = self.extract_bladed_version()
 
-    def extract_bladed_version(self):
-        """Get the Bladed version from the header in the .$PJ file
-        """
+    def extract_bladed_version(self) -> str:
+        """ Get the Bladed version from the header in the .$PJ file """
         with open(os.path.join(self.ds.attrs["result_dir"], self.ds.attrs["result_prefix"]+'.$PJ')) as f:
             for line in f:
                 if 'ApplicationVersion' in line:
@@ -40,8 +40,7 @@ class BladedLinData(AbstractLinearizationData):
         return None
 
     def read_data(self):
-        """Read all available Campbell diagram data.
-        """
+        """ Read all available Campbell diagram data. """
 
         print('Start reading Bladed data')
 
@@ -69,13 +68,14 @@ class BladedLinData(AbstractLinearizationData):
             self.read_coupled_modes(bladed_result)
             self.read_cmb_data(bladed_result)
 
-    def read_op_data(self, bladed_result):
-        """Read operational data.
+    def read_op_data(self, bladed_result: BladedResult):
+        """ Read operational data
+
+        Read the operational data from the BladedResult object and insert it in the xarray dataset
 
         Args:
-            bladed_result (obj.): Bladed result reader object
+            bladed_result: Bladed result reader object
         """
-
         windspeed = bladed_result['Nominal wind speed at hub position'].squeeze()
         pitch = np.array(bladed_result['Nominal pitch angle'].squeeze() * 180/np.pi)
         rpm = np.array(bladed_result['Rotor speed'].squeeze() * (60 / (2*np.pi)))
@@ -89,15 +89,12 @@ class BladedLinData(AbstractLinearizationData):
         self.ds.coords["operating_parameter"] = ['wind speed [m/s]', 'pitch [deg]', 'rot. speed [rpm]', 'Electrical power [kw]']
         self.ds["operating_points"] = (["operating_point_ID", "operating_parameter"], op_point_arr)
 
-    def read_coupled_modes(self, bladed_result):
-        """Read coupled data (mode tracked frequency and damping curves).
+    def read_coupled_modes(self, bladed_result: BladedResult):
+        """ Read coupled data (mode tracked frequency and damping curves).
 
         Args:
-            bladed_result (obj.):
-                Bladed result reader object.
-
+            bladed_result: Bladed result reader object
         """
-
         frequency, frequency_metadata = bladed_result['Frequency (undamped)']
         damping, damping_metadata = bladed_result['Damping']
         damping = 100 * damping  # damping ratio in %
@@ -111,8 +108,8 @@ class BladedLinData(AbstractLinearizationData):
         self.ds["frequency"] = (["operating_point_ID", "mode_ID"], frequency[:, :, 0])
         self.ds["damping"] = (["operating_point_ID", "mode_ID"], damping[:, :, 0])
 
-    def read_cmb_data(self, bladed_result):
-        """Read Campbell diagram data (participation factors).
+    def read_cmb_data(self, bladed_result: BladedResult):
+        """ Read Campbell diagram data (participation factors).
 
         Data is parsed from the .$CM file, which contains all Campbell diagram data. This file contains frequency,
         damping and participation factor results for all coupled modes. Unfortunately, it can happen that a specific
@@ -126,7 +123,7 @@ class BladedLinData(AbstractLinearizationData):
         which operating points the coupled mode of the .$CM file has valid entries.
 
         Args:
-            bladed_result (obj.): Bladed result reader object
+            bladed_result: Bladed result reader object
         """
         # coupled modes and operating points have to be read before
         if self.ds["modes"] is None:
@@ -151,8 +148,12 @@ class BladedLinData(AbstractLinearizationData):
         uncoupled_mode_names = list(dict.fromkeys(uncoupled_mode_names_with_duplicates))
 
         # initialize matrices for participation factors amplitude and phase
-        participation_factors_amp = np.zeros((len(self.ds.operating_point_ID), len(uncoupled_mode_names), len(self.ds["modes"])))
-        participation_factors_phase = np.zeros((len(self.ds.operating_point_ID), len(uncoupled_mode_names), len(self.ds["modes"])))
+        participation_factors_amp = np.zeros((len(self.ds.operating_point_ID),
+                                              len(uncoupled_mode_names),
+                                              len(self.ds["modes"])))
+        participation_factors_phase = np.zeros((len(self.ds.operating_point_ID),
+                                                len(uncoupled_mode_names),
+                                                len(self.ds["modes"])))
 
         for i_mode, mode_cmb in enumerate(campbell_data):
             # CHECK THAT COUPLED MODE (MODE TRACK) (FILE .$CM) MATCHES WITH THE COUPLED MODE OUTPUT (FILE .$02)
@@ -160,7 +161,8 @@ class BladedLinData(AbstractLinearizationData):
             if -1 in self.ds["frequency"][:, 0].values:
                 print('The tracked coupled mode is not complete for all operating points')
 
-            if not np.allclose(np.array(mode_cmb['freq']), self.ds["frequency"][used_operating_points, i_mode].values * 2 * np.pi, rtol=1e-02):
+            if not np.allclose(np.array(mode_cmb['freq']),
+                               self.ds["frequency"][used_operating_points, i_mode].values * 2 * np.pi, rtol=1e-02):
                 print('\nThe frequencies of the mode read from the .$CM file do not match with the frequencies from the '
                       'coupled modes in the .$02 file')
 
@@ -187,12 +189,15 @@ class BladedLinData(AbstractLinearizationData):
         self.ds["participation_factors_phase"] = (
             ["operating_point_ID", "participation_mode_ID", "mode_ID"], participation_factors_phase)
 
-    def read_op_data_4p7_4p8(self, bladed_result):
-        """
-        Read operational data from Bladed results made by v4.7 and v4.8.
+    def read_op_data_4p7_4p8(self, bladed_result: BladedResult):
+        """ Read operational data from Bladed results made by v4.7 and v4.8.
+
         For these versions the operational data can not be directly obtained with pyBladed, but (normally) the wind
         speed will be available in the .%02 file and the rotor speed can be extracted from the .$CM file.
         So this method is a workaround specifically for these Bladed versions.
+
+        Args:
+            bladed_result: Bladed result reader object
         """
         for result in bladed_result.results:
             if result[-3:] == '%02':
@@ -221,8 +226,9 @@ class BladedLinData(AbstractLinearizationData):
                 self.ds["operating_points"] = (["operating_point_ID", "operating_parameter"],
                                                np.array([windspeed.T, rpm.T]).T)
 
-    def read_coupled_modes_pre4p7(self, bladed_result):
-        """
+    def read_coupled_modes_pre4p7(self, bladed_result: BladedResult):
+        """ Read coupled modes vor Bladed versions <4.7
+
         The output of a Bladed Campbell Diagram Linearization is very different for versions <4.6. Some notable
         differences:
 
@@ -243,6 +249,8 @@ class BladedLinData(AbstractLinearizationData):
         Therefore we only read the frequency/damping from the .$02 file and the rotor speed + mode names from the .%02
         file
 
+        Args:
+            bladed_result: Bladed result reader object
         """
         print('WARNING: Reading the participation factors for Bladed Campbell <4.7 results has not been implemented '
               'yet. (Because the format of the .$CM file differs from newer versions)')

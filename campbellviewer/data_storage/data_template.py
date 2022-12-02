@@ -19,6 +19,9 @@ class AbstractLinearizationData:
 
     The initial idea was to have <mode_names> and <participation mode names> as coordinates, but this idea was
     disregarded in order to have a dedicated aeroelastic mode class. The coordinates are therefore just the indices.
+
+    Args:
+        ds: xarray Dataset containing all linearization data
     """
     __slots__ = ("ds",)
 

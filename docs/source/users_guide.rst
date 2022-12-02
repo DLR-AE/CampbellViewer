@@ -1,4 +1,5 @@
 User's Guide
 ============
 
-This area could contain a User's guide in the future.
+.. include:: ../../user_guide.md
+    :parser: myst_parser.sphinx_
