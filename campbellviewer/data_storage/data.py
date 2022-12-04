@@ -101,10 +101,7 @@ class LinearizationDataWrapper(dict):
                 for ii, ae_mode in enumerate(xr_dataset_to_save.participation_modes.values):
                     xr_dataset_to_save['participation_modes'][ii] = ae_mode.to_plain_text()
 
-                if os.path.exists(fname):
-                    xr_dataset_to_save.to_netcdf(fname, mode='a', group=toolname + '&' + datasetname)
-                else:
-                    xr_dataset_to_save.to_netcdf(fname, mode='w', group=toolname + '&' + datasetname)
+                xr_dataset_to_save.to_netcdf(fname, mode='w', group=toolname + '&' + datasetname)
 
 
     def load(self, fname='CampbellViewerDatabase.nc'):

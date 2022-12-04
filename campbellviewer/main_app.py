@@ -374,7 +374,7 @@ class SettingsPopupAEMode(SettingsPopup):
         popup_layoutNAME.addWidget(self.__NameSelection)
 
         self.__SymTypeSelection = QComboBox()
-        self.__SymTypeSelection.addItems(['Symmetric', 'Asymmetric'])
+        self.__SymTypeSelection.addItems(['symmetric', 'asymmetric'])
         self.__SymTypeSelection.setEditable(True)
         self.__SymTypeSelection.setCurrentText(self.symmetry_type)
         popup_layoutSYM.addWidget(QLabel('Symmetry type:'))
@@ -456,7 +456,7 @@ class SettingsPopupModeFilter(SettingsPopup):
         popup_layoutBttn = QHBoxLayout(self)
 
         self.__SymTypeSelection = QComboBox()
-        self.__SymTypeSelection.addItems(['all', 'Symmetric', 'Asymmetric'])
+        self.__SymTypeSelection.addItems(['all', 'symmetric', 'asymmetric'])
         self.__SymTypeSelection.setEditable(True)
         popup_layoutSYM.addWidget(QLabel('Only show this symmetry type:'))
         popup_layoutSYM.addWidget(self.__SymTypeSelection)
@@ -881,7 +881,8 @@ class DatasetTree(QTreeView):
             self.tree_model.set_checked(idx, Qt.Unchecked, only_selected=True, selection=self.selectedIndexes())
         elif action == filterModes:
             self.popupFilterModes = SettingsPopupModeFilter()
-            self.tree_model.filter_checked(idx.internalPointer(), self.popupFilterModes.get_settings())
+            self.tree_model.filter_checked(idx.internalPointer(), self.popupFilterModes.get_settings(),
+                                           selection=self.selectedIndexes())
             del self.popupFilterModes
         elif action == deleteThisItem:
             self.tree_model.delete_data([idx])
