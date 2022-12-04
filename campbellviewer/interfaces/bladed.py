@@ -42,8 +42,6 @@ class BladedLinData(AbstractLinearizationData):
     def read_data(self):
         """ Read all available Campbell diagram data. """
 
-        print('Start reading Bladed data')
-
         bladed_result = BladedResult(self.ds.attrs["result_dir"], self.ds.attrs["result_prefix"])
         try:
             bladed_result.scan()

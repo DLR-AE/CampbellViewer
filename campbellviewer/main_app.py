@@ -1109,8 +1109,9 @@ class ApplicationWindow(QMainWindow):
 
                     # get xaxis values
                     if self.xaxis_param not in database[atool][ads].ds.operating_parameter:
-                        print('WARNING: Operating condition {} is not available in the {}-{} dataset. The data will '
-                              'not be plotted.'.format(self.xaxis_param, atool, ads))
+                        self.statusBar().showMessage('WARNING: Operating condition {} is not available in the {}-{} '
+                                                     'dataset. The data will not be '
+                                                     'plotted.'.format(self.xaxis_param, atool, ads), 4000)
                         continue
                     else:
                         xaxis_values = database[atool][ads].ds['operating_points'].loc[:, self.xaxis_param]
@@ -1193,11 +1194,10 @@ class ApplicationWindow(QMainWindow):
             bbox = self.legend.get_window_extent(self.fig.canvas.get_renderer()).transformed(self.fig.transFigure.inverted())
             if bbox.y1 < 1:
                 break
-            # print('  ', fontsize, ': bbox', bbox, 'too big, decreasing legend font size')
             self.legend.remove()
             self.legend = None
         if self.legend is None:
-            print('Legend disabled (too big for canvas)')
+            self.statusBar().showMessage('Legend disabled (too big for canvas)', 4000)
         self.fig.tight_layout(rect=(0, 0, bbox.x0, 1), h_pad=0.5, w_pad=0.5)
 
         xlim, ylim, y2lim = view_cfg.get_axes_limits(self.axes1.get_xlim(), self.axes1.get_ylim(), self.axes2.get_ylim())
@@ -1343,7 +1343,7 @@ class ApplicationWindow(QMainWindow):
 
                         for sel in self.cursor.selections:
                             if sel.artist in mode_lines:
-                                print('Selections are:', atool, ads, mode_ID)
+                                # print('Selections are:', atool, ads, mode_ID)
                                 selected_lines.append([atool, ads, mode_ID])
 
         return selected_lines
@@ -1461,7 +1461,7 @@ class ApplicationWindow(QMainWindow):
         tool, datasetname = self.popup.get_settings()
 
         if '&' in datasetname:
-            print('& is not allowed in the datasetname')
+            self.statusBar().showMessage('& is not allowed in the datasetname', 4000)
             datasetname = datasetname.replace('&', '_')
 
         # A unique datasetname is enforced
@@ -1642,10 +1642,12 @@ class ApplicationWindow(QMainWindow):
         """ Create a window for the participation factors of the highlighted mode in the diagram """
         selected_lines = self.find_data_of_highlights()
         if selected_lines == []:
-            print('WARNING: There are no lines selected in the diagram, so no amplitude plot will be made')
+            self.statusBar().showMessage('WARNING: There are no lines selected in the diagram, '
+                                         'so no amplitude plot will be made', 4000)
         else:
             if len(selected_lines) > 1:
-                print('WARNING: Multiple lines are selected in the diagram, but only one amplitude plot will be made')
+                self.statusBar().showMessage('WARNING: Multiple lines are selected in the diagram, '
+                                             'but only one amplitude plot will be made', 4000)
             self.initAmplitudes(popup=False, chosen_mode=selected_lines[0])
 
     def initAmplitudes(self, popup: bool=True, chosen_mode: list=None):

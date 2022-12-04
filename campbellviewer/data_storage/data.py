@@ -76,7 +76,6 @@ class LinearizationDataWrapper(dict):
         else:
             print('The list provided can only have 1, 2, or 3 values. Nothing removed from database')
 
-
     def save(self, fname='CampbellViewerDatabase.nc'):
         """
         Save the database to a file.
@@ -90,6 +89,11 @@ class LinearizationDataWrapper(dict):
         Args:
             fname (str, optional): file to which database will be saved
         """
+        # If the file already exists, it is first removed. Otherwise the .to_netcdf methods below would add the
+        # current database to the file.
+        if os.path.exists(fname):
+            os.remove(fname)
+
         for toolname in self:
             for datasetname, dataset_obj in self[toolname].items():
                 # The xarray datasets can be saved using the build-in to_netcdf methods of xarray.
@@ -101,7 +105,10 @@ class LinearizationDataWrapper(dict):
                 for ii, ae_mode in enumerate(xr_dataset_to_save.participation_modes.values):
                     xr_dataset_to_save['participation_modes'][ii] = ae_mode.to_plain_text()
 
-                xr_dataset_to_save.to_netcdf(fname, mode='w', group=toolname + '&' + datasetname)
+                if os.path.exists(fname):
+                    xr_dataset_to_save.to_netcdf(fname, mode='a', group=toolname + '&' + datasetname)
+                else:
+                    xr_dataset_to_save.to_netcdf(fname, mode='w', group=toolname + '&' + datasetname)
 
 
     def load(self, fname='CampbellViewerDatabase.nc'):
