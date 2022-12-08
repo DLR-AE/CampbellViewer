@@ -42,16 +42,46 @@ class AEMode:
             name : string
                 name of the aeroelastic mode (e.g. 1st FW flap, etc.)
             symmetry_type : string
-                indication whether this is a symmetrical or asymmetical model
+                indication whether this is a symmetrical or asymmetrical mode
             whirl_type : string
                 type of whirling motion (FW or BW)
             wt_component : string
-                indication which is the wind turbine component has the main contribution in this mode
+                indication which wind turbine component has the main contribution in this mode
         """
         self.name = name
         self.symmetry_type = symmetry_type
         self.whirl_type = whirl_type  # BW, FW,
         self.wt_component = wt_component  # blade, tower, drivetrain, ...
+
+        self.categorize_mode()
+
+    def categorize_mode(self):
+        """ Categorize mode
+
+        Define which categories a mode belongs to depending on the mode name (given by the tool interface)
+        """
+        if self.symmetry_type == '':
+            if any(substring in self.name.lower() for substring in ['sym', 'symmetric', 'collective']):
+                self.symmetry_type = 'symmetric'
+            elif any(substring in self.name.lower() for substring in ['fw', 'bw', 'forward whirl',
+                                                                      'backward whirl', 'cyclic']):
+                self.symmetry_type = 'asymmetric'
+
+        if self.whirl_type == '':
+            if any(substring in self.name.lower() for substring in ['fw', 'forward whirl']):
+                self.whirl_type = 'FW'
+            elif any(substring in self.name.lower() for substring in ['bw', 'backward whirl']):
+                self.whirl_type = 'BW'
+
+        if self.wt_component == '':
+            if any(substring in self.name.lower() for substring in ['twr', 'tower']):
+                self.wt_component = 'tower'
+            elif any(substring in self.name.lower() for substring in ['drivetrain', 'drvtrn']):
+                self.wt_component = 'drivetrain'
+            elif any(substring in self.name.lower() for substring in ['rotor', 'blade', 'bw', 'fw', 'backward whirl',
+                                                                      'forward whirl', 'edge', 'flap', 'edgewise',
+                                                                      'flapwise']):
+                self.wt_component = 'blade'
 
     def summary(self):
         """
