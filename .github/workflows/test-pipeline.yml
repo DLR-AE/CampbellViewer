@@ -1,13 +1,14 @@
-name: Python package
+name: Test pipeline
 
 on: [push]
 
 jobs:
   build:
 
-    runs-on: windows-latest
+    runs-on: ${{ matrix.os }}
     strategy:
       matrix:
+        os: [windows-latest, macos-latest, ubuntu-latest]
         python-version: ["3.9", "3.10"]
 
     steps:
