@@ -16,11 +16,11 @@ class HAWCStab2Data(AbstractLinearizationData):
 
     Args:
         filenamecmb (str):
-            Filename of *.cmb file.
+            Filename of \*.cmb file.
         filenameamp (str):
-            Filename of *.amp file.
+            Filename of \*.amp file.
         filenameopt:
-            Filename of *.opt file.
+            Filename of \*.opt file.
 
     """
 
@@ -139,7 +139,7 @@ class HAWCStab2Data(AbstractLinearizationData):
                                  dtype='float')
         except OSError:
             print(
-                f'ERROR: HAWCStab2 cmb file {self.ds.attrs["filenameamp"]} '
+                f'ERROR: HAWCStab2 amp file {self.ds.attrs["filenameamp"]} '
                 f'not found! Abort!'
             )
             return
