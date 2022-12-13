@@ -5,7 +5,7 @@
 
    {% block attributes %}
    {% if attributes %}
-   {{ "Module Attributes" | escape | underline(line='^') }}
+{{ "Module Attributes" | escape | underline(line='^') }}
 
    .. autosummary::
       :toctree:
@@ -17,7 +17,7 @@
 
    {% block functions %}
    {% if functions %}
-   {{ "Functions" | escape | underline(line='^') }}
+{{ "Functions" | escape | underline(line='^') }}
 
    .. autosummary::
       :toctree:
@@ -29,7 +29,7 @@
 
    {% block classes %}
    {% if classes %}
-   {{ "Classes" | escape | underline(line='^') }}
+{{ "Classes" | escape | underline(line='^') }}
 
    .. autosummary::
       :toctree:
@@ -43,7 +43,7 @@
 
    {% block exceptions %}
    {% if exceptions %}
-   {{ "Exceptions" | escape | underline(line='^') }}
+{{ "Exceptions" | escape | underline(line='^') }}
 
    .. autosummary::
       :toctree:
