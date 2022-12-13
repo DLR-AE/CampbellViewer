@@ -208,7 +208,7 @@ class MPLLinestyle:
         elif tool == 'Bladed (lin.)':
             idx_1 = 1
 
-        idx_2 = int(self.nr_lines_allocated[tool] / len(seq_0)) % len(seq_1)
+        idx_2 = int(self.nr_lines_allocated[tool] / len(seq_0)) % len(seq_2)
 
         self.nr_lines_allocated[tool] += 1
 

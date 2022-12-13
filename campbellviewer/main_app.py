@@ -374,7 +374,7 @@ class SettingsPopupAEMode(SettingsPopup):
         popup_layoutNAME.addWidget(self.__NameSelection)
 
         self.__SymTypeSelection = QComboBox()
-        self.__SymTypeSelection.addItems(['Symmetric', 'Asymmetric'])
+        self.__SymTypeSelection.addItems(['symmetric', 'asymmetric'])
         self.__SymTypeSelection.setEditable(True)
         self.__SymTypeSelection.setCurrentText(self.symmetry_type)
         popup_layoutSYM.addWidget(QLabel('Symmetry type:'))
@@ -456,7 +456,7 @@ class SettingsPopupModeFilter(SettingsPopup):
         popup_layoutBttn = QHBoxLayout(self)
 
         self.__SymTypeSelection = QComboBox()
-        self.__SymTypeSelection.addItems(['all', 'Symmetric', 'Asymmetric'])
+        self.__SymTypeSelection.addItems(['all', 'symmetric', 'asymmetric'])
         self.__SymTypeSelection.setEditable(True)
         popup_layoutSYM.addWidget(QLabel('Only show this symmetry type:'))
         popup_layoutSYM.addWidget(self.__SymTypeSelection)
@@ -657,6 +657,7 @@ class AmplitudeWindow(QMainWindow):
     Separate window for participation factor plot
 
     Attributes:
+        requested_toolname (str): Name of the tool which is analysed
         settingsAMPmode (int): ID of the mode which is analysed
         AMPmode_name (str): Name of the mode which is analysed
         dataset (AbstractLinearizationData): Dataset to be analysed
@@ -695,6 +696,7 @@ class AmplitudeWindow(QMainWindow):
             threshold: Threshold determining which participation modes are visualized, i.e. only modes with
                 a significant participation are shown.
         """
+        self.requested_toolname = requested_toolname
         self.settingsAMPmode = requested_mode_id
         self.AMPmode_name = database[requested_toolname][requested_datasetname].ds.modes.values[requested_mode_id].name
         self.dataset = dataset
@@ -767,7 +769,7 @@ class AmplitudeWindow(QMainWindow):
         for i, mode in enumerate(self.dataset.participation_modes.values):
             # only show modes with a part. of minimum self.AMPthreshold (for at least one of the operating points)
             if max(self.dataset.participation_factors_amp.loc[:, i, self.settingsAMPmode]) > self.AMPthreshold:
-                ls = mpl_ls.new_ls()
+                ls = mpl_ls.new_ls(self.requested_toolname)
                 ampl_line, = self.axes1.plot(self.dataset.operating_points.loc[:, self.xaxis_param],
                                 self.dataset.participation_factors_amp.loc[:, i, self.settingsAMPmode],
                                 label=mode.name, linewidth=mpl_ls.lw, c=ls['color'], linestyle=ls['linestyle'],
@@ -879,7 +881,8 @@ class DatasetTree(QTreeView):
             self.tree_model.set_checked(idx, Qt.Unchecked, only_selected=True, selection=self.selectedIndexes())
         elif action == filterModes:
             self.popupFilterModes = SettingsPopupModeFilter()
-            self.tree_model.filter_checked(idx.internalPointer(), self.popupFilterModes.get_settings())
+            self.tree_model.filter_checked(idx.internalPointer(), self.popupFilterModes.get_settings(),
+                                           selection=self.selectedIndexes())
             del self.popupFilterModes
         elif action == deleteThisItem:
             self.tree_model.delete_data([idx])
@@ -1106,8 +1109,9 @@ class ApplicationWindow(QMainWindow):
 
                     # get xaxis values
                     if self.xaxis_param not in database[atool][ads].ds.operating_parameter:
-                        print('WARNING: Operating condition {} is not available in the {}-{} dataset. The data will '
-                              'not be plotted.'.format(self.xaxis_param, atool, ads))
+                        self.statusBar().showMessage('WARNING: Operating condition {} is not available in the {}-{} '
+                                                     'dataset. The data will not be '
+                                                     'plotted.'.format(self.xaxis_param, atool, ads), 4000)
                         continue
                     else:
                         xaxis_values = database[atool][ads].ds['operating_points'].loc[:, self.xaxis_param]
@@ -1190,11 +1194,10 @@ class ApplicationWindow(QMainWindow):
             bbox = self.legend.get_window_extent(self.fig.canvas.get_renderer()).transformed(self.fig.transFigure.inverted())
             if bbox.y1 < 1:
                 break
-            # print('  ', fontsize, ': bbox', bbox, 'too big, decreasing legend font size')
             self.legend.remove()
             self.legend = None
         if self.legend is None:
-            print('Legend disabled (too big for canvas)')
+            self.statusBar().showMessage('Legend disabled (too big for canvas)', 4000)
         self.fig.tight_layout(rect=(0, 0, bbox.x0, 1), h_pad=0.5, w_pad=0.5)
 
         xlim, ylim, y2lim = view_cfg.get_axes_limits(self.axes1.get_xlim(), self.axes1.get_ylim(), self.axes2.get_ylim())
@@ -1340,7 +1343,7 @@ class ApplicationWindow(QMainWindow):
 
                         for sel in self.cursor.selections:
                             if sel.artist in mode_lines:
-                                print('Selections are:', atool, ads, mode_ID)
+                                # print('Selections are:', atool, ads, mode_ID)
                                 selected_lines.append([atool, ads, mode_ID])
 
         return selected_lines
@@ -1458,7 +1461,7 @@ class ApplicationWindow(QMainWindow):
         tool, datasetname = self.popup.get_settings()
 
         if '&' in datasetname:
-            print('& is not allowed in the datasetname')
+            self.statusBar().showMessage('& is not allowed in the datasetname', 4000)
             datasetname = datasetname.replace('&', '_')
 
         # A unique datasetname is enforced
@@ -1500,8 +1503,16 @@ class ApplicationWindow(QMainWindow):
         view_cfg.lines[toolname][datasetname] = [None]*len(database[toolname][datasetname].ds.modes)
 
         # add the (unique) operating parameters of this dataset to the xaxis button.
-        self.button_xaxis.addItems(list(set(database[toolname][datasetname].ds.operating_parameter.data).difference(
-                                       set([self.button_xaxis.itemText(i) for i in range(self.button_xaxis.count())]))))
+        if len(self.button_xaxis) == 0:
+            # this is first data added -> Use "wind speed [m/s]" as default operating parameter if it is in the
+            # operating parameter list of the dataset.
+            self.button_xaxis.addItems(database[toolname][datasetname].ds.operating_parameter.data)
+            if 'wind speed [m/s]' in database[toolname][datasetname].ds.operating_parameter.data:
+                self.button_xaxis.setCurrentText('wind speed [m/s]')
+        else:
+            # only add unique parameters
+            self.button_xaxis.addItems(list(set(database[toolname][datasetname].ds.operating_parameter.data).difference(
+                                           set([self.button_xaxis.itemText(i) for i in range(self.button_xaxis.count())]))))
         self.button_xaxis.model().sort(0)
 
     def openFileNameDialogHAWCStab2(self, datasetname: str='default'):
@@ -1563,27 +1574,27 @@ class ApplicationWindow(QMainWindow):
         """ Modify the data if the user requests a different variable on the x-axis
 
         - set the xaxis_param
-        - modify all xaxis values of the active lines
+        - modify all xaxis values of all lines
         - update the main plot
 
         Args:
             text: Identifier for the x-axis parameter
         """
         self.xaxis_param = text
-        # modify the xaxis values of all visible lines
-        for atool in view_cfg.active_data:  # active tool
-            for ads in view_cfg.active_data[atool]:  # active dataset
-                if text not in database[atool][ads].ds.operating_parameter:
-                    view_cfg.reset_these_lines(tool=atool, ds=ads)
+        # modify the xaxis values of all lines
+        for tool in view_cfg.lines:
+            for ds in view_cfg.lines[tool]:
+                if text not in database[tool][ds].ds.operating_parameter:
+                    view_cfg.reset_these_lines(tool=tool, ds=ds)
                 else:
-                    for mode_ID in view_cfg.active_data[atool][ads]:  # active mode tracks
-                        if view_cfg.lines[atool][ads][mode_ID] is not None:
-                            for artist in view_cfg.lines[atool][ads][mode_ID]:  # freq. and damp. lines
+                    for mode_lines in view_cfg.lines[tool][ds]:
+                        if mode_lines is not None:
+                            for artist in mode_lines:  # freq. and damp. lines
                                 if isinstance(artist, matplotlib.lines.Line2D):
-                                    artist.set_xdata(database[atool][ads].ds["operating_points"].sel(operating_parameter=text))
+                                    artist.set_xdata(database[tool][ds].ds["operating_points"].sel(operating_parameter=text))
                                 else:
                                     scatter_offsets = artist.get_offsets()
-                                    scatter_offsets[:, 0] = database[atool][ads].ds["operating_points"].sel(operating_parameter=text)
+                                    scatter_offsets[:, 0] = database[tool][ds].ds["operating_points"].sel(operating_parameter=text)
                                     artist.set_offsets(scatter_offsets)
 
         view_cfg.auto_scaling_x = True
@@ -1631,10 +1642,12 @@ class ApplicationWindow(QMainWindow):
         """ Create a window for the participation factors of the highlighted mode in the diagram """
         selected_lines = self.find_data_of_highlights()
         if selected_lines == []:
-            print('WARNING: There are no lines selected in the diagram, so no amplitude plot will be made')
+            self.statusBar().showMessage('WARNING: There are no lines selected in the diagram, '
+                                         'so no amplitude plot will be made', 4000)
         else:
             if len(selected_lines) > 1:
-                print('WARNING: Multiple lines are selected in the diagram, but only one amplitude plot will be made')
+                self.statusBar().showMessage('WARNING: Multiple lines are selected in the diagram, '
+                                             'but only one amplitude plot will be made', 4000)
             self.initAmplitudes(popup=False, chosen_mode=selected_lines[0])
 
     def initAmplitudes(self, popup: bool=True, chosen_mode: list=None):

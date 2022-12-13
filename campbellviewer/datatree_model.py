@@ -144,7 +144,12 @@ class TreeModel(QAbstractItemModel):
         """ sets data in the tree model based on user modification in the tree view and updates database accordingly """
         item = self.getItem(index)
         if role == Qt.EditRole:
+            if value == '':
+                return False  # return and do not change item if it is left blank
             original_branch = self.get_branch_from_item(item)
+            if len(original_branch) == 2 and value in database[original_branch[-1]]:
+                print('This dataset name already exists, please specify a unique dataset name')
+                return False
             item.itemName = value
             modified_branch = self.get_branch_from_item(item)
             if item.itemData is not None:
@@ -292,7 +297,7 @@ class TreeModel(QAbstractItemModel):
 
         for tool in database:
             if tool in old_database:
-                current_tool_node = self.rootItem.childItems[list(old_database.keys()).index(tool)]
+                current_tool_node = self.rootItem.childItems[[item.itemName for item in self.rootItem.childItems].index(tool)]
             else:
                 if tool in view_cfg.active_data:
                     self.rootItem.appendChild(TreeItem(tool, Qt.Checked, self.rootItem, item_type='tool'))
@@ -481,9 +486,12 @@ class TreeModel(QAbstractItemModel):
         self.updateActiveData()
         self.layoutChanged.emit()
 
-    def filter_checked(self, base_node, filter):
-        """
-        Change checked state of multiple items in the tree model based on a filter on the AEMode attributes
+    def filter_checked(self, base_node, filter, selection=[]):
+        """ Apply filter on modes
+
+        Change checked state of multiple items in the tree model based on a filter on the AEMode attributes.
+        If the 'filter modes' method is called from a tool or dataset item, only the activated modes will be filtered.
+        If the 'filter modes' method is called from a mode item, only the selected modes will be filtered.
 
         Args:
             base_node (item):
@@ -491,16 +499,17 @@ class TreeModel(QAbstractItemModel):
                 'children modes' will be filtered.
             filter (tuple):
                 AEMode attributes to filter for (symmetry_type, whirl_type, wt_component)
-
+            selection (list) : list with the selected indices in the view
         """
         if base_node.itemType == 'mode':
-            base_node.itemActivity = base_node.itemData.filter(filter)
+            for selected_index in selection:
+                self.getItem(selected_index).itemActivity = self.getItem(selected_index).itemData.filter(filter)
 
         for node in base_node.childItems:
-            if node.itemType == 'mode':
+            if node.itemType == 'mode' and node.itemActivity == Qt.Checked:
                 node.itemActivity = node.itemData.filter(filter)
             for node in node.childItems:
-                if node.itemType == 'mode':
+                if node.itemType == 'mode' and node.itemActivity == Qt.Checked:
                     node.itemActivity = node.itemData.filter(filter)
 
         self.updateActivityRepresentation(base_node)
