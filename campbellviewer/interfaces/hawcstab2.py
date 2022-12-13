@@ -139,7 +139,7 @@ class HAWCStab2Data(AbstractLinearizationData):
                                  dtype='float')
         except OSError:
             print(
-                f'ERROR: HAWCStab2 cmb file {self.ds.attrs["filenameamp"]} '
+                f'ERROR: HAWCStab2 amp file {self.ds.attrs["filenameamp"]} '
                 f'not found! Abort!'
             )
             return
