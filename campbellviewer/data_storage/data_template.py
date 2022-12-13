@@ -41,7 +41,11 @@ class AbstractLinearizationData:
 
         # Timestamp and user metadata are saved when the dataset class is initiated
         self.ds.attrs["timestamp"] = datetime.now().strftime("%c")
-        self.ds.attrs["user"] = os.getlogin()
+        try:
+            self.ds.attrs["user"] = os.getlogin()
+        except OSError:
+            # This is used for the testing pipeline
+            self.ds.attrs["user"] = "default_user"
 
     def remove_modes(self, mode_ids):
         """Remove modes (identified by their index) from the database.
