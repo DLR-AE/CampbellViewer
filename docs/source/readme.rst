@@ -1,3 +1,5 @@
+.. _sec_readme:
+
 Getting started
 ===============
 
