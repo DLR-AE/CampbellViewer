@@ -20,6 +20,7 @@ extensions = [
     "sphinx.ext.autosummary",
     "sphinx.ext.napoleon",
     "myst_parser",
+    "sphinx_design",
 ]
 
 templates_path = ["_templates"]
@@ -30,20 +31,25 @@ exclude_patterns = []
 # -- Options for HTML output -------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#options-for-html-output
 
-html_theme = "sphinx_rtd_theme"
-html_theme_options = {"logo_only": True}
+html_theme = "pydata_sphinx_theme"
+# html_theme_options = {"logo_only": True}
+html_theme_options = {
+        "show_prev_next": False,
+        "navigation_with_keys": False
+    }
 
 html_logo = "./images/sample_icon.png"
 
 html_static_path = ["_static"]
-html_css_files = ["css/custom.css"]
+# html_css_files = ["css/custom.css"]
 
 
 # -- Extension configuration -------------------------------------------------
 autosummary_generate = True
 autodoc_typehints = "description"
+autodoc_member_order="groupwise" # sorting of functions etc.
 autodoc_default_options = {
-    "members": True,
-    "inherited-members": False,
-    "exclude-members": "with_traceback",
+    "members": True, #
+    "member-order": "bysource", # "groupwise", "alphabetical"
+    "undoc-members": True,
 }

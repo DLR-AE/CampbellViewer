@@ -1,35 +1,39 @@
-# """
-# #######################################################################################
-# This file is part of CampbellViewer.
+"""
+Disclaimer
+-----------------------------------------------------------------
 
-# CampbellViewer is free software: you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation, either version 3 of the License, or
-# (at your option) any later version.
+Simple postprocessing GUI for wind turbine linearization results.
 
-# CampbellViewer is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
+Purposes:
+- Create Interactive Campbell-Plots
+- Participation plots
+- Mode visualizations
+- etc.
 
-# You should have received a copy of the GNU General Public License
-# along with CampbellViewer. If not, see <http://www.gnu.org/licenses/>
-# #######################################################################################
+.. note::
+    CampbellViewer is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
 
-# --------------------------------------------------------------------------------------
-# Simple postprocessing GUI for wind turbine linearization results.
+    CampbellViewer is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
 
+    You should have received a copy of the GNU General Public License
+    along with CampbellViewer. If not, klick `here <http://www.gnu.org/licenses/>`_
 
-# Purpose: Create Interactive Campbell-Plots, participation plots, mode visualizations, etc.
+    There is NO warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR
+    PURPOSE.
 
-# author: J.Rieke - Nordex Energy GmbH
-#         H.Verdonck - DLR
-#         O.Hach - DLR
+authors:
+- J. Rieke - Nordex Energy GmbH
+- H. Verdonck - DLR
+- O. Hach - DLR
+- N. Joeres - Nordex Energy GmbH
 
-# --------------------------------------------------------------------------------------
-# There is NO warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
-# --------------------------------------------------------------------------------------
-# """
+"""
 
 from __future__ import annotations
 import sys
@@ -1452,10 +1456,12 @@ class ApplicationWindow(QMainWindow):
     def dataSelection(self):
         """ Select HAWCStab2 or Bladed data to add to GUI
 
-        - Uses a SettingsPopupDataSelection popup to select from which tool data will be loaded and which (unique) name
-        the dataset will get.
+        - Uses a SettingsPopupDataSelection popup to select from which tool data
+          will be loaded and which (unique) name the dataset will get.
+
         - Loads the data through a fileDialog.
         - Adds the data the dataset tree model
+
         """
         self.popup = SettingsPopupDataSelection()
         tool, datasetname = self.popup.get_settings()
@@ -1579,6 +1585,7 @@ class ApplicationWindow(QMainWindow):
 
         Args:
             text: Identifier for the x-axis parameter
+
         """
         self.xaxis_param = text
         # modify the xaxis values of all lines
