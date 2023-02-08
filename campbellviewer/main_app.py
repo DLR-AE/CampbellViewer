@@ -44,9 +44,12 @@ import argparse
 
 from PyQt5 import QtCore
 from PyQt5.QtWidgets import QApplication, QMainWindow, QMenu, QVBoxLayout, QHBoxLayout, QMessageBox, QWidget, QDialog
-from PyQt5.QtWidgets import QLineEdit, QFileDialog, QPushButton, QLabel, QSpinBox, QCheckBox, QComboBox, QTreeView
+from PyQt5.QtWidgets import QLineEdit, QFileDialog, QPushButton, QLabel, QSpinBox, QCheckBox, QComboBox, QTreeView, QAction
 from PyQt5.QtGui  import QIcon, QDoubleValidator
 from PyQt5.QtCore import QFileInfo, Qt, QItemSelectionModel
+import qdarkstyle
+from qdarkstyle.dark.palette import DarkPalette  # noqa: E402
+from qdarkstyle.light.palette import LightPalette  # noqa: E402
 
 import matplotlib
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
@@ -61,8 +64,6 @@ from campbellviewer.settings.view import MPLLinestyle
 from campbellviewer.utilities import assure_unique_name
 
 matplotlib.use("Qt5Agg")
-matplotlib.rcParams['hatch.color']     = 'grey'
-matplotlib.rcParams['hatch.linewidth'] = 0.2
 
 # activate clipboard --> not working currently!
 #~ matplotlib.rcParams['toolbar'] = 'toolmanager'
@@ -899,6 +900,7 @@ class ApplicationWindow(QMainWindow):
     Main window of the GUI
 
     Attributes:
+        app (QApplication): Main QApplication instance
         file_menu (QMenu): Dropdown menu for file operations (loading/saving data)
         settings_menu (QMenu): Dropdown menu for managing GUI settings
         tools_menu (QMenu): Dropdown menu for additional tools to interact or visualize data
@@ -933,10 +935,19 @@ class ApplicationWindow(QMainWindow):
         pick_markers_box (QCheckBox): Toggling picking markers or picking lines
     """
 
-    def __init__(self):
+    def __init__(self, app: QApplication=None):
+        """ Initializes the main application window
+
+        Args:
+             app: Main QApplication instance, forwarded to allow stylesheets updates from the application window
+        """
         super(ApplicationWindow, self).__init__()
         self.setAttribute(QtCore.Qt.WA_DeleteOnClose)
         self.setWindowTitle("Application main window")
+
+        ##############################################################
+        # Qt Application
+        self.app = app
 
         ##############################################################
         # Menu items
@@ -954,7 +965,13 @@ class ApplicationWindow(QMainWindow):
         self.settings_menu = QMenu('&Settings', self)
         self.menuBar().addSeparator()
         self.menuBar().addMenu(self.settings_menu)
-        self.settings_menu.addAction('&Header Lines', self.setHeaderLines)
+        gui_style_menu = QMenu('&GUI style', self)
+        for style in ['Fusion', 'Dark', 'Light']:
+            style_action = QAction(style, self)
+            style_action.triggered.connect(lambda _, style=style: self.update_stylesheet(style))
+            gui_style_menu.addAction(style_action)
+        self.settings_menu.addMenu(gui_style_menu)
+        self.settings_menu.addAction('&Header lines', self.setHeaderLines)
         self.settings_menu.addAction('&Linestyle defaults', self.setLinestyleDefaults)
 
         # Tools
@@ -1018,8 +1035,8 @@ class ApplicationWindow(QMainWindow):
         self.legend = None
 
         # create figure with two axis
-        self.axes1      = self.fig.add_subplot(211)
-        self.axes2      = self.fig.add_subplot(212, sharex=self.axes1)
+        self.axes1 = self.fig.add_subplot(211)
+        self.axes2 = self.fig.add_subplot(212, sharex=self.axes1)
         self.right_mouse_press = False
         self.cursor = None
 
@@ -1642,6 +1659,62 @@ class ApplicationWindow(QMainWindow):
         self.popup = SettingsPopupLinestyle(self)
         del self.popup
 
+    def update_stylesheet(self, style: str='Fusion'):
+        """ Updates Qt application stylesheet, existing matplotlib figures and matplotlib rcparams
+
+        Args:
+            style : string
+                Identifier for the qt style sheet. Options: 'Fusion', 'Dark', 'Light'
+        """
+
+        # update qt style sheet
+        if style == 'Fusion':
+            self.app.setStyleSheet('Fusion')
+        elif style == 'Dark':
+            self.app.setStyleSheet(qdarkstyle.load_stylesheet(qt_api='pyqt5', palette=DarkPalette))
+        elif style == 'Light':
+            self.app.setStyleSheet(qdarkstyle.load_stylesheet(qt_api='pyqt5', palette=LightPalette))
+
+        # update matplotlib defaults
+        view_cfg.set_matplotlib_defaults(style)
+
+        # update existing matplotlib plots
+        self.update_mpl_fig_style(style)
+        self.UpdateMainPlot()
+
+    def update_mpl_fig_style(self, qt_style):
+        if qt_style == 'Fusion':
+            self.fig.patch.set_facecolor('w')
+            for ax in [self.axes1, self.axes2]:
+                ax.set_facecolor('w')
+                ax.spines['bottom'].set_color('k')
+                ax.spines['top'].set_color('k')
+                ax.spines['right'].set_color('k')
+                ax.spines['left'].set_color('k')
+                ax.xaxis.label.set_color('k')
+                ax.yaxis.label.set_color('k')
+        elif qt_style == 'Light':
+            self.fig.patch.set_facecolor(LightPalette.COLOR_BACKGROUND_1)
+            for ax in [self.axes1, self.axes2]:
+                ax.set_facecolor(LightPalette.COLOR_BACKGROUND_1)
+                ax.spines['bottom'].set_color(LightPalette.COLOR_TEXT_1)
+                ax.spines['top'].set_color(LightPalette.COLOR_TEXT_1)
+                ax.spines['right'].set_color(LightPalette.COLOR_TEXT_1)
+                ax.spines['left'].set_color(LightPalette.COLOR_TEXT_1)
+                ax.xaxis.label.set_color(LightPalette.COLOR_TEXT_1)
+                ax.yaxis.label.set_color(LightPalette.COLOR_TEXT_1)
+        else:
+            self.fig.patch.set_facecolor(DarkPalette.COLOR_BACKGROUND_2)
+            for ax in [self.axes1, self.axes2]:
+                ax.set_facecolor(DarkPalette.COLOR_BACKGROUND_1)
+                ax.spines['bottom'].set_color(DarkPalette.COLOR_TEXT_1)
+                ax.spines['top'].set_color(DarkPalette.COLOR_TEXT_1)
+                ax.spines['right'].set_color(DarkPalette.COLOR_TEXT_1)
+                ax.spines['left'].set_color(DarkPalette.COLOR_TEXT_1)
+
+                ax.xaxis.label.set_color(DarkPalette.COLOR_TEXT_1)
+                ax.yaxis.label.set_color(DarkPalette.COLOR_TEXT_1)
+
     ##########
     # Tools
     ##########
@@ -1801,7 +1874,9 @@ def main():
     app = QApplication(qt_args)
     app.setStyle('Fusion')
 
-    aw = ApplicationWindow()
+    view_cfg.set_matplotlib_defaults('Fusion')
+
+    aw = ApplicationWindow(app)
     aw.setWindowTitle("UniversalCampbellPlotter")
     aw.setWindowIcon(QIcon('../docs/source/images/sample_icon.png'))
 

@@ -3,7 +3,8 @@ Module for settings of view in the main application.
 """
 
 import matplotlib
-
+from qdarkstyle.dark.palette import DarkPalette  # noqa: E402
+from qdarkstyle.light.palette import LightPalette  # noqa: E402
 
 class ViewSettings:
     """
@@ -134,6 +135,50 @@ class ViewSettings:
             self.auto_scaling_y = False
 
         return self.axes_limits
+
+    def set_matplotlib_defaults(self, qt_style='Fusion'):
+        """
+        Sets the matplotlib default style properties matching with the qt style sheet
+
+        Args:
+            qt_style : string
+                Identifier for the qt style sheet. Options: 'Fusion', 'Dark', 'Light'
+        """
+        matplotlib.rcParams['hatch.color'] = 'grey'
+        matplotlib.rcParams['hatch.linewidth'] = 0.2
+
+        if qt_style == 'Fusion' or qt_style == 'Light':
+            matplotlib.rcParams['ytick.color'] = 'k'
+            matplotlib.rcParams['xtick.color'] = 'k'
+            matplotlib.rcParams['axes.labelcolor'] = 'k'
+            matplotlib.rcParams['axes.titlecolor'] = 'k'
+            matplotlib.rcParams['axes.edgecolor'] = 'k'
+            matplotlib.rcParams['axes.facecolor'] = 'w'
+            matplotlib.rcParams['figure.facecolor'] = 'w'
+            matplotlib.rcParams['legend.facecolor'] = 'w'
+            matplotlib.rcParams['legend.labelcolor'] = 'k'
+        elif qt_style == 'Light':
+            matplotlib.rcParams['ytick.color'] = LightPalette.COLOR_TEXT_1
+            matplotlib.rcParams['xtick.color'] = LightPalette.COLOR_TEXT_1
+            matplotlib.rcParams['axes.labelcolor'] = LightPalette.COLOR_TEXT_1
+            matplotlib.rcParams['axes.titlecolor'] = LightPalette.COLOR_TEXT_1
+            matplotlib.rcParams['axes.edgecolor'] = LightPalette.COLOR_TEXT_1
+            matplotlib.rcParams['axes.facecolor'] = LightPalette.COLOR_BACKGROUND_1
+            matplotlib.rcParams['figure.facecolor'] = LightPalette.COLOR_BACKGROUND_1
+            matplotlib.rcParams['legend.facecolor'] = LightPalette.COLOR_BACKGROUND_1
+            matplotlib.rcParams['legend.labelcolor'] = LightPalette.COLOR_TEXT_1
+        else:
+            matplotlib.rcParams['hatch.color'] = DarkPalette.COLOR_TEXT_1
+            matplotlib.rcParams['ytick.color'] = DarkPalette.COLOR_TEXT_1
+            matplotlib.rcParams['xtick.color'] = DarkPalette.COLOR_TEXT_1
+            matplotlib.rcParams['axes.labelcolor'] = DarkPalette.COLOR_TEXT_1
+            matplotlib.rcParams['axes.titlecolor'] = DarkPalette.COLOR_TEXT_1
+            matplotlib.rcParams['axes.edgecolor'] = DarkPalette.COLOR_TEXT_1
+            matplotlib.rcParams['axes.facecolor'] = DarkPalette.COLOR_BACKGROUND_1
+            matplotlib.rcParams['grid.color'] = DarkPalette.COLOR_BACKGROUND_2
+            matplotlib.rcParams['figure.facecolor'] = DarkPalette.COLOR_BACKGROUND_1
+            matplotlib.rcParams['legend.facecolor'] = DarkPalette.COLOR_BACKGROUND_1
+            matplotlib.rcParams['legend.labelcolor'] = DarkPalette.COLOR_TEXT_1
 
 
 class MPLLinestyle:
