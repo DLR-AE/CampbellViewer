@@ -1803,7 +1803,7 @@ def main():
 
     aw = ApplicationWindow()
     aw.setWindowTitle("UniversalCampbellPlotter")
-    aw.setWindowIcon(QIcon('../images/Campbell.PNG'))
+    aw.setWindowIcon(QIcon('../docs/source/images/sample_icon.png'))
 
     # set initial size
     w = 1400
