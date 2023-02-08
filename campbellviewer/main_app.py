@@ -113,9 +113,9 @@ class SettingsPopupDataSelection(SettingsPopup):
 
         self.setWindowTitle("Tool selection")
         popup_layoutV = QVBoxLayout(self)
-        popup_layoutTool = QHBoxLayout(self)
-        popup_layoutName = QHBoxLayout(self)
-        popup_layoutBttn = QHBoxLayout(self)
+        popup_layoutTool = QHBoxLayout()
+        popup_layoutName = QHBoxLayout()
+        popup_layoutBttn = QHBoxLayout()
 
         self.__ToolSelection = QComboBox()
         self.__ToolSelection.addItems(['HAWCStab2', 'Bladed (lin.)'])
@@ -184,10 +184,10 @@ class SettingsPopupHS2Headers(SettingsPopup):
         self.settingsOP = settingsOP
         self.setWindowTitle("Settings for Header Lines")
         popup_layoutV = QVBoxLayout(self)
-        popup_layoutHCMB = QHBoxLayout(self)
-        popup_layoutHAMP = QHBoxLayout(self)
-        popup_layoutHOP = QHBoxLayout(self)
-        popup_layoutBttn = QHBoxLayout(self)
+        popup_layoutHCMB = QHBoxLayout()
+        popup_layoutHAMP = QHBoxLayout()
+        popup_layoutHOP = QHBoxLayout()
+        popup_layoutBttn = QHBoxLayout()
 
         headerLinesCMBL = QLabel('Number of header lines in Campbell file:')
         headerLinesAMPL = QLabel('Number of header lines in Amplitude file:')
@@ -259,10 +259,10 @@ class SettingsPopupAMP(SettingsPopup):
         self.selected_dataset = list(view_cfg.active_data[self.selected_tool].keys())[0]
         self.setWindowTitle("Set mode number for Amplitude plot")
         popup_layoutV = QVBoxLayout(self)
-        popup_layoutAMPmode = QHBoxLayout(self)
-        popup_layoutBttn = QHBoxLayout(self)
-        popup_layoutDS = QHBoxLayout(self)
-        popup_layouttool = QHBoxLayout(self)
+        popup_layoutAMPmode = QHBoxLayout()
+        popup_layoutBttn = QHBoxLayout()
+        popup_layoutDS = QHBoxLayout()
+        popup_layouttool = QHBoxLayout()
 
         self.__ToolSelection = QComboBox()
         self.__ToolSelection.addItems(view_cfg.active_data.keys())
@@ -367,11 +367,11 @@ class SettingsPopupAEMode(SettingsPopup):
         self.setWindowTitle("Modify mode description")
 
         popup_layoutV = QVBoxLayout(self)
-        popup_layoutNAME = QHBoxLayout(self)
-        popup_layoutSYM = QHBoxLayout(self)
-        popup_layoutWHIRL = QHBoxLayout(self)
-        popup_layoutWT = QHBoxLayout(self)
-        popup_layoutBttn = QHBoxLayout(self)
+        popup_layoutNAME = QHBoxLayout()
+        popup_layoutSYM = QHBoxLayout()
+        popup_layoutWHIRL = QHBoxLayout()
+        popup_layoutWT = QHBoxLayout()
+        popup_layoutBttn = QHBoxLayout()
 
         self.__NameSelection = QLineEdit(self.name)
         popup_layoutNAME.addWidget(QLabel('Mode name:'))
@@ -454,10 +454,10 @@ class SettingsPopupModeFilter(SettingsPopup):
         self.setWindowTitle("Filter modes")
 
         popup_layoutV = QVBoxLayout(self)
-        popup_layoutSYM = QHBoxLayout(self)
-        popup_layoutWHIRL = QHBoxLayout(self)
-        popup_layoutWT = QHBoxLayout(self)
-        popup_layoutBttn = QHBoxLayout(self)
+        popup_layoutSYM = QHBoxLayout()
+        popup_layoutWHIRL = QHBoxLayout()
+        popup_layoutWT = QHBoxLayout()
+        popup_layoutBttn = QHBoxLayout()
 
         self.__SymTypeSelection = QComboBox()
         self.__SymTypeSelection.addItems(['all', 'symmetric', 'asymmetric'])
@@ -539,14 +539,14 @@ class SettingsPopupLinestyle(SettingsPopup):
         self.main_window = main_window
 
         popup_layoutV = QVBoxLayout(self)
-        popup_layoutCM = QHBoxLayout(self)
-        popup_layoutLS = QHBoxLayout(self)
-        popup_layoutMARKER = QHBoxLayout(self)
-        popup_layoutLW = QHBoxLayout(self)
-        popup_layoutMARKERSIZE = QHBoxLayout(self)
-        popup_layoutCM2 = QHBoxLayout(self)
-        popup_layoutSDO = QHBoxLayout(self)
-        popup_layoutBttn = QHBoxLayout(self)
+        popup_layoutCM = QHBoxLayout()
+        popup_layoutLS = QHBoxLayout()
+        popup_layoutMARKER = QHBoxLayout()
+        popup_layoutLW = QHBoxLayout()
+        popup_layoutMARKERSIZE = QHBoxLayout()
+        popup_layoutCM2 = QHBoxLayout()
+        popup_layoutSDO = QHBoxLayout()
+        popup_layoutBttn = QHBoxLayout()
 
         self.__CMSelection = QComboBox()
         self.__CMSelection.addItems(['tab10', 'tab20', 'tab20b', 'tab20c', 'Pastel1', 'Pastel2', 'Paired',
@@ -977,10 +977,10 @@ class ApplicationWindow(QMainWindow):
         ##############################################################
         # Layout definition
         self.main_layout      = QVBoxLayout(self.main_widget)
-        self.button_layout    = QHBoxLayout(self.main_widget)
-        self.layout_mplib     = QVBoxLayout(self.main_widget)
-        self.layout_list      = QVBoxLayout(self.main_widget)
-        self.layout_mpliblist = QHBoxLayout(self.main_widget)
+        self.button_layout    = QHBoxLayout()
+        self.layout_mplib     = QVBoxLayout()
+        self.layout_list      = QVBoxLayout()
+        self.layout_mpliblist = QHBoxLayout()
 
         self.main_layout.addLayout(self.button_layout)
         self.main_layout.addLayout(self.layout_mpliblist)
