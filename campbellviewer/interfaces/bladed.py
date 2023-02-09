@@ -39,9 +39,8 @@ class BladedLinData(AbstractLinearizationData):
                     return version
         return None
 
-    def read_data(self):
-        """ Read all available Campbell diagram data. """
-
+    def scan_bladed_results(self) -> BladedResult:
+        """ Scan the available Bladed results """
         bladed_result = BladedResult(self.ds.attrs["result_dir"], self.ds.attrs["result_prefix"])
         try:
             bladed_result.scan()
@@ -49,6 +48,12 @@ class BladedLinData(AbstractLinearizationData):
             print('WARNING: There are no result files in the same directory as the .$PJ file. So no Bladed results '
                   'can be loaded.')
             raise
+        return bladed_result
+
+    def read_data(self):
+        """ Read all available Campbell diagram data. """
+
+        bladed_result = self.scan_bladed_results()
 
         if int(self.ds.attrs["bladed_version"].split('.')[1]) <= 6:
             self.read_coupled_modes_pre4p7(bladed_result)
