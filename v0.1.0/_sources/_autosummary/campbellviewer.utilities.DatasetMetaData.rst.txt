@@ -1,0 +1,65 @@
+DatasetMetaData
+###############
+*campbellviewer.utilities.DatasetMetaData*
+
+.. currentmodule:: campbellviewer.utilities
+
+
+
+
+Methods
+=======
+
+.. tab-set::
+
+   .. tab-item:: Plain
+      :sync: key-plain
+
+      .. autosummary::
+
+         ~DatasetMetaData.__init__
+
+         ~DatasetMetaData.summary
+
+
+   .. tab-item:: Inherited
+      :sync: key-inherited
+
+      .. autosummary::
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Definition
+==========
+
+.. tab-set::
+
+   .. tab-item:: Plain
+      :sync: key-plain
+
+      .. autoclass:: DatasetMetaData
+         :show-inheritance:
+         :members: DatasetMetaData.__init__,DatasetMetaData.summary,
+
+   .. tab-item:: Inherited
+      :sync: key-inherited
+
+      .. autoclass:: DatasetMetaData
+         :show-inheritance:
+         :inherited-members:
+         :noindex:

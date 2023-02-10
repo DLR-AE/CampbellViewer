@@ -1,0 +1,787 @@
+SettingsPopupAMP
+################
+*campbellviewer.main_app.SettingsPopupAMP*
+
+.. currentmodule:: campbellviewer.main_app
+
+
+
+
+Methods
+=======
+
+.. tab-set::
+
+   .. tab-item:: Plain
+      :sync: key-plain
+
+      .. autosummary::
+
+         ~SettingsPopupAMP.__init__
+
+         ~SettingsPopupAMP.cancel
+
+         ~SettingsPopupAMP.get_settings
+
+         ~SettingsPopupAMP.update_dataset_choice
+
+         ~SettingsPopupAMP.update_mode_choice
+
+         ~SettingsPopupAMP.update_settings
+
+
+   .. tab-item:: Inherited
+      :sync: key-inherited
+
+      .. autosummary::
+
+         ~SettingsPopupAMP.accept
+
+         ~SettingsPopupAMP.acceptDrops
+
+         ~SettingsPopupAMP.accessibleDescription
+
+         ~SettingsPopupAMP.accessibleName
+
+         ~SettingsPopupAMP.actionEvent
+
+         ~SettingsPopupAMP.actions
+
+         ~SettingsPopupAMP.activateWindow
+
+         ~SettingsPopupAMP.addAction
+
+         ~SettingsPopupAMP.addActions
+
+         ~SettingsPopupAMP.adjustSize
+
+         ~SettingsPopupAMP.autoFillBackground
+
+         ~SettingsPopupAMP.backgroundRole
+
+         ~SettingsPopupAMP.baseSize
+
+         ~SettingsPopupAMP.blockSignals
+
+         ~SettingsPopupAMP.changeEvent
+
+         ~SettingsPopupAMP.childAt
+
+         ~SettingsPopupAMP.childEvent
+
+         ~SettingsPopupAMP.children
+
+         ~SettingsPopupAMP.childrenRect
+
+         ~SettingsPopupAMP.childrenRegion
+
+         ~SettingsPopupAMP.clearFocus
+
+         ~SettingsPopupAMP.clearMask
+
+         ~SettingsPopupAMP.close
+
+         ~SettingsPopupAMP.closeEvent
+
+         ~SettingsPopupAMP.close_popup
+
+         ~SettingsPopupAMP.colorCount
+
+         ~SettingsPopupAMP.connectNotify
+
+         ~SettingsPopupAMP.contentsMargins
+
+         ~SettingsPopupAMP.contentsRect
+
+         ~SettingsPopupAMP.contextMenuEvent
+
+         ~SettingsPopupAMP.contextMenuPolicy
+
+         ~SettingsPopupAMP.create
+
+         ~SettingsPopupAMP.createWindowContainer
+
+         ~SettingsPopupAMP.cursor
+
+         ~SettingsPopupAMP.customEvent
+
+         ~SettingsPopupAMP.deleteLater
+
+         ~SettingsPopupAMP.depth
+
+         ~SettingsPopupAMP.destroy
+
+         ~SettingsPopupAMP.devType
+
+         ~SettingsPopupAMP.devicePixelRatio
+
+         ~SettingsPopupAMP.devicePixelRatioF
+
+         ~SettingsPopupAMP.devicePixelRatioFScale
+
+         ~SettingsPopupAMP.disconnect
+
+         ~SettingsPopupAMP.disconnectNotify
+
+         ~SettingsPopupAMP.done
+
+         ~SettingsPopupAMP.dragEnterEvent
+
+         ~SettingsPopupAMP.dragLeaveEvent
+
+         ~SettingsPopupAMP.dragMoveEvent
+
+         ~SettingsPopupAMP.dropEvent
+
+         ~SettingsPopupAMP.dumpObjectInfo
+
+         ~SettingsPopupAMP.dumpObjectTree
+
+         ~SettingsPopupAMP.dynamicPropertyNames
+
+         ~SettingsPopupAMP.effectiveWinId
+
+         ~SettingsPopupAMP.ensurePolished
+
+         ~SettingsPopupAMP.enterEvent
+
+         ~SettingsPopupAMP.event
+
+         ~SettingsPopupAMP.eventFilter
+
+         ~SettingsPopupAMP.exec
+
+         ~SettingsPopupAMP.exec_
+
+         ~SettingsPopupAMP.find
+
+         ~SettingsPopupAMP.findChild
+
+         ~SettingsPopupAMP.findChildren
+
+         ~SettingsPopupAMP.focusInEvent
+
+         ~SettingsPopupAMP.focusNextChild
+
+         ~SettingsPopupAMP.focusNextPrevChild
+
+         ~SettingsPopupAMP.focusOutEvent
+
+         ~SettingsPopupAMP.focusPolicy
+
+         ~SettingsPopupAMP.focusPreviousChild
+
+         ~SettingsPopupAMP.focusProxy
+
+         ~SettingsPopupAMP.focusWidget
+
+         ~SettingsPopupAMP.font
+
+         ~SettingsPopupAMP.fontInfo
+
+         ~SettingsPopupAMP.fontMetrics
+
+         ~SettingsPopupAMP.foregroundRole
+
+         ~SettingsPopupAMP.frameGeometry
+
+         ~SettingsPopupAMP.frameSize
+
+         ~SettingsPopupAMP.geometry
+
+         ~SettingsPopupAMP.getContentsMargins
+
+         ~SettingsPopupAMP.grab
+
+         ~SettingsPopupAMP.grabGesture
+
+         ~SettingsPopupAMP.grabKeyboard
+
+         ~SettingsPopupAMP.grabMouse
+
+         ~SettingsPopupAMP.grabShortcut
+
+         ~SettingsPopupAMP.graphicsEffect
+
+         ~SettingsPopupAMP.graphicsProxyWidget
+
+         ~SettingsPopupAMP.hasFocus
+
+         ~SettingsPopupAMP.hasHeightForWidth
+
+         ~SettingsPopupAMP.hasMouseTracking
+
+         ~SettingsPopupAMP.hasTabletTracking
+
+         ~SettingsPopupAMP.height
+
+         ~SettingsPopupAMP.heightForWidth
+
+         ~SettingsPopupAMP.heightMM
+
+         ~SettingsPopupAMP.hide
+
+         ~SettingsPopupAMP.hideEvent
+
+         ~SettingsPopupAMP.inherits
+
+         ~SettingsPopupAMP.initPainter
+
+         ~SettingsPopupAMP.inputMethodEvent
+
+         ~SettingsPopupAMP.inputMethodHints
+
+         ~SettingsPopupAMP.inputMethodQuery
+
+         ~SettingsPopupAMP.insertAction
+
+         ~SettingsPopupAMP.insertActions
+
+         ~SettingsPopupAMP.installEventFilter
+
+         ~SettingsPopupAMP.isActiveWindow
+
+         ~SettingsPopupAMP.isAncestorOf
+
+         ~SettingsPopupAMP.isEnabled
+
+         ~SettingsPopupAMP.isEnabledTo
+
+         ~SettingsPopupAMP.isFullScreen
+
+         ~SettingsPopupAMP.isHidden
+
+         ~SettingsPopupAMP.isLeftToRight
+
+         ~SettingsPopupAMP.isMaximized
+
+         ~SettingsPopupAMP.isMinimized
+
+         ~SettingsPopupAMP.isModal
+
+         ~SettingsPopupAMP.isRightToLeft
+
+         ~SettingsPopupAMP.isSignalConnected
+
+         ~SettingsPopupAMP.isSizeGripEnabled
+
+         ~SettingsPopupAMP.isVisible
+
+         ~SettingsPopupAMP.isVisibleTo
+
+         ~SettingsPopupAMP.isWidgetType
+
+         ~SettingsPopupAMP.isWindow
+
+         ~SettingsPopupAMP.isWindowModified
+
+         ~SettingsPopupAMP.isWindowType
+
+         ~SettingsPopupAMP.keyPressEvent
+
+         ~SettingsPopupAMP.keyReleaseEvent
+
+         ~SettingsPopupAMP.keyboardGrabber
+
+         ~SettingsPopupAMP.killTimer
+
+         ~SettingsPopupAMP.layout
+
+         ~SettingsPopupAMP.layoutDirection
+
+         ~SettingsPopupAMP.leaveEvent
+
+         ~SettingsPopupAMP.locale
+
+         ~SettingsPopupAMP.logicalDpiX
+
+         ~SettingsPopupAMP.logicalDpiY
+
+         ~SettingsPopupAMP.lower
+
+         ~SettingsPopupAMP.mapFrom
+
+         ~SettingsPopupAMP.mapFromGlobal
+
+         ~SettingsPopupAMP.mapFromParent
+
+         ~SettingsPopupAMP.mapTo
+
+         ~SettingsPopupAMP.mapToGlobal
+
+         ~SettingsPopupAMP.mapToParent
+
+         ~SettingsPopupAMP.mask
+
+         ~SettingsPopupAMP.maximumHeight
+
+         ~SettingsPopupAMP.maximumSize
+
+         ~SettingsPopupAMP.maximumWidth
+
+         ~SettingsPopupAMP.metaObject
+
+         ~SettingsPopupAMP.metric
+
+         ~SettingsPopupAMP.minimumHeight
+
+         ~SettingsPopupAMP.minimumSize
+
+         ~SettingsPopupAMP.minimumSizeHint
+
+         ~SettingsPopupAMP.minimumWidth
+
+         ~SettingsPopupAMP.mouseDoubleClickEvent
+
+         ~SettingsPopupAMP.mouseGrabber
+
+         ~SettingsPopupAMP.mouseMoveEvent
+
+         ~SettingsPopupAMP.mousePressEvent
+
+         ~SettingsPopupAMP.mouseReleaseEvent
+
+         ~SettingsPopupAMP.move
+
+         ~SettingsPopupAMP.moveEvent
+
+         ~SettingsPopupAMP.moveToThread
+
+         ~SettingsPopupAMP.nativeEvent
+
+         ~SettingsPopupAMP.nativeParentWidget
+
+         ~SettingsPopupAMP.nextInFocusChain
+
+         ~SettingsPopupAMP.normalGeometry
+
+         ~SettingsPopupAMP.objectName
+
+         ~SettingsPopupAMP.ok_click
+
+         ~SettingsPopupAMP.open
+
+         ~SettingsPopupAMP.overrideWindowFlags
+
+         ~SettingsPopupAMP.overrideWindowState
+
+         ~SettingsPopupAMP.paintEngine
+
+         ~SettingsPopupAMP.paintEvent
+
+         ~SettingsPopupAMP.paintingActive
+
+         ~SettingsPopupAMP.palette
+
+         ~SettingsPopupAMP.parent
+
+         ~SettingsPopupAMP.parentWidget
+
+         ~SettingsPopupAMP.physicalDpiX
+
+         ~SettingsPopupAMP.physicalDpiY
+
+         ~SettingsPopupAMP.pos
+
+         ~SettingsPopupAMP.previousInFocusChain
+
+         ~SettingsPopupAMP.property
+
+         ~SettingsPopupAMP.pyqtConfigure
+
+         ~SettingsPopupAMP.raise_
+
+         ~SettingsPopupAMP.receivers
+
+         ~SettingsPopupAMP.rect
+
+         ~SettingsPopupAMP.reject
+
+         ~SettingsPopupAMP.releaseKeyboard
+
+         ~SettingsPopupAMP.releaseMouse
+
+         ~SettingsPopupAMP.releaseShortcut
+
+         ~SettingsPopupAMP.removeAction
+
+         ~SettingsPopupAMP.removeEventFilter
+
+         ~SettingsPopupAMP.render
+
+         ~SettingsPopupAMP.repaint
+
+         ~SettingsPopupAMP.resize
+
+         ~SettingsPopupAMP.resizeEvent
+
+         ~SettingsPopupAMP.restoreGeometry
+
+         ~SettingsPopupAMP.result
+
+         ~SettingsPopupAMP.saveGeometry
+
+         ~SettingsPopupAMP.screen
+
+         ~SettingsPopupAMP.scroll
+
+         ~SettingsPopupAMP.sender
+
+         ~SettingsPopupAMP.senderSignalIndex
+
+         ~SettingsPopupAMP.setAcceptDrops
+
+         ~SettingsPopupAMP.setAccessibleDescription
+
+         ~SettingsPopupAMP.setAccessibleName
+
+         ~SettingsPopupAMP.setAttribute
+
+         ~SettingsPopupAMP.setAutoFillBackground
+
+         ~SettingsPopupAMP.setBackgroundRole
+
+         ~SettingsPopupAMP.setBaseSize
+
+         ~SettingsPopupAMP.setContentsMargins
+
+         ~SettingsPopupAMP.setContextMenuPolicy
+
+         ~SettingsPopupAMP.setCursor
+
+         ~SettingsPopupAMP.setDisabled
+
+         ~SettingsPopupAMP.setEnabled
+
+         ~SettingsPopupAMP.setFixedHeight
+
+         ~SettingsPopupAMP.setFixedSize
+
+         ~SettingsPopupAMP.setFixedWidth
+
+         ~SettingsPopupAMP.setFocus
+
+         ~SettingsPopupAMP.setFocusPolicy
+
+         ~SettingsPopupAMP.setFocusProxy
+
+         ~SettingsPopupAMP.setFont
+
+         ~SettingsPopupAMP.setForegroundRole
+
+         ~SettingsPopupAMP.setGeometry
+
+         ~SettingsPopupAMP.setGraphicsEffect
+
+         ~SettingsPopupAMP.setHidden
+
+         ~SettingsPopupAMP.setInputMethodHints
+
+         ~SettingsPopupAMP.setLayout
+
+         ~SettingsPopupAMP.setLayoutDirection
+
+         ~SettingsPopupAMP.setLocale
+
+         ~SettingsPopupAMP.setMask
+
+         ~SettingsPopupAMP.setMaximumHeight
+
+         ~SettingsPopupAMP.setMaximumSize
+
+         ~SettingsPopupAMP.setMaximumWidth
+
+         ~SettingsPopupAMP.setMinimumHeight
+
+         ~SettingsPopupAMP.setMinimumSize
+
+         ~SettingsPopupAMP.setMinimumWidth
+
+         ~SettingsPopupAMP.setModal
+
+         ~SettingsPopupAMP.setMouseTracking
+
+         ~SettingsPopupAMP.setObjectName
+
+         ~SettingsPopupAMP.setPalette
+
+         ~SettingsPopupAMP.setParent
+
+         ~SettingsPopupAMP.setProperty
+
+         ~SettingsPopupAMP.setResult
+
+         ~SettingsPopupAMP.setShortcutAutoRepeat
+
+         ~SettingsPopupAMP.setShortcutEnabled
+
+         ~SettingsPopupAMP.setSizeGripEnabled
+
+         ~SettingsPopupAMP.setSizeIncrement
+
+         ~SettingsPopupAMP.setSizePolicy
+
+         ~SettingsPopupAMP.setStatusTip
+
+         ~SettingsPopupAMP.setStyle
+
+         ~SettingsPopupAMP.setStyleSheet
+
+         ~SettingsPopupAMP.setTabOrder
+
+         ~SettingsPopupAMP.setTabletTracking
+
+         ~SettingsPopupAMP.setToolTip
+
+         ~SettingsPopupAMP.setToolTipDuration
+
+         ~SettingsPopupAMP.setUpdatesEnabled
+
+         ~SettingsPopupAMP.setVisible
+
+         ~SettingsPopupAMP.setWhatsThis
+
+         ~SettingsPopupAMP.setWindowFilePath
+
+         ~SettingsPopupAMP.setWindowFlag
+
+         ~SettingsPopupAMP.setWindowFlags
+
+         ~SettingsPopupAMP.setWindowIcon
+
+         ~SettingsPopupAMP.setWindowIconText
+
+         ~SettingsPopupAMP.setWindowModality
+
+         ~SettingsPopupAMP.setWindowModified
+
+         ~SettingsPopupAMP.setWindowOpacity
+
+         ~SettingsPopupAMP.setWindowRole
+
+         ~SettingsPopupAMP.setWindowState
+
+         ~SettingsPopupAMP.setWindowTitle
+
+         ~SettingsPopupAMP.sharedPainter
+
+         ~SettingsPopupAMP.show
+
+         ~SettingsPopupAMP.showEvent
+
+         ~SettingsPopupAMP.showFullScreen
+
+         ~SettingsPopupAMP.showMaximized
+
+         ~SettingsPopupAMP.showMinimized
+
+         ~SettingsPopupAMP.showNormal
+
+         ~SettingsPopupAMP.signalsBlocked
+
+         ~SettingsPopupAMP.size
+
+         ~SettingsPopupAMP.sizeHint
+
+         ~SettingsPopupAMP.sizeIncrement
+
+         ~SettingsPopupAMP.sizePolicy
+
+         ~SettingsPopupAMP.stackUnder
+
+         ~SettingsPopupAMP.startTimer
+
+         ~SettingsPopupAMP.statusTip
+
+         ~SettingsPopupAMP.style
+
+         ~SettingsPopupAMP.styleSheet
+
+         ~SettingsPopupAMP.tabletEvent
+
+         ~SettingsPopupAMP.testAttribute
+
+         ~SettingsPopupAMP.thread
+
+         ~SettingsPopupAMP.timerEvent
+
+         ~SettingsPopupAMP.toolTip
+
+         ~SettingsPopupAMP.toolTipDuration
+
+         ~SettingsPopupAMP.tr
+
+         ~SettingsPopupAMP.underMouse
+
+         ~SettingsPopupAMP.ungrabGesture
+
+         ~SettingsPopupAMP.unsetCursor
+
+         ~SettingsPopupAMP.unsetLayoutDirection
+
+         ~SettingsPopupAMP.unsetLocale
+
+         ~SettingsPopupAMP.update
+
+         ~SettingsPopupAMP.updateGeometry
+
+         ~SettingsPopupAMP.updateMicroFocus
+
+         ~SettingsPopupAMP.updatesEnabled
+
+         ~SettingsPopupAMP.visibleRegion
+
+         ~SettingsPopupAMP.whatsThis
+
+         ~SettingsPopupAMP.wheelEvent
+
+         ~SettingsPopupAMP.width
+
+         ~SettingsPopupAMP.widthMM
+
+         ~SettingsPopupAMP.winId
+
+         ~SettingsPopupAMP.window
+
+         ~SettingsPopupAMP.windowFilePath
+
+         ~SettingsPopupAMP.windowFlags
+
+         ~SettingsPopupAMP.windowHandle
+
+         ~SettingsPopupAMP.windowIcon
+
+         ~SettingsPopupAMP.windowIconText
+
+         ~SettingsPopupAMP.windowModality
+
+         ~SettingsPopupAMP.windowOpacity
+
+         ~SettingsPopupAMP.windowRole
+
+         ~SettingsPopupAMP.windowState
+
+         ~SettingsPopupAMP.windowTitle
+
+         ~SettingsPopupAMP.windowType
+
+         ~SettingsPopupAMP.x
+
+         ~SettingsPopupAMP.y
+
+
+
+
+
+
+
+
+Attributes
+==========
+
+.. tab-set::
+
+   .. tab-item:: Plain
+      :sync: key-plain
+
+      .. autosummary::
+
+
+   .. tab-item:: Inherited
+      :sync: key-inherited
+
+      .. autosummary::
+
+         ~SettingsPopupAMP.Accepted
+
+         ~SettingsPopupAMP.DrawChildren
+
+         ~SettingsPopupAMP.DrawWindowBackground
+
+         ~SettingsPopupAMP.IgnoreMask
+
+         ~SettingsPopupAMP.PdmDepth
+
+         ~SettingsPopupAMP.PdmDevicePixelRatio
+
+         ~SettingsPopupAMP.PdmDevicePixelRatioScaled
+
+         ~SettingsPopupAMP.PdmDpiX
+
+         ~SettingsPopupAMP.PdmDpiY
+
+         ~SettingsPopupAMP.PdmHeight
+
+         ~SettingsPopupAMP.PdmHeightMM
+
+         ~SettingsPopupAMP.PdmNumColors
+
+         ~SettingsPopupAMP.PdmPhysicalDpiX
+
+         ~SettingsPopupAMP.PdmPhysicalDpiY
+
+         ~SettingsPopupAMP.PdmWidth
+
+         ~SettingsPopupAMP.PdmWidthMM
+
+         ~SettingsPopupAMP.Rejected
+
+         ~SettingsPopupAMP.accepted
+
+         ~SettingsPopupAMP.customContextMenuRequested
+
+         ~SettingsPopupAMP.destroyed
+
+         ~SettingsPopupAMP.finished
+
+         ~SettingsPopupAMP.objectNameChanged
+
+         ~SettingsPopupAMP.rejected
+
+         ~SettingsPopupAMP.staticMetaObject
+
+         ~SettingsPopupAMP.windowIconChanged
+
+         ~SettingsPopupAMP.windowIconTextChanged
+
+         ~SettingsPopupAMP.windowTitleChanged
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Definition
+==========
+
+.. tab-set::
+
+   .. tab-item:: Plain
+      :sync: key-plain
+
+      .. autoclass:: SettingsPopupAMP
+         :show-inheritance:
+         :members: SettingsPopupAMP.__init__,SettingsPopupAMP.cancel,SettingsPopupAMP.get_settings,SettingsPopupAMP.update_dataset_choice,SettingsPopupAMP.update_mode_choice,SettingsPopupAMP.update_settings,
+
+   .. tab-item:: Inherited
+      :sync: key-inherited
+
+      .. autoclass:: SettingsPopupAMP
+         :show-inheritance:
+         :inherited-members:
+         :noindex:

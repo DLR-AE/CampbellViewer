@@ -1,0 +1,961 @@
+ApplicationWindow
+#################
+*campbellviewer.main_app.ApplicationWindow*
+
+.. currentmodule:: campbellviewer.main_app
+
+
+
+
+Methods
+=======
+
+.. tab-set::
+
+   .. tab-item:: Plain
+      :sync: key-plain
+
+      .. autosummary::
+
+         ~ApplicationWindow.UpdateMainPlot
+
+         ~ApplicationWindow.__init__
+
+         ~ApplicationWindow.about
+
+         ~ApplicationWindow.add_or_remove_scatter
+
+         ~ApplicationWindow.amplitudes_of_highlights
+
+         ~ApplicationWindow.apply_database
+
+         ~ApplicationWindow.closeEvent
+
+         ~ApplicationWindow.dataSelection
+
+         ~ApplicationWindow.deleteAmplitudes
+
+         ~ApplicationWindow.fileQuit
+
+         ~ApplicationWindow.find_data_of_highlights
+
+         ~ApplicationWindow.get_database_filename
+
+         ~ApplicationWindow.initAmplitudes
+
+         ~ApplicationWindow.init_active_data
+
+         ~ApplicationWindow.load_database
+
+         ~ApplicationWindow.main_plot
+
+         ~ApplicationWindow.on_motion
+
+         ~ApplicationWindow.on_mpl_cursors_pick
+
+         ~ApplicationWindow.on_press
+
+         ~ApplicationWindow.on_release
+
+         ~ApplicationWindow.openFileNameDialogBladedLin
+
+         ~ApplicationWindow.openFileNameDialogHAWCStab2
+
+         ~ApplicationWindow.plotPharmonics
+
+         ~ApplicationWindow.rescale_plot_limits
+
+         ~ApplicationWindow.save_database
+
+         ~ApplicationWindow.savepdf
+
+         ~ApplicationWindow.setHeaderLines
+
+         ~ApplicationWindow.setLinestyleDefaults
+
+         ~ApplicationWindow.updateAmplitudes
+
+         ~ApplicationWindow.xaxis_change
+
+
+   .. tab-item:: Inherited
+      :sync: key-inherited
+
+      .. autosummary::
+
+         ~ApplicationWindow.acceptDrops
+
+         ~ApplicationWindow.accessibleDescription
+
+         ~ApplicationWindow.accessibleName
+
+         ~ApplicationWindow.actionEvent
+
+         ~ApplicationWindow.actions
+
+         ~ApplicationWindow.activateWindow
+
+         ~ApplicationWindow.addAction
+
+         ~ApplicationWindow.addActions
+
+         ~ApplicationWindow.addDockWidget
+
+         ~ApplicationWindow.addToolBar
+
+         ~ApplicationWindow.addToolBarBreak
+
+         ~ApplicationWindow.adjustSize
+
+         ~ApplicationWindow.autoFillBackground
+
+         ~ApplicationWindow.backgroundRole
+
+         ~ApplicationWindow.baseSize
+
+         ~ApplicationWindow.blockSignals
+
+         ~ApplicationWindow.centralWidget
+
+         ~ApplicationWindow.changeEvent
+
+         ~ApplicationWindow.childAt
+
+         ~ApplicationWindow.childEvent
+
+         ~ApplicationWindow.children
+
+         ~ApplicationWindow.childrenRect
+
+         ~ApplicationWindow.childrenRegion
+
+         ~ApplicationWindow.clearFocus
+
+         ~ApplicationWindow.clearMask
+
+         ~ApplicationWindow.close
+
+         ~ApplicationWindow.colorCount
+
+         ~ApplicationWindow.connectNotify
+
+         ~ApplicationWindow.contentsMargins
+
+         ~ApplicationWindow.contentsRect
+
+         ~ApplicationWindow.contextMenuEvent
+
+         ~ApplicationWindow.contextMenuPolicy
+
+         ~ApplicationWindow.corner
+
+         ~ApplicationWindow.create
+
+         ~ApplicationWindow.createPopupMenu
+
+         ~ApplicationWindow.createWindowContainer
+
+         ~ApplicationWindow.cursor
+
+         ~ApplicationWindow.customEvent
+
+         ~ApplicationWindow.deleteLater
+
+         ~ApplicationWindow.depth
+
+         ~ApplicationWindow.destroy
+
+         ~ApplicationWindow.devType
+
+         ~ApplicationWindow.devicePixelRatio
+
+         ~ApplicationWindow.devicePixelRatioF
+
+         ~ApplicationWindow.devicePixelRatioFScale
+
+         ~ApplicationWindow.disconnect
+
+         ~ApplicationWindow.disconnectNotify
+
+         ~ApplicationWindow.dockOptions
+
+         ~ApplicationWindow.dockWidgetArea
+
+         ~ApplicationWindow.documentMode
+
+         ~ApplicationWindow.dragEnterEvent
+
+         ~ApplicationWindow.dragLeaveEvent
+
+         ~ApplicationWindow.dragMoveEvent
+
+         ~ApplicationWindow.dropEvent
+
+         ~ApplicationWindow.dumpObjectInfo
+
+         ~ApplicationWindow.dumpObjectTree
+
+         ~ApplicationWindow.dynamicPropertyNames
+
+         ~ApplicationWindow.effectiveWinId
+
+         ~ApplicationWindow.ensurePolished
+
+         ~ApplicationWindow.enterEvent
+
+         ~ApplicationWindow.event
+
+         ~ApplicationWindow.eventFilter
+
+         ~ApplicationWindow.find
+
+         ~ApplicationWindow.findChild
+
+         ~ApplicationWindow.findChildren
+
+         ~ApplicationWindow.focusInEvent
+
+         ~ApplicationWindow.focusNextChild
+
+         ~ApplicationWindow.focusNextPrevChild
+
+         ~ApplicationWindow.focusOutEvent
+
+         ~ApplicationWindow.focusPolicy
+
+         ~ApplicationWindow.focusPreviousChild
+
+         ~ApplicationWindow.focusProxy
+
+         ~ApplicationWindow.focusWidget
+
+         ~ApplicationWindow.font
+
+         ~ApplicationWindow.fontInfo
+
+         ~ApplicationWindow.fontMetrics
+
+         ~ApplicationWindow.foregroundRole
+
+         ~ApplicationWindow.frameGeometry
+
+         ~ApplicationWindow.frameSize
+
+         ~ApplicationWindow.geometry
+
+         ~ApplicationWindow.getContentsMargins
+
+         ~ApplicationWindow.grab
+
+         ~ApplicationWindow.grabGesture
+
+         ~ApplicationWindow.grabKeyboard
+
+         ~ApplicationWindow.grabMouse
+
+         ~ApplicationWindow.grabShortcut
+
+         ~ApplicationWindow.graphicsEffect
+
+         ~ApplicationWindow.graphicsProxyWidget
+
+         ~ApplicationWindow.hasFocus
+
+         ~ApplicationWindow.hasHeightForWidth
+
+         ~ApplicationWindow.hasMouseTracking
+
+         ~ApplicationWindow.hasTabletTracking
+
+         ~ApplicationWindow.height
+
+         ~ApplicationWindow.heightForWidth
+
+         ~ApplicationWindow.heightMM
+
+         ~ApplicationWindow.hide
+
+         ~ApplicationWindow.hideEvent
+
+         ~ApplicationWindow.iconSize
+
+         ~ApplicationWindow.inherits
+
+         ~ApplicationWindow.initPainter
+
+         ~ApplicationWindow.inputMethodEvent
+
+         ~ApplicationWindow.inputMethodHints
+
+         ~ApplicationWindow.inputMethodQuery
+
+         ~ApplicationWindow.insertAction
+
+         ~ApplicationWindow.insertActions
+
+         ~ApplicationWindow.insertToolBar
+
+         ~ApplicationWindow.insertToolBarBreak
+
+         ~ApplicationWindow.installEventFilter
+
+         ~ApplicationWindow.isActiveWindow
+
+         ~ApplicationWindow.isAncestorOf
+
+         ~ApplicationWindow.isAnimated
+
+         ~ApplicationWindow.isDockNestingEnabled
+
+         ~ApplicationWindow.isEnabled
+
+         ~ApplicationWindow.isEnabledTo
+
+         ~ApplicationWindow.isFullScreen
+
+         ~ApplicationWindow.isHidden
+
+         ~ApplicationWindow.isLeftToRight
+
+         ~ApplicationWindow.isMaximized
+
+         ~ApplicationWindow.isMinimized
+
+         ~ApplicationWindow.isModal
+
+         ~ApplicationWindow.isRightToLeft
+
+         ~ApplicationWindow.isSeparator
+
+         ~ApplicationWindow.isSignalConnected
+
+         ~ApplicationWindow.isVisible
+
+         ~ApplicationWindow.isVisibleTo
+
+         ~ApplicationWindow.isWidgetType
+
+         ~ApplicationWindow.isWindow
+
+         ~ApplicationWindow.isWindowModified
+
+         ~ApplicationWindow.isWindowType
+
+         ~ApplicationWindow.keyPressEvent
+
+         ~ApplicationWindow.keyReleaseEvent
+
+         ~ApplicationWindow.keyboardGrabber
+
+         ~ApplicationWindow.killTimer
+
+         ~ApplicationWindow.layout
+
+         ~ApplicationWindow.layoutDirection
+
+         ~ApplicationWindow.leaveEvent
+
+         ~ApplicationWindow.locale
+
+         ~ApplicationWindow.logicalDpiX
+
+         ~ApplicationWindow.logicalDpiY
+
+         ~ApplicationWindow.lower
+
+         ~ApplicationWindow.mapFrom
+
+         ~ApplicationWindow.mapFromGlobal
+
+         ~ApplicationWindow.mapFromParent
+
+         ~ApplicationWindow.mapTo
+
+         ~ApplicationWindow.mapToGlobal
+
+         ~ApplicationWindow.mapToParent
+
+         ~ApplicationWindow.mask
+
+         ~ApplicationWindow.maximumHeight
+
+         ~ApplicationWindow.maximumSize
+
+         ~ApplicationWindow.maximumWidth
+
+         ~ApplicationWindow.menuBar
+
+         ~ApplicationWindow.menuWidget
+
+         ~ApplicationWindow.metaObject
+
+         ~ApplicationWindow.metric
+
+         ~ApplicationWindow.minimumHeight
+
+         ~ApplicationWindow.minimumSize
+
+         ~ApplicationWindow.minimumSizeHint
+
+         ~ApplicationWindow.minimumWidth
+
+         ~ApplicationWindow.mouseDoubleClickEvent
+
+         ~ApplicationWindow.mouseGrabber
+
+         ~ApplicationWindow.mouseMoveEvent
+
+         ~ApplicationWindow.mousePressEvent
+
+         ~ApplicationWindow.mouseReleaseEvent
+
+         ~ApplicationWindow.move
+
+         ~ApplicationWindow.moveEvent
+
+         ~ApplicationWindow.moveToThread
+
+         ~ApplicationWindow.nativeEvent
+
+         ~ApplicationWindow.nativeParentWidget
+
+         ~ApplicationWindow.nextInFocusChain
+
+         ~ApplicationWindow.normalGeometry
+
+         ~ApplicationWindow.objectName
+
+         ~ApplicationWindow.overrideWindowFlags
+
+         ~ApplicationWindow.overrideWindowState
+
+         ~ApplicationWindow.paintEngine
+
+         ~ApplicationWindow.paintEvent
+
+         ~ApplicationWindow.paintingActive
+
+         ~ApplicationWindow.palette
+
+         ~ApplicationWindow.parent
+
+         ~ApplicationWindow.parentWidget
+
+         ~ApplicationWindow.physicalDpiX
+
+         ~ApplicationWindow.physicalDpiY
+
+         ~ApplicationWindow.pos
+
+         ~ApplicationWindow.previousInFocusChain
+
+         ~ApplicationWindow.property
+
+         ~ApplicationWindow.pyqtConfigure
+
+         ~ApplicationWindow.raise_
+
+         ~ApplicationWindow.receivers
+
+         ~ApplicationWindow.rect
+
+         ~ApplicationWindow.releaseKeyboard
+
+         ~ApplicationWindow.releaseMouse
+
+         ~ApplicationWindow.releaseShortcut
+
+         ~ApplicationWindow.removeAction
+
+         ~ApplicationWindow.removeDockWidget
+
+         ~ApplicationWindow.removeEventFilter
+
+         ~ApplicationWindow.removeToolBar
+
+         ~ApplicationWindow.removeToolBarBreak
+
+         ~ApplicationWindow.render
+
+         ~ApplicationWindow.repaint
+
+         ~ApplicationWindow.resize
+
+         ~ApplicationWindow.resizeDocks
+
+         ~ApplicationWindow.resizeEvent
+
+         ~ApplicationWindow.restoreDockWidget
+
+         ~ApplicationWindow.restoreGeometry
+
+         ~ApplicationWindow.restoreState
+
+         ~ApplicationWindow.saveGeometry
+
+         ~ApplicationWindow.saveState
+
+         ~ApplicationWindow.screen
+
+         ~ApplicationWindow.scroll
+
+         ~ApplicationWindow.sender
+
+         ~ApplicationWindow.senderSignalIndex
+
+         ~ApplicationWindow.setAcceptDrops
+
+         ~ApplicationWindow.setAccessibleDescription
+
+         ~ApplicationWindow.setAccessibleName
+
+         ~ApplicationWindow.setAnimated
+
+         ~ApplicationWindow.setAttribute
+
+         ~ApplicationWindow.setAutoFillBackground
+
+         ~ApplicationWindow.setBackgroundRole
+
+         ~ApplicationWindow.setBaseSize
+
+         ~ApplicationWindow.setCentralWidget
+
+         ~ApplicationWindow.setContentsMargins
+
+         ~ApplicationWindow.setContextMenuPolicy
+
+         ~ApplicationWindow.setCorner
+
+         ~ApplicationWindow.setCursor
+
+         ~ApplicationWindow.setDisabled
+
+         ~ApplicationWindow.setDockNestingEnabled
+
+         ~ApplicationWindow.setDockOptions
+
+         ~ApplicationWindow.setDocumentMode
+
+         ~ApplicationWindow.setEnabled
+
+         ~ApplicationWindow.setFixedHeight
+
+         ~ApplicationWindow.setFixedSize
+
+         ~ApplicationWindow.setFixedWidth
+
+         ~ApplicationWindow.setFocus
+
+         ~ApplicationWindow.setFocusPolicy
+
+         ~ApplicationWindow.setFocusProxy
+
+         ~ApplicationWindow.setFont
+
+         ~ApplicationWindow.setForegroundRole
+
+         ~ApplicationWindow.setGeometry
+
+         ~ApplicationWindow.setGraphicsEffect
+
+         ~ApplicationWindow.setHidden
+
+         ~ApplicationWindow.setIconSize
+
+         ~ApplicationWindow.setInputMethodHints
+
+         ~ApplicationWindow.setLayout
+
+         ~ApplicationWindow.setLayoutDirection
+
+         ~ApplicationWindow.setLocale
+
+         ~ApplicationWindow.setMask
+
+         ~ApplicationWindow.setMaximumHeight
+
+         ~ApplicationWindow.setMaximumSize
+
+         ~ApplicationWindow.setMaximumWidth
+
+         ~ApplicationWindow.setMenuBar
+
+         ~ApplicationWindow.setMenuWidget
+
+         ~ApplicationWindow.setMinimumHeight
+
+         ~ApplicationWindow.setMinimumSize
+
+         ~ApplicationWindow.setMinimumWidth
+
+         ~ApplicationWindow.setMouseTracking
+
+         ~ApplicationWindow.setObjectName
+
+         ~ApplicationWindow.setPalette
+
+         ~ApplicationWindow.setParent
+
+         ~ApplicationWindow.setProperty
+
+         ~ApplicationWindow.setShortcutAutoRepeat
+
+         ~ApplicationWindow.setShortcutEnabled
+
+         ~ApplicationWindow.setSizeIncrement
+
+         ~ApplicationWindow.setSizePolicy
+
+         ~ApplicationWindow.setStatusBar
+
+         ~ApplicationWindow.setStatusTip
+
+         ~ApplicationWindow.setStyle
+
+         ~ApplicationWindow.setStyleSheet
+
+         ~ApplicationWindow.setTabOrder
+
+         ~ApplicationWindow.setTabPosition
+
+         ~ApplicationWindow.setTabShape
+
+         ~ApplicationWindow.setTabletTracking
+
+         ~ApplicationWindow.setToolButtonStyle
+
+         ~ApplicationWindow.setToolTip
+
+         ~ApplicationWindow.setToolTipDuration
+
+         ~ApplicationWindow.setUnifiedTitleAndToolBarOnMac
+
+         ~ApplicationWindow.setUpdatesEnabled
+
+         ~ApplicationWindow.setVisible
+
+         ~ApplicationWindow.setWhatsThis
+
+         ~ApplicationWindow.setWindowFilePath
+
+         ~ApplicationWindow.setWindowFlag
+
+         ~ApplicationWindow.setWindowFlags
+
+         ~ApplicationWindow.setWindowIcon
+
+         ~ApplicationWindow.setWindowIconText
+
+         ~ApplicationWindow.setWindowModality
+
+         ~ApplicationWindow.setWindowModified
+
+         ~ApplicationWindow.setWindowOpacity
+
+         ~ApplicationWindow.setWindowRole
+
+         ~ApplicationWindow.setWindowState
+
+         ~ApplicationWindow.setWindowTitle
+
+         ~ApplicationWindow.sharedPainter
+
+         ~ApplicationWindow.show
+
+         ~ApplicationWindow.showEvent
+
+         ~ApplicationWindow.showFullScreen
+
+         ~ApplicationWindow.showMaximized
+
+         ~ApplicationWindow.showMinimized
+
+         ~ApplicationWindow.showNormal
+
+         ~ApplicationWindow.signalsBlocked
+
+         ~ApplicationWindow.size
+
+         ~ApplicationWindow.sizeHint
+
+         ~ApplicationWindow.sizeIncrement
+
+         ~ApplicationWindow.sizePolicy
+
+         ~ApplicationWindow.splitDockWidget
+
+         ~ApplicationWindow.stackUnder
+
+         ~ApplicationWindow.startTimer
+
+         ~ApplicationWindow.statusBar
+
+         ~ApplicationWindow.statusTip
+
+         ~ApplicationWindow.style
+
+         ~ApplicationWindow.styleSheet
+
+         ~ApplicationWindow.tabPosition
+
+         ~ApplicationWindow.tabShape
+
+         ~ApplicationWindow.tabifiedDockWidgets
+
+         ~ApplicationWindow.tabifyDockWidget
+
+         ~ApplicationWindow.tabletEvent
+
+         ~ApplicationWindow.takeCentralWidget
+
+         ~ApplicationWindow.testAttribute
+
+         ~ApplicationWindow.thread
+
+         ~ApplicationWindow.timerEvent
+
+         ~ApplicationWindow.toolBarArea
+
+         ~ApplicationWindow.toolBarBreak
+
+         ~ApplicationWindow.toolButtonStyle
+
+         ~ApplicationWindow.toolTip
+
+         ~ApplicationWindow.toolTipDuration
+
+         ~ApplicationWindow.tr
+
+         ~ApplicationWindow.underMouse
+
+         ~ApplicationWindow.ungrabGesture
+
+         ~ApplicationWindow.unifiedTitleAndToolBarOnMac
+
+         ~ApplicationWindow.unsetCursor
+
+         ~ApplicationWindow.unsetLayoutDirection
+
+         ~ApplicationWindow.unsetLocale
+
+         ~ApplicationWindow.update
+
+         ~ApplicationWindow.updateGeometry
+
+         ~ApplicationWindow.updateMicroFocus
+
+         ~ApplicationWindow.updatesEnabled
+
+         ~ApplicationWindow.visibleRegion
+
+         ~ApplicationWindow.whatsThis
+
+         ~ApplicationWindow.wheelEvent
+
+         ~ApplicationWindow.width
+
+         ~ApplicationWindow.widthMM
+
+         ~ApplicationWindow.winId
+
+         ~ApplicationWindow.window
+
+         ~ApplicationWindow.windowFilePath
+
+         ~ApplicationWindow.windowFlags
+
+         ~ApplicationWindow.windowHandle
+
+         ~ApplicationWindow.windowIcon
+
+         ~ApplicationWindow.windowIconText
+
+         ~ApplicationWindow.windowModality
+
+         ~ApplicationWindow.windowOpacity
+
+         ~ApplicationWindow.windowRole
+
+         ~ApplicationWindow.windowState
+
+         ~ApplicationWindow.windowTitle
+
+         ~ApplicationWindow.windowType
+
+         ~ApplicationWindow.x
+
+         ~ApplicationWindow.y
+
+
+
+
+
+
+
+
+Attributes
+==========
+
+.. tab-set::
+
+   .. tab-item:: Plain
+      :sync: key-plain
+
+      .. autosummary::
+
+
+   .. tab-item:: Inherited
+      :sync: key-inherited
+
+      .. autosummary::
+
+         ~ApplicationWindow.AllowNestedDocks
+
+         ~ApplicationWindow.AllowTabbedDocks
+
+         ~ApplicationWindow.AnimatedDocks
+
+         ~ApplicationWindow.DrawChildren
+
+         ~ApplicationWindow.DrawWindowBackground
+
+         ~ApplicationWindow.ForceTabbedDocks
+
+         ~ApplicationWindow.GroupedDragging
+
+         ~ApplicationWindow.IgnoreMask
+
+         ~ApplicationWindow.PdmDepth
+
+         ~ApplicationWindow.PdmDevicePixelRatio
+
+         ~ApplicationWindow.PdmDevicePixelRatioScaled
+
+         ~ApplicationWindow.PdmDpiX
+
+         ~ApplicationWindow.PdmDpiY
+
+         ~ApplicationWindow.PdmHeight
+
+         ~ApplicationWindow.PdmHeightMM
+
+         ~ApplicationWindow.PdmNumColors
+
+         ~ApplicationWindow.PdmPhysicalDpiX
+
+         ~ApplicationWindow.PdmPhysicalDpiY
+
+         ~ApplicationWindow.PdmWidth
+
+         ~ApplicationWindow.PdmWidthMM
+
+         ~ApplicationWindow.VerticalTabs
+
+         ~ApplicationWindow.customContextMenuRequested
+
+         ~ApplicationWindow.destroyed
+
+         ~ApplicationWindow.iconSizeChanged
+
+         ~ApplicationWindow.objectNameChanged
+
+         ~ApplicationWindow.staticMetaObject
+
+         ~ApplicationWindow.tabifiedDockWidgetActivated
+
+         ~ApplicationWindow.toolButtonStyleChanged
+
+         ~ApplicationWindow.windowIconChanged
+
+         ~ApplicationWindow.windowIconTextChanged
+
+         ~ApplicationWindow.windowTitleChanged
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Definition
+==========
+
+.. tab-set::
+
+   .. tab-item:: Plain
+      :sync: key-plain
+
+      .. autoclass:: ApplicationWindow
+         :show-inheritance:
+         :members: ApplicationWindow.UpdateMainPlot,ApplicationWindow.__init__,ApplicationWindow.about,ApplicationWindow.add_or_remove_scatter,ApplicationWindow.amplitudes_of_highlights,ApplicationWindow.apply_database,ApplicationWindow.closeEvent,ApplicationWindow.dataSelection,ApplicationWindow.deleteAmplitudes,ApplicationWindow.fileQuit,ApplicationWindow.find_data_of_highlights,ApplicationWindow.get_database_filename,ApplicationWindow.initAmplitudes,ApplicationWindow.init_active_data,ApplicationWindow.load_database,ApplicationWindow.main_plot,ApplicationWindow.on_motion,ApplicationWindow.on_mpl_cursors_pick,ApplicationWindow.on_press,ApplicationWindow.on_release,ApplicationWindow.openFileNameDialogBladedLin,ApplicationWindow.openFileNameDialogHAWCStab2,ApplicationWindow.plotPharmonics,ApplicationWindow.rescale_plot_limits,ApplicationWindow.save_database,ApplicationWindow.savepdf,ApplicationWindow.setHeaderLines,ApplicationWindow.setLinestyleDefaults,ApplicationWindow.updateAmplitudes,ApplicationWindow.xaxis_change,
+
+   .. tab-item:: Inherited
+      :sync: key-inherited
+
+      .. autoclass:: ApplicationWindow
+         :show-inheritance:
+         :inherited-members:
+         :noindex:

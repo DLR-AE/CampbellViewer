@@ -1,0 +1,777 @@
+SettingsPopupLinestyle
+######################
+*campbellviewer.main_app.SettingsPopupLinestyle*
+
+.. currentmodule:: campbellviewer.main_app
+
+
+
+
+Methods
+=======
+
+.. tab-set::
+
+   .. tab-item:: Plain
+      :sync: key-plain
+
+      .. autosummary::
+
+         ~SettingsPopupLinestyle.__init__
+
+         ~SettingsPopupLinestyle.override_colormap
+
+         ~SettingsPopupLinestyle.update_settings
+
+
+   .. tab-item:: Inherited
+      :sync: key-inherited
+
+      .. autosummary::
+
+         ~SettingsPopupLinestyle.accept
+
+         ~SettingsPopupLinestyle.acceptDrops
+
+         ~SettingsPopupLinestyle.accessibleDescription
+
+         ~SettingsPopupLinestyle.accessibleName
+
+         ~SettingsPopupLinestyle.actionEvent
+
+         ~SettingsPopupLinestyle.actions
+
+         ~SettingsPopupLinestyle.activateWindow
+
+         ~SettingsPopupLinestyle.addAction
+
+         ~SettingsPopupLinestyle.addActions
+
+         ~SettingsPopupLinestyle.adjustSize
+
+         ~SettingsPopupLinestyle.autoFillBackground
+
+         ~SettingsPopupLinestyle.backgroundRole
+
+         ~SettingsPopupLinestyle.baseSize
+
+         ~SettingsPopupLinestyle.blockSignals
+
+         ~SettingsPopupLinestyle.changeEvent
+
+         ~SettingsPopupLinestyle.childAt
+
+         ~SettingsPopupLinestyle.childEvent
+
+         ~SettingsPopupLinestyle.children
+
+         ~SettingsPopupLinestyle.childrenRect
+
+         ~SettingsPopupLinestyle.childrenRegion
+
+         ~SettingsPopupLinestyle.clearFocus
+
+         ~SettingsPopupLinestyle.clearMask
+
+         ~SettingsPopupLinestyle.close
+
+         ~SettingsPopupLinestyle.closeEvent
+
+         ~SettingsPopupLinestyle.close_popup
+
+         ~SettingsPopupLinestyle.colorCount
+
+         ~SettingsPopupLinestyle.connectNotify
+
+         ~SettingsPopupLinestyle.contentsMargins
+
+         ~SettingsPopupLinestyle.contentsRect
+
+         ~SettingsPopupLinestyle.contextMenuEvent
+
+         ~SettingsPopupLinestyle.contextMenuPolicy
+
+         ~SettingsPopupLinestyle.create
+
+         ~SettingsPopupLinestyle.createWindowContainer
+
+         ~SettingsPopupLinestyle.cursor
+
+         ~SettingsPopupLinestyle.customEvent
+
+         ~SettingsPopupLinestyle.deleteLater
+
+         ~SettingsPopupLinestyle.depth
+
+         ~SettingsPopupLinestyle.destroy
+
+         ~SettingsPopupLinestyle.devType
+
+         ~SettingsPopupLinestyle.devicePixelRatio
+
+         ~SettingsPopupLinestyle.devicePixelRatioF
+
+         ~SettingsPopupLinestyle.devicePixelRatioFScale
+
+         ~SettingsPopupLinestyle.disconnect
+
+         ~SettingsPopupLinestyle.disconnectNotify
+
+         ~SettingsPopupLinestyle.done
+
+         ~SettingsPopupLinestyle.dragEnterEvent
+
+         ~SettingsPopupLinestyle.dragLeaveEvent
+
+         ~SettingsPopupLinestyle.dragMoveEvent
+
+         ~SettingsPopupLinestyle.dropEvent
+
+         ~SettingsPopupLinestyle.dumpObjectInfo
+
+         ~SettingsPopupLinestyle.dumpObjectTree
+
+         ~SettingsPopupLinestyle.dynamicPropertyNames
+
+         ~SettingsPopupLinestyle.effectiveWinId
+
+         ~SettingsPopupLinestyle.ensurePolished
+
+         ~SettingsPopupLinestyle.enterEvent
+
+         ~SettingsPopupLinestyle.event
+
+         ~SettingsPopupLinestyle.eventFilter
+
+         ~SettingsPopupLinestyle.exec
+
+         ~SettingsPopupLinestyle.exec_
+
+         ~SettingsPopupLinestyle.find
+
+         ~SettingsPopupLinestyle.findChild
+
+         ~SettingsPopupLinestyle.findChildren
+
+         ~SettingsPopupLinestyle.focusInEvent
+
+         ~SettingsPopupLinestyle.focusNextChild
+
+         ~SettingsPopupLinestyle.focusNextPrevChild
+
+         ~SettingsPopupLinestyle.focusOutEvent
+
+         ~SettingsPopupLinestyle.focusPolicy
+
+         ~SettingsPopupLinestyle.focusPreviousChild
+
+         ~SettingsPopupLinestyle.focusProxy
+
+         ~SettingsPopupLinestyle.focusWidget
+
+         ~SettingsPopupLinestyle.font
+
+         ~SettingsPopupLinestyle.fontInfo
+
+         ~SettingsPopupLinestyle.fontMetrics
+
+         ~SettingsPopupLinestyle.foregroundRole
+
+         ~SettingsPopupLinestyle.frameGeometry
+
+         ~SettingsPopupLinestyle.frameSize
+
+         ~SettingsPopupLinestyle.geometry
+
+         ~SettingsPopupLinestyle.getContentsMargins
+
+         ~SettingsPopupLinestyle.get_settings
+
+         ~SettingsPopupLinestyle.grab
+
+         ~SettingsPopupLinestyle.grabGesture
+
+         ~SettingsPopupLinestyle.grabKeyboard
+
+         ~SettingsPopupLinestyle.grabMouse
+
+         ~SettingsPopupLinestyle.grabShortcut
+
+         ~SettingsPopupLinestyle.graphicsEffect
+
+         ~SettingsPopupLinestyle.graphicsProxyWidget
+
+         ~SettingsPopupLinestyle.hasFocus
+
+         ~SettingsPopupLinestyle.hasHeightForWidth
+
+         ~SettingsPopupLinestyle.hasMouseTracking
+
+         ~SettingsPopupLinestyle.hasTabletTracking
+
+         ~SettingsPopupLinestyle.height
+
+         ~SettingsPopupLinestyle.heightForWidth
+
+         ~SettingsPopupLinestyle.heightMM
+
+         ~SettingsPopupLinestyle.hide
+
+         ~SettingsPopupLinestyle.hideEvent
+
+         ~SettingsPopupLinestyle.inherits
+
+         ~SettingsPopupLinestyle.initPainter
+
+         ~SettingsPopupLinestyle.inputMethodEvent
+
+         ~SettingsPopupLinestyle.inputMethodHints
+
+         ~SettingsPopupLinestyle.inputMethodQuery
+
+         ~SettingsPopupLinestyle.insertAction
+
+         ~SettingsPopupLinestyle.insertActions
+
+         ~SettingsPopupLinestyle.installEventFilter
+
+         ~SettingsPopupLinestyle.isActiveWindow
+
+         ~SettingsPopupLinestyle.isAncestorOf
+
+         ~SettingsPopupLinestyle.isEnabled
+
+         ~SettingsPopupLinestyle.isEnabledTo
+
+         ~SettingsPopupLinestyle.isFullScreen
+
+         ~SettingsPopupLinestyle.isHidden
+
+         ~SettingsPopupLinestyle.isLeftToRight
+
+         ~SettingsPopupLinestyle.isMaximized
+
+         ~SettingsPopupLinestyle.isMinimized
+
+         ~SettingsPopupLinestyle.isModal
+
+         ~SettingsPopupLinestyle.isRightToLeft
+
+         ~SettingsPopupLinestyle.isSignalConnected
+
+         ~SettingsPopupLinestyle.isSizeGripEnabled
+
+         ~SettingsPopupLinestyle.isVisible
+
+         ~SettingsPopupLinestyle.isVisibleTo
+
+         ~SettingsPopupLinestyle.isWidgetType
+
+         ~SettingsPopupLinestyle.isWindow
+
+         ~SettingsPopupLinestyle.isWindowModified
+
+         ~SettingsPopupLinestyle.isWindowType
+
+         ~SettingsPopupLinestyle.keyPressEvent
+
+         ~SettingsPopupLinestyle.keyReleaseEvent
+
+         ~SettingsPopupLinestyle.keyboardGrabber
+
+         ~SettingsPopupLinestyle.killTimer
+
+         ~SettingsPopupLinestyle.layout
+
+         ~SettingsPopupLinestyle.layoutDirection
+
+         ~SettingsPopupLinestyle.leaveEvent
+
+         ~SettingsPopupLinestyle.locale
+
+         ~SettingsPopupLinestyle.logicalDpiX
+
+         ~SettingsPopupLinestyle.logicalDpiY
+
+         ~SettingsPopupLinestyle.lower
+
+         ~SettingsPopupLinestyle.mapFrom
+
+         ~SettingsPopupLinestyle.mapFromGlobal
+
+         ~SettingsPopupLinestyle.mapFromParent
+
+         ~SettingsPopupLinestyle.mapTo
+
+         ~SettingsPopupLinestyle.mapToGlobal
+
+         ~SettingsPopupLinestyle.mapToParent
+
+         ~SettingsPopupLinestyle.mask
+
+         ~SettingsPopupLinestyle.maximumHeight
+
+         ~SettingsPopupLinestyle.maximumSize
+
+         ~SettingsPopupLinestyle.maximumWidth
+
+         ~SettingsPopupLinestyle.metaObject
+
+         ~SettingsPopupLinestyle.metric
+
+         ~SettingsPopupLinestyle.minimumHeight
+
+         ~SettingsPopupLinestyle.minimumSize
+
+         ~SettingsPopupLinestyle.minimumSizeHint
+
+         ~SettingsPopupLinestyle.minimumWidth
+
+         ~SettingsPopupLinestyle.mouseDoubleClickEvent
+
+         ~SettingsPopupLinestyle.mouseGrabber
+
+         ~SettingsPopupLinestyle.mouseMoveEvent
+
+         ~SettingsPopupLinestyle.mousePressEvent
+
+         ~SettingsPopupLinestyle.mouseReleaseEvent
+
+         ~SettingsPopupLinestyle.move
+
+         ~SettingsPopupLinestyle.moveEvent
+
+         ~SettingsPopupLinestyle.moveToThread
+
+         ~SettingsPopupLinestyle.nativeEvent
+
+         ~SettingsPopupLinestyle.nativeParentWidget
+
+         ~SettingsPopupLinestyle.nextInFocusChain
+
+         ~SettingsPopupLinestyle.normalGeometry
+
+         ~SettingsPopupLinestyle.objectName
+
+         ~SettingsPopupLinestyle.ok_click
+
+         ~SettingsPopupLinestyle.open
+
+         ~SettingsPopupLinestyle.overrideWindowFlags
+
+         ~SettingsPopupLinestyle.overrideWindowState
+
+         ~SettingsPopupLinestyle.paintEngine
+
+         ~SettingsPopupLinestyle.paintEvent
+
+         ~SettingsPopupLinestyle.paintingActive
+
+         ~SettingsPopupLinestyle.palette
+
+         ~SettingsPopupLinestyle.parent
+
+         ~SettingsPopupLinestyle.parentWidget
+
+         ~SettingsPopupLinestyle.physicalDpiX
+
+         ~SettingsPopupLinestyle.physicalDpiY
+
+         ~SettingsPopupLinestyle.pos
+
+         ~SettingsPopupLinestyle.previousInFocusChain
+
+         ~SettingsPopupLinestyle.property
+
+         ~SettingsPopupLinestyle.pyqtConfigure
+
+         ~SettingsPopupLinestyle.raise_
+
+         ~SettingsPopupLinestyle.receivers
+
+         ~SettingsPopupLinestyle.rect
+
+         ~SettingsPopupLinestyle.reject
+
+         ~SettingsPopupLinestyle.releaseKeyboard
+
+         ~SettingsPopupLinestyle.releaseMouse
+
+         ~SettingsPopupLinestyle.releaseShortcut
+
+         ~SettingsPopupLinestyle.removeAction
+
+         ~SettingsPopupLinestyle.removeEventFilter
+
+         ~SettingsPopupLinestyle.render
+
+         ~SettingsPopupLinestyle.repaint
+
+         ~SettingsPopupLinestyle.resize
+
+         ~SettingsPopupLinestyle.resizeEvent
+
+         ~SettingsPopupLinestyle.restoreGeometry
+
+         ~SettingsPopupLinestyle.result
+
+         ~SettingsPopupLinestyle.saveGeometry
+
+         ~SettingsPopupLinestyle.screen
+
+         ~SettingsPopupLinestyle.scroll
+
+         ~SettingsPopupLinestyle.sender
+
+         ~SettingsPopupLinestyle.senderSignalIndex
+
+         ~SettingsPopupLinestyle.setAcceptDrops
+
+         ~SettingsPopupLinestyle.setAccessibleDescription
+
+         ~SettingsPopupLinestyle.setAccessibleName
+
+         ~SettingsPopupLinestyle.setAttribute
+
+         ~SettingsPopupLinestyle.setAutoFillBackground
+
+         ~SettingsPopupLinestyle.setBackgroundRole
+
+         ~SettingsPopupLinestyle.setBaseSize
+
+         ~SettingsPopupLinestyle.setContentsMargins
+
+         ~SettingsPopupLinestyle.setContextMenuPolicy
+
+         ~SettingsPopupLinestyle.setCursor
+
+         ~SettingsPopupLinestyle.setDisabled
+
+         ~SettingsPopupLinestyle.setEnabled
+
+         ~SettingsPopupLinestyle.setFixedHeight
+
+         ~SettingsPopupLinestyle.setFixedSize
+
+         ~SettingsPopupLinestyle.setFixedWidth
+
+         ~SettingsPopupLinestyle.setFocus
+
+         ~SettingsPopupLinestyle.setFocusPolicy
+
+         ~SettingsPopupLinestyle.setFocusProxy
+
+         ~SettingsPopupLinestyle.setFont
+
+         ~SettingsPopupLinestyle.setForegroundRole
+
+         ~SettingsPopupLinestyle.setGeometry
+
+         ~SettingsPopupLinestyle.setGraphicsEffect
+
+         ~SettingsPopupLinestyle.setHidden
+
+         ~SettingsPopupLinestyle.setInputMethodHints
+
+         ~SettingsPopupLinestyle.setLayout
+
+         ~SettingsPopupLinestyle.setLayoutDirection
+
+         ~SettingsPopupLinestyle.setLocale
+
+         ~SettingsPopupLinestyle.setMask
+
+         ~SettingsPopupLinestyle.setMaximumHeight
+
+         ~SettingsPopupLinestyle.setMaximumSize
+
+         ~SettingsPopupLinestyle.setMaximumWidth
+
+         ~SettingsPopupLinestyle.setMinimumHeight
+
+         ~SettingsPopupLinestyle.setMinimumSize
+
+         ~SettingsPopupLinestyle.setMinimumWidth
+
+         ~SettingsPopupLinestyle.setModal
+
+         ~SettingsPopupLinestyle.setMouseTracking
+
+         ~SettingsPopupLinestyle.setObjectName
+
+         ~SettingsPopupLinestyle.setPalette
+
+         ~SettingsPopupLinestyle.setParent
+
+         ~SettingsPopupLinestyle.setProperty
+
+         ~SettingsPopupLinestyle.setResult
+
+         ~SettingsPopupLinestyle.setShortcutAutoRepeat
+
+         ~SettingsPopupLinestyle.setShortcutEnabled
+
+         ~SettingsPopupLinestyle.setSizeGripEnabled
+
+         ~SettingsPopupLinestyle.setSizeIncrement
+
+         ~SettingsPopupLinestyle.setSizePolicy
+
+         ~SettingsPopupLinestyle.setStatusTip
+
+         ~SettingsPopupLinestyle.setStyle
+
+         ~SettingsPopupLinestyle.setStyleSheet
+
+         ~SettingsPopupLinestyle.setTabOrder
+
+         ~SettingsPopupLinestyle.setTabletTracking
+
+         ~SettingsPopupLinestyle.setToolTip
+
+         ~SettingsPopupLinestyle.setToolTipDuration
+
+         ~SettingsPopupLinestyle.setUpdatesEnabled
+
+         ~SettingsPopupLinestyle.setVisible
+
+         ~SettingsPopupLinestyle.setWhatsThis
+
+         ~SettingsPopupLinestyle.setWindowFilePath
+
+         ~SettingsPopupLinestyle.setWindowFlag
+
+         ~SettingsPopupLinestyle.setWindowFlags
+
+         ~SettingsPopupLinestyle.setWindowIcon
+
+         ~SettingsPopupLinestyle.setWindowIconText
+
+         ~SettingsPopupLinestyle.setWindowModality
+
+         ~SettingsPopupLinestyle.setWindowModified
+
+         ~SettingsPopupLinestyle.setWindowOpacity
+
+         ~SettingsPopupLinestyle.setWindowRole
+
+         ~SettingsPopupLinestyle.setWindowState
+
+         ~SettingsPopupLinestyle.setWindowTitle
+
+         ~SettingsPopupLinestyle.sharedPainter
+
+         ~SettingsPopupLinestyle.show
+
+         ~SettingsPopupLinestyle.showEvent
+
+         ~SettingsPopupLinestyle.showFullScreen
+
+         ~SettingsPopupLinestyle.showMaximized
+
+         ~SettingsPopupLinestyle.showMinimized
+
+         ~SettingsPopupLinestyle.showNormal
+
+         ~SettingsPopupLinestyle.signalsBlocked
+
+         ~SettingsPopupLinestyle.size
+
+         ~SettingsPopupLinestyle.sizeHint
+
+         ~SettingsPopupLinestyle.sizeIncrement
+
+         ~SettingsPopupLinestyle.sizePolicy
+
+         ~SettingsPopupLinestyle.stackUnder
+
+         ~SettingsPopupLinestyle.startTimer
+
+         ~SettingsPopupLinestyle.statusTip
+
+         ~SettingsPopupLinestyle.style
+
+         ~SettingsPopupLinestyle.styleSheet
+
+         ~SettingsPopupLinestyle.tabletEvent
+
+         ~SettingsPopupLinestyle.testAttribute
+
+         ~SettingsPopupLinestyle.thread
+
+         ~SettingsPopupLinestyle.timerEvent
+
+         ~SettingsPopupLinestyle.toolTip
+
+         ~SettingsPopupLinestyle.toolTipDuration
+
+         ~SettingsPopupLinestyle.tr
+
+         ~SettingsPopupLinestyle.underMouse
+
+         ~SettingsPopupLinestyle.ungrabGesture
+
+         ~SettingsPopupLinestyle.unsetCursor
+
+         ~SettingsPopupLinestyle.unsetLayoutDirection
+
+         ~SettingsPopupLinestyle.unsetLocale
+
+         ~SettingsPopupLinestyle.update
+
+         ~SettingsPopupLinestyle.updateGeometry
+
+         ~SettingsPopupLinestyle.updateMicroFocus
+
+         ~SettingsPopupLinestyle.updatesEnabled
+
+         ~SettingsPopupLinestyle.visibleRegion
+
+         ~SettingsPopupLinestyle.whatsThis
+
+         ~SettingsPopupLinestyle.wheelEvent
+
+         ~SettingsPopupLinestyle.width
+
+         ~SettingsPopupLinestyle.widthMM
+
+         ~SettingsPopupLinestyle.winId
+
+         ~SettingsPopupLinestyle.window
+
+         ~SettingsPopupLinestyle.windowFilePath
+
+         ~SettingsPopupLinestyle.windowFlags
+
+         ~SettingsPopupLinestyle.windowHandle
+
+         ~SettingsPopupLinestyle.windowIcon
+
+         ~SettingsPopupLinestyle.windowIconText
+
+         ~SettingsPopupLinestyle.windowModality
+
+         ~SettingsPopupLinestyle.windowOpacity
+
+         ~SettingsPopupLinestyle.windowRole
+
+         ~SettingsPopupLinestyle.windowState
+
+         ~SettingsPopupLinestyle.windowTitle
+
+         ~SettingsPopupLinestyle.windowType
+
+         ~SettingsPopupLinestyle.x
+
+         ~SettingsPopupLinestyle.y
+
+
+
+
+
+
+
+
+Attributes
+==========
+
+.. tab-set::
+
+   .. tab-item:: Plain
+      :sync: key-plain
+
+      .. autosummary::
+
+
+   .. tab-item:: Inherited
+      :sync: key-inherited
+
+      .. autosummary::
+
+         ~SettingsPopupLinestyle.Accepted
+
+         ~SettingsPopupLinestyle.DrawChildren
+
+         ~SettingsPopupLinestyle.DrawWindowBackground
+
+         ~SettingsPopupLinestyle.IgnoreMask
+
+         ~SettingsPopupLinestyle.PdmDepth
+
+         ~SettingsPopupLinestyle.PdmDevicePixelRatio
+
+         ~SettingsPopupLinestyle.PdmDevicePixelRatioScaled
+
+         ~SettingsPopupLinestyle.PdmDpiX
+
+         ~SettingsPopupLinestyle.PdmDpiY
+
+         ~SettingsPopupLinestyle.PdmHeight
+
+         ~SettingsPopupLinestyle.PdmHeightMM
+
+         ~SettingsPopupLinestyle.PdmNumColors
+
+         ~SettingsPopupLinestyle.PdmPhysicalDpiX
+
+         ~SettingsPopupLinestyle.PdmPhysicalDpiY
+
+         ~SettingsPopupLinestyle.PdmWidth
+
+         ~SettingsPopupLinestyle.PdmWidthMM
+
+         ~SettingsPopupLinestyle.Rejected
+
+         ~SettingsPopupLinestyle.accepted
+
+         ~SettingsPopupLinestyle.customContextMenuRequested
+
+         ~SettingsPopupLinestyle.destroyed
+
+         ~SettingsPopupLinestyle.finished
+
+         ~SettingsPopupLinestyle.objectNameChanged
+
+         ~SettingsPopupLinestyle.rejected
+
+         ~SettingsPopupLinestyle.staticMetaObject
+
+         ~SettingsPopupLinestyle.windowIconChanged
+
+         ~SettingsPopupLinestyle.windowIconTextChanged
+
+         ~SettingsPopupLinestyle.windowTitleChanged
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Definition
+==========
+
+.. tab-set::
+
+   .. tab-item:: Plain
+      :sync: key-plain
+
+      .. autoclass:: SettingsPopupLinestyle
+         :show-inheritance:
+         :members: SettingsPopupLinestyle.__init__,SettingsPopupLinestyle.override_colormap,SettingsPopupLinestyle.update_settings,
+
+   .. tab-item:: Inherited
+      :sync: key-inherited
+
+      .. autoclass:: SettingsPopupLinestyle
+         :show-inheritance:
+         :inherited-members:
+         :noindex:

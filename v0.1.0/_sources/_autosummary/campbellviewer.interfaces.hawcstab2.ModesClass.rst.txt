@@ -1,0 +1,65 @@
+ModesClass
+##########
+*campbellviewer.interfaces.hawcstab2.ModesClass*
+
+.. currentmodule:: campbellviewer.interfaces.hawcstab2
+
+
+
+
+Methods
+=======
+
+.. tab-set::
+
+   .. tab-item:: Plain
+      :sync: key-plain
+
+      .. autosummary::
+
+         ~ModesClass.__init__
+
+         ~ModesClass.num
+
+
+   .. tab-item:: Inherited
+      :sync: key-inherited
+
+      .. autosummary::
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Definition
+==========
+
+.. tab-set::
+
+   .. tab-item:: Plain
+      :sync: key-plain
+
+      .. autoclass:: ModesClass
+         :show-inheritance:
+         :members: ModesClass.__init__,ModesClass.num,
+
+   .. tab-item:: Inherited
+      :sync: key-inherited
+
+      .. autoclass:: ModesClass
+         :show-inheritance:
+         :inherited-members:
+         :noindex:

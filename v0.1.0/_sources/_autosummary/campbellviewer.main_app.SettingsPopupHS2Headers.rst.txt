@@ -1,0 +1,775 @@
+SettingsPopupHS2Headers
+#######################
+*campbellviewer.main_app.SettingsPopupHS2Headers*
+
+.. currentmodule:: campbellviewer.main_app
+
+
+
+
+Methods
+=======
+
+.. tab-set::
+
+   .. tab-item:: Plain
+      :sync: key-plain
+
+      .. autosummary::
+
+         ~SettingsPopupHS2Headers.__init__
+
+         ~SettingsPopupHS2Headers.get_settings
+
+         ~SettingsPopupHS2Headers.update_settings
+
+
+   .. tab-item:: Inherited
+      :sync: key-inherited
+
+      .. autosummary::
+
+         ~SettingsPopupHS2Headers.accept
+
+         ~SettingsPopupHS2Headers.acceptDrops
+
+         ~SettingsPopupHS2Headers.accessibleDescription
+
+         ~SettingsPopupHS2Headers.accessibleName
+
+         ~SettingsPopupHS2Headers.actionEvent
+
+         ~SettingsPopupHS2Headers.actions
+
+         ~SettingsPopupHS2Headers.activateWindow
+
+         ~SettingsPopupHS2Headers.addAction
+
+         ~SettingsPopupHS2Headers.addActions
+
+         ~SettingsPopupHS2Headers.adjustSize
+
+         ~SettingsPopupHS2Headers.autoFillBackground
+
+         ~SettingsPopupHS2Headers.backgroundRole
+
+         ~SettingsPopupHS2Headers.baseSize
+
+         ~SettingsPopupHS2Headers.blockSignals
+
+         ~SettingsPopupHS2Headers.changeEvent
+
+         ~SettingsPopupHS2Headers.childAt
+
+         ~SettingsPopupHS2Headers.childEvent
+
+         ~SettingsPopupHS2Headers.children
+
+         ~SettingsPopupHS2Headers.childrenRect
+
+         ~SettingsPopupHS2Headers.childrenRegion
+
+         ~SettingsPopupHS2Headers.clearFocus
+
+         ~SettingsPopupHS2Headers.clearMask
+
+         ~SettingsPopupHS2Headers.close
+
+         ~SettingsPopupHS2Headers.closeEvent
+
+         ~SettingsPopupHS2Headers.close_popup
+
+         ~SettingsPopupHS2Headers.colorCount
+
+         ~SettingsPopupHS2Headers.connectNotify
+
+         ~SettingsPopupHS2Headers.contentsMargins
+
+         ~SettingsPopupHS2Headers.contentsRect
+
+         ~SettingsPopupHS2Headers.contextMenuEvent
+
+         ~SettingsPopupHS2Headers.contextMenuPolicy
+
+         ~SettingsPopupHS2Headers.create
+
+         ~SettingsPopupHS2Headers.createWindowContainer
+
+         ~SettingsPopupHS2Headers.cursor
+
+         ~SettingsPopupHS2Headers.customEvent
+
+         ~SettingsPopupHS2Headers.deleteLater
+
+         ~SettingsPopupHS2Headers.depth
+
+         ~SettingsPopupHS2Headers.destroy
+
+         ~SettingsPopupHS2Headers.devType
+
+         ~SettingsPopupHS2Headers.devicePixelRatio
+
+         ~SettingsPopupHS2Headers.devicePixelRatioF
+
+         ~SettingsPopupHS2Headers.devicePixelRatioFScale
+
+         ~SettingsPopupHS2Headers.disconnect
+
+         ~SettingsPopupHS2Headers.disconnectNotify
+
+         ~SettingsPopupHS2Headers.done
+
+         ~SettingsPopupHS2Headers.dragEnterEvent
+
+         ~SettingsPopupHS2Headers.dragLeaveEvent
+
+         ~SettingsPopupHS2Headers.dragMoveEvent
+
+         ~SettingsPopupHS2Headers.dropEvent
+
+         ~SettingsPopupHS2Headers.dumpObjectInfo
+
+         ~SettingsPopupHS2Headers.dumpObjectTree
+
+         ~SettingsPopupHS2Headers.dynamicPropertyNames
+
+         ~SettingsPopupHS2Headers.effectiveWinId
+
+         ~SettingsPopupHS2Headers.ensurePolished
+
+         ~SettingsPopupHS2Headers.enterEvent
+
+         ~SettingsPopupHS2Headers.event
+
+         ~SettingsPopupHS2Headers.eventFilter
+
+         ~SettingsPopupHS2Headers.exec
+
+         ~SettingsPopupHS2Headers.exec_
+
+         ~SettingsPopupHS2Headers.find
+
+         ~SettingsPopupHS2Headers.findChild
+
+         ~SettingsPopupHS2Headers.findChildren
+
+         ~SettingsPopupHS2Headers.focusInEvent
+
+         ~SettingsPopupHS2Headers.focusNextChild
+
+         ~SettingsPopupHS2Headers.focusNextPrevChild
+
+         ~SettingsPopupHS2Headers.focusOutEvent
+
+         ~SettingsPopupHS2Headers.focusPolicy
+
+         ~SettingsPopupHS2Headers.focusPreviousChild
+
+         ~SettingsPopupHS2Headers.focusProxy
+
+         ~SettingsPopupHS2Headers.focusWidget
+
+         ~SettingsPopupHS2Headers.font
+
+         ~SettingsPopupHS2Headers.fontInfo
+
+         ~SettingsPopupHS2Headers.fontMetrics
+
+         ~SettingsPopupHS2Headers.foregroundRole
+
+         ~SettingsPopupHS2Headers.frameGeometry
+
+         ~SettingsPopupHS2Headers.frameSize
+
+         ~SettingsPopupHS2Headers.geometry
+
+         ~SettingsPopupHS2Headers.getContentsMargins
+
+         ~SettingsPopupHS2Headers.grab
+
+         ~SettingsPopupHS2Headers.grabGesture
+
+         ~SettingsPopupHS2Headers.grabKeyboard
+
+         ~SettingsPopupHS2Headers.grabMouse
+
+         ~SettingsPopupHS2Headers.grabShortcut
+
+         ~SettingsPopupHS2Headers.graphicsEffect
+
+         ~SettingsPopupHS2Headers.graphicsProxyWidget
+
+         ~SettingsPopupHS2Headers.hasFocus
+
+         ~SettingsPopupHS2Headers.hasHeightForWidth
+
+         ~SettingsPopupHS2Headers.hasMouseTracking
+
+         ~SettingsPopupHS2Headers.hasTabletTracking
+
+         ~SettingsPopupHS2Headers.height
+
+         ~SettingsPopupHS2Headers.heightForWidth
+
+         ~SettingsPopupHS2Headers.heightMM
+
+         ~SettingsPopupHS2Headers.hide
+
+         ~SettingsPopupHS2Headers.hideEvent
+
+         ~SettingsPopupHS2Headers.inherits
+
+         ~SettingsPopupHS2Headers.initPainter
+
+         ~SettingsPopupHS2Headers.inputMethodEvent
+
+         ~SettingsPopupHS2Headers.inputMethodHints
+
+         ~SettingsPopupHS2Headers.inputMethodQuery
+
+         ~SettingsPopupHS2Headers.insertAction
+
+         ~SettingsPopupHS2Headers.insertActions
+
+         ~SettingsPopupHS2Headers.installEventFilter
+
+         ~SettingsPopupHS2Headers.isActiveWindow
+
+         ~SettingsPopupHS2Headers.isAncestorOf
+
+         ~SettingsPopupHS2Headers.isEnabled
+
+         ~SettingsPopupHS2Headers.isEnabledTo
+
+         ~SettingsPopupHS2Headers.isFullScreen
+
+         ~SettingsPopupHS2Headers.isHidden
+
+         ~SettingsPopupHS2Headers.isLeftToRight
+
+         ~SettingsPopupHS2Headers.isMaximized
+
+         ~SettingsPopupHS2Headers.isMinimized
+
+         ~SettingsPopupHS2Headers.isModal
+
+         ~SettingsPopupHS2Headers.isRightToLeft
+
+         ~SettingsPopupHS2Headers.isSignalConnected
+
+         ~SettingsPopupHS2Headers.isSizeGripEnabled
+
+         ~SettingsPopupHS2Headers.isVisible
+
+         ~SettingsPopupHS2Headers.isVisibleTo
+
+         ~SettingsPopupHS2Headers.isWidgetType
+
+         ~SettingsPopupHS2Headers.isWindow
+
+         ~SettingsPopupHS2Headers.isWindowModified
+
+         ~SettingsPopupHS2Headers.isWindowType
+
+         ~SettingsPopupHS2Headers.keyPressEvent
+
+         ~SettingsPopupHS2Headers.keyReleaseEvent
+
+         ~SettingsPopupHS2Headers.keyboardGrabber
+
+         ~SettingsPopupHS2Headers.killTimer
+
+         ~SettingsPopupHS2Headers.layout
+
+         ~SettingsPopupHS2Headers.layoutDirection
+
+         ~SettingsPopupHS2Headers.leaveEvent
+
+         ~SettingsPopupHS2Headers.locale
+
+         ~SettingsPopupHS2Headers.logicalDpiX
+
+         ~SettingsPopupHS2Headers.logicalDpiY
+
+         ~SettingsPopupHS2Headers.lower
+
+         ~SettingsPopupHS2Headers.mapFrom
+
+         ~SettingsPopupHS2Headers.mapFromGlobal
+
+         ~SettingsPopupHS2Headers.mapFromParent
+
+         ~SettingsPopupHS2Headers.mapTo
+
+         ~SettingsPopupHS2Headers.mapToGlobal
+
+         ~SettingsPopupHS2Headers.mapToParent
+
+         ~SettingsPopupHS2Headers.mask
+
+         ~SettingsPopupHS2Headers.maximumHeight
+
+         ~SettingsPopupHS2Headers.maximumSize
+
+         ~SettingsPopupHS2Headers.maximumWidth
+
+         ~SettingsPopupHS2Headers.metaObject
+
+         ~SettingsPopupHS2Headers.metric
+
+         ~SettingsPopupHS2Headers.minimumHeight
+
+         ~SettingsPopupHS2Headers.minimumSize
+
+         ~SettingsPopupHS2Headers.minimumSizeHint
+
+         ~SettingsPopupHS2Headers.minimumWidth
+
+         ~SettingsPopupHS2Headers.mouseDoubleClickEvent
+
+         ~SettingsPopupHS2Headers.mouseGrabber
+
+         ~SettingsPopupHS2Headers.mouseMoveEvent
+
+         ~SettingsPopupHS2Headers.mousePressEvent
+
+         ~SettingsPopupHS2Headers.mouseReleaseEvent
+
+         ~SettingsPopupHS2Headers.move
+
+         ~SettingsPopupHS2Headers.moveEvent
+
+         ~SettingsPopupHS2Headers.moveToThread
+
+         ~SettingsPopupHS2Headers.nativeEvent
+
+         ~SettingsPopupHS2Headers.nativeParentWidget
+
+         ~SettingsPopupHS2Headers.nextInFocusChain
+
+         ~SettingsPopupHS2Headers.normalGeometry
+
+         ~SettingsPopupHS2Headers.objectName
+
+         ~SettingsPopupHS2Headers.ok_click
+
+         ~SettingsPopupHS2Headers.open
+
+         ~SettingsPopupHS2Headers.overrideWindowFlags
+
+         ~SettingsPopupHS2Headers.overrideWindowState
+
+         ~SettingsPopupHS2Headers.paintEngine
+
+         ~SettingsPopupHS2Headers.paintEvent
+
+         ~SettingsPopupHS2Headers.paintingActive
+
+         ~SettingsPopupHS2Headers.palette
+
+         ~SettingsPopupHS2Headers.parent
+
+         ~SettingsPopupHS2Headers.parentWidget
+
+         ~SettingsPopupHS2Headers.physicalDpiX
+
+         ~SettingsPopupHS2Headers.physicalDpiY
+
+         ~SettingsPopupHS2Headers.pos
+
+         ~SettingsPopupHS2Headers.previousInFocusChain
+
+         ~SettingsPopupHS2Headers.property
+
+         ~SettingsPopupHS2Headers.pyqtConfigure
+
+         ~SettingsPopupHS2Headers.raise_
+
+         ~SettingsPopupHS2Headers.receivers
+
+         ~SettingsPopupHS2Headers.rect
+
+         ~SettingsPopupHS2Headers.reject
+
+         ~SettingsPopupHS2Headers.releaseKeyboard
+
+         ~SettingsPopupHS2Headers.releaseMouse
+
+         ~SettingsPopupHS2Headers.releaseShortcut
+
+         ~SettingsPopupHS2Headers.removeAction
+
+         ~SettingsPopupHS2Headers.removeEventFilter
+
+         ~SettingsPopupHS2Headers.render
+
+         ~SettingsPopupHS2Headers.repaint
+
+         ~SettingsPopupHS2Headers.resize
+
+         ~SettingsPopupHS2Headers.resizeEvent
+
+         ~SettingsPopupHS2Headers.restoreGeometry
+
+         ~SettingsPopupHS2Headers.result
+
+         ~SettingsPopupHS2Headers.saveGeometry
+
+         ~SettingsPopupHS2Headers.screen
+
+         ~SettingsPopupHS2Headers.scroll
+
+         ~SettingsPopupHS2Headers.sender
+
+         ~SettingsPopupHS2Headers.senderSignalIndex
+
+         ~SettingsPopupHS2Headers.setAcceptDrops
+
+         ~SettingsPopupHS2Headers.setAccessibleDescription
+
+         ~SettingsPopupHS2Headers.setAccessibleName
+
+         ~SettingsPopupHS2Headers.setAttribute
+
+         ~SettingsPopupHS2Headers.setAutoFillBackground
+
+         ~SettingsPopupHS2Headers.setBackgroundRole
+
+         ~SettingsPopupHS2Headers.setBaseSize
+
+         ~SettingsPopupHS2Headers.setContentsMargins
+
+         ~SettingsPopupHS2Headers.setContextMenuPolicy
+
+         ~SettingsPopupHS2Headers.setCursor
+
+         ~SettingsPopupHS2Headers.setDisabled
+
+         ~SettingsPopupHS2Headers.setEnabled
+
+         ~SettingsPopupHS2Headers.setFixedHeight
+
+         ~SettingsPopupHS2Headers.setFixedSize
+
+         ~SettingsPopupHS2Headers.setFixedWidth
+
+         ~SettingsPopupHS2Headers.setFocus
+
+         ~SettingsPopupHS2Headers.setFocusPolicy
+
+         ~SettingsPopupHS2Headers.setFocusProxy
+
+         ~SettingsPopupHS2Headers.setFont
+
+         ~SettingsPopupHS2Headers.setForegroundRole
+
+         ~SettingsPopupHS2Headers.setGeometry
+
+         ~SettingsPopupHS2Headers.setGraphicsEffect
+
+         ~SettingsPopupHS2Headers.setHidden
+
+         ~SettingsPopupHS2Headers.setInputMethodHints
+
+         ~SettingsPopupHS2Headers.setLayout
+
+         ~SettingsPopupHS2Headers.setLayoutDirection
+
+         ~SettingsPopupHS2Headers.setLocale
+
+         ~SettingsPopupHS2Headers.setMask
+
+         ~SettingsPopupHS2Headers.setMaximumHeight
+
+         ~SettingsPopupHS2Headers.setMaximumSize
+
+         ~SettingsPopupHS2Headers.setMaximumWidth
+
+         ~SettingsPopupHS2Headers.setMinimumHeight
+
+         ~SettingsPopupHS2Headers.setMinimumSize
+
+         ~SettingsPopupHS2Headers.setMinimumWidth
+
+         ~SettingsPopupHS2Headers.setModal
+
+         ~SettingsPopupHS2Headers.setMouseTracking
+
+         ~SettingsPopupHS2Headers.setObjectName
+
+         ~SettingsPopupHS2Headers.setPalette
+
+         ~SettingsPopupHS2Headers.setParent
+
+         ~SettingsPopupHS2Headers.setProperty
+
+         ~SettingsPopupHS2Headers.setResult
+
+         ~SettingsPopupHS2Headers.setShortcutAutoRepeat
+
+         ~SettingsPopupHS2Headers.setShortcutEnabled
+
+         ~SettingsPopupHS2Headers.setSizeGripEnabled
+
+         ~SettingsPopupHS2Headers.setSizeIncrement
+
+         ~SettingsPopupHS2Headers.setSizePolicy
+
+         ~SettingsPopupHS2Headers.setStatusTip
+
+         ~SettingsPopupHS2Headers.setStyle
+
+         ~SettingsPopupHS2Headers.setStyleSheet
+
+         ~SettingsPopupHS2Headers.setTabOrder
+
+         ~SettingsPopupHS2Headers.setTabletTracking
+
+         ~SettingsPopupHS2Headers.setToolTip
+
+         ~SettingsPopupHS2Headers.setToolTipDuration
+
+         ~SettingsPopupHS2Headers.setUpdatesEnabled
+
+         ~SettingsPopupHS2Headers.setVisible
+
+         ~SettingsPopupHS2Headers.setWhatsThis
+
+         ~SettingsPopupHS2Headers.setWindowFilePath
+
+         ~SettingsPopupHS2Headers.setWindowFlag
+
+         ~SettingsPopupHS2Headers.setWindowFlags
+
+         ~SettingsPopupHS2Headers.setWindowIcon
+
+         ~SettingsPopupHS2Headers.setWindowIconText
+
+         ~SettingsPopupHS2Headers.setWindowModality
+
+         ~SettingsPopupHS2Headers.setWindowModified
+
+         ~SettingsPopupHS2Headers.setWindowOpacity
+
+         ~SettingsPopupHS2Headers.setWindowRole
+
+         ~SettingsPopupHS2Headers.setWindowState
+
+         ~SettingsPopupHS2Headers.setWindowTitle
+
+         ~SettingsPopupHS2Headers.sharedPainter
+
+         ~SettingsPopupHS2Headers.show
+
+         ~SettingsPopupHS2Headers.showEvent
+
+         ~SettingsPopupHS2Headers.showFullScreen
+
+         ~SettingsPopupHS2Headers.showMaximized
+
+         ~SettingsPopupHS2Headers.showMinimized
+
+         ~SettingsPopupHS2Headers.showNormal
+
+         ~SettingsPopupHS2Headers.signalsBlocked
+
+         ~SettingsPopupHS2Headers.size
+
+         ~SettingsPopupHS2Headers.sizeHint
+
+         ~SettingsPopupHS2Headers.sizeIncrement
+
+         ~SettingsPopupHS2Headers.sizePolicy
+
+         ~SettingsPopupHS2Headers.stackUnder
+
+         ~SettingsPopupHS2Headers.startTimer
+
+         ~SettingsPopupHS2Headers.statusTip
+
+         ~SettingsPopupHS2Headers.style
+
+         ~SettingsPopupHS2Headers.styleSheet
+
+         ~SettingsPopupHS2Headers.tabletEvent
+
+         ~SettingsPopupHS2Headers.testAttribute
+
+         ~SettingsPopupHS2Headers.thread
+
+         ~SettingsPopupHS2Headers.timerEvent
+
+         ~SettingsPopupHS2Headers.toolTip
+
+         ~SettingsPopupHS2Headers.toolTipDuration
+
+         ~SettingsPopupHS2Headers.tr
+
+         ~SettingsPopupHS2Headers.underMouse
+
+         ~SettingsPopupHS2Headers.ungrabGesture
+
+         ~SettingsPopupHS2Headers.unsetCursor
+
+         ~SettingsPopupHS2Headers.unsetLayoutDirection
+
+         ~SettingsPopupHS2Headers.unsetLocale
+
+         ~SettingsPopupHS2Headers.update
+
+         ~SettingsPopupHS2Headers.updateGeometry
+
+         ~SettingsPopupHS2Headers.updateMicroFocus
+
+         ~SettingsPopupHS2Headers.updatesEnabled
+
+         ~SettingsPopupHS2Headers.visibleRegion
+
+         ~SettingsPopupHS2Headers.whatsThis
+
+         ~SettingsPopupHS2Headers.wheelEvent
+
+         ~SettingsPopupHS2Headers.width
+
+         ~SettingsPopupHS2Headers.widthMM
+
+         ~SettingsPopupHS2Headers.winId
+
+         ~SettingsPopupHS2Headers.window
+
+         ~SettingsPopupHS2Headers.windowFilePath
+
+         ~SettingsPopupHS2Headers.windowFlags
+
+         ~SettingsPopupHS2Headers.windowHandle
+
+         ~SettingsPopupHS2Headers.windowIcon
+
+         ~SettingsPopupHS2Headers.windowIconText
+
+         ~SettingsPopupHS2Headers.windowModality
+
+         ~SettingsPopupHS2Headers.windowOpacity
+
+         ~SettingsPopupHS2Headers.windowRole
+
+         ~SettingsPopupHS2Headers.windowState
+
+         ~SettingsPopupHS2Headers.windowTitle
+
+         ~SettingsPopupHS2Headers.windowType
+
+         ~SettingsPopupHS2Headers.x
+
+         ~SettingsPopupHS2Headers.y
+
+
+
+
+
+
+
+
+Attributes
+==========
+
+.. tab-set::
+
+   .. tab-item:: Plain
+      :sync: key-plain
+
+      .. autosummary::
+
+
+   .. tab-item:: Inherited
+      :sync: key-inherited
+
+      .. autosummary::
+
+         ~SettingsPopupHS2Headers.Accepted
+
+         ~SettingsPopupHS2Headers.DrawChildren
+
+         ~SettingsPopupHS2Headers.DrawWindowBackground
+
+         ~SettingsPopupHS2Headers.IgnoreMask
+
+         ~SettingsPopupHS2Headers.PdmDepth
+
+         ~SettingsPopupHS2Headers.PdmDevicePixelRatio
+
+         ~SettingsPopupHS2Headers.PdmDevicePixelRatioScaled
+
+         ~SettingsPopupHS2Headers.PdmDpiX
+
+         ~SettingsPopupHS2Headers.PdmDpiY
+
+         ~SettingsPopupHS2Headers.PdmHeight
+
+         ~SettingsPopupHS2Headers.PdmHeightMM
+
+         ~SettingsPopupHS2Headers.PdmNumColors
+
+         ~SettingsPopupHS2Headers.PdmPhysicalDpiX
+
+         ~SettingsPopupHS2Headers.PdmPhysicalDpiY
+
+         ~SettingsPopupHS2Headers.PdmWidth
+
+         ~SettingsPopupHS2Headers.PdmWidthMM
+
+         ~SettingsPopupHS2Headers.Rejected
+
+         ~SettingsPopupHS2Headers.accepted
+
+         ~SettingsPopupHS2Headers.customContextMenuRequested
+
+         ~SettingsPopupHS2Headers.destroyed
+
+         ~SettingsPopupHS2Headers.finished
+
+         ~SettingsPopupHS2Headers.objectNameChanged
+
+         ~SettingsPopupHS2Headers.rejected
+
+         ~SettingsPopupHS2Headers.staticMetaObject
+
+         ~SettingsPopupHS2Headers.windowIconChanged
+
+         ~SettingsPopupHS2Headers.windowIconTextChanged
+
+         ~SettingsPopupHS2Headers.windowTitleChanged
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Definition
+==========
+
+.. tab-set::
+
+   .. tab-item:: Plain
+      :sync: key-plain
+
+      .. autoclass:: SettingsPopupHS2Headers
+         :show-inheritance:
+         :members: SettingsPopupHS2Headers.__init__,SettingsPopupHS2Headers.get_settings,SettingsPopupHS2Headers.update_settings,
+
+   .. tab-item:: Inherited
+      :sync: key-inherited
+
+      .. autoclass:: SettingsPopupHS2Headers
+         :show-inheritance:
+         :inherited-members:
+         :noindex:

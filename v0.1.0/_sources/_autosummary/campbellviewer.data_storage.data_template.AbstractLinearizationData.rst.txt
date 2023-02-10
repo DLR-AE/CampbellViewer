@@ -1,0 +1,85 @@
+AbstractLinearizationData
+#########################
+*campbellviewer.data_storage.data_template.AbstractLinearizationData*
+
+.. currentmodule:: campbellviewer.data_storage.data_template
+
+
+
+
+Methods
+=======
+
+.. tab-set::
+
+   .. tab-item:: Plain
+      :sync: key-plain
+
+      .. autosummary::
+
+         ~AbstractLinearizationData.__init__
+
+         ~AbstractLinearizationData.remove_modes
+
+
+   .. tab-item:: Inherited
+      :sync: key-inherited
+
+      .. autosummary::
+
+
+
+
+
+
+
+
+Attributes
+==========
+
+.. tab-set::
+
+   .. tab-item:: Plain
+      :sync: key-plain
+
+      .. autosummary::
+
+         ~AbstractLinearizationData.ds
+
+
+   .. tab-item:: Inherited
+      :sync: key-inherited
+
+      .. autosummary::
+
+
+
+
+
+
+
+
+
+
+
+
+
+Definition
+==========
+
+.. tab-set::
+
+   .. tab-item:: Plain
+      :sync: key-plain
+
+      .. autoclass:: AbstractLinearizationData
+         :show-inheritance:
+         :members: AbstractLinearizationData.__init__,AbstractLinearizationData.remove_modes,
+
+   .. tab-item:: Inherited
+      :sync: key-inherited
+
+      .. autoclass:: AbstractLinearizationData
+         :show-inheritance:
+         :inherited-members:
+         :noindex:

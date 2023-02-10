@@ -1,0 +1,779 @@
+SettingsPopup
+#############
+*campbellviewer.main_app.SettingsPopup*
+
+.. currentmodule:: campbellviewer.main_app
+
+
+
+
+Methods
+=======
+
+.. tab-set::
+
+   .. tab-item:: Plain
+      :sync: key-plain
+
+      .. autosummary::
+
+         ~SettingsPopup.__init__
+
+         ~SettingsPopup.close_popup
+
+         ~SettingsPopup.get_settings
+
+         ~SettingsPopup.ok_click
+
+         ~SettingsPopup.update_settings
+
+
+   .. tab-item:: Inherited
+      :sync: key-inherited
+
+      .. autosummary::
+
+         ~SettingsPopup.accept
+
+         ~SettingsPopup.acceptDrops
+
+         ~SettingsPopup.accessibleDescription
+
+         ~SettingsPopup.accessibleName
+
+         ~SettingsPopup.actionEvent
+
+         ~SettingsPopup.actions
+
+         ~SettingsPopup.activateWindow
+
+         ~SettingsPopup.addAction
+
+         ~SettingsPopup.addActions
+
+         ~SettingsPopup.adjustSize
+
+         ~SettingsPopup.autoFillBackground
+
+         ~SettingsPopup.backgroundRole
+
+         ~SettingsPopup.baseSize
+
+         ~SettingsPopup.blockSignals
+
+         ~SettingsPopup.changeEvent
+
+         ~SettingsPopup.childAt
+
+         ~SettingsPopup.childEvent
+
+         ~SettingsPopup.children
+
+         ~SettingsPopup.childrenRect
+
+         ~SettingsPopup.childrenRegion
+
+         ~SettingsPopup.clearFocus
+
+         ~SettingsPopup.clearMask
+
+         ~SettingsPopup.close
+
+         ~SettingsPopup.closeEvent
+
+         ~SettingsPopup.colorCount
+
+         ~SettingsPopup.connectNotify
+
+         ~SettingsPopup.contentsMargins
+
+         ~SettingsPopup.contentsRect
+
+         ~SettingsPopup.contextMenuEvent
+
+         ~SettingsPopup.contextMenuPolicy
+
+         ~SettingsPopup.create
+
+         ~SettingsPopup.createWindowContainer
+
+         ~SettingsPopup.cursor
+
+         ~SettingsPopup.customEvent
+
+         ~SettingsPopup.deleteLater
+
+         ~SettingsPopup.depth
+
+         ~SettingsPopup.destroy
+
+         ~SettingsPopup.devType
+
+         ~SettingsPopup.devicePixelRatio
+
+         ~SettingsPopup.devicePixelRatioF
+
+         ~SettingsPopup.devicePixelRatioFScale
+
+         ~SettingsPopup.disconnect
+
+         ~SettingsPopup.disconnectNotify
+
+         ~SettingsPopup.done
+
+         ~SettingsPopup.dragEnterEvent
+
+         ~SettingsPopup.dragLeaveEvent
+
+         ~SettingsPopup.dragMoveEvent
+
+         ~SettingsPopup.dropEvent
+
+         ~SettingsPopup.dumpObjectInfo
+
+         ~SettingsPopup.dumpObjectTree
+
+         ~SettingsPopup.dynamicPropertyNames
+
+         ~SettingsPopup.effectiveWinId
+
+         ~SettingsPopup.ensurePolished
+
+         ~SettingsPopup.enterEvent
+
+         ~SettingsPopup.event
+
+         ~SettingsPopup.eventFilter
+
+         ~SettingsPopup.exec
+
+         ~SettingsPopup.exec_
+
+         ~SettingsPopup.find
+
+         ~SettingsPopup.findChild
+
+         ~SettingsPopup.findChildren
+
+         ~SettingsPopup.focusInEvent
+
+         ~SettingsPopup.focusNextChild
+
+         ~SettingsPopup.focusNextPrevChild
+
+         ~SettingsPopup.focusOutEvent
+
+         ~SettingsPopup.focusPolicy
+
+         ~SettingsPopup.focusPreviousChild
+
+         ~SettingsPopup.focusProxy
+
+         ~SettingsPopup.focusWidget
+
+         ~SettingsPopup.font
+
+         ~SettingsPopup.fontInfo
+
+         ~SettingsPopup.fontMetrics
+
+         ~SettingsPopup.foregroundRole
+
+         ~SettingsPopup.frameGeometry
+
+         ~SettingsPopup.frameSize
+
+         ~SettingsPopup.geometry
+
+         ~SettingsPopup.getContentsMargins
+
+         ~SettingsPopup.grab
+
+         ~SettingsPopup.grabGesture
+
+         ~SettingsPopup.grabKeyboard
+
+         ~SettingsPopup.grabMouse
+
+         ~SettingsPopup.grabShortcut
+
+         ~SettingsPopup.graphicsEffect
+
+         ~SettingsPopup.graphicsProxyWidget
+
+         ~SettingsPopup.hasFocus
+
+         ~SettingsPopup.hasHeightForWidth
+
+         ~SettingsPopup.hasMouseTracking
+
+         ~SettingsPopup.hasTabletTracking
+
+         ~SettingsPopup.height
+
+         ~SettingsPopup.heightForWidth
+
+         ~SettingsPopup.heightMM
+
+         ~SettingsPopup.hide
+
+         ~SettingsPopup.hideEvent
+
+         ~SettingsPopup.inherits
+
+         ~SettingsPopup.initPainter
+
+         ~SettingsPopup.inputMethodEvent
+
+         ~SettingsPopup.inputMethodHints
+
+         ~SettingsPopup.inputMethodQuery
+
+         ~SettingsPopup.insertAction
+
+         ~SettingsPopup.insertActions
+
+         ~SettingsPopup.installEventFilter
+
+         ~SettingsPopup.isActiveWindow
+
+         ~SettingsPopup.isAncestorOf
+
+         ~SettingsPopup.isEnabled
+
+         ~SettingsPopup.isEnabledTo
+
+         ~SettingsPopup.isFullScreen
+
+         ~SettingsPopup.isHidden
+
+         ~SettingsPopup.isLeftToRight
+
+         ~SettingsPopup.isMaximized
+
+         ~SettingsPopup.isMinimized
+
+         ~SettingsPopup.isModal
+
+         ~SettingsPopup.isRightToLeft
+
+         ~SettingsPopup.isSignalConnected
+
+         ~SettingsPopup.isSizeGripEnabled
+
+         ~SettingsPopup.isVisible
+
+         ~SettingsPopup.isVisibleTo
+
+         ~SettingsPopup.isWidgetType
+
+         ~SettingsPopup.isWindow
+
+         ~SettingsPopup.isWindowModified
+
+         ~SettingsPopup.isWindowType
+
+         ~SettingsPopup.keyPressEvent
+
+         ~SettingsPopup.keyReleaseEvent
+
+         ~SettingsPopup.keyboardGrabber
+
+         ~SettingsPopup.killTimer
+
+         ~SettingsPopup.layout
+
+         ~SettingsPopup.layoutDirection
+
+         ~SettingsPopup.leaveEvent
+
+         ~SettingsPopup.locale
+
+         ~SettingsPopup.logicalDpiX
+
+         ~SettingsPopup.logicalDpiY
+
+         ~SettingsPopup.lower
+
+         ~SettingsPopup.mapFrom
+
+         ~SettingsPopup.mapFromGlobal
+
+         ~SettingsPopup.mapFromParent
+
+         ~SettingsPopup.mapTo
+
+         ~SettingsPopup.mapToGlobal
+
+         ~SettingsPopup.mapToParent
+
+         ~SettingsPopup.mask
+
+         ~SettingsPopup.maximumHeight
+
+         ~SettingsPopup.maximumSize
+
+         ~SettingsPopup.maximumWidth
+
+         ~SettingsPopup.metaObject
+
+         ~SettingsPopup.metric
+
+         ~SettingsPopup.minimumHeight
+
+         ~SettingsPopup.minimumSize
+
+         ~SettingsPopup.minimumSizeHint
+
+         ~SettingsPopup.minimumWidth
+
+         ~SettingsPopup.mouseDoubleClickEvent
+
+         ~SettingsPopup.mouseGrabber
+
+         ~SettingsPopup.mouseMoveEvent
+
+         ~SettingsPopup.mousePressEvent
+
+         ~SettingsPopup.mouseReleaseEvent
+
+         ~SettingsPopup.move
+
+         ~SettingsPopup.moveEvent
+
+         ~SettingsPopup.moveToThread
+
+         ~SettingsPopup.nativeEvent
+
+         ~SettingsPopup.nativeParentWidget
+
+         ~SettingsPopup.nextInFocusChain
+
+         ~SettingsPopup.normalGeometry
+
+         ~SettingsPopup.objectName
+
+         ~SettingsPopup.open
+
+         ~SettingsPopup.overrideWindowFlags
+
+         ~SettingsPopup.overrideWindowState
+
+         ~SettingsPopup.paintEngine
+
+         ~SettingsPopup.paintEvent
+
+         ~SettingsPopup.paintingActive
+
+         ~SettingsPopup.palette
+
+         ~SettingsPopup.parent
+
+         ~SettingsPopup.parentWidget
+
+         ~SettingsPopup.physicalDpiX
+
+         ~SettingsPopup.physicalDpiY
+
+         ~SettingsPopup.pos
+
+         ~SettingsPopup.previousInFocusChain
+
+         ~SettingsPopup.property
+
+         ~SettingsPopup.pyqtConfigure
+
+         ~SettingsPopup.raise_
+
+         ~SettingsPopup.receivers
+
+         ~SettingsPopup.rect
+
+         ~SettingsPopup.reject
+
+         ~SettingsPopup.releaseKeyboard
+
+         ~SettingsPopup.releaseMouse
+
+         ~SettingsPopup.releaseShortcut
+
+         ~SettingsPopup.removeAction
+
+         ~SettingsPopup.removeEventFilter
+
+         ~SettingsPopup.render
+
+         ~SettingsPopup.repaint
+
+         ~SettingsPopup.resize
+
+         ~SettingsPopup.resizeEvent
+
+         ~SettingsPopup.restoreGeometry
+
+         ~SettingsPopup.result
+
+         ~SettingsPopup.saveGeometry
+
+         ~SettingsPopup.screen
+
+         ~SettingsPopup.scroll
+
+         ~SettingsPopup.sender
+
+         ~SettingsPopup.senderSignalIndex
+
+         ~SettingsPopup.setAcceptDrops
+
+         ~SettingsPopup.setAccessibleDescription
+
+         ~SettingsPopup.setAccessibleName
+
+         ~SettingsPopup.setAttribute
+
+         ~SettingsPopup.setAutoFillBackground
+
+         ~SettingsPopup.setBackgroundRole
+
+         ~SettingsPopup.setBaseSize
+
+         ~SettingsPopup.setContentsMargins
+
+         ~SettingsPopup.setContextMenuPolicy
+
+         ~SettingsPopup.setCursor
+
+         ~SettingsPopup.setDisabled
+
+         ~SettingsPopup.setEnabled
+
+         ~SettingsPopup.setFixedHeight
+
+         ~SettingsPopup.setFixedSize
+
+         ~SettingsPopup.setFixedWidth
+
+         ~SettingsPopup.setFocus
+
+         ~SettingsPopup.setFocusPolicy
+
+         ~SettingsPopup.setFocusProxy
+
+         ~SettingsPopup.setFont
+
+         ~SettingsPopup.setForegroundRole
+
+         ~SettingsPopup.setGeometry
+
+         ~SettingsPopup.setGraphicsEffect
+
+         ~SettingsPopup.setHidden
+
+         ~SettingsPopup.setInputMethodHints
+
+         ~SettingsPopup.setLayout
+
+         ~SettingsPopup.setLayoutDirection
+
+         ~SettingsPopup.setLocale
+
+         ~SettingsPopup.setMask
+
+         ~SettingsPopup.setMaximumHeight
+
+         ~SettingsPopup.setMaximumSize
+
+         ~SettingsPopup.setMaximumWidth
+
+         ~SettingsPopup.setMinimumHeight
+
+         ~SettingsPopup.setMinimumSize
+
+         ~SettingsPopup.setMinimumWidth
+
+         ~SettingsPopup.setModal
+
+         ~SettingsPopup.setMouseTracking
+
+         ~SettingsPopup.setObjectName
+
+         ~SettingsPopup.setPalette
+
+         ~SettingsPopup.setParent
+
+         ~SettingsPopup.setProperty
+
+         ~SettingsPopup.setResult
+
+         ~SettingsPopup.setShortcutAutoRepeat
+
+         ~SettingsPopup.setShortcutEnabled
+
+         ~SettingsPopup.setSizeGripEnabled
+
+         ~SettingsPopup.setSizeIncrement
+
+         ~SettingsPopup.setSizePolicy
+
+         ~SettingsPopup.setStatusTip
+
+         ~SettingsPopup.setStyle
+
+         ~SettingsPopup.setStyleSheet
+
+         ~SettingsPopup.setTabOrder
+
+         ~SettingsPopup.setTabletTracking
+
+         ~SettingsPopup.setToolTip
+
+         ~SettingsPopup.setToolTipDuration
+
+         ~SettingsPopup.setUpdatesEnabled
+
+         ~SettingsPopup.setVisible
+
+         ~SettingsPopup.setWhatsThis
+
+         ~SettingsPopup.setWindowFilePath
+
+         ~SettingsPopup.setWindowFlag
+
+         ~SettingsPopup.setWindowFlags
+
+         ~SettingsPopup.setWindowIcon
+
+         ~SettingsPopup.setWindowIconText
+
+         ~SettingsPopup.setWindowModality
+
+         ~SettingsPopup.setWindowModified
+
+         ~SettingsPopup.setWindowOpacity
+
+         ~SettingsPopup.setWindowRole
+
+         ~SettingsPopup.setWindowState
+
+         ~SettingsPopup.setWindowTitle
+
+         ~SettingsPopup.sharedPainter
+
+         ~SettingsPopup.show
+
+         ~SettingsPopup.showEvent
+
+         ~SettingsPopup.showFullScreen
+
+         ~SettingsPopup.showMaximized
+
+         ~SettingsPopup.showMinimized
+
+         ~SettingsPopup.showNormal
+
+         ~SettingsPopup.signalsBlocked
+
+         ~SettingsPopup.size
+
+         ~SettingsPopup.sizeHint
+
+         ~SettingsPopup.sizeIncrement
+
+         ~SettingsPopup.sizePolicy
+
+         ~SettingsPopup.stackUnder
+
+         ~SettingsPopup.startTimer
+
+         ~SettingsPopup.statusTip
+
+         ~SettingsPopup.style
+
+         ~SettingsPopup.styleSheet
+
+         ~SettingsPopup.tabletEvent
+
+         ~SettingsPopup.testAttribute
+
+         ~SettingsPopup.thread
+
+         ~SettingsPopup.timerEvent
+
+         ~SettingsPopup.toolTip
+
+         ~SettingsPopup.toolTipDuration
+
+         ~SettingsPopup.tr
+
+         ~SettingsPopup.underMouse
+
+         ~SettingsPopup.ungrabGesture
+
+         ~SettingsPopup.unsetCursor
+
+         ~SettingsPopup.unsetLayoutDirection
+
+         ~SettingsPopup.unsetLocale
+
+         ~SettingsPopup.update
+
+         ~SettingsPopup.updateGeometry
+
+         ~SettingsPopup.updateMicroFocus
+
+         ~SettingsPopup.updatesEnabled
+
+         ~SettingsPopup.visibleRegion
+
+         ~SettingsPopup.whatsThis
+
+         ~SettingsPopup.wheelEvent
+
+         ~SettingsPopup.width
+
+         ~SettingsPopup.widthMM
+
+         ~SettingsPopup.winId
+
+         ~SettingsPopup.window
+
+         ~SettingsPopup.windowFilePath
+
+         ~SettingsPopup.windowFlags
+
+         ~SettingsPopup.windowHandle
+
+         ~SettingsPopup.windowIcon
+
+         ~SettingsPopup.windowIconText
+
+         ~SettingsPopup.windowModality
+
+         ~SettingsPopup.windowOpacity
+
+         ~SettingsPopup.windowRole
+
+         ~SettingsPopup.windowState
+
+         ~SettingsPopup.windowTitle
+
+         ~SettingsPopup.windowType
+
+         ~SettingsPopup.x
+
+         ~SettingsPopup.y
+
+
+
+
+
+
+
+
+Attributes
+==========
+
+.. tab-set::
+
+   .. tab-item:: Plain
+      :sync: key-plain
+
+      .. autosummary::
+
+
+   .. tab-item:: Inherited
+      :sync: key-inherited
+
+      .. autosummary::
+
+         ~SettingsPopup.Accepted
+
+         ~SettingsPopup.DrawChildren
+
+         ~SettingsPopup.DrawWindowBackground
+
+         ~SettingsPopup.IgnoreMask
+
+         ~SettingsPopup.PdmDepth
+
+         ~SettingsPopup.PdmDevicePixelRatio
+
+         ~SettingsPopup.PdmDevicePixelRatioScaled
+
+         ~SettingsPopup.PdmDpiX
+
+         ~SettingsPopup.PdmDpiY
+
+         ~SettingsPopup.PdmHeight
+
+         ~SettingsPopup.PdmHeightMM
+
+         ~SettingsPopup.PdmNumColors
+
+         ~SettingsPopup.PdmPhysicalDpiX
+
+         ~SettingsPopup.PdmPhysicalDpiY
+
+         ~SettingsPopup.PdmWidth
+
+         ~SettingsPopup.PdmWidthMM
+
+         ~SettingsPopup.Rejected
+
+         ~SettingsPopup.accepted
+
+         ~SettingsPopup.customContextMenuRequested
+
+         ~SettingsPopup.destroyed
+
+         ~SettingsPopup.finished
+
+         ~SettingsPopup.objectNameChanged
+
+         ~SettingsPopup.rejected
+
+         ~SettingsPopup.staticMetaObject
+
+         ~SettingsPopup.windowIconChanged
+
+         ~SettingsPopup.windowIconTextChanged
+
+         ~SettingsPopup.windowTitleChanged
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Definition
+==========
+
+.. tab-set::
+
+   .. tab-item:: Plain
+      :sync: key-plain
+
+      .. autoclass:: SettingsPopup
+         :show-inheritance:
+         :members: SettingsPopup.__init__,SettingsPopup.close_popup,SettingsPopup.get_settings,SettingsPopup.ok_click,SettingsPopup.update_settings,
+
+   .. tab-item:: Inherited
+      :sync: key-inherited
+
+      .. autoclass:: SettingsPopup
+         :show-inheritance:
+         :inherited-members:
+         :noindex:
