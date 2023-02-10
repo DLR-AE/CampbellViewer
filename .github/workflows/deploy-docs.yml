@@ -20,6 +20,7 @@ jobs:
       - name: Build
         run: |
           pip install -r requirements-dev.txt
+          pip install .
           sphinx-build docs/source docs/build/html -b html -D release=${{ github.ref_name }} -v -T
       - name: Deploy
         uses: peaceiris/actions-gh-pages@v3
