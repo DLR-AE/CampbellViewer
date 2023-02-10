@@ -41,6 +41,7 @@ import os
 import numpy as np
 import copy
 import argparse
+import importlib.resources
 
 from PyQt5 import QtCore
 from PyQt5.QtWidgets import QApplication, QMainWindow, QMenu, QVBoxLayout, QHBoxLayout, QMessageBox, QWidget, QDialog
@@ -1803,7 +1804,8 @@ def main():
 
     aw = ApplicationWindow()
     aw.setWindowTitle("UniversalCampbellPlotter")
-    aw.setWindowIcon(QIcon('../docs/source/images/sample_icon.png'))
+    icon_path = importlib.resources.files('campbellviewer') / 'assets' / 'windturbine.ico'
+    aw.setWindowIcon(QIcon(str(icon_path)))
 
     # set initial size
     w = 1400
