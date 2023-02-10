@@ -1,0 +1,48 @@
+
+name: Deploy
+
+on:
+  push:
+    tags:
+      - v*
+
+permissions:
+  contents: write
+
+jobs:
+  docs:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'
+      - name: Build
+        run: |
+          pip install -r requirements-dev.txt
+          make html
+      - name: Deploy
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          publish_branch: gh-pages
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: build/html
+          destination_dir: ${{ github.ref_name }}
+
+      - name: Create switcher file
+        run: |
+          mkdir redirect
+          git fetch --tags origin
+          git tag -l > tags.txt
+          python ./.github/scripts/update_switcher.py
+
+      - name: Create redirect
+        run: |
+          python ./.github/scripts/create_redirect.py ${{ github.ref_name }}
+
+      - name: Deploy redirect
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./redirect
+          keep_files: true
