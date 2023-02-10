@@ -1,0 +1,775 @@
+SettingsPopupModeFilter
+#######################
+*campbellviewer.main_app.SettingsPopupModeFilter*
+
+.. currentmodule:: campbellviewer.main_app
+
+
+
+
+Methods
+=======
+
+.. tab-set::
+
+   .. tab-item:: Plain
+      :sync: key-plain
+
+      .. autosummary::
+
+         ~SettingsPopupModeFilter.__init__
+
+         ~SettingsPopupModeFilter.get_settings
+
+         ~SettingsPopupModeFilter.update_settings
+
+
+   .. tab-item:: Inherited
+      :sync: key-inherited
+
+      .. autosummary::
+
+         ~SettingsPopupModeFilter.accept
+
+         ~SettingsPopupModeFilter.acceptDrops
+
+         ~SettingsPopupModeFilter.accessibleDescription
+
+         ~SettingsPopupModeFilter.accessibleName
+
+         ~SettingsPopupModeFilter.actionEvent
+
+         ~SettingsPopupModeFilter.actions
+
+         ~SettingsPopupModeFilter.activateWindow
+
+         ~SettingsPopupModeFilter.addAction
+
+         ~SettingsPopupModeFilter.addActions
+
+         ~SettingsPopupModeFilter.adjustSize
+
+         ~SettingsPopupModeFilter.autoFillBackground
+
+         ~SettingsPopupModeFilter.backgroundRole
+
+         ~SettingsPopupModeFilter.baseSize
+
+         ~SettingsPopupModeFilter.blockSignals
+
+         ~SettingsPopupModeFilter.changeEvent
+
+         ~SettingsPopupModeFilter.childAt
+
+         ~SettingsPopupModeFilter.childEvent
+
+         ~SettingsPopupModeFilter.children
+
+         ~SettingsPopupModeFilter.childrenRect
+
+         ~SettingsPopupModeFilter.childrenRegion
+
+         ~SettingsPopupModeFilter.clearFocus
+
+         ~SettingsPopupModeFilter.clearMask
+
+         ~SettingsPopupModeFilter.close
+
+         ~SettingsPopupModeFilter.closeEvent
+
+         ~SettingsPopupModeFilter.close_popup
+
+         ~SettingsPopupModeFilter.colorCount
+
+         ~SettingsPopupModeFilter.connectNotify
+
+         ~SettingsPopupModeFilter.contentsMargins
+
+         ~SettingsPopupModeFilter.contentsRect
+
+         ~SettingsPopupModeFilter.contextMenuEvent
+
+         ~SettingsPopupModeFilter.contextMenuPolicy
+
+         ~SettingsPopupModeFilter.create
+
+         ~SettingsPopupModeFilter.createWindowContainer
+
+         ~SettingsPopupModeFilter.cursor
+
+         ~SettingsPopupModeFilter.customEvent
+
+         ~SettingsPopupModeFilter.deleteLater
+
+         ~SettingsPopupModeFilter.depth
+
+         ~SettingsPopupModeFilter.destroy
+
+         ~SettingsPopupModeFilter.devType
+
+         ~SettingsPopupModeFilter.devicePixelRatio
+
+         ~SettingsPopupModeFilter.devicePixelRatioF
+
+         ~SettingsPopupModeFilter.devicePixelRatioFScale
+
+         ~SettingsPopupModeFilter.disconnect
+
+         ~SettingsPopupModeFilter.disconnectNotify
+
+         ~SettingsPopupModeFilter.done
+
+         ~SettingsPopupModeFilter.dragEnterEvent
+
+         ~SettingsPopupModeFilter.dragLeaveEvent
+
+         ~SettingsPopupModeFilter.dragMoveEvent
+
+         ~SettingsPopupModeFilter.dropEvent
+
+         ~SettingsPopupModeFilter.dumpObjectInfo
+
+         ~SettingsPopupModeFilter.dumpObjectTree
+
+         ~SettingsPopupModeFilter.dynamicPropertyNames
+
+         ~SettingsPopupModeFilter.effectiveWinId
+
+         ~SettingsPopupModeFilter.ensurePolished
+
+         ~SettingsPopupModeFilter.enterEvent
+
+         ~SettingsPopupModeFilter.event
+
+         ~SettingsPopupModeFilter.eventFilter
+
+         ~SettingsPopupModeFilter.exec
+
+         ~SettingsPopupModeFilter.exec_
+
+         ~SettingsPopupModeFilter.find
+
+         ~SettingsPopupModeFilter.findChild
+
+         ~SettingsPopupModeFilter.findChildren
+
+         ~SettingsPopupModeFilter.focusInEvent
+
+         ~SettingsPopupModeFilter.focusNextChild
+
+         ~SettingsPopupModeFilter.focusNextPrevChild
+
+         ~SettingsPopupModeFilter.focusOutEvent
+
+         ~SettingsPopupModeFilter.focusPolicy
+
+         ~SettingsPopupModeFilter.focusPreviousChild
+
+         ~SettingsPopupModeFilter.focusProxy
+
+         ~SettingsPopupModeFilter.focusWidget
+
+         ~SettingsPopupModeFilter.font
+
+         ~SettingsPopupModeFilter.fontInfo
+
+         ~SettingsPopupModeFilter.fontMetrics
+
+         ~SettingsPopupModeFilter.foregroundRole
+
+         ~SettingsPopupModeFilter.frameGeometry
+
+         ~SettingsPopupModeFilter.frameSize
+
+         ~SettingsPopupModeFilter.geometry
+
+         ~SettingsPopupModeFilter.getContentsMargins
+
+         ~SettingsPopupModeFilter.grab
+
+         ~SettingsPopupModeFilter.grabGesture
+
+         ~SettingsPopupModeFilter.grabKeyboard
+
+         ~SettingsPopupModeFilter.grabMouse
+
+         ~SettingsPopupModeFilter.grabShortcut
+
+         ~SettingsPopupModeFilter.graphicsEffect
+
+         ~SettingsPopupModeFilter.graphicsProxyWidget
+
+         ~SettingsPopupModeFilter.hasFocus
+
+         ~SettingsPopupModeFilter.hasHeightForWidth
+
+         ~SettingsPopupModeFilter.hasMouseTracking
+
+         ~SettingsPopupModeFilter.hasTabletTracking
+
+         ~SettingsPopupModeFilter.height
+
+         ~SettingsPopupModeFilter.heightForWidth
+
+         ~SettingsPopupModeFilter.heightMM
+
+         ~SettingsPopupModeFilter.hide
+
+         ~SettingsPopupModeFilter.hideEvent
+
+         ~SettingsPopupModeFilter.inherits
+
+         ~SettingsPopupModeFilter.initPainter
+
+         ~SettingsPopupModeFilter.inputMethodEvent
+
+         ~SettingsPopupModeFilter.inputMethodHints
+
+         ~SettingsPopupModeFilter.inputMethodQuery
+
+         ~SettingsPopupModeFilter.insertAction
+
+         ~SettingsPopupModeFilter.insertActions
+
+         ~SettingsPopupModeFilter.installEventFilter
+
+         ~SettingsPopupModeFilter.isActiveWindow
+
+         ~SettingsPopupModeFilter.isAncestorOf
+
+         ~SettingsPopupModeFilter.isEnabled
+
+         ~SettingsPopupModeFilter.isEnabledTo
+
+         ~SettingsPopupModeFilter.isFullScreen
+
+         ~SettingsPopupModeFilter.isHidden
+
+         ~SettingsPopupModeFilter.isLeftToRight
+
+         ~SettingsPopupModeFilter.isMaximized
+
+         ~SettingsPopupModeFilter.isMinimized
+
+         ~SettingsPopupModeFilter.isModal
+
+         ~SettingsPopupModeFilter.isRightToLeft
+
+         ~SettingsPopupModeFilter.isSignalConnected
+
+         ~SettingsPopupModeFilter.isSizeGripEnabled
+
+         ~SettingsPopupModeFilter.isVisible
+
+         ~SettingsPopupModeFilter.isVisibleTo
+
+         ~SettingsPopupModeFilter.isWidgetType
+
+         ~SettingsPopupModeFilter.isWindow
+
+         ~SettingsPopupModeFilter.isWindowModified
+
+         ~SettingsPopupModeFilter.isWindowType
+
+         ~SettingsPopupModeFilter.keyPressEvent
+
+         ~SettingsPopupModeFilter.keyReleaseEvent
+
+         ~SettingsPopupModeFilter.keyboardGrabber
+
+         ~SettingsPopupModeFilter.killTimer
+
+         ~SettingsPopupModeFilter.layout
+
+         ~SettingsPopupModeFilter.layoutDirection
+
+         ~SettingsPopupModeFilter.leaveEvent
+
+         ~SettingsPopupModeFilter.locale
+
+         ~SettingsPopupModeFilter.logicalDpiX
+
+         ~SettingsPopupModeFilter.logicalDpiY
+
+         ~SettingsPopupModeFilter.lower
+
+         ~SettingsPopupModeFilter.mapFrom
+
+         ~SettingsPopupModeFilter.mapFromGlobal
+
+         ~SettingsPopupModeFilter.mapFromParent
+
+         ~SettingsPopupModeFilter.mapTo
+
+         ~SettingsPopupModeFilter.mapToGlobal
+
+         ~SettingsPopupModeFilter.mapToParent
+
+         ~SettingsPopupModeFilter.mask
+
+         ~SettingsPopupModeFilter.maximumHeight
+
+         ~SettingsPopupModeFilter.maximumSize
+
+         ~SettingsPopupModeFilter.maximumWidth
+
+         ~SettingsPopupModeFilter.metaObject
+
+         ~SettingsPopupModeFilter.metric
+
+         ~SettingsPopupModeFilter.minimumHeight
+
+         ~SettingsPopupModeFilter.minimumSize
+
+         ~SettingsPopupModeFilter.minimumSizeHint
+
+         ~SettingsPopupModeFilter.minimumWidth
+
+         ~SettingsPopupModeFilter.mouseDoubleClickEvent
+
+         ~SettingsPopupModeFilter.mouseGrabber
+
+         ~SettingsPopupModeFilter.mouseMoveEvent
+
+         ~SettingsPopupModeFilter.mousePressEvent
+
+         ~SettingsPopupModeFilter.mouseReleaseEvent
+
+         ~SettingsPopupModeFilter.move
+
+         ~SettingsPopupModeFilter.moveEvent
+
+         ~SettingsPopupModeFilter.moveToThread
+
+         ~SettingsPopupModeFilter.nativeEvent
+
+         ~SettingsPopupModeFilter.nativeParentWidget
+
+         ~SettingsPopupModeFilter.nextInFocusChain
+
+         ~SettingsPopupModeFilter.normalGeometry
+
+         ~SettingsPopupModeFilter.objectName
+
+         ~SettingsPopupModeFilter.ok_click
+
+         ~SettingsPopupModeFilter.open
+
+         ~SettingsPopupModeFilter.overrideWindowFlags
+
+         ~SettingsPopupModeFilter.overrideWindowState
+
+         ~SettingsPopupModeFilter.paintEngine
+
+         ~SettingsPopupModeFilter.paintEvent
+
+         ~SettingsPopupModeFilter.paintingActive
+
+         ~SettingsPopupModeFilter.palette
+
+         ~SettingsPopupModeFilter.parent
+
+         ~SettingsPopupModeFilter.parentWidget
+
+         ~SettingsPopupModeFilter.physicalDpiX
+
+         ~SettingsPopupModeFilter.physicalDpiY
+
+         ~SettingsPopupModeFilter.pos
+
+         ~SettingsPopupModeFilter.previousInFocusChain
+
+         ~SettingsPopupModeFilter.property
+
+         ~SettingsPopupModeFilter.pyqtConfigure
+
+         ~SettingsPopupModeFilter.raise_
+
+         ~SettingsPopupModeFilter.receivers
+
+         ~SettingsPopupModeFilter.rect
+
+         ~SettingsPopupModeFilter.reject
+
+         ~SettingsPopupModeFilter.releaseKeyboard
+
+         ~SettingsPopupModeFilter.releaseMouse
+
+         ~SettingsPopupModeFilter.releaseShortcut
+
+         ~SettingsPopupModeFilter.removeAction
+
+         ~SettingsPopupModeFilter.removeEventFilter
+
+         ~SettingsPopupModeFilter.render
+
+         ~SettingsPopupModeFilter.repaint
+
+         ~SettingsPopupModeFilter.resize
+
+         ~SettingsPopupModeFilter.resizeEvent
+
+         ~SettingsPopupModeFilter.restoreGeometry
+
+         ~SettingsPopupModeFilter.result
+
+         ~SettingsPopupModeFilter.saveGeometry
+
+         ~SettingsPopupModeFilter.screen
+
+         ~SettingsPopupModeFilter.scroll
+
+         ~SettingsPopupModeFilter.sender
+
+         ~SettingsPopupModeFilter.senderSignalIndex
+
+         ~SettingsPopupModeFilter.setAcceptDrops
+
+         ~SettingsPopupModeFilter.setAccessibleDescription
+
+         ~SettingsPopupModeFilter.setAccessibleName
+
+         ~SettingsPopupModeFilter.setAttribute
+
+         ~SettingsPopupModeFilter.setAutoFillBackground
+
+         ~SettingsPopupModeFilter.setBackgroundRole
+
+         ~SettingsPopupModeFilter.setBaseSize
+
+         ~SettingsPopupModeFilter.setContentsMargins
+
+         ~SettingsPopupModeFilter.setContextMenuPolicy
+
+         ~SettingsPopupModeFilter.setCursor
+
+         ~SettingsPopupModeFilter.setDisabled
+
+         ~SettingsPopupModeFilter.setEnabled
+
+         ~SettingsPopupModeFilter.setFixedHeight
+
+         ~SettingsPopupModeFilter.setFixedSize
+
+         ~SettingsPopupModeFilter.setFixedWidth
+
+         ~SettingsPopupModeFilter.setFocus
+
+         ~SettingsPopupModeFilter.setFocusPolicy
+
+         ~SettingsPopupModeFilter.setFocusProxy
+
+         ~SettingsPopupModeFilter.setFont
+
+         ~SettingsPopupModeFilter.setForegroundRole
+
+         ~SettingsPopupModeFilter.setGeometry
+
+         ~SettingsPopupModeFilter.setGraphicsEffect
+
+         ~SettingsPopupModeFilter.setHidden
+
+         ~SettingsPopupModeFilter.setInputMethodHints
+
+         ~SettingsPopupModeFilter.setLayout
+
+         ~SettingsPopupModeFilter.setLayoutDirection
+
+         ~SettingsPopupModeFilter.setLocale
+
+         ~SettingsPopupModeFilter.setMask
+
+         ~SettingsPopupModeFilter.setMaximumHeight
+
+         ~SettingsPopupModeFilter.setMaximumSize
+
+         ~SettingsPopupModeFilter.setMaximumWidth
+
+         ~SettingsPopupModeFilter.setMinimumHeight
+
+         ~SettingsPopupModeFilter.setMinimumSize
+
+         ~SettingsPopupModeFilter.setMinimumWidth
+
+         ~SettingsPopupModeFilter.setModal
+
+         ~SettingsPopupModeFilter.setMouseTracking
+
+         ~SettingsPopupModeFilter.setObjectName
+
+         ~SettingsPopupModeFilter.setPalette
+
+         ~SettingsPopupModeFilter.setParent
+
+         ~SettingsPopupModeFilter.setProperty
+
+         ~SettingsPopupModeFilter.setResult
+
+         ~SettingsPopupModeFilter.setShortcutAutoRepeat
+
+         ~SettingsPopupModeFilter.setShortcutEnabled
+
+         ~SettingsPopupModeFilter.setSizeGripEnabled
+
+         ~SettingsPopupModeFilter.setSizeIncrement
+
+         ~SettingsPopupModeFilter.setSizePolicy
+
+         ~SettingsPopupModeFilter.setStatusTip
+
+         ~SettingsPopupModeFilter.setStyle
+
+         ~SettingsPopupModeFilter.setStyleSheet
+
+         ~SettingsPopupModeFilter.setTabOrder
+
+         ~SettingsPopupModeFilter.setTabletTracking
+
+         ~SettingsPopupModeFilter.setToolTip
+
+         ~SettingsPopupModeFilter.setToolTipDuration
+
+         ~SettingsPopupModeFilter.setUpdatesEnabled
+
+         ~SettingsPopupModeFilter.setVisible
+
+         ~SettingsPopupModeFilter.setWhatsThis
+
+         ~SettingsPopupModeFilter.setWindowFilePath
+
+         ~SettingsPopupModeFilter.setWindowFlag
+
+         ~SettingsPopupModeFilter.setWindowFlags
+
+         ~SettingsPopupModeFilter.setWindowIcon
+
+         ~SettingsPopupModeFilter.setWindowIconText
+
+         ~SettingsPopupModeFilter.setWindowModality
+
+         ~SettingsPopupModeFilter.setWindowModified
+
+         ~SettingsPopupModeFilter.setWindowOpacity
+
+         ~SettingsPopupModeFilter.setWindowRole
+
+         ~SettingsPopupModeFilter.setWindowState
+
+         ~SettingsPopupModeFilter.setWindowTitle
+
+         ~SettingsPopupModeFilter.sharedPainter
+
+         ~SettingsPopupModeFilter.show
+
+         ~SettingsPopupModeFilter.showEvent
+
+         ~SettingsPopupModeFilter.showFullScreen
+
+         ~SettingsPopupModeFilter.showMaximized
+
+         ~SettingsPopupModeFilter.showMinimized
+
+         ~SettingsPopupModeFilter.showNormal
+
+         ~SettingsPopupModeFilter.signalsBlocked
+
+         ~SettingsPopupModeFilter.size
+
+         ~SettingsPopupModeFilter.sizeHint
+
+         ~SettingsPopupModeFilter.sizeIncrement
+
+         ~SettingsPopupModeFilter.sizePolicy
+
+         ~SettingsPopupModeFilter.stackUnder
+
+         ~SettingsPopupModeFilter.startTimer
+
+         ~SettingsPopupModeFilter.statusTip
+
+         ~SettingsPopupModeFilter.style
+
+         ~SettingsPopupModeFilter.styleSheet
+
+         ~SettingsPopupModeFilter.tabletEvent
+
+         ~SettingsPopupModeFilter.testAttribute
+
+         ~SettingsPopupModeFilter.thread
+
+         ~SettingsPopupModeFilter.timerEvent
+
+         ~SettingsPopupModeFilter.toolTip
+
+         ~SettingsPopupModeFilter.toolTipDuration
+
+         ~SettingsPopupModeFilter.tr
+
+         ~SettingsPopupModeFilter.underMouse
+
+         ~SettingsPopupModeFilter.ungrabGesture
+
+         ~SettingsPopupModeFilter.unsetCursor
+
+         ~SettingsPopupModeFilter.unsetLayoutDirection
+
+         ~SettingsPopupModeFilter.unsetLocale
+
+         ~SettingsPopupModeFilter.update
+
+         ~SettingsPopupModeFilter.updateGeometry
+
+         ~SettingsPopupModeFilter.updateMicroFocus
+
+         ~SettingsPopupModeFilter.updatesEnabled
+
+         ~SettingsPopupModeFilter.visibleRegion
+
+         ~SettingsPopupModeFilter.whatsThis
+
+         ~SettingsPopupModeFilter.wheelEvent
+
+         ~SettingsPopupModeFilter.width
+
+         ~SettingsPopupModeFilter.widthMM
+
+         ~SettingsPopupModeFilter.winId
+
+         ~SettingsPopupModeFilter.window
+
+         ~SettingsPopupModeFilter.windowFilePath
+
+         ~SettingsPopupModeFilter.windowFlags
+
+         ~SettingsPopupModeFilter.windowHandle
+
+         ~SettingsPopupModeFilter.windowIcon
+
+         ~SettingsPopupModeFilter.windowIconText
+
+         ~SettingsPopupModeFilter.windowModality
+
+         ~SettingsPopupModeFilter.windowOpacity
+
+         ~SettingsPopupModeFilter.windowRole
+
+         ~SettingsPopupModeFilter.windowState
+
+         ~SettingsPopupModeFilter.windowTitle
+
+         ~SettingsPopupModeFilter.windowType
+
+         ~SettingsPopupModeFilter.x
+
+         ~SettingsPopupModeFilter.y
+
+
+
+
+
+
+
+
+Attributes
+==========
+
+.. tab-set::
+
+   .. tab-item:: Plain
+      :sync: key-plain
+
+      .. autosummary::
+
+
+   .. tab-item:: Inherited
+      :sync: key-inherited
+
+      .. autosummary::
+
+         ~SettingsPopupModeFilter.Accepted
+
+         ~SettingsPopupModeFilter.DrawChildren
+
+         ~SettingsPopupModeFilter.DrawWindowBackground
+
+         ~SettingsPopupModeFilter.IgnoreMask
+
+         ~SettingsPopupModeFilter.PdmDepth
+
+         ~SettingsPopupModeFilter.PdmDevicePixelRatio
+
+         ~SettingsPopupModeFilter.PdmDevicePixelRatioScaled
+
+         ~SettingsPopupModeFilter.PdmDpiX
+
+         ~SettingsPopupModeFilter.PdmDpiY
+
+         ~SettingsPopupModeFilter.PdmHeight
+
+         ~SettingsPopupModeFilter.PdmHeightMM
+
+         ~SettingsPopupModeFilter.PdmNumColors
+
+         ~SettingsPopupModeFilter.PdmPhysicalDpiX
+
+         ~SettingsPopupModeFilter.PdmPhysicalDpiY
+
+         ~SettingsPopupModeFilter.PdmWidth
+
+         ~SettingsPopupModeFilter.PdmWidthMM
+
+         ~SettingsPopupModeFilter.Rejected
+
+         ~SettingsPopupModeFilter.accepted
+
+         ~SettingsPopupModeFilter.customContextMenuRequested
+
+         ~SettingsPopupModeFilter.destroyed
+
+         ~SettingsPopupModeFilter.finished
+
+         ~SettingsPopupModeFilter.objectNameChanged
+
+         ~SettingsPopupModeFilter.rejected
+
+         ~SettingsPopupModeFilter.staticMetaObject
+
+         ~SettingsPopupModeFilter.windowIconChanged
+
+         ~SettingsPopupModeFilter.windowIconTextChanged
+
+         ~SettingsPopupModeFilter.windowTitleChanged
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Definition
+==========
+
+.. tab-set::
+
+   .. tab-item:: Plain
+      :sync: key-plain
+
+      .. autoclass:: SettingsPopupModeFilter
+         :show-inheritance:
+         :members: SettingsPopupModeFilter.__init__,SettingsPopupModeFilter.get_settings,SettingsPopupModeFilter.update_settings,
+
+   .. tab-item:: Inherited
+      :sync: key-inherited
+
+      .. autoclass:: SettingsPopupModeFilter
+         :show-inheritance:
+         :inherited-members:
+         :noindex:

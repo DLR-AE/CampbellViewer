@@ -1,0 +1,36 @@
+view
+####
+*campbellviewer.settings.view*
+
+.. automodule:: campbellviewer.settings.view
+   :no-members:
+
+
+
+
+
+
+
+
+
+
+
+Classes
+^^^^^^^
+
+.. autosummary::
+   :toctree:
+   :template: custom-class-template.rst
+   :recursive:
+
+   MPLLinestyle
+   ViewSettings
+
+
+
+
+
+
+
+
+

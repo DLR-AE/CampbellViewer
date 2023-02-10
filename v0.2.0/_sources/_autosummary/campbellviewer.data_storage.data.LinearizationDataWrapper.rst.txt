@@ -1,0 +1,97 @@
+LinearizationDataWrapper
+########################
+*campbellviewer.data_storage.data.LinearizationDataWrapper*
+
+.. currentmodule:: campbellviewer.data_storage.data
+
+
+
+
+Methods
+=======
+
+.. tab-set::
+
+   .. tab-item:: Plain
+      :sync: key-plain
+
+      .. autosummary::
+
+         ~LinearizationDataWrapper.add_data
+
+         ~LinearizationDataWrapper.load
+
+         ~LinearizationDataWrapper.remove_data
+
+         ~LinearizationDataWrapper.save
+
+
+   .. tab-item:: Inherited
+      :sync: key-inherited
+
+      .. autosummary::
+
+         ~LinearizationDataWrapper.__init__
+
+         ~LinearizationDataWrapper.clear
+
+         ~LinearizationDataWrapper.copy
+
+         ~LinearizationDataWrapper.fromkeys
+
+         ~LinearizationDataWrapper.get
+
+         ~LinearizationDataWrapper.items
+
+         ~LinearizationDataWrapper.keys
+
+         ~LinearizationDataWrapper.pop
+
+         ~LinearizationDataWrapper.popitem
+
+         ~LinearizationDataWrapper.setdefault
+
+         ~LinearizationDataWrapper.update
+
+         ~LinearizationDataWrapper.values
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Definition
+==========
+
+.. tab-set::
+
+   .. tab-item:: Plain
+      :sync: key-plain
+
+      .. autoclass:: LinearizationDataWrapper
+         :show-inheritance:
+         :members: LinearizationDataWrapper.add_data,LinearizationDataWrapper.load,LinearizationDataWrapper.remove_data,LinearizationDataWrapper.save,
+
+   .. tab-item:: Inherited
+      :sync: key-inherited
+
+      .. autoclass:: LinearizationDataWrapper
+         :show-inheritance:
+         :inherited-members:
+         :noindex:

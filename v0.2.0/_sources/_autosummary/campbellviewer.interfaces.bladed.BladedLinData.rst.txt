@@ -1,0 +1,115 @@
+BladedLinData
+#############
+*campbellviewer.interfaces.bladed.BladedLinData*
+
+.. currentmodule:: campbellviewer.interfaces.bladed
+
+
+
+
+Methods
+=======
+
+.. tab-set::
+
+   .. tab-item:: Plain
+      :sync: key-plain
+
+      .. autosummary::
+
+         ~BladedLinData.__init__
+
+         ~BladedLinData.extract_bladed_version
+
+         ~BladedLinData.read_cmb_data
+
+         ~BladedLinData.read_coupled_modes
+
+         ~BladedLinData.read_coupled_modes_pre4p7
+
+         ~BladedLinData.read_data
+
+         ~BladedLinData.read_op_data
+
+         ~BladedLinData.read_op_data_4p7_4p8
+
+         ~BladedLinData.scan_bladed_results
+
+
+   .. tab-item:: Inherited
+      :sync: key-inherited
+
+      .. autosummary::
+
+         ~BladedLinData.remove_modes
+
+
+
+
+
+
+
+
+Attributes
+==========
+
+.. tab-set::
+
+   .. tab-item:: Plain
+      :sync: key-plain
+
+      .. autosummary::
+
+
+   .. tab-item:: Inherited
+      :sync: key-inherited
+
+      .. autosummary::
+
+         ~BladedLinData.ds
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Definition
+==========
+
+.. tab-set::
+
+   .. tab-item:: Plain
+      :sync: key-plain
+
+      .. autoclass:: BladedLinData
+         :show-inheritance:
+         :members: BladedLinData.__init__,BladedLinData.extract_bladed_version,BladedLinData.read_cmb_data,BladedLinData.read_coupled_modes,BladedLinData.read_coupled_modes_pre4p7,BladedLinData.read_data,BladedLinData.read_op_data,BladedLinData.read_op_data_4p7_4p8,BladedLinData.scan_bladed_results,
+
+   .. tab-item:: Inherited
+      :sync: key-inherited
+
+      .. autoclass:: BladedLinData
+         :show-inheritance:
+         :inherited-members:
+         :noindex:

@@ -1,0 +1,85 @@
+ViewSettings
+############
+*campbellviewer.settings.view.ViewSettings*
+
+.. currentmodule:: campbellviewer.settings.view
+
+
+
+
+Methods
+=======
+
+.. tab-set::
+
+   .. tab-item:: Plain
+      :sync: key-plain
+
+      .. autosummary::
+
+         ~ViewSettings.__init__
+
+         ~ViewSettings.get_axes_limits
+
+         ~ViewSettings.remove_lines
+
+         ~ViewSettings.reset_all_lines
+
+         ~ViewSettings.reset_these_lines
+
+         ~ViewSettings.update_lines
+
+         ~ViewSettings.xparam2xlabel
+
+
+   .. tab-item:: Inherited
+      :sync: key-inherited
+
+      .. autosummary::
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Definition
+==========
+
+.. tab-set::
+
+   .. tab-item:: Plain
+      :sync: key-plain
+
+      .. autoclass:: ViewSettings
+         :show-inheritance:
+         :members: ViewSettings.__init__,ViewSettings.get_axes_limits,ViewSettings.remove_lines,ViewSettings.reset_all_lines,ViewSettings.reset_these_lines,ViewSettings.update_lines,ViewSettings.xparam2xlabel,
+
+   .. tab-item:: Inherited
+      :sync: key-inherited
+
+      .. autoclass:: ViewSettings
+         :show-inheritance:
+         :inherited-members:
+         :noindex:
