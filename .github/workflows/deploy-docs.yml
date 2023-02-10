@@ -22,19 +22,6 @@ jobs:
         run: |
           python ./.github/scripts/update_versions.py ${{ github.ref_name }}
 
-      - name: Build
-        run: |
-          pip install -r requirements-dev.txt
-          pip install .
-          sphinx-build docs/source docs/build/html -b html -D release=${{ github.ref_name }} -v -T
-      - name: Deploy
-        uses: peaceiris/actions-gh-pages@v3
-        with:
-          publish_branch: gh-pages
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: docs/build/html
-          destination_dir: ${{ github.ref_name }}
-
       - name: Create switcher file
         run: |
           mkdir redirect
@@ -52,3 +39,17 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./redirect
           keep_files: true
+
+      - name: Build documentation
+        run: |
+          pip install -r requirements-dev.txt
+          pip install .
+          sphinx-build docs/source docs/build/html -b html -D release=${{ github.ref_name }} -v -T
+
+      - name: Deploy documentation
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          publish_branch: gh-pages
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: docs/build/html
+          destination_dir: ${{ github.ref_name }}
