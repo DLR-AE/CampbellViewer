@@ -35,7 +35,7 @@ if "dev" in release:
     version_match = release
     json_url = "_static/switcher.json"
 else:
-    version_match = "v" + release
+    version_match = release
 
 html_theme = "pydata_sphinx_theme"
 html_theme_options = {
