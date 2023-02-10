@@ -18,7 +18,7 @@ for version in versions:
         {
             'name': f'{version}',
             'version': f'{version}',
-            'url': f'https://DLR-AE.github.io/campbellviewer/{version}/'
+            'url': f'https://DLR-AE.github.io/CampbellViewer/{version}/'
         }
     )
 

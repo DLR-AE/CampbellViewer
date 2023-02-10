@@ -10,6 +10,6 @@ version = sys.argv[1]
 p = Path(os.getcwd()) / 'redirect' / 'index.html'
 p.write_text(
     f"<head>\n"
-    f"    <meta http-equiv=\"Refresh\" content=\"0; url='/campbellviewer/{version}'\" />\n"
+    f"    <meta http-equiv=\"Refresh\" content=\"0; url='/CampbellViewer/{version}'\" />\n"
     f"</head>"
 )
