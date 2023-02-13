@@ -1,12 +1,11 @@
 # CampbellViewer
 
-Unified plotting tool for Campbell diagrams, processing results of wind turbine simulation tools HAWCStab2 and Bladed
+Unified plotting tool for Campbell diagrams, processing results of wind turbine simulation tools HAWCStab2 and Bladed. 
 
 ## Installation
 
-The ``campbellviewer`` supports Python 3.9 or newer.
+**CampbellViewer** is tested for Python versions 3.8, 3.9, and 3.10. You can install the package using
 
-You can install the package using
 ```{code-block} console
 pip install git+https://github.com/DLR-AE/CampbellViewer.git
 ```
@@ -15,18 +14,17 @@ pip install git+https://github.com/DLR-AE/CampbellViewer.git
 If you want to install a certain branch add **@<branch_name>** to the end of
 the URL.
 
-## Start the CampbellViewer
+## Start
 
-To start the ``campbellviewer`` just type
+To start **CampbellViewer** just type
 ```{code-block} console
 campbellviewer
 ```
 
-## Main building blocks
-- The GUI mainly contained in the CampbellViewer module
-- The tree model which allows interaction (enabling/disabling, highlighting, deleting) of the loaded datasets
-- The most important data structures are defined as globals, such that they can be accessed easily by all modules
-  - database = dictionary with the loaded datasets and further methods to load/unload data
-  - view_cfg = class with information for the GUI/matplotlib, this can be seen as a link between the tree model, the database and the plots. This contains information such as 'which datasets should be plotted', 'which datasets are selected (and should therefore be highlighted)', 'which matplotlib artists have already been plotted', etc.
-- The individial datasets are xarray datasets, an abstract template is given in data_template.py
-- The interfaces will get information from the GUI such as the paths to result files and load data into the xarray dataset convention.
+## Documentation 
+
+The documentation of **CampbellViewer** can be found [here](https://dlr-ae.github.io/CampbellViewer).
+
+## License
+
+**CampbellViewer** is published under the [Apache License 2.0](https://github.com/DLR-AE/CampbellViewer/blob/main/LICENSE).
