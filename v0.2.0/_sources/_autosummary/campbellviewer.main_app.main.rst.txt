@@ -1,6 +1,0 @@
-campbellviewer.main\_app.main
-=============================
-
-.. currentmodule:: campbellviewer.main_app
-
-.. autofunction:: main

@@ -1,6 +1,0 @@
-campbellviewer.utilities.assure\_unique\_name
-=============================================
-
-.. currentmodule:: campbellviewer.utilities
-
-.. autofunction:: assure_unique_name

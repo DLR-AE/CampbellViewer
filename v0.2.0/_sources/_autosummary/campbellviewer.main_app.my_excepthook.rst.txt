@@ -1,6 +1,0 @@
-campbellviewer.main\_app.my\_excepthook
-=======================================
-
-.. currentmodule:: campbellviewer.main_app
-
-.. autofunction:: my_excepthook

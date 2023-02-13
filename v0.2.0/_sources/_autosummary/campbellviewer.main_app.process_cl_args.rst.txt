@@ -1,6 +1,0 @@
-campbellviewer.main\_app.process\_cl\_args
-==========================================
-
-.. currentmodule:: campbellviewer.main_app
-
-.. autofunction:: process_cl_args
