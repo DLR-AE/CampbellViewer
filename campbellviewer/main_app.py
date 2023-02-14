@@ -11,27 +11,17 @@ Purposes:
 - etc.
 
 .. note::
-    CampbellViewer is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
-
-    CampbellViewer is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License
-    along with CampbellViewer. If not, klick `here <http://www.gnu.org/licenses/>`_
+    CampbellViewer is free software distributed under license conditions as stated in
+    the file LICENSE, which is part of the repository.
 
     There is NO warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR
     PURPOSE.
 
 authors:
-- J. Rieke - Nordex Energy GmbH
+- J. Rieke - Nordex Energy SE & Co. KG
 - H. Verdonck - DLR
 - O. Hach - DLR
-- N. Joeres - Nordex Energy GmbH
+- N. Joeres - Nordex Energy SE & Co. KG
 
 """
 
@@ -658,8 +648,7 @@ class SettingsPopupLinestyle(SettingsPopup):
 
 
 class AmplitudeWindow(QMainWindow):
-    """
-    Separate window for participation factor plot
+    """Separate window for participation factor plot
 
     Attributes:
         requested_toolname (str): Name of the tool which is analysed
@@ -688,7 +677,7 @@ class AmplitudeWindow(QMainWindow):
         self.setMinimumHeight(800)
 
     def configure_plotAMP(self, requested_toolname: str, requested_datasetname: str, requested_mode_id: int,
-                          dataset, xaxis_param: str, threshold: float=0.05):
+                          dataset, xaxis_param: str, threshold: float=0.05) -> None:
         """
         Configures matplotlib figure for participation plot
 
@@ -709,7 +698,7 @@ class AmplitudeWindow(QMainWindow):
         self.xaxis_param = xaxis_param
 
         # Figure settings
-        self.AMPfig = Figure(figsize=(6, 6), dpi=100)
+        self.AMPfig = Figure(figsize=(6, 6), dpi=100, tight_layout=True)
         self.AMPcanvas = FigureCanvas(self.AMPfig)
         toolbar = NavigationToolbar(self.AMPcanvas, self)
 
@@ -727,12 +716,20 @@ class AmplitudeWindow(QMainWindow):
             uylim = [0, 1.1]
             uy2lim = [-180, 180]
 
-        self.main_plotAMP(title='Amplitude participations for tool {}, \ndataset {}, {}, visibility threshold = {}'.format(requested_toolname, requested_datasetname, self.AMPmode_name, self.AMPthreshold),
+        self.main_plotAMP(title=f'Amplitude participations for tool {requested_toolname}, '+
+                                f'\ndataset {requested_datasetname}, {self.AMPmode_name}, '+
+                                f'visibility threshold = {self.AMPthreshold}',
                           xlabel=view_cfg.xparam2xlabel(self.xaxis_param), ylabel='normalized participation',
                           y2label='phase angle in degree', xlim=view_cfg.axes_limits[0], ylim=uylim, y2lim=uy2lim)
 
-    def main_plotAMP(self, title: str='Amplitudes', xlabel: str='', ylabel: str='', y2label: str='',
-                     xlim: list=None, ylim: list=None, y2lim: list=None):
+    def main_plotAMP(self,
+                     title: str='Amplitudes',
+                     xlabel: str='',
+                     ylabel: str='',
+                     y2label: str='',
+                     xlim: list=None,
+                     ylim: list=None,
+                     y2lim: list=None) -> None:
         """
         Fill the participation plot
 
@@ -786,11 +783,7 @@ class AmplitudeWindow(QMainWindow):
                 ampl_lines.append(ampl_line)
                 phase_lines.append(phase_line)
 
-        legend = self.AMPfig.legend(loc='center right')
-        bbox = legend.get_window_extent(self.AMPfig.canvas.get_renderer()).transformed(
-            self.AMPfig.transFigure.inverted())
-        # increasing the box by 20% since tight_layout is not effectively working
-        self.AMPfig.tight_layout(rect=(0, 0, bbox.x0*1.2, 1), h_pad=0.5, w_pad=0.5)
+        self.axes1.legend(loc='center right', bbox_to_anchor=(1.20,0.0))
 
         cursor = mplcursors.cursor(ampl_lines + phase_lines, multiple=True, highlight=True)
         pairs = dict(zip(ampl_lines, phase_lines))
@@ -1191,6 +1184,7 @@ class ApplicationWindow(QMainWindow):
 
         # create a figure legend on the right edge and shrink the axes box accordingly
         # legend font size is decreased to make it fit - or disabled
+        # Add a legend
         for fontsize in ['medium', 'small', 'x-small', 'xx-small', None]:
             if fontsize is None:
                 bbox.x0 = 1
@@ -1658,7 +1652,7 @@ class ApplicationWindow(QMainWindow):
                                              'but only one amplitude plot will be made', 4000)
             self.initAmplitudes(popup=False, chosen_mode=selected_lines[0])
 
-    def initAmplitudes(self, popup: bool=True, chosen_mode: list=None):
+    def initAmplitudes(self, popup: bool=True, chosen_mode: list=None) -> None:
         """ Initialize the participation diagram
 
         This routine initializes the window/plot of the participation factors on the amplitudes for a
