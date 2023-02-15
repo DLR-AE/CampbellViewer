@@ -59,7 +59,8 @@ from campbellviewer.dialogs.dialogs import (
     SettingsPopupAEMode,
     SettingsPopupHS2Headers,
     SettingsPopupAMP,
-    SettingsPopupNumModes
+    SettingsPopupNumModes,
+    GeneralSettingsDialog
     )
 
 matplotlib.use("Qt5Agg")
@@ -365,7 +366,7 @@ class ApplicationWindow(QMainWindow):
         self.settings_menu = QMenu('&Settings', self)
         self.menuBar().addSeparator()
         self.menuBar().addMenu(self.settings_menu)
-        self.settings_menu.addAction('&Mode Numbers', self.set_default_modes_active)
+        self.settings_menu.addAction('&General Settings', self.open_general_settings)
         self.settings_menu.addAction('&Header Lines', self.set_header_lines)
         self.settings_menu.addAction('&Linestyle defaults', self.setLinestyleDefaults)
         self.settings_menu.addAction('&Reset user specific settings to default', self.reset_qsettings)
@@ -416,7 +417,6 @@ class ApplicationWindow(QMainWindow):
         # init QSettings for setting/getting user defaults settings
         self.__qsettings = QSettings('CampbellViewer')
 
-
         ##############################################################
         # Get default settings
         self.update_settings()
@@ -461,7 +461,7 @@ class ApplicationWindow(QMainWindow):
         self.button_layout.addLayout(self.xaxis_selection_box)
 
         self.button_savepdf = QPushButton('Quick Save to PDF', self)
-        self.button_savepdf.clicked.connect(self.savepdf)
+        self.button_savepdf.clicked.connect(self.save_pdf)
         self.button_layout.addWidget(self.button_savepdf)
 
         self.button_rescale = QPushButton('Rescale plot limits', self)
@@ -1030,7 +1030,7 @@ class ApplicationWindow(QMainWindow):
         view_cfg.auto_scaling_y = True
         self.UpdateMainPlot()
 
-    def savepdf(self):
+    def save_pdf(self):
         """ Saves the current plot to pdf. todo: FileDialog to set file name has to be added """
 
         pdf_filename = 'CampbellViewerPlot.pdf'
@@ -1048,6 +1048,12 @@ class ApplicationWindow(QMainWindow):
     ##########
     # Settings
     ##########
+    def open_general_settings(self):
+        """test"""
+        settings = GeneralSettingsDialog(self.__qsettings)
+        settings.exec_()
+
+
     def set_settings_to_default(self, save: bool = False) -> None:
         """retrieves the default values or settings
 
@@ -1072,42 +1078,25 @@ class ApplicationWindow(QMainWindow):
 
         if save:
             for settings_key in self.__CV_settings:
-                self.__qsettings.setValue(settings_key, str(self.__CV_settings[settings_key]))
+                self.__qsettings.setValue(settings_key, self.__CV_settings[settings_key])
 
 
     def update_settings(self) -> None:
-        """retrieves the default values or the user specific settings from qsettings"""
+        """retrieves the default values or the user specific settings from QSettings"""
         # defaults
         self.set_settings_to_default(save=False)
 
         # try to get the user settings
         for settings_key in self.__CV_settings:
             if self.__qsettings.contains(settings_key):
-                try:
-                    self.__CV_settings[settings_key] = int(self.__qsettings.value(settings_key))
-                except:
-                    self.__CV_settings[settings_key] = self.__qsettings.value(settings_key)
-
-                try:
-                    self.__CV_settings[settings_key] = bool(self.__qsettings.value(settings_key))
-                except:
-                    self.__CV_settings[settings_key] = self.__qsettings.value(settings_key)
+                user_setting = self.__qsettings.value(settings_key)
+                self.__CV_settings[settings_key] = user_setting
 
 
     def reset_qsettings(self) -> None:
         """resets the user specific settings stored in QSettings"""
         self.__qsettings.clear()
         pass
-
-    def set_default_modes_active(self):
-        """user can define the number of modes seen at startup"""
-        popup = SettingsPopupNumModes(self.__CV_settings['mode_minpara_cmb'],
-                                      self.__CV_settings['mode_maxpara_cmb'])
-        (self.__CV_settings['mode_minpara_cmb'],
-         self.__CV_settings['mode_maxpara_cmb']) = popup.get_settings()
-        self.__qsettings.setValue('mode_minpara_cmb', str(self.__CV_settings['mode_minpara_cmb']))
-        self.__qsettings.setValue('mode_maxpara_cmb', str(self.__CV_settings['mode_maxpara_cmb']))
-        del popup
 
     def set_header_lines(self):
         """ This routine overrides the default header line numbers for HAWCStab2 Campbell and Amplitude files """
@@ -1284,7 +1273,7 @@ def main():
 
     aw = ApplicationWindow()
     aw.setWindowTitle("CampbellViewer")
-    icon_path = importlib.resources.files('campbellviewer') / 'assets' / 'windturbine.ico'
+    icon_path = importlib.resources.files('campbellviewer') / 'assets' / 'windturbine_square.png'
     aw.setWindowIcon(QIcon(str(icon_path)))
 
     # set initial size
