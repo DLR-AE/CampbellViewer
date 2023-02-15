@@ -52,9 +52,10 @@ html_theme_options = {
             "json_url": json_url,
             "version_match": version_match,
         },
+        "footer_items": ["copyright", "sphinx-version", "theme-version", "footer-template"],
     }
 
-html_logo = "_static/images/windturbine.png"
+html_logo = "_static/images/windturbine.svg"
 
 html_static_path = ["_static"]
 # html_css_files = ["css/custom.css"]
