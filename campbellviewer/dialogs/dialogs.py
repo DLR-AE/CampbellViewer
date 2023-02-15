@@ -2,21 +2,139 @@
 Module for dialogs
 """
 from __future__ import annotations
-
 from typing import Tuple
-
+import importlib.resources
 from PyQt5.QtWidgets import (
-    QMainWindow, QVBoxLayout, QHBoxLayout, QGridLayout, QDialog,
-    QLineEdit, QPushButton, QLabel, QSpinBox, QCheckBox, QComboBox
+    QMainWindow, QVBoxLayout, QHBoxLayout, QGridLayout, QDialog, QWidget, QTabWidget,
+    QLineEdit, QPushButton, QSpinBox, QCheckBox, QComboBox, QLabel
     )
-from PyQt5.QtGui  import QDoubleValidator
-from PyQt5.QtCore import Qt
+from PyQt5.QtGui  import QDoubleValidator, QIcon
+from PyQt5.QtCore import Qt, QSettings
 
 from campbellviewer.settings.globals import view_cfg, database
 
 ####
 # Popup setting dialogs
 ####
+
+
+class GeneralTab(QWidget):
+    def __init__(self,*args):
+        super(GeneralTab, self).__init__(*args)
+        self._main_layout = QGridLayout(self)
+        self._main_layout.setAlignment(Qt.AlignLeft|Qt.AlignTop)
+        self.setLayout(self._main_layout)
+
+
+class SettingsMenuTabs(QTabWidget):
+    """Class for a settings QDialog with tabs"""
+    def __init__(self, qsettings: QSettings, *args):
+        super(SettingsMenuTabs, self).__init__(*args)
+
+        # Initialize tab screen
+        self.__general = SettingsNumModes(qsettings)
+        self.__hs2     = GeneralTab()
+        self.__DNVB    = GeneralTab()
+
+        #self.__plot._main_layout.addWidget(QLabel("Test 2"))
+
+        # Add tabs
+        self.addTab(self.__general,"General")
+        self.addTab(self.__hs2    ,"HAWCStab2 I/O")
+        self.addTab(self.__DNVB   ,"DNV Bladed I/O")
+
+        # add ICON
+        # icon_path = importlib.resources.files('campbellviewer') / 'assets' / 'Loads_noText.png'
+        # self.setTabIcon(1,QtG.QIcon(QtG.QPixmap(str(icon_path)))
+
+    def save_settings(self):
+        self.__general.save_settings()
+
+class GeneralSettingsDialog(QDialog):
+    """Base class for a popup dialog for general settings """
+    def __init__(self, qsettings: QSettings):
+        super(GeneralSettingsDialog, self).__init__()
+
+        self.setWindowTitle("Settings")
+        self.setWindowFlag(Qt.WindowContextHelpButtonHint, False)
+        self.setMinimumSize(640, 480)
+        icon_path = importlib.resources.files('campbellviewer') / 'assets' / 'windturbine_square.png'
+        self.setWindowIcon(QIcon(str(icon_path)))
+
+        main_layout = QGridLayout()
+        self.setLayout(main_layout)
+
+        # tabbed menu
+        self.settings = SettingsMenuTabs(qsettings)
+        main_layout.addWidget(self.settings, 0,0,1,2)
+
+        # buttons
+        ok_button = QPushButton('OK')
+        main_layout.addWidget(ok_button, 1,0,1,1)
+        cancel_button = QPushButton('Cancel')
+        main_layout.addWidget(cancel_button, 1,1,1,1)
+        ok_button.clicked.connect(self.ok_clicked)
+        cancel_button.clicked.connect(self.cancel_clicked)
+
+    def ok_clicked(self):
+        self.settings.save_settings()
+        self.close()
+
+    def cancel_clicked(self):
+        self.close()
+
+
+class SettingsNumModes(QWidget):
+    """Class to modify the default numbers shown
+
+    Attributes:
+        __qsettings  (QSettings): current settings object
+        __minpara_sb (QSpinBox): QSpinBox to select the start plot mode
+        __maxpara_sb (QSpinBox): QSpinBox to select the end plot mode
+    """
+    def __init__(self, qsettings: QSettings) -> None:
+        """Initializes popup for HAWCStab2 input file header line definitions
+
+        Args:
+            qsettings: QSettings object
+
+        """
+        super(SettingsNumModes, self).__init__()
+
+        self.__qsettings = qsettings
+        popup_layout = QGridLayout(self)
+        popup_layout.setAlignment(Qt.AlignLeft|Qt.AlignTop)
+
+        # try to fetch the data from qsettings, otherwise take default
+        if self.__qsettings.contains('mode_minpara_cmb'):
+            mode_minpara = self.__qsettings.value('mode_minpara_cmb')
+        else:
+            # default to 1
+            mode_minpara = 1
+        if self.__qsettings.contains('mode_maxpara_cmb'):
+            mode_maxpara = self.__qsettings.value('mode_maxpara_cmb')
+        else:
+            # default to 6
+            mode_maxpara = 6
+
+        popup_layout.addWidget(QLabel("<b>Campbell-Plot: Default Mode Number Range</b>"), 0,0,1,2)
+        minpara_label = QLabel('First Mode Number:')
+        maxpara_label = QLabel('Last  Mode Number:')
+        popup_layout.addWidget(minpara_label, 1,0,1,1)
+        popup_layout.addWidget(maxpara_label, 2,0,1,1)
+        self.__minpara_sb = QSpinBox()
+        self.__maxpara_sb = QSpinBox()
+        self.__minpara_sb.setValue(mode_minpara)
+        self.__maxpara_sb.setValue(mode_maxpara)
+        popup_layout.addWidget(self.__minpara_sb, 1,1,1,1)
+        popup_layout.addWidget(self.__maxpara_sb, 2,1,1,1)
+
+    def save_settings(self):
+        """save the settings"""
+        self.__qsettings.setValue('mode_minpara_cmb',self.__minpara_sb.value())
+        self.__qsettings.setValue('mode_maxpara_cmb',self.__maxpara_sb.value())
+
+########################################################################################################################
 class SettingsPopup(QDialog):
     """Base class for a QDialog popup window where the user can modify settings """
     def __init__(self):
