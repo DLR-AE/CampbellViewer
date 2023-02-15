@@ -34,10 +34,12 @@ import argparse
 import importlib.resources
 
 from PyQt5 import QtCore
-from PyQt5.QtWidgets import QApplication, QMainWindow, QMenu, QVBoxLayout, QHBoxLayout, QMessageBox, QWidget, QDialog
-from PyQt5.QtWidgets import QLineEdit, QFileDialog, QPushButton, QLabel, QSpinBox, QCheckBox, QComboBox, QTreeView
+from PyQt5.QtWidgets import (
+    QApplication, QMainWindow, QMenu, QVBoxLayout, QHBoxLayout, QMessageBox, QWidget, QDialog,
+    QLineEdit, QFileDialog, QPushButton, QLabel, QSpinBox, QCheckBox, QComboBox, QTreeView
+    )
 from PyQt5.QtGui  import QIcon, QDoubleValidator
-from PyQt5.QtCore import QFileInfo, Qt, QItemSelectionModel
+from PyQt5.QtCore import QFileInfo, Qt, QItemSelectionModel, QSettings
 
 import matplotlib
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
@@ -889,8 +891,7 @@ class DatasetTree(QTreeView):
 
 
 class ApplicationWindow(QMainWindow):
-    """
-    Main window of the GUI
+    """Main window of the GUI
 
     Attributes:
         file_menu (QMenu): Dropdown menu for file operations (loading/saving data)
@@ -994,13 +995,13 @@ class ApplicationWindow(QMainWindow):
         self.dataset_tree_model.layoutChanged.connect(self.UpdateMainPlot)
 
         ##############################################################
+        # init QSettings for setting/getting user defaults settings
+        self.__qsettings = QSettings('CampbellViewer')
+
+
+        ##############################################################
         # Some defaults
-        self.mode_minpara_cmb = 1
-        self.mode_maxpara_cmb = 6
-        self.pharmonics       = False
-        self.skip_header_CMB  = 1              # number of header lines in Campbell file
-        self.skip_header_AMP  = 5              # number of header lines in Amplitude file
-        self.skip_header_OP   = 1              # number of header lines in operational data file
+        self.get_defaults()
 
         ##############################################################
         # Figure settings
@@ -1626,6 +1627,25 @@ class ApplicationWindow(QMainWindow):
     ##########
     # Settings
     ##########
+    def get_defaults(self):
+        """retrieves the default values or the user specific settings from qsettings"""
+
+        if self.__qsettings.contains('mode_minpara_cmb'):
+            self.mode_minpara_cmb = self.__qsettings.value('mode_minpara_cmb')
+        else:
+            self.mode_minpara_cmb = 1
+
+        if self.__qsettings.contains('mode_maxpara_cmb'):
+            self.mode_maxpara_cmb = self.__qsettings.value('mode_maxpara_cmb')
+        else:
+            self.mode_maxpara_cmb = 6
+
+        self.pharmonics       = False
+        self.skip_header_CMB  = 1              # number of header lines in Campbell file
+        self.skip_header_AMP  = 5              # number of header lines in Amplitude file
+        self.skip_header_OP   = 1              # number of header lines in operational data file
+
+
     def setHeaderLines(self):
         """ This routine overrides the default header line numbers for HAWCStab2 Campbell and Amplitude files """
         self.popup = SettingsPopupHS2Headers(self.skip_header_CMB, self.skip_header_AMP, self.skip_header_OP)
@@ -1633,7 +1653,7 @@ class ApplicationWindow(QMainWindow):
         del self.popup
 
     def setLinestyleDefaults(self):
-        """ This routine sets the default linestyle behaviour """
+        """ This routine sets the default line style behaviour """
         self.popup = SettingsPopupLinestyle(self)
         del self.popup
 
