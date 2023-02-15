@@ -1216,12 +1216,15 @@ class ApplicationWindow(QMainWindow):
         self.fileQuit()
 
     def about(self):
-        QMessageBox.about(self, "About",
-        """CampbellViewer is free software distributed under license conditions as\n""" +
-        """stated in the file LICENSE, which is part of the repository."""+
-        """CampbellViewer is distributed in the hope that it will be useful,\n"""+
-        """but WITHOUT ANY WARRANTY; without even the implied warranty of\n"""+
-        """MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.\n""")
+        QMessageBox.about(self, "About",(
+            "CampbellViewer is free software distributed under license conditions as "
+            "stated in the file <a href=\"https://github.com/DLR-AE/CampbellViewer/blob/main/LICENSE\">LICENSE</a>, "
+            "which is part of the repository. <br>CampbellViewer is distributed in the hope that it will be useful, "
+            "but WITHOUT ANY WARRANTY; without even the implied warranty of "
+            "MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.<br><br>"
+            "Wind turbine icon taken from "
+            "<a href=\"https://thenounproject.com/icon/wind-turbine-2076/\">Noun Project</a>."
+        ))
 
 
 ##########
@@ -1280,7 +1283,7 @@ def main():
     app.setStyle('Fusion')
 
     aw = ApplicationWindow()
-    aw.setWindowTitle("UniversalCampbellPlotter")
+    aw.setWindowTitle("CampbellViewer")
     icon_path = importlib.resources.files('campbellviewer') / 'assets' / 'windturbine.ico'
     aw.setWindowIcon(QIcon(str(icon_path)))
 
