@@ -101,9 +101,8 @@ class AmplitudeWindow(QMainWindow):
         self.setMinimumHeight(800)
 
     def configure_plotAMP(self, requested_toolname: str, requested_datasetname: str, requested_mode_id: int,
-                          dataset, xaxis_param: str, threshold: float=0.05) -> None:
-        """
-        Configures matplotlib figure for participation plot
+                          dataset, xaxis_param: str, threshold: float) -> None:
+        """Configures matplotlib figure for participation plot
 
         Args:
             requested_toolname: name of the tool which will be analysed
@@ -142,7 +141,7 @@ class AmplitudeWindow(QMainWindow):
 
         self.main_plotAMP(title=f'Amplitude participations for tool {requested_toolname}, '+
                                 f'\ndataset {requested_datasetname}, {self.AMPmode_name}, '+
-                                f'visibility threshold = {self.AMPthreshold}',
+                                f'visibility threshold = {self.AMPthreshold:.2f}',
                           xlabel=view_cfg.xparam2xlabel(self.xaxis_param), ylabel='normalized participation',
                           y2label='phase angle in degree', xlim=view_cfg.axes_limits[0], ylim=uylim, y2lim=uy2lim)
 
@@ -367,7 +366,6 @@ class ApplicationWindow(QMainWindow):
         self.menuBar().addSeparator()
         self.menuBar().addMenu(self.settings_menu)
         self.settings_menu.addAction('&General Settings', self.open_general_settings)
-        self.settings_menu.addAction('&Header Lines', self.set_header_lines)
         self.settings_menu.addAction('&Linestyle defaults', self.setLinestyleDefaults)
         self.settings_menu.addAction('&Reset user specific settings to default', self.reset_qsettings)
 
@@ -416,6 +414,8 @@ class ApplicationWindow(QMainWindow):
         ##############################################################
         # init QSettings for setting/getting user defaults settings
         self.__qsettings = QSettings('CampbellViewer')
+        self.settings = GeneralSettingsDialog(self.__qsettings)
+        self.settings.saved.connect(self.update_settings)
 
         ##############################################################
         # Get default settings
@@ -1048,10 +1048,9 @@ class ApplicationWindow(QMainWindow):
     ##########
     # Settings
     ##########
-    def open_general_settings(self):
-        """test"""
-        settings = GeneralSettingsDialog(self.__qsettings)
-        settings.exec_()
+    def open_general_settings(self) -> None:
+        """opens the settings popup"""
+        self.settings.exec_()
 
 
     def set_settings_to_default(self, save: bool = False) -> None:
@@ -1069,12 +1068,13 @@ class ApplicationWindow(QMainWindow):
 
         """
         # defaults
-        self.__CV_settings = {'mode_minpara_cmb' : 1,
-                              'mode_maxpara_cmb' : 6,
-                              'pharmonics'       : False,
-                              'skip_header_CMB'  : 1,
-                              'skip_header_AMP'  : 5,
-                              'skip_header_OP'   : 1}
+        self.__CV_settings = {'mode_minpara_cmb'  : 1,
+                              'mode_maxpara_cmb'  : 6,
+                              'pharmonics'        : False,
+                              'skip_header_CMB'   : 1,
+                              'skip_header_AMP'   : 5,
+                              'skip_header_OP'    : 1,
+                              'amp_part_threshold': 0.5}
 
         if save:
             for settings_key in self.__CV_settings:
@@ -1090,7 +1090,10 @@ class ApplicationWindow(QMainWindow):
         for settings_key in self.__CV_settings:
             if self.__qsettings.contains(settings_key):
                 user_setting = self.__qsettings.value(settings_key)
-                self.__CV_settings[settings_key] = user_setting
+                if isinstance(self.__CV_settings[settings_key],float):
+                    self.__CV_settings[settings_key] = float(user_setting)
+                else:
+                    self.__CV_settings[settings_key] = user_setting
 
 
     def reset_qsettings(self) -> None:
@@ -1106,9 +1109,9 @@ class ApplicationWindow(QMainWindow):
         (self.__CV_settings['skip_header_CMB'], 
          self.__CV_settings['skip_header_AMP'], 
          self.__CV_settings['skip_header_OP' ]) = popup.get_settings()
-        self.__qsettings.setValue('skip_header_CMB', str(self.__CV_settings['skip_header_CMB']))
-        self.__qsettings.setValue('skip_header_AMP', str(self.__CV_settings['skip_header_AMP']))
-        self.__qsettings.setValue('skip_header_OP' , str(self.__CV_settings['skip_header_OP']))
+        self.__qsettings.setValue('skip_header_CMB', self.__CV_settings['skip_header_CMB'])
+        self.__qsettings.setValue('skip_header_AMP', self.__CV_settings['skip_header_AMP'])
+        self.__qsettings.setValue('skip_header_OP' , self.__CV_settings['skip_header_OP'])
         del popup
 
     def setLinestyleDefaults(self):
@@ -1185,7 +1188,8 @@ class ApplicationWindow(QMainWindow):
                                                    amp_dataset,
                                                    amp_modeid,
                                                    database[amp_tool][amp_dataset].ds,
-                                                   self.xaxis_param)
+                                                   self.xaxis_param,
+                                                   threshold=self.__CV_settings['amp_part_threshold'])
             self.AmplitudeWindow.show()
         else:
             QMessageBox.about(self, "WARNING", "Campbell and Amplitude files have to be loaded first!")
