@@ -143,6 +143,15 @@ class SettingsGeneral(QWidget):
         self.__amp_th_sb.setValue(amp_part_threshold)
         layout.addWidget(self.__amp_th_sb, 4,1,1,1)
 
+        layout.addWidget(QLabel("<b>Global Settings</b>"), 5,0,1,2)
+        delete_button = QPushButton('Delete User Settings')
+        delete_button.clicked.connect(self.delete_settings)
+        layout.addWidget(delete_button, 6,0,1,2)
+
+    def delete_settings(self):
+        """delete all settings"""
+        self.__qsettings.clear()
+
     def save_settings(self):
         """save the settings"""
         self.__qsettings.setValue('mode_minpara_cmb',self.__minpara_sb.value())
