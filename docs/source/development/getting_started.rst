@@ -13,6 +13,12 @@ to install the package in development mode.
 
     pip install -e .
 
+Make sure you also have the dependencies for development installed.
+
+.. code-block:: console
+
+    pip install -r requirements-dev.txt
+
 
 Building the documentation
 ---------------------------
