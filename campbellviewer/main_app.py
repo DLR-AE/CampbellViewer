@@ -57,9 +57,7 @@ from campbellviewer.dialogs.dialogs import (
     SettingsPopupLinestyle,
     SettingsPopupDataSelection,
     SettingsPopupAEMode,
-    SettingsPopupHS2Headers,
     SettingsPopupAMP,
-    SettingsPopupNumModes,
     GeneralSettingsDialog
     )
 
@@ -367,7 +365,6 @@ class ApplicationWindow(QMainWindow):
         self.menuBar().addMenu(self.settings_menu)
         self.settings_menu.addAction('&General Settings', self.open_general_settings)
         self.settings_menu.addAction('&Linestyle defaults', self.setLinestyleDefaults)
-        self.settings_menu.addAction('&Reset user specific settings to default', self.reset_qsettings)
 
         # Tools
         self.tools_menu = QMenu('&Tools', self)
@@ -449,6 +446,7 @@ class ApplicationWindow(QMainWindow):
         ##############################################################
         # Set buttons
         self.button_pharm = QPushButton('Plot P-Harmonics', self)
+        self.button_pharm.setCheckable(True)
         self.button_pharm.clicked.connect(self.plotPharmonics)
         self.button_layout.addWidget(self.button_pharm)
 
@@ -595,6 +593,8 @@ class ApplicationWindow(QMainWindow):
 
                 # plot p-harmonics if present
                 if database[atool][ads].ds.operating_points.values.ndim != 0 and self.__CV_settings['pharmonics']:
+                    if self.__CV_settings['pharmonics']:
+                        self.button_pharm.setChecked(True)
                     P_harmonics = [1, 3, 6, 9, 12]
                     for index in P_harmonics:
                         P_hamonics_data = database[atool][ads].ds.operating_points.loc[:, 'rot. speed [rpm]']/60*index  # rpm in Hz
@@ -952,7 +952,8 @@ class ApplicationWindow(QMainWindow):
             options = QFileDialog.Options()
             options |= QFileDialog.DontUseNativeDialog
             filter = "HAWCStab2 {} (*.{});;All Files (*)".format(descr, suffix)
-            fileName, _ = QFileDialog.getOpenFileName(self, "Open {}".format(descr), "", filter, options=options)
+            __path = self.__qsettings.value("IO/HS2_project", os.path.expanduser("~"))
+            fileName, _ = QFileDialog.getOpenFileName(self, "Open {}".format(descr), __path, filter, options=options)
 
             if QFileInfo(fileName).exists():
                 # get filename extension
@@ -964,6 +965,8 @@ class ApplicationWindow(QMainWindow):
                                                           'skip_header_CMB': self.__CV_settings['skip_header_CMB'],
                                                           'skip_header_AMP': self.__CV_settings['skip_header_AMP'],
                                                           'skip_header_OP': self.__CV_settings['skip_header_OP']})
+                # save location to settings
+                self.__qsettings.setValue("IO/HS2_project", QFileInfo(fileName).absolutePath())
 
     def openFileNameDialogBladedLin(self, datasetname: str='default'):
         """ Open File Dialog for Bladed linearization Campbell diagram files
@@ -987,9 +990,11 @@ class ApplicationWindow(QMainWindow):
     ##############################################################
     def plotPharmonics(self):
         """ Plot P-Harmonics in Campbell diagram """
-        if self.__CV_settings['pharmonics'] == True:
+        if self.__CV_settings['pharmonics']:
+            self.button_pharm.setChecked(False)
             self.__CV_settings['pharmonics'] = False
         else:
+            self.button_pharm.setChecked(True)
             self.__CV_settings['pharmonics'] = True
         self.UpdateMainPlot()
 
@@ -1092,27 +1097,10 @@ class ApplicationWindow(QMainWindow):
                 user_setting = self.__qsettings.value(settings_key)
                 if isinstance(self.__CV_settings[settings_key],float):
                     self.__CV_settings[settings_key] = float(user_setting)
+                elif isinstance(self.__CV_settings[settings_key],bool):
+                    self.__CV_settings[settings_key] = bool(user_setting)
                 else:
                     self.__CV_settings[settings_key] = user_setting
-
-
-    def reset_qsettings(self) -> None:
-        """resets the user specific settings stored in QSettings"""
-        self.__qsettings.clear()
-        pass
-
-    def set_header_lines(self):
-        """ This routine overrides the default header line numbers for HAWCStab2 Campbell and Amplitude files """
-        popup = SettingsPopupHS2Headers(self.__CV_settings['skip_header_CMB'],
-                                        self.__CV_settings['skip_header_AMP'],
-                                        self.__CV_settings['skip_header_OP'])
-        (self.__CV_settings['skip_header_CMB'], 
-         self.__CV_settings['skip_header_AMP'], 
-         self.__CV_settings['skip_header_OP' ]) = popup.get_settings()
-        self.__qsettings.setValue('skip_header_CMB', self.__CV_settings['skip_header_CMB'])
-        self.__qsettings.setValue('skip_header_AMP', self.__CV_settings['skip_header_AMP'])
-        self.__qsettings.setValue('skip_header_OP' , self.__CV_settings['skip_header_OP'])
-        del popup
 
     def setLinestyleDefaults(self):
         """ This routine sets the default line style behaviour """

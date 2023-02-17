@@ -31,7 +31,7 @@ class SettingsMenuTabs(QTabWidget):
 
         # Initialize tab screen
         self.__general = SettingsGeneral(qsettings)
-        self.__plot    = GeneralTab()
+        self.__plot    = SettingsPlot(qsettings)
         self.__hs2     = SettingsHS2(qsettings)
         self.__DNVB    = GeneralTab()
 
@@ -49,6 +49,7 @@ class SettingsMenuTabs(QTabWidget):
 
     def save_settings(self):
         self.__general.save_settings()
+        self.__plot.save_settings()
         self.__hs2.save_settings()
 
 class GeneralSettingsDialog(QDialog):
@@ -101,8 +102,6 @@ class SettingsGeneral(QWidget):
 
     Attributes:
         __qsettings  (QSettings): current settings object
-        __minpara_sb (QSpinBox): QSpinBox to select the start plot mode
-        __maxpara_sb (QSpinBox): QSpinBox to select the end plot mode
     """
     def __init__(self, qsettings: QSettings) -> None:
         """Initializes the range of shown modes
@@ -117,36 +116,72 @@ class SettingsGeneral(QWidget):
         layout = QGridLayout(self)
         layout.setAlignment(Qt.AlignLeft|Qt.AlignTop)
 
+        layout.addWidget(QLabel("<b>Global Settings</b>"), 0,0,1,2)
+        delete_button = QPushButton('Delete User Settings')
+        delete_button.clicked.connect(self.delete_settings)
+        layout.addWidget(delete_button, 1,0,1,2)
+
+    def delete_settings(self):
+        """delete all settings"""
+        self.__qsettings.clear()
+
+    def save_settings(self):
+        """save the settings"""
+        pass
+
+class SettingsPlot(QWidget):
+    """Class to modify the default plot settings
+
+    Attributes:
+        __qsettings  (QSettings): current settings object
+        __minpara_sb (QSpinBox): QSpinBox to select the start plot mode
+        __maxpara_sb (QSpinBox): QSpinBox to select the end plot mode
+    """
+    def __init__(self, qsettings: QSettings) -> None:
+        """Initializes the plot settings
+
+        Args:
+            qsettings: QSettings object
+
+        """
+        super(SettingsPlot, self).__init__()
+
+        self.__qsettings = qsettings
+        layout = QGridLayout(self)
+        layout.setAlignment(Qt.AlignLeft|Qt.AlignTop)
+
         # try to fetch the data from qsettings, otherwise take default
         mode_minpara = self.__qsettings.value('mode_minpara_cmb', 1) # default to 1
         mode_maxpara = self.__qsettings.value('mode_maxpara_cmb', 6) # default to 6
         amp_part_threshold = float(self.__qsettings.value('amp_part_threshold',0.05)) # for PyQt5/Python 3.9 an explicit conversion has to be performed
+        pharmonics = bool(self.__qsettings.value('pharmonics', False)) # default to False
 
         layout.addWidget(QLabel("<b>Campbell-Plot: Default Mode Number Range</b>"), 0,0,1,2)
         minpara_label = QLabel('First Mode Number:')
         maxpara_label = QLabel('Last  Mode Number:')
+        pharmonics_label = QLabel('Plot P-harmonics:')
         layout.addWidget(minpara_label, 1,0,1,1)
         layout.addWidget(maxpara_label, 2,0,1,1)
+        layout.addWidget(pharmonics_label, 3,0,1,1)
         self.__minpara_sb = QSpinBox()
         self.__maxpara_sb = QSpinBox()
+        self.__pharm_cb = QCheckBox()
         self.__minpara_sb.setValue(mode_minpara)
         self.__maxpara_sb.setValue(mode_maxpara)
+        self.__pharm_cb.setChecked(pharmonics)
+        self.__pharm_cb.isCheckable()
         layout.addWidget(self.__minpara_sb, 1,1,1,1)
         layout.addWidget(self.__maxpara_sb, 2,1,1,1)
+        layout.addWidget(self.__pharm_cb, 3, 1, 1, 1)
 
 
-        layout.addWidget(QLabel("<b>Amplitude-Plot</b>"), 3,0,1,2)
+        layout.addWidget(QLabel("<b>Amplitude-Plot</b>"), 4,0,1,2)
         amp_th_label = QLabel('Default Threshold for Participation:')
-        layout.addWidget(amp_th_label, 4,0,1,1)
+        layout.addWidget(amp_th_label, 5,0,1,1)
         self.__amp_th_sb = QDoubleSpinBox()
         self.__amp_th_sb.setSingleStep(0.1)
         self.__amp_th_sb.setValue(amp_part_threshold)
-        layout.addWidget(self.__amp_th_sb, 4,1,1,1)
-
-        layout.addWidget(QLabel("<b>Global Settings</b>"), 5,0,1,2)
-        delete_button = QPushButton('Delete User Settings')
-        delete_button.clicked.connect(self.delete_settings)
-        layout.addWidget(delete_button, 6,0,1,2)
+        layout.addWidget(self.__amp_th_sb, 5,1,1,1)
 
     def delete_settings(self):
         """delete all settings"""
@@ -157,6 +192,8 @@ class SettingsGeneral(QWidget):
         self.__qsettings.setValue('mode_minpara_cmb',self.__minpara_sb.value())
         self.__qsettings.setValue('mode_maxpara_cmb',self.__maxpara_sb.value())
         self.__qsettings.setValue('amp_part_threshold',self.__amp_th_sb.value())
+        self.__qsettings.setValue('pharmonics', self.__pharm_cb.isChecked())
+
 
 class SettingsHS2(QWidget):
     """Class to modify the default settings for HAWCStab2 ASCII file import
@@ -189,66 +226,6 @@ class SettingsHS2(QWidget):
         self.skip_header_OP  = self.__qsettings.value('skip_header_OP' , 1) # default to 6
 
         layout.addWidget(QLabel("<b>HAWCStab2: Header lines to skip</b>"), 0,0,1,2)
-        headerLinesCMBL = QLabel('Number of header lines in Campbell file:')
-        headerLinesAMPL = QLabel('Number of header lines in Amplitude file:')
-        headerLinesOPL = QLabel('Number of header lines in Operational data file:')
-        layout.addWidget(headerLinesCMBL, 1,0,1,1)
-        layout.addWidget(headerLinesAMPL, 2,0,1,1)
-        layout.addWidget(headerLinesOPL , 3,0,1,1)
-        self.__headerLinesCMBE = QSpinBox()
-        self.__headerLinesAMPE = QSpinBox()
-        self.__headerLinesOPE  = QSpinBox()
-        self.__headerLinesCMBE.setValue(self.skip_header_CMB)
-        self.__headerLinesAMPE.setValue(self.skip_header_AMP)
-        self.__headerLinesOPE.setValue(self.skip_header_OP)
-        layout.addWidget(self.__headerLinesCMBE, 1,1,1,1)
-        layout.addWidget(self.__headerLinesAMPE, 2,1,1,1)
-        layout.addWidget(self.__headerLinesOPE , 3,1,1,1)
-
-    def save_settings(self):
-        """save the settings"""
-        self.__qsettings.setValue('skip_header_CMB',self.__headerLinesCMBE.value())
-        self.__qsettings.setValue('skip_header_AMP',self.__headerLinesAMPE.value())
-        self.__qsettings.setValue('skip_header_OP' ,self.__headerLinesOPE.value())
-
-
-class SettingsPlot(QWidget):
-    """Class to modify the default settings for plotting figures
-
-    Attributes:
-        __qsettings (QSettings): current settings object
-    """
-    def __init__(self, qsettings: QSettings) -> None:
-        """Initializes settings for plot figures
-
-        Args:
-            qsettings: QSettings object
-
-        """
-        super(SettingsPlot, self).__init__()
-
-        self.__qsettings = qsettings
-        layout = QGridLayout(self)
-        layout.setAlignment(Qt.AlignLeft|Qt.AlignTop)
-
-        # try to fetch the data from qsettings, otherwise take default
-        if self.__qsettings.contains('skip_header_CMB'):
-            self.skip_header_CMB = self.__qsettings.value('skip_header_CMB')
-        else:
-            # default to 1
-            self.skip_header_CMB = 1
-        if self.__qsettings.contains('skip_header_AMP'):
-            self.skip_header_AMP = self.__qsettings.value('skip_header_AMP')
-        else:
-            # default to 6
-            self.skip_header_AMP = 5
-        if self.__qsettings.contains('skip_header_OP'):
-            self.skip_header_OP = self.__qsettings.value('skip_header_OP')
-        else:
-            # default to 6
-            self.skip_header_OP = 1
-
-        layout.addWidget(QLabel("<b>Amplitude Plot</b>"), 0,0,1,2)
         headerLinesCMBL = QLabel('Number of header lines in Campbell file:')
         headerLinesAMPL = QLabel('Number of header lines in Amplitude file:')
         headerLinesOPL = QLabel('Number of header lines in Operational data file:')
@@ -353,143 +330,6 @@ class SettingsPopupDataSelection(SettingsPopup):
         self.selected_tool = self.__ToolSelection.currentText()
         self.dataset_name = self.__DataSetName.text()
         self.close()
-
-
-class SettingsPopupNumModes(SettingsPopup):
-    """Class for popup-window to modify the default numbers shown
-
-    Attributes:
-        mode_minpara (int): first mode for plotting
-        mode_maxpara (int): last mode for plotting
-        __minpara_sb (QSpinBox): QSpinBox to select the start plot mode
-        __maxpara_sb (QSpinBox): QSpinBox to select the end plot mode
-    """
-    def __init__(self, mode_minpara: int, mode_maxpara: int) -> None:
-        """Initializes popup for HAWCStab2 input file header line definitions
-
-        Args:
-            mode_minpara: integer for initial definition of the first mode for plotting
-            mode_maxpara: integer for initial definition of the last mode for plotting
-        """
-        super(SettingsPopupNumModes, self).__init__()
-
-        self.mode_minpara = mode_minpara
-        self.mode_maxpara = mode_maxpara
-        self.setWindowTitle("Settings for Default Mode Number for Plotting")
-        popup_layout = QGridLayout(self)
-
-        minpara_label = QLabel('First Mode Number:')
-        maxpara_label = QLabel('Last  Mode Number:')
-        popup_layout.addWidget(minpara_label, 0,0,1,1)
-        popup_layout.addWidget(maxpara_label, 1,0,1,1)
-        self.__minpara_sb = QSpinBox()
-        self.__maxpara_sb = QSpinBox()
-        self.__minpara_sb.setValue(self.mode_minpara)
-        self.__maxpara_sb.setValue(self.mode_maxpara)
-        popup_layout.addWidget(self.__minpara_sb, 0,1,1,1)
-        popup_layout.addWidget(self.__maxpara_sb, 1,1,1,1)
-
-        button_OK = QPushButton('OK', self)
-        button_OK.clicked.connect(self.ok_click)
-        popup_layout.addWidget(button_OK, 2,0,1,1)
-        button_Cancel = QPushButton('Cancel', self)
-        button_Cancel.clicked.connect(self.close_popup)
-        popup_layout.addWidget(button_Cancel, 2,1,1,1)
-
-        self.exec_()
-
-    def get_settings(self) -> Tuple[int, int]:
-        """Gives the current selected settings
-
-        Returns:
-            mode_minpara: integer of the first mode for plotting
-            mode_maxpara: integer of the last mode for plotting
-        """
-        return self.mode_minpara, self.mode_maxpara
-
-    def update_settings(self):
-        """ Updates the settings based on the current content of the popup """
-        self.mode_minpara = self.__minpara_sb.value()
-        self.mode_maxpara = self.__maxpara_sb.value()
-
-
-class SettingsPopupHS2Headers(SettingsPopup):
-    """Class for popup-window to modify the header lines in Campbell, Amplitude and operational data file which serve as
-    input for HAWCStab2
-
-    Attributes:
-        settingsCMB (int): Number of header lines in the .cmb file
-        settingsAMP (int): Number of header lines in the .amp file
-        settingsOP (int): Number of header lines in the .opt file
-        __headerLinesCMBE (QSpinBox): QSpinBox to select the number of header lines in .cmb file
-        __headerLinesAMPE (QSpinBox): QSpinBox to select the number of header lines in .amp file
-        __headerLinesOPE (QSpinBox): QSpinBox to select the number of header lines in .opt file
-    """
-    def __init__(self, settingsCMB: int, settingsAMP: int, settingsOP: int):
-        """Initializes popup for HAWCStab2 input file header line definitions
-
-        Args:
-            settingsCMB: integer for initial definition of the number of header lines in the .cmb file
-            settingsAMP: integer for initial definition of the number of header lines in the .amp file
-            settingsOP: integer for initial definition of the number of header lines in the .opt file
-        """
-        super(SettingsPopupHS2Headers, self).__init__()
-
-        self.settingsCMB = settingsCMB
-        self.settingsAMP = settingsAMP
-        self.settingsOP = settingsOP
-        self.setWindowTitle("Settings for Header Lines")
-        popup_layoutV = QVBoxLayout(self)
-        popup_layoutHCMB = QHBoxLayout()
-        popup_layoutHAMP = QHBoxLayout()
-        popup_layoutHOP = QHBoxLayout()
-        popup_layoutBttn = QHBoxLayout()
-
-        headerLinesCMBL = QLabel('Number of header lines in Campbell file:')
-        headerLinesAMPL = QLabel('Number of header lines in Amplitude file:')
-        headerLinesOPL = QLabel('Number of header lines in Operational data file:')
-        self.__headerLinesCMBE = QSpinBox()
-        self.__headerLinesAMPE = QSpinBox()
-        self.__headerLinesOPE = QSpinBox()
-        self.__headerLinesCMBE.setValue(self.settingsCMB)
-        self.__headerLinesAMPE.setValue(self.settingsAMP)
-        self.__headerLinesOPE.setValue(self.settingsOP)
-        popup_layoutHCMB.addWidget(headerLinesCMBL)
-        popup_layoutHCMB.addWidget(self.__headerLinesCMBE)
-        popup_layoutHAMP.addWidget(headerLinesAMPL)
-        popup_layoutHAMP.addWidget(self.__headerLinesAMPE)
-        popup_layoutHOP.addWidget(headerLinesOPL)
-        popup_layoutHOP.addWidget(self.__headerLinesOPE)
-
-        button_OK = QPushButton('OK', self)
-        button_OK.clicked.connect(self.ok_click)
-        popup_layoutBttn.addWidget(button_OK)
-        button_Cancel = QPushButton('Cancel', self)
-        button_Cancel.clicked.connect(self.close_popup)
-        popup_layoutBttn.addWidget(button_Cancel)
-
-        popup_layoutV.addLayout(popup_layoutHCMB)
-        popup_layoutV.addLayout(popup_layoutHAMP)
-        popup_layoutV.addLayout(popup_layoutHOP)
-        popup_layoutV.addLayout(popup_layoutBttn)
-        self.exec_()
-
-    def get_settings(self) -> Tuple[int, int, int]:
-        """Gives the current selected settings
-
-        Returns:
-            settingsCMB: user-defined number of header lines in the .cmb file
-            settingsAMP: user-defined number of header lines in the .amp file
-            settingsOP: user-defined number of header lines in the .opt file
-        """
-        return self.settingsCMB, self.settingsAMP, self.settingsOP
-
-    def update_settings(self):
-        """ Updates the settings based on the current content of the popup """
-        self.settingsCMB = self.__headerLinesCMBE.value()
-        self.settingsAMP = self.__headerLinesAMPE.value()
-        self.settingsOP = self.__headerLinesOPE.value()
-
 
 class SettingsPopupAMP(SettingsPopup):
     """Class for popup-window to select for which mode the modal participations have to be shown
