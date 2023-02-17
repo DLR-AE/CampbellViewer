@@ -1,0 +1,739 @@
+SettingsPlot
+############
+*campbellviewer.dialogs.dialogs.SettingsPlot*
+
+.. currentmodule:: campbellviewer.dialogs.dialogs
+
+
+
+
+Methods
+=======
+
+.. tab-set::
+
+   .. tab-item:: Plain
+      :sync: key-plain
+
+      .. autosummary::
+
+         ~SettingsPlot.__init__
+
+         ~SettingsPlot.delete_settings
+
+         ~SettingsPlot.save_settings
+
+
+   .. tab-item:: Inherited
+      :sync: key-inherited
+
+      .. autosummary::
+
+         ~SettingsPlot.acceptDrops
+
+         ~SettingsPlot.accessibleDescription
+
+         ~SettingsPlot.accessibleName
+
+         ~SettingsPlot.actionEvent
+
+         ~SettingsPlot.actions
+
+         ~SettingsPlot.activateWindow
+
+         ~SettingsPlot.addAction
+
+         ~SettingsPlot.addActions
+
+         ~SettingsPlot.adjustSize
+
+         ~SettingsPlot.autoFillBackground
+
+         ~SettingsPlot.backgroundRole
+
+         ~SettingsPlot.baseSize
+
+         ~SettingsPlot.blockSignals
+
+         ~SettingsPlot.changeEvent
+
+         ~SettingsPlot.childAt
+
+         ~SettingsPlot.childEvent
+
+         ~SettingsPlot.children
+
+         ~SettingsPlot.childrenRect
+
+         ~SettingsPlot.childrenRegion
+
+         ~SettingsPlot.clearFocus
+
+         ~SettingsPlot.clearMask
+
+         ~SettingsPlot.close
+
+         ~SettingsPlot.closeEvent
+
+         ~SettingsPlot.colorCount
+
+         ~SettingsPlot.connectNotify
+
+         ~SettingsPlot.contentsMargins
+
+         ~SettingsPlot.contentsRect
+
+         ~SettingsPlot.contextMenuEvent
+
+         ~SettingsPlot.contextMenuPolicy
+
+         ~SettingsPlot.create
+
+         ~SettingsPlot.createWindowContainer
+
+         ~SettingsPlot.cursor
+
+         ~SettingsPlot.customEvent
+
+         ~SettingsPlot.deleteLater
+
+         ~SettingsPlot.depth
+
+         ~SettingsPlot.destroy
+
+         ~SettingsPlot.devType
+
+         ~SettingsPlot.devicePixelRatio
+
+         ~SettingsPlot.devicePixelRatioF
+
+         ~SettingsPlot.devicePixelRatioFScale
+
+         ~SettingsPlot.disconnect
+
+         ~SettingsPlot.disconnectNotify
+
+         ~SettingsPlot.dragEnterEvent
+
+         ~SettingsPlot.dragLeaveEvent
+
+         ~SettingsPlot.dragMoveEvent
+
+         ~SettingsPlot.dropEvent
+
+         ~SettingsPlot.dumpObjectInfo
+
+         ~SettingsPlot.dumpObjectTree
+
+         ~SettingsPlot.dynamicPropertyNames
+
+         ~SettingsPlot.effectiveWinId
+
+         ~SettingsPlot.ensurePolished
+
+         ~SettingsPlot.enterEvent
+
+         ~SettingsPlot.event
+
+         ~SettingsPlot.eventFilter
+
+         ~SettingsPlot.find
+
+         ~SettingsPlot.findChild
+
+         ~SettingsPlot.findChildren
+
+         ~SettingsPlot.focusInEvent
+
+         ~SettingsPlot.focusNextChild
+
+         ~SettingsPlot.focusNextPrevChild
+
+         ~SettingsPlot.focusOutEvent
+
+         ~SettingsPlot.focusPolicy
+
+         ~SettingsPlot.focusPreviousChild
+
+         ~SettingsPlot.focusProxy
+
+         ~SettingsPlot.focusWidget
+
+         ~SettingsPlot.font
+
+         ~SettingsPlot.fontInfo
+
+         ~SettingsPlot.fontMetrics
+
+         ~SettingsPlot.foregroundRole
+
+         ~SettingsPlot.frameGeometry
+
+         ~SettingsPlot.frameSize
+
+         ~SettingsPlot.geometry
+
+         ~SettingsPlot.getContentsMargins
+
+         ~SettingsPlot.grab
+
+         ~SettingsPlot.grabGesture
+
+         ~SettingsPlot.grabKeyboard
+
+         ~SettingsPlot.grabMouse
+
+         ~SettingsPlot.grabShortcut
+
+         ~SettingsPlot.graphicsEffect
+
+         ~SettingsPlot.graphicsProxyWidget
+
+         ~SettingsPlot.hasFocus
+
+         ~SettingsPlot.hasHeightForWidth
+
+         ~SettingsPlot.hasMouseTracking
+
+         ~SettingsPlot.hasTabletTracking
+
+         ~SettingsPlot.height
+
+         ~SettingsPlot.heightForWidth
+
+         ~SettingsPlot.heightMM
+
+         ~SettingsPlot.hide
+
+         ~SettingsPlot.hideEvent
+
+         ~SettingsPlot.inherits
+
+         ~SettingsPlot.initPainter
+
+         ~SettingsPlot.inputMethodEvent
+
+         ~SettingsPlot.inputMethodHints
+
+         ~SettingsPlot.inputMethodQuery
+
+         ~SettingsPlot.insertAction
+
+         ~SettingsPlot.insertActions
+
+         ~SettingsPlot.installEventFilter
+
+         ~SettingsPlot.isActiveWindow
+
+         ~SettingsPlot.isAncestorOf
+
+         ~SettingsPlot.isEnabled
+
+         ~SettingsPlot.isEnabledTo
+
+         ~SettingsPlot.isFullScreen
+
+         ~SettingsPlot.isHidden
+
+         ~SettingsPlot.isLeftToRight
+
+         ~SettingsPlot.isMaximized
+
+         ~SettingsPlot.isMinimized
+
+         ~SettingsPlot.isModal
+
+         ~SettingsPlot.isRightToLeft
+
+         ~SettingsPlot.isSignalConnected
+
+         ~SettingsPlot.isVisible
+
+         ~SettingsPlot.isVisibleTo
+
+         ~SettingsPlot.isWidgetType
+
+         ~SettingsPlot.isWindow
+
+         ~SettingsPlot.isWindowModified
+
+         ~SettingsPlot.isWindowType
+
+         ~SettingsPlot.keyPressEvent
+
+         ~SettingsPlot.keyReleaseEvent
+
+         ~SettingsPlot.keyboardGrabber
+
+         ~SettingsPlot.killTimer
+
+         ~SettingsPlot.layout
+
+         ~SettingsPlot.layoutDirection
+
+         ~SettingsPlot.leaveEvent
+
+         ~SettingsPlot.locale
+
+         ~SettingsPlot.logicalDpiX
+
+         ~SettingsPlot.logicalDpiY
+
+         ~SettingsPlot.lower
+
+         ~SettingsPlot.mapFrom
+
+         ~SettingsPlot.mapFromGlobal
+
+         ~SettingsPlot.mapFromParent
+
+         ~SettingsPlot.mapTo
+
+         ~SettingsPlot.mapToGlobal
+
+         ~SettingsPlot.mapToParent
+
+         ~SettingsPlot.mask
+
+         ~SettingsPlot.maximumHeight
+
+         ~SettingsPlot.maximumSize
+
+         ~SettingsPlot.maximumWidth
+
+         ~SettingsPlot.metaObject
+
+         ~SettingsPlot.metric
+
+         ~SettingsPlot.minimumHeight
+
+         ~SettingsPlot.minimumSize
+
+         ~SettingsPlot.minimumSizeHint
+
+         ~SettingsPlot.minimumWidth
+
+         ~SettingsPlot.mouseDoubleClickEvent
+
+         ~SettingsPlot.mouseGrabber
+
+         ~SettingsPlot.mouseMoveEvent
+
+         ~SettingsPlot.mousePressEvent
+
+         ~SettingsPlot.mouseReleaseEvent
+
+         ~SettingsPlot.move
+
+         ~SettingsPlot.moveEvent
+
+         ~SettingsPlot.moveToThread
+
+         ~SettingsPlot.nativeEvent
+
+         ~SettingsPlot.nativeParentWidget
+
+         ~SettingsPlot.nextInFocusChain
+
+         ~SettingsPlot.normalGeometry
+
+         ~SettingsPlot.objectName
+
+         ~SettingsPlot.overrideWindowFlags
+
+         ~SettingsPlot.overrideWindowState
+
+         ~SettingsPlot.paintEngine
+
+         ~SettingsPlot.paintEvent
+
+         ~SettingsPlot.paintingActive
+
+         ~SettingsPlot.palette
+
+         ~SettingsPlot.parent
+
+         ~SettingsPlot.parentWidget
+
+         ~SettingsPlot.physicalDpiX
+
+         ~SettingsPlot.physicalDpiY
+
+         ~SettingsPlot.pos
+
+         ~SettingsPlot.previousInFocusChain
+
+         ~SettingsPlot.property
+
+         ~SettingsPlot.pyqtConfigure
+
+         ~SettingsPlot.raise_
+
+         ~SettingsPlot.receivers
+
+         ~SettingsPlot.rect
+
+         ~SettingsPlot.releaseKeyboard
+
+         ~SettingsPlot.releaseMouse
+
+         ~SettingsPlot.releaseShortcut
+
+         ~SettingsPlot.removeAction
+
+         ~SettingsPlot.removeEventFilter
+
+         ~SettingsPlot.render
+
+         ~SettingsPlot.repaint
+
+         ~SettingsPlot.resize
+
+         ~SettingsPlot.resizeEvent
+
+         ~SettingsPlot.restoreGeometry
+
+         ~SettingsPlot.saveGeometry
+
+         ~SettingsPlot.screen
+
+         ~SettingsPlot.scroll
+
+         ~SettingsPlot.sender
+
+         ~SettingsPlot.senderSignalIndex
+
+         ~SettingsPlot.setAcceptDrops
+
+         ~SettingsPlot.setAccessibleDescription
+
+         ~SettingsPlot.setAccessibleName
+
+         ~SettingsPlot.setAttribute
+
+         ~SettingsPlot.setAutoFillBackground
+
+         ~SettingsPlot.setBackgroundRole
+
+         ~SettingsPlot.setBaseSize
+
+         ~SettingsPlot.setContentsMargins
+
+         ~SettingsPlot.setContextMenuPolicy
+
+         ~SettingsPlot.setCursor
+
+         ~SettingsPlot.setDisabled
+
+         ~SettingsPlot.setEnabled
+
+         ~SettingsPlot.setFixedHeight
+
+         ~SettingsPlot.setFixedSize
+
+         ~SettingsPlot.setFixedWidth
+
+         ~SettingsPlot.setFocus
+
+         ~SettingsPlot.setFocusPolicy
+
+         ~SettingsPlot.setFocusProxy
+
+         ~SettingsPlot.setFont
+
+         ~SettingsPlot.setForegroundRole
+
+         ~SettingsPlot.setGeometry
+
+         ~SettingsPlot.setGraphicsEffect
+
+         ~SettingsPlot.setHidden
+
+         ~SettingsPlot.setInputMethodHints
+
+         ~SettingsPlot.setLayout
+
+         ~SettingsPlot.setLayoutDirection
+
+         ~SettingsPlot.setLocale
+
+         ~SettingsPlot.setMask
+
+         ~SettingsPlot.setMaximumHeight
+
+         ~SettingsPlot.setMaximumSize
+
+         ~SettingsPlot.setMaximumWidth
+
+         ~SettingsPlot.setMinimumHeight
+
+         ~SettingsPlot.setMinimumSize
+
+         ~SettingsPlot.setMinimumWidth
+
+         ~SettingsPlot.setMouseTracking
+
+         ~SettingsPlot.setObjectName
+
+         ~SettingsPlot.setPalette
+
+         ~SettingsPlot.setParent
+
+         ~SettingsPlot.setProperty
+
+         ~SettingsPlot.setShortcutAutoRepeat
+
+         ~SettingsPlot.setShortcutEnabled
+
+         ~SettingsPlot.setSizeIncrement
+
+         ~SettingsPlot.setSizePolicy
+
+         ~SettingsPlot.setStatusTip
+
+         ~SettingsPlot.setStyle
+
+         ~SettingsPlot.setStyleSheet
+
+         ~SettingsPlot.setTabOrder
+
+         ~SettingsPlot.setTabletTracking
+
+         ~SettingsPlot.setToolTip
+
+         ~SettingsPlot.setToolTipDuration
+
+         ~SettingsPlot.setUpdatesEnabled
+
+         ~SettingsPlot.setVisible
+
+         ~SettingsPlot.setWhatsThis
+
+         ~SettingsPlot.setWindowFilePath
+
+         ~SettingsPlot.setWindowFlag
+
+         ~SettingsPlot.setWindowFlags
+
+         ~SettingsPlot.setWindowIcon
+
+         ~SettingsPlot.setWindowIconText
+
+         ~SettingsPlot.setWindowModality
+
+         ~SettingsPlot.setWindowModified
+
+         ~SettingsPlot.setWindowOpacity
+
+         ~SettingsPlot.setWindowRole
+
+         ~SettingsPlot.setWindowState
+
+         ~SettingsPlot.setWindowTitle
+
+         ~SettingsPlot.sharedPainter
+
+         ~SettingsPlot.show
+
+         ~SettingsPlot.showEvent
+
+         ~SettingsPlot.showFullScreen
+
+         ~SettingsPlot.showMaximized
+
+         ~SettingsPlot.showMinimized
+
+         ~SettingsPlot.showNormal
+
+         ~SettingsPlot.signalsBlocked
+
+         ~SettingsPlot.size
+
+         ~SettingsPlot.sizeHint
+
+         ~SettingsPlot.sizeIncrement
+
+         ~SettingsPlot.sizePolicy
+
+         ~SettingsPlot.stackUnder
+
+         ~SettingsPlot.startTimer
+
+         ~SettingsPlot.statusTip
+
+         ~SettingsPlot.style
+
+         ~SettingsPlot.styleSheet
+
+         ~SettingsPlot.tabletEvent
+
+         ~SettingsPlot.testAttribute
+
+         ~SettingsPlot.thread
+
+         ~SettingsPlot.timerEvent
+
+         ~SettingsPlot.toolTip
+
+         ~SettingsPlot.toolTipDuration
+
+         ~SettingsPlot.tr
+
+         ~SettingsPlot.underMouse
+
+         ~SettingsPlot.ungrabGesture
+
+         ~SettingsPlot.unsetCursor
+
+         ~SettingsPlot.unsetLayoutDirection
+
+         ~SettingsPlot.unsetLocale
+
+         ~SettingsPlot.update
+
+         ~SettingsPlot.updateGeometry
+
+         ~SettingsPlot.updateMicroFocus
+
+         ~SettingsPlot.updatesEnabled
+
+         ~SettingsPlot.visibleRegion
+
+         ~SettingsPlot.whatsThis
+
+         ~SettingsPlot.wheelEvent
+
+         ~SettingsPlot.width
+
+         ~SettingsPlot.widthMM
+
+         ~SettingsPlot.winId
+
+         ~SettingsPlot.window
+
+         ~SettingsPlot.windowFilePath
+
+         ~SettingsPlot.windowFlags
+
+         ~SettingsPlot.windowHandle
+
+         ~SettingsPlot.windowIcon
+
+         ~SettingsPlot.windowIconText
+
+         ~SettingsPlot.windowModality
+
+         ~SettingsPlot.windowOpacity
+
+         ~SettingsPlot.windowRole
+
+         ~SettingsPlot.windowState
+
+         ~SettingsPlot.windowTitle
+
+         ~SettingsPlot.windowType
+
+         ~SettingsPlot.x
+
+         ~SettingsPlot.y
+
+
+
+
+
+
+
+
+Attributes
+==========
+
+.. tab-set::
+
+   .. tab-item:: Plain
+      :sync: key-plain
+
+      .. autosummary::
+
+
+   .. tab-item:: Inherited
+      :sync: key-inherited
+
+      .. autosummary::
+
+         ~SettingsPlot.DrawChildren
+
+         ~SettingsPlot.DrawWindowBackground
+
+         ~SettingsPlot.IgnoreMask
+
+         ~SettingsPlot.PdmDepth
+
+         ~SettingsPlot.PdmDevicePixelRatio
+
+         ~SettingsPlot.PdmDevicePixelRatioScaled
+
+         ~SettingsPlot.PdmDpiX
+
+         ~SettingsPlot.PdmDpiY
+
+         ~SettingsPlot.PdmHeight
+
+         ~SettingsPlot.PdmHeightMM
+
+         ~SettingsPlot.PdmNumColors
+
+         ~SettingsPlot.PdmPhysicalDpiX
+
+         ~SettingsPlot.PdmPhysicalDpiY
+
+         ~SettingsPlot.PdmWidth
+
+         ~SettingsPlot.PdmWidthMM
+
+         ~SettingsPlot.customContextMenuRequested
+
+         ~SettingsPlot.destroyed
+
+         ~SettingsPlot.objectNameChanged
+
+         ~SettingsPlot.staticMetaObject
+
+         ~SettingsPlot.windowIconChanged
+
+         ~SettingsPlot.windowIconTextChanged
+
+         ~SettingsPlot.windowTitleChanged
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Definition
+==========
+
+.. tab-set::
+
+   .. tab-item:: Plain
+      :sync: key-plain
+
+      .. autoclass:: SettingsPlot
+         :show-inheritance:
+         :members: SettingsPlot.__init__,SettingsPlot.delete_settings,SettingsPlot.save_settings,
+
+   .. tab-item:: Inherited
+      :sync: key-inherited
+
+      .. autoclass:: SettingsPlot
+         :show-inheritance:
+         :inherited-members:
+         :noindex:

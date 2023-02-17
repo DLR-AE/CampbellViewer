@@ -1,0 +1,1275 @@
+DatasetTree
+###########
+*campbellviewer.main_app.DatasetTree*
+
+.. currentmodule:: campbellviewer.main_app
+
+
+
+
+Methods
+=======
+
+.. tab-set::
+
+   .. tab-item:: Plain
+      :sync: key-plain
+
+      .. autosummary::
+
+         ~DatasetTree.__init__
+
+         ~DatasetTree.keyPressEvent
+
+         ~DatasetTree.showContextMenu
+
+
+   .. tab-item:: Inherited
+      :sync: key-inherited
+
+      .. autosummary::
+
+         ~DatasetTree.acceptDrops
+
+         ~DatasetTree.accessibleDescription
+
+         ~DatasetTree.accessibleName
+
+         ~DatasetTree.actionEvent
+
+         ~DatasetTree.actions
+
+         ~DatasetTree.activateWindow
+
+         ~DatasetTree.addAction
+
+         ~DatasetTree.addActions
+
+         ~DatasetTree.addScrollBarWidget
+
+         ~DatasetTree.adjustSize
+
+         ~DatasetTree.allColumnsShowFocus
+
+         ~DatasetTree.alternatingRowColors
+
+         ~DatasetTree.autoExpandDelay
+
+         ~DatasetTree.autoFillBackground
+
+         ~DatasetTree.autoScrollMargin
+
+         ~DatasetTree.backgroundRole
+
+         ~DatasetTree.baseSize
+
+         ~DatasetTree.blockSignals
+
+         ~DatasetTree.changeEvent
+
+         ~DatasetTree.childAt
+
+         ~DatasetTree.childEvent
+
+         ~DatasetTree.children
+
+         ~DatasetTree.childrenRect
+
+         ~DatasetTree.childrenRegion
+
+         ~DatasetTree.clearFocus
+
+         ~DatasetTree.clearMask
+
+         ~DatasetTree.clearSelection
+
+         ~DatasetTree.close
+
+         ~DatasetTree.closeEditor
+
+         ~DatasetTree.closeEvent
+
+         ~DatasetTree.closePersistentEditor
+
+         ~DatasetTree.collapse
+
+         ~DatasetTree.collapseAll
+
+         ~DatasetTree.colorCount
+
+         ~DatasetTree.columnAt
+
+         ~DatasetTree.columnCountChanged
+
+         ~DatasetTree.columnMoved
+
+         ~DatasetTree.columnResized
+
+         ~DatasetTree.columnViewportPosition
+
+         ~DatasetTree.columnWidth
+
+         ~DatasetTree.commitData
+
+         ~DatasetTree.connectNotify
+
+         ~DatasetTree.contentsMargins
+
+         ~DatasetTree.contentsRect
+
+         ~DatasetTree.contextMenuEvent
+
+         ~DatasetTree.contextMenuPolicy
+
+         ~DatasetTree.cornerWidget
+
+         ~DatasetTree.create
+
+         ~DatasetTree.createWindowContainer
+
+         ~DatasetTree.currentChanged
+
+         ~DatasetTree.currentIndex
+
+         ~DatasetTree.cursor
+
+         ~DatasetTree.customEvent
+
+         ~DatasetTree.dataChanged
+
+         ~DatasetTree.defaultDropAction
+
+         ~DatasetTree.deleteLater
+
+         ~DatasetTree.depth
+
+         ~DatasetTree.destroy
+
+         ~DatasetTree.devType
+
+         ~DatasetTree.devicePixelRatio
+
+         ~DatasetTree.devicePixelRatioF
+
+         ~DatasetTree.devicePixelRatioFScale
+
+         ~DatasetTree.dirtyRegionOffset
+
+         ~DatasetTree.disconnect
+
+         ~DatasetTree.disconnectNotify
+
+         ~DatasetTree.dragDropMode
+
+         ~DatasetTree.dragDropOverwriteMode
+
+         ~DatasetTree.dragEnabled
+
+         ~DatasetTree.dragEnterEvent
+
+         ~DatasetTree.dragLeaveEvent
+
+         ~DatasetTree.dragMoveEvent
+
+         ~DatasetTree.drawBranches
+
+         ~DatasetTree.drawFrame
+
+         ~DatasetTree.drawRow
+
+         ~DatasetTree.drawTree
+
+         ~DatasetTree.dropEvent
+
+         ~DatasetTree.dropIndicatorPosition
+
+         ~DatasetTree.dumpObjectInfo
+
+         ~DatasetTree.dumpObjectTree
+
+         ~DatasetTree.dynamicPropertyNames
+
+         ~DatasetTree.edit
+
+         ~DatasetTree.editTriggers
+
+         ~DatasetTree.editorDestroyed
+
+         ~DatasetTree.effectiveWinId
+
+         ~DatasetTree.ensurePolished
+
+         ~DatasetTree.enterEvent
+
+         ~DatasetTree.event
+
+         ~DatasetTree.eventFilter
+
+         ~DatasetTree.executeDelayedItemsLayout
+
+         ~DatasetTree.expand
+
+         ~DatasetTree.expandAll
+
+         ~DatasetTree.expandRecursively
+
+         ~DatasetTree.expandToDepth
+
+         ~DatasetTree.expandsOnDoubleClick
+
+         ~DatasetTree.find
+
+         ~DatasetTree.findChild
+
+         ~DatasetTree.findChildren
+
+         ~DatasetTree.focusInEvent
+
+         ~DatasetTree.focusNextChild
+
+         ~DatasetTree.focusNextPrevChild
+
+         ~DatasetTree.focusOutEvent
+
+         ~DatasetTree.focusPolicy
+
+         ~DatasetTree.focusPreviousChild
+
+         ~DatasetTree.focusProxy
+
+         ~DatasetTree.focusWidget
+
+         ~DatasetTree.font
+
+         ~DatasetTree.fontInfo
+
+         ~DatasetTree.fontMetrics
+
+         ~DatasetTree.foregroundRole
+
+         ~DatasetTree.frameGeometry
+
+         ~DatasetTree.frameRect
+
+         ~DatasetTree.frameShadow
+
+         ~DatasetTree.frameShape
+
+         ~DatasetTree.frameSize
+
+         ~DatasetTree.frameStyle
+
+         ~DatasetTree.frameWidth
+
+         ~DatasetTree.geometry
+
+         ~DatasetTree.getContentsMargins
+
+         ~DatasetTree.grab
+
+         ~DatasetTree.grabGesture
+
+         ~DatasetTree.grabKeyboard
+
+         ~DatasetTree.grabMouse
+
+         ~DatasetTree.grabShortcut
+
+         ~DatasetTree.graphicsEffect
+
+         ~DatasetTree.graphicsProxyWidget
+
+         ~DatasetTree.hasAutoScroll
+
+         ~DatasetTree.hasFocus
+
+         ~DatasetTree.hasHeightForWidth
+
+         ~DatasetTree.hasMouseTracking
+
+         ~DatasetTree.hasTabletTracking
+
+         ~DatasetTree.header
+
+         ~DatasetTree.height
+
+         ~DatasetTree.heightForWidth
+
+         ~DatasetTree.heightMM
+
+         ~DatasetTree.hide
+
+         ~DatasetTree.hideColumn
+
+         ~DatasetTree.hideEvent
+
+         ~DatasetTree.horizontalOffset
+
+         ~DatasetTree.horizontalScrollBar
+
+         ~DatasetTree.horizontalScrollBarPolicy
+
+         ~DatasetTree.horizontalScrollMode
+
+         ~DatasetTree.horizontalScrollbarAction
+
+         ~DatasetTree.horizontalScrollbarValueChanged
+
+         ~DatasetTree.iconSize
+
+         ~DatasetTree.indentation
+
+         ~DatasetTree.indexAbove
+
+         ~DatasetTree.indexAt
+
+         ~DatasetTree.indexBelow
+
+         ~DatasetTree.indexRowSizeHint
+
+         ~DatasetTree.indexWidget
+
+         ~DatasetTree.inherits
+
+         ~DatasetTree.initPainter
+
+         ~DatasetTree.initStyleOption
+
+         ~DatasetTree.inputMethodEvent
+
+         ~DatasetTree.inputMethodHints
+
+         ~DatasetTree.inputMethodQuery
+
+         ~DatasetTree.insertAction
+
+         ~DatasetTree.insertActions
+
+         ~DatasetTree.installEventFilter
+
+         ~DatasetTree.isActiveWindow
+
+         ~DatasetTree.isAncestorOf
+
+         ~DatasetTree.isAnimated
+
+         ~DatasetTree.isColumnHidden
+
+         ~DatasetTree.isEnabled
+
+         ~DatasetTree.isEnabledTo
+
+         ~DatasetTree.isExpanded
+
+         ~DatasetTree.isFirstColumnSpanned
+
+         ~DatasetTree.isFullScreen
+
+         ~DatasetTree.isHeaderHidden
+
+         ~DatasetTree.isHidden
+
+         ~DatasetTree.isIndexHidden
+
+         ~DatasetTree.isLeftToRight
+
+         ~DatasetTree.isMaximized
+
+         ~DatasetTree.isMinimized
+
+         ~DatasetTree.isModal
+
+         ~DatasetTree.isPersistentEditorOpen
+
+         ~DatasetTree.isRightToLeft
+
+         ~DatasetTree.isRowHidden
+
+         ~DatasetTree.isSignalConnected
+
+         ~DatasetTree.isSortingEnabled
+
+         ~DatasetTree.isVisible
+
+         ~DatasetTree.isVisibleTo
+
+         ~DatasetTree.isWidgetType
+
+         ~DatasetTree.isWindow
+
+         ~DatasetTree.isWindowModified
+
+         ~DatasetTree.isWindowType
+
+         ~DatasetTree.itemDelegate
+
+         ~DatasetTree.itemDelegateForColumn
+
+         ~DatasetTree.itemDelegateForRow
+
+         ~DatasetTree.itemsExpandable
+
+         ~DatasetTree.keyReleaseEvent
+
+         ~DatasetTree.keyboardGrabber
+
+         ~DatasetTree.keyboardSearch
+
+         ~DatasetTree.killTimer
+
+         ~DatasetTree.layout
+
+         ~DatasetTree.layoutDirection
+
+         ~DatasetTree.leaveEvent
+
+         ~DatasetTree.lineWidth
+
+         ~DatasetTree.locale
+
+         ~DatasetTree.logicalDpiX
+
+         ~DatasetTree.logicalDpiY
+
+         ~DatasetTree.lower
+
+         ~DatasetTree.mapFrom
+
+         ~DatasetTree.mapFromGlobal
+
+         ~DatasetTree.mapFromParent
+
+         ~DatasetTree.mapTo
+
+         ~DatasetTree.mapToGlobal
+
+         ~DatasetTree.mapToParent
+
+         ~DatasetTree.mask
+
+         ~DatasetTree.maximumHeight
+
+         ~DatasetTree.maximumSize
+
+         ~DatasetTree.maximumViewportSize
+
+         ~DatasetTree.maximumWidth
+
+         ~DatasetTree.metaObject
+
+         ~DatasetTree.metric
+
+         ~DatasetTree.midLineWidth
+
+         ~DatasetTree.minimumHeight
+
+         ~DatasetTree.minimumSize
+
+         ~DatasetTree.minimumSizeHint
+
+         ~DatasetTree.minimumWidth
+
+         ~DatasetTree.model
+
+         ~DatasetTree.mouseDoubleClickEvent
+
+         ~DatasetTree.mouseGrabber
+
+         ~DatasetTree.mouseMoveEvent
+
+         ~DatasetTree.mousePressEvent
+
+         ~DatasetTree.mouseReleaseEvent
+
+         ~DatasetTree.move
+
+         ~DatasetTree.moveCursor
+
+         ~DatasetTree.moveEvent
+
+         ~DatasetTree.moveToThread
+
+         ~DatasetTree.nativeEvent
+
+         ~DatasetTree.nativeParentWidget
+
+         ~DatasetTree.nextInFocusChain
+
+         ~DatasetTree.normalGeometry
+
+         ~DatasetTree.objectName
+
+         ~DatasetTree.openPersistentEditor
+
+         ~DatasetTree.overrideWindowFlags
+
+         ~DatasetTree.overrideWindowState
+
+         ~DatasetTree.paintEngine
+
+         ~DatasetTree.paintEvent
+
+         ~DatasetTree.paintingActive
+
+         ~DatasetTree.palette
+
+         ~DatasetTree.parent
+
+         ~DatasetTree.parentWidget
+
+         ~DatasetTree.physicalDpiX
+
+         ~DatasetTree.physicalDpiY
+
+         ~DatasetTree.pos
+
+         ~DatasetTree.previousInFocusChain
+
+         ~DatasetTree.property
+
+         ~DatasetTree.pyqtConfigure
+
+         ~DatasetTree.raise_
+
+         ~DatasetTree.receivers
+
+         ~DatasetTree.rect
+
+         ~DatasetTree.reexpand
+
+         ~DatasetTree.releaseKeyboard
+
+         ~DatasetTree.releaseMouse
+
+         ~DatasetTree.releaseShortcut
+
+         ~DatasetTree.removeAction
+
+         ~DatasetTree.removeEventFilter
+
+         ~DatasetTree.render
+
+         ~DatasetTree.repaint
+
+         ~DatasetTree.reset
+
+         ~DatasetTree.resetHorizontalScrollMode
+
+         ~DatasetTree.resetIndentation
+
+         ~DatasetTree.resetVerticalScrollMode
+
+         ~DatasetTree.resize
+
+         ~DatasetTree.resizeColumnToContents
+
+         ~DatasetTree.resizeEvent
+
+         ~DatasetTree.restoreGeometry
+
+         ~DatasetTree.rootIndex
+
+         ~DatasetTree.rootIsDecorated
+
+         ~DatasetTree.rowHeight
+
+         ~DatasetTree.rowsAboutToBeRemoved
+
+         ~DatasetTree.rowsInserted
+
+         ~DatasetTree.rowsRemoved
+
+         ~DatasetTree.saveGeometry
+
+         ~DatasetTree.scheduleDelayedItemsLayout
+
+         ~DatasetTree.screen
+
+         ~DatasetTree.scroll
+
+         ~DatasetTree.scrollBarWidgets
+
+         ~DatasetTree.scrollContentsBy
+
+         ~DatasetTree.scrollDirtyRegion
+
+         ~DatasetTree.scrollTo
+
+         ~DatasetTree.scrollToBottom
+
+         ~DatasetTree.scrollToTop
+
+         ~DatasetTree.selectAll
+
+         ~DatasetTree.selectedIndexes
+
+         ~DatasetTree.selectionBehavior
+
+         ~DatasetTree.selectionChanged
+
+         ~DatasetTree.selectionCommand
+
+         ~DatasetTree.selectionMode
+
+         ~DatasetTree.selectionModel
+
+         ~DatasetTree.sender
+
+         ~DatasetTree.senderSignalIndex
+
+         ~DatasetTree.setAcceptDrops
+
+         ~DatasetTree.setAccessibleDescription
+
+         ~DatasetTree.setAccessibleName
+
+         ~DatasetTree.setAllColumnsShowFocus
+
+         ~DatasetTree.setAlternatingRowColors
+
+         ~DatasetTree.setAnimated
+
+         ~DatasetTree.setAttribute
+
+         ~DatasetTree.setAutoExpandDelay
+
+         ~DatasetTree.setAutoFillBackground
+
+         ~DatasetTree.setAutoScroll
+
+         ~DatasetTree.setAutoScrollMargin
+
+         ~DatasetTree.setBackgroundRole
+
+         ~DatasetTree.setBaseSize
+
+         ~DatasetTree.setColumnHidden
+
+         ~DatasetTree.setColumnWidth
+
+         ~DatasetTree.setContentsMargins
+
+         ~DatasetTree.setContextMenuPolicy
+
+         ~DatasetTree.setCornerWidget
+
+         ~DatasetTree.setCurrentIndex
+
+         ~DatasetTree.setCursor
+
+         ~DatasetTree.setDefaultDropAction
+
+         ~DatasetTree.setDirtyRegion
+
+         ~DatasetTree.setDisabled
+
+         ~DatasetTree.setDragDropMode
+
+         ~DatasetTree.setDragDropOverwriteMode
+
+         ~DatasetTree.setDragEnabled
+
+         ~DatasetTree.setDropIndicatorShown
+
+         ~DatasetTree.setEditTriggers
+
+         ~DatasetTree.setEnabled
+
+         ~DatasetTree.setExpanded
+
+         ~DatasetTree.setExpandsOnDoubleClick
+
+         ~DatasetTree.setFirstColumnSpanned
+
+         ~DatasetTree.setFixedHeight
+
+         ~DatasetTree.setFixedSize
+
+         ~DatasetTree.setFixedWidth
+
+         ~DatasetTree.setFocus
+
+         ~DatasetTree.setFocusPolicy
+
+         ~DatasetTree.setFocusProxy
+
+         ~DatasetTree.setFont
+
+         ~DatasetTree.setForegroundRole
+
+         ~DatasetTree.setFrameRect
+
+         ~DatasetTree.setFrameShadow
+
+         ~DatasetTree.setFrameShape
+
+         ~DatasetTree.setFrameStyle
+
+         ~DatasetTree.setGeometry
+
+         ~DatasetTree.setGraphicsEffect
+
+         ~DatasetTree.setHeader
+
+         ~DatasetTree.setHeaderHidden
+
+         ~DatasetTree.setHidden
+
+         ~DatasetTree.setHorizontalScrollBar
+
+         ~DatasetTree.setHorizontalScrollBarPolicy
+
+         ~DatasetTree.setHorizontalScrollMode
+
+         ~DatasetTree.setIconSize
+
+         ~DatasetTree.setIndentation
+
+         ~DatasetTree.setIndexWidget
+
+         ~DatasetTree.setInputMethodHints
+
+         ~DatasetTree.setItemDelegate
+
+         ~DatasetTree.setItemDelegateForColumn
+
+         ~DatasetTree.setItemDelegateForRow
+
+         ~DatasetTree.setItemsExpandable
+
+         ~DatasetTree.setLayout
+
+         ~DatasetTree.setLayoutDirection
+
+         ~DatasetTree.setLineWidth
+
+         ~DatasetTree.setLocale
+
+         ~DatasetTree.setMask
+
+         ~DatasetTree.setMaximumHeight
+
+         ~DatasetTree.setMaximumSize
+
+         ~DatasetTree.setMaximumWidth
+
+         ~DatasetTree.setMidLineWidth
+
+         ~DatasetTree.setMinimumHeight
+
+         ~DatasetTree.setMinimumSize
+
+         ~DatasetTree.setMinimumWidth
+
+         ~DatasetTree.setModel
+
+         ~DatasetTree.setMouseTracking
+
+         ~DatasetTree.setObjectName
+
+         ~DatasetTree.setPalette
+
+         ~DatasetTree.setParent
+
+         ~DatasetTree.setProperty
+
+         ~DatasetTree.setRootIndex
+
+         ~DatasetTree.setRootIsDecorated
+
+         ~DatasetTree.setRowHidden
+
+         ~DatasetTree.setSelection
+
+         ~DatasetTree.setSelectionBehavior
+
+         ~DatasetTree.setSelectionMode
+
+         ~DatasetTree.setSelectionModel
+
+         ~DatasetTree.setShortcutAutoRepeat
+
+         ~DatasetTree.setShortcutEnabled
+
+         ~DatasetTree.setSizeAdjustPolicy
+
+         ~DatasetTree.setSizeIncrement
+
+         ~DatasetTree.setSizePolicy
+
+         ~DatasetTree.setSortingEnabled
+
+         ~DatasetTree.setState
+
+         ~DatasetTree.setStatusTip
+
+         ~DatasetTree.setStyle
+
+         ~DatasetTree.setStyleSheet
+
+         ~DatasetTree.setTabKeyNavigation
+
+         ~DatasetTree.setTabOrder
+
+         ~DatasetTree.setTabletTracking
+
+         ~DatasetTree.setTextElideMode
+
+         ~DatasetTree.setToolTip
+
+         ~DatasetTree.setToolTipDuration
+
+         ~DatasetTree.setTreePosition
+
+         ~DatasetTree.setUniformRowHeights
+
+         ~DatasetTree.setUpdatesEnabled
+
+         ~DatasetTree.setVerticalScrollBar
+
+         ~DatasetTree.setVerticalScrollBarPolicy
+
+         ~DatasetTree.setVerticalScrollMode
+
+         ~DatasetTree.setViewport
+
+         ~DatasetTree.setViewportMargins
+
+         ~DatasetTree.setVisible
+
+         ~DatasetTree.setWhatsThis
+
+         ~DatasetTree.setWindowFilePath
+
+         ~DatasetTree.setWindowFlag
+
+         ~DatasetTree.setWindowFlags
+
+         ~DatasetTree.setWindowIcon
+
+         ~DatasetTree.setWindowIconText
+
+         ~DatasetTree.setWindowModality
+
+         ~DatasetTree.setWindowModified
+
+         ~DatasetTree.setWindowOpacity
+
+         ~DatasetTree.setWindowRole
+
+         ~DatasetTree.setWindowState
+
+         ~DatasetTree.setWindowTitle
+
+         ~DatasetTree.setWordWrap
+
+         ~DatasetTree.setupViewport
+
+         ~DatasetTree.sharedPainter
+
+         ~DatasetTree.show
+
+         ~DatasetTree.showColumn
+
+         ~DatasetTree.showDropIndicator
+
+         ~DatasetTree.showEvent
+
+         ~DatasetTree.showFullScreen
+
+         ~DatasetTree.showMaximized
+
+         ~DatasetTree.showMinimized
+
+         ~DatasetTree.showNormal
+
+         ~DatasetTree.signalsBlocked
+
+         ~DatasetTree.size
+
+         ~DatasetTree.sizeAdjustPolicy
+
+         ~DatasetTree.sizeHint
+
+         ~DatasetTree.sizeHintForColumn
+
+         ~DatasetTree.sizeHintForIndex
+
+         ~DatasetTree.sizeHintForRow
+
+         ~DatasetTree.sizeIncrement
+
+         ~DatasetTree.sizePolicy
+
+         ~DatasetTree.sortByColumn
+
+         ~DatasetTree.stackUnder
+
+         ~DatasetTree.startDrag
+
+         ~DatasetTree.startTimer
+
+         ~DatasetTree.state
+
+         ~DatasetTree.statusTip
+
+         ~DatasetTree.style
+
+         ~DatasetTree.styleSheet
+
+         ~DatasetTree.tabKeyNavigation
+
+         ~DatasetTree.tabletEvent
+
+         ~DatasetTree.testAttribute
+
+         ~DatasetTree.textElideMode
+
+         ~DatasetTree.thread
+
+         ~DatasetTree.timerEvent
+
+         ~DatasetTree.toolTip
+
+         ~DatasetTree.toolTipDuration
+
+         ~DatasetTree.tr
+
+         ~DatasetTree.treePosition
+
+         ~DatasetTree.underMouse
+
+         ~DatasetTree.ungrabGesture
+
+         ~DatasetTree.uniformRowHeights
+
+         ~DatasetTree.unsetCursor
+
+         ~DatasetTree.unsetLayoutDirection
+
+         ~DatasetTree.unsetLocale
+
+         ~DatasetTree.update
+
+         ~DatasetTree.updateEditorData
+
+         ~DatasetTree.updateEditorGeometries
+
+         ~DatasetTree.updateGeometries
+
+         ~DatasetTree.updateGeometry
+
+         ~DatasetTree.updateMicroFocus
+
+         ~DatasetTree.updatesEnabled
+
+         ~DatasetTree.verticalOffset
+
+         ~DatasetTree.verticalScrollBar
+
+         ~DatasetTree.verticalScrollBarPolicy
+
+         ~DatasetTree.verticalScrollMode
+
+         ~DatasetTree.verticalScrollbarAction
+
+         ~DatasetTree.verticalScrollbarValueChanged
+
+         ~DatasetTree.viewOptions
+
+         ~DatasetTree.viewport
+
+         ~DatasetTree.viewportEvent
+
+         ~DatasetTree.viewportMargins
+
+         ~DatasetTree.viewportSizeHint
+
+         ~DatasetTree.visibleRegion
+
+         ~DatasetTree.visualRect
+
+         ~DatasetTree.visualRegionForSelection
+
+         ~DatasetTree.whatsThis
+
+         ~DatasetTree.wheelEvent
+
+         ~DatasetTree.width
+
+         ~DatasetTree.widthMM
+
+         ~DatasetTree.winId
+
+         ~DatasetTree.window
+
+         ~DatasetTree.windowFilePath
+
+         ~DatasetTree.windowFlags
+
+         ~DatasetTree.windowHandle
+
+         ~DatasetTree.windowIcon
+
+         ~DatasetTree.windowIconText
+
+         ~DatasetTree.windowModality
+
+         ~DatasetTree.windowOpacity
+
+         ~DatasetTree.windowRole
+
+         ~DatasetTree.windowState
+
+         ~DatasetTree.windowTitle
+
+         ~DatasetTree.windowType
+
+         ~DatasetTree.wordWrap
+
+         ~DatasetTree.x
+
+         ~DatasetTree.y
+
+
+
+
+
+
+
+
+Attributes
+==========
+
+.. tab-set::
+
+   .. tab-item:: Plain
+      :sync: key-plain
+
+      .. autosummary::
+
+
+   .. tab-item:: Inherited
+      :sync: key-inherited
+
+      .. autosummary::
+
+         ~DatasetTree.AboveItem
+
+         ~DatasetTree.AdjustIgnored
+
+         ~DatasetTree.AdjustToContents
+
+         ~DatasetTree.AdjustToContentsOnFirstShow
+
+         ~DatasetTree.AllEditTriggers
+
+         ~DatasetTree.AnimatingState
+
+         ~DatasetTree.AnyKeyPressed
+
+         ~DatasetTree.BelowItem
+
+         ~DatasetTree.Box
+
+         ~DatasetTree.CollapsingState
+
+         ~DatasetTree.ContiguousSelection
+
+         ~DatasetTree.CurrentChanged
+
+         ~DatasetTree.DoubleClicked
+
+         ~DatasetTree.DragDrop
+
+         ~DatasetTree.DragOnly
+
+         ~DatasetTree.DragSelectingState
+
+         ~DatasetTree.DraggingState
+
+         ~DatasetTree.DrawChildren
+
+         ~DatasetTree.DrawWindowBackground
+
+         ~DatasetTree.DropOnly
+
+         ~DatasetTree.EditKeyPressed
+
+         ~DatasetTree.EditingState
+
+         ~DatasetTree.EnsureVisible
+
+         ~DatasetTree.ExpandingState
+
+         ~DatasetTree.ExtendedSelection
+
+         ~DatasetTree.HLine
+
+         ~DatasetTree.IgnoreMask
+
+         ~DatasetTree.InternalMove
+
+         ~DatasetTree.MoveDown
+
+         ~DatasetTree.MoveEnd
+
+         ~DatasetTree.MoveHome
+
+         ~DatasetTree.MoveLeft
+
+         ~DatasetTree.MoveNext
+
+         ~DatasetTree.MovePageDown
+
+         ~DatasetTree.MovePageUp
+
+         ~DatasetTree.MovePrevious
+
+         ~DatasetTree.MoveRight
+
+         ~DatasetTree.MoveUp
+
+         ~DatasetTree.MultiSelection
+
+         ~DatasetTree.NoDragDrop
+
+         ~DatasetTree.NoEditTriggers
+
+         ~DatasetTree.NoFrame
+
+         ~DatasetTree.NoSelection
+
+         ~DatasetTree.NoState
+
+         ~DatasetTree.OnItem
+
+         ~DatasetTree.OnViewport
+
+         ~DatasetTree.Panel
+
+         ~DatasetTree.PdmDepth
+
+         ~DatasetTree.PdmDevicePixelRatio
+
+         ~DatasetTree.PdmDevicePixelRatioScaled
+
+         ~DatasetTree.PdmDpiX
+
+         ~DatasetTree.PdmDpiY
+
+         ~DatasetTree.PdmHeight
+
+         ~DatasetTree.PdmHeightMM
+
+         ~DatasetTree.PdmNumColors
+
+         ~DatasetTree.PdmPhysicalDpiX
+
+         ~DatasetTree.PdmPhysicalDpiY
+
+         ~DatasetTree.PdmWidth
+
+         ~DatasetTree.PdmWidthMM
+
+         ~DatasetTree.Plain
+
+         ~DatasetTree.PositionAtBottom
+
+         ~DatasetTree.PositionAtCenter
+
+         ~DatasetTree.PositionAtTop
+
+         ~DatasetTree.Raised
+
+         ~DatasetTree.ScrollPerItem
+
+         ~DatasetTree.ScrollPerPixel
+
+         ~DatasetTree.SelectColumns
+
+         ~DatasetTree.SelectItems
+
+         ~DatasetTree.SelectRows
+
+         ~DatasetTree.SelectedClicked
+
+         ~DatasetTree.Shadow_Mask
+
+         ~DatasetTree.Shape_Mask
+
+         ~DatasetTree.SingleSelection
+
+         ~DatasetTree.StyledPanel
+
+         ~DatasetTree.Sunken
+
+         ~DatasetTree.VLine
+
+         ~DatasetTree.WinPanel
+
+         ~DatasetTree.activated
+
+         ~DatasetTree.clicked
+
+         ~DatasetTree.collapsed
+
+         ~DatasetTree.customContextMenuRequested
+
+         ~DatasetTree.destroyed
+
+         ~DatasetTree.doubleClicked
+
+         ~DatasetTree.entered
+
+         ~DatasetTree.expanded
+
+         ~DatasetTree.iconSizeChanged
+
+         ~DatasetTree.objectNameChanged
+
+         ~DatasetTree.pressed
+
+         ~DatasetTree.staticMetaObject
+
+         ~DatasetTree.viewportEntered
+
+         ~DatasetTree.windowIconChanged
+
+         ~DatasetTree.windowIconTextChanged
+
+         ~DatasetTree.windowTitleChanged
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Definition
+==========
+
+.. tab-set::
+
+   .. tab-item:: Plain
+      :sync: key-plain
+
+      .. autoclass:: DatasetTree
+         :show-inheritance:
+         :members: DatasetTree.__init__,DatasetTree.keyPressEvent,DatasetTree.showContextMenu,
+
+   .. tab-item:: Inherited
+      :sync: key-inherited
+
+      .. autoclass:: DatasetTree
+         :show-inheritance:
+         :inherited-members:
+         :noindex:

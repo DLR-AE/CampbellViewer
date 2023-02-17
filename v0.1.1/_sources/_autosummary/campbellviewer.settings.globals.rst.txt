@@ -1,0 +1,25 @@
+globals
+#######
+*campbellviewer.settings.globals*
+
+.. automodule:: campbellviewer.settings.globals
+   :no-members:
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

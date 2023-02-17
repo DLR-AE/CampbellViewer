@@ -1,0 +1,47 @@
+main\_app
+#########
+*campbellviewer.main_app*
+
+.. automodule:: campbellviewer.main_app
+   :no-members:
+
+
+
+
+
+
+
+Functions
+^^^^^^^^^
+
+.. autosummary::
+   :toctree:
+
+   main
+   my_excepthook
+   process_cl_args
+
+
+
+
+
+Classes
+^^^^^^^
+
+.. autosummary::
+   :toctree:
+   :template: custom-class-template.rst
+   :recursive:
+
+   AmplitudeWindow
+   ApplicationWindow
+   DatasetTree
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,35 @@
+data
+####
+*campbellviewer.data_storage.data*
+
+.. automodule:: campbellviewer.data_storage.data
+   :no-members:
+
+
+
+
+
+
+
+
+
+
+
+Classes
+^^^^^^^
+
+.. autosummary::
+   :toctree:
+   :template: custom-class-template.rst
+   :recursive:
+
+   LinearizationDataWrapper
+
+
+
+
+
+
+
+
+

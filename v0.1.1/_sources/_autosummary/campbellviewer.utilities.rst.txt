@@ -1,0 +1,44 @@
+utilities
+#########
+*campbellviewer.utilities*
+
+.. automodule:: campbellviewer.utilities
+   :no-members:
+
+
+
+
+
+
+
+Functions
+^^^^^^^^^
+
+.. autosummary::
+   :toctree:
+
+   assure_unique_name
+
+
+
+
+
+Classes
+^^^^^^^
+
+.. autosummary::
+   :toctree:
+   :template: custom-class-template.rst
+   :recursive:
+
+   AEMode
+   DatasetMetaData
+
+
+
+
+
+
+
+
+

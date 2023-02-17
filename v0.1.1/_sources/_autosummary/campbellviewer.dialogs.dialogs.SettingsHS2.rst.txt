@@ -1,0 +1,735 @@
+SettingsHS2
+###########
+*campbellviewer.dialogs.dialogs.SettingsHS2*
+
+.. currentmodule:: campbellviewer.dialogs.dialogs
+
+
+
+
+Methods
+=======
+
+.. tab-set::
+
+   .. tab-item:: Plain
+      :sync: key-plain
+
+      .. autosummary::
+
+         ~SettingsHS2.__init__
+
+         ~SettingsHS2.save_settings
+
+
+   .. tab-item:: Inherited
+      :sync: key-inherited
+
+      .. autosummary::
+
+         ~SettingsHS2.acceptDrops
+
+         ~SettingsHS2.accessibleDescription
+
+         ~SettingsHS2.accessibleName
+
+         ~SettingsHS2.actionEvent
+
+         ~SettingsHS2.actions
+
+         ~SettingsHS2.activateWindow
+
+         ~SettingsHS2.addAction
+
+         ~SettingsHS2.addActions
+
+         ~SettingsHS2.adjustSize
+
+         ~SettingsHS2.autoFillBackground
+
+         ~SettingsHS2.backgroundRole
+
+         ~SettingsHS2.baseSize
+
+         ~SettingsHS2.blockSignals
+
+         ~SettingsHS2.changeEvent
+
+         ~SettingsHS2.childAt
+
+         ~SettingsHS2.childEvent
+
+         ~SettingsHS2.children
+
+         ~SettingsHS2.childrenRect
+
+         ~SettingsHS2.childrenRegion
+
+         ~SettingsHS2.clearFocus
+
+         ~SettingsHS2.clearMask
+
+         ~SettingsHS2.close
+
+         ~SettingsHS2.closeEvent
+
+         ~SettingsHS2.colorCount
+
+         ~SettingsHS2.connectNotify
+
+         ~SettingsHS2.contentsMargins
+
+         ~SettingsHS2.contentsRect
+
+         ~SettingsHS2.contextMenuEvent
+
+         ~SettingsHS2.contextMenuPolicy
+
+         ~SettingsHS2.create
+
+         ~SettingsHS2.createWindowContainer
+
+         ~SettingsHS2.cursor
+
+         ~SettingsHS2.customEvent
+
+         ~SettingsHS2.deleteLater
+
+         ~SettingsHS2.depth
+
+         ~SettingsHS2.destroy
+
+         ~SettingsHS2.devType
+
+         ~SettingsHS2.devicePixelRatio
+
+         ~SettingsHS2.devicePixelRatioF
+
+         ~SettingsHS2.devicePixelRatioFScale
+
+         ~SettingsHS2.disconnect
+
+         ~SettingsHS2.disconnectNotify
+
+         ~SettingsHS2.dragEnterEvent
+
+         ~SettingsHS2.dragLeaveEvent
+
+         ~SettingsHS2.dragMoveEvent
+
+         ~SettingsHS2.dropEvent
+
+         ~SettingsHS2.dumpObjectInfo
+
+         ~SettingsHS2.dumpObjectTree
+
+         ~SettingsHS2.dynamicPropertyNames
+
+         ~SettingsHS2.effectiveWinId
+
+         ~SettingsHS2.ensurePolished
+
+         ~SettingsHS2.enterEvent
+
+         ~SettingsHS2.event
+
+         ~SettingsHS2.eventFilter
+
+         ~SettingsHS2.find
+
+         ~SettingsHS2.findChild
+
+         ~SettingsHS2.findChildren
+
+         ~SettingsHS2.focusInEvent
+
+         ~SettingsHS2.focusNextChild
+
+         ~SettingsHS2.focusNextPrevChild
+
+         ~SettingsHS2.focusOutEvent
+
+         ~SettingsHS2.focusPolicy
+
+         ~SettingsHS2.focusPreviousChild
+
+         ~SettingsHS2.focusProxy
+
+         ~SettingsHS2.focusWidget
+
+         ~SettingsHS2.font
+
+         ~SettingsHS2.fontInfo
+
+         ~SettingsHS2.fontMetrics
+
+         ~SettingsHS2.foregroundRole
+
+         ~SettingsHS2.frameGeometry
+
+         ~SettingsHS2.frameSize
+
+         ~SettingsHS2.geometry
+
+         ~SettingsHS2.getContentsMargins
+
+         ~SettingsHS2.grab
+
+         ~SettingsHS2.grabGesture
+
+         ~SettingsHS2.grabKeyboard
+
+         ~SettingsHS2.grabMouse
+
+         ~SettingsHS2.grabShortcut
+
+         ~SettingsHS2.graphicsEffect
+
+         ~SettingsHS2.graphicsProxyWidget
+
+         ~SettingsHS2.hasFocus
+
+         ~SettingsHS2.hasHeightForWidth
+
+         ~SettingsHS2.hasMouseTracking
+
+         ~SettingsHS2.hasTabletTracking
+
+         ~SettingsHS2.height
+
+         ~SettingsHS2.heightForWidth
+
+         ~SettingsHS2.heightMM
+
+         ~SettingsHS2.hide
+
+         ~SettingsHS2.hideEvent
+
+         ~SettingsHS2.inherits
+
+         ~SettingsHS2.initPainter
+
+         ~SettingsHS2.inputMethodEvent
+
+         ~SettingsHS2.inputMethodHints
+
+         ~SettingsHS2.inputMethodQuery
+
+         ~SettingsHS2.insertAction
+
+         ~SettingsHS2.insertActions
+
+         ~SettingsHS2.installEventFilter
+
+         ~SettingsHS2.isActiveWindow
+
+         ~SettingsHS2.isAncestorOf
+
+         ~SettingsHS2.isEnabled
+
+         ~SettingsHS2.isEnabledTo
+
+         ~SettingsHS2.isFullScreen
+
+         ~SettingsHS2.isHidden
+
+         ~SettingsHS2.isLeftToRight
+
+         ~SettingsHS2.isMaximized
+
+         ~SettingsHS2.isMinimized
+
+         ~SettingsHS2.isModal
+
+         ~SettingsHS2.isRightToLeft
+
+         ~SettingsHS2.isSignalConnected
+
+         ~SettingsHS2.isVisible
+
+         ~SettingsHS2.isVisibleTo
+
+         ~SettingsHS2.isWidgetType
+
+         ~SettingsHS2.isWindow
+
+         ~SettingsHS2.isWindowModified
+
+         ~SettingsHS2.isWindowType
+
+         ~SettingsHS2.keyPressEvent
+
+         ~SettingsHS2.keyReleaseEvent
+
+         ~SettingsHS2.keyboardGrabber
+
+         ~SettingsHS2.killTimer
+
+         ~SettingsHS2.layout
+
+         ~SettingsHS2.layoutDirection
+
+         ~SettingsHS2.leaveEvent
+
+         ~SettingsHS2.locale
+
+         ~SettingsHS2.logicalDpiX
+
+         ~SettingsHS2.logicalDpiY
+
+         ~SettingsHS2.lower
+
+         ~SettingsHS2.mapFrom
+
+         ~SettingsHS2.mapFromGlobal
+
+         ~SettingsHS2.mapFromParent
+
+         ~SettingsHS2.mapTo
+
+         ~SettingsHS2.mapToGlobal
+
+         ~SettingsHS2.mapToParent
+
+         ~SettingsHS2.mask
+
+         ~SettingsHS2.maximumHeight
+
+         ~SettingsHS2.maximumSize
+
+         ~SettingsHS2.maximumWidth
+
+         ~SettingsHS2.metaObject
+
+         ~SettingsHS2.metric
+
+         ~SettingsHS2.minimumHeight
+
+         ~SettingsHS2.minimumSize
+
+         ~SettingsHS2.minimumSizeHint
+
+         ~SettingsHS2.minimumWidth
+
+         ~SettingsHS2.mouseDoubleClickEvent
+
+         ~SettingsHS2.mouseGrabber
+
+         ~SettingsHS2.mouseMoveEvent
+
+         ~SettingsHS2.mousePressEvent
+
+         ~SettingsHS2.mouseReleaseEvent
+
+         ~SettingsHS2.move
+
+         ~SettingsHS2.moveEvent
+
+         ~SettingsHS2.moveToThread
+
+         ~SettingsHS2.nativeEvent
+
+         ~SettingsHS2.nativeParentWidget
+
+         ~SettingsHS2.nextInFocusChain
+
+         ~SettingsHS2.normalGeometry
+
+         ~SettingsHS2.objectName
+
+         ~SettingsHS2.overrideWindowFlags
+
+         ~SettingsHS2.overrideWindowState
+
+         ~SettingsHS2.paintEngine
+
+         ~SettingsHS2.paintEvent
+
+         ~SettingsHS2.paintingActive
+
+         ~SettingsHS2.palette
+
+         ~SettingsHS2.parent
+
+         ~SettingsHS2.parentWidget
+
+         ~SettingsHS2.physicalDpiX
+
+         ~SettingsHS2.physicalDpiY
+
+         ~SettingsHS2.pos
+
+         ~SettingsHS2.previousInFocusChain
+
+         ~SettingsHS2.property
+
+         ~SettingsHS2.pyqtConfigure
+
+         ~SettingsHS2.raise_
+
+         ~SettingsHS2.receivers
+
+         ~SettingsHS2.rect
+
+         ~SettingsHS2.releaseKeyboard
+
+         ~SettingsHS2.releaseMouse
+
+         ~SettingsHS2.releaseShortcut
+
+         ~SettingsHS2.removeAction
+
+         ~SettingsHS2.removeEventFilter
+
+         ~SettingsHS2.render
+
+         ~SettingsHS2.repaint
+
+         ~SettingsHS2.resize
+
+         ~SettingsHS2.resizeEvent
+
+         ~SettingsHS2.restoreGeometry
+
+         ~SettingsHS2.saveGeometry
+
+         ~SettingsHS2.screen
+
+         ~SettingsHS2.scroll
+
+         ~SettingsHS2.sender
+
+         ~SettingsHS2.senderSignalIndex
+
+         ~SettingsHS2.setAcceptDrops
+
+         ~SettingsHS2.setAccessibleDescription
+
+         ~SettingsHS2.setAccessibleName
+
+         ~SettingsHS2.setAttribute
+
+         ~SettingsHS2.setAutoFillBackground
+
+         ~SettingsHS2.setBackgroundRole
+
+         ~SettingsHS2.setBaseSize
+
+         ~SettingsHS2.setContentsMargins
+
+         ~SettingsHS2.setContextMenuPolicy
+
+         ~SettingsHS2.setCursor
+
+         ~SettingsHS2.setDisabled
+
+         ~SettingsHS2.setEnabled
+
+         ~SettingsHS2.setFixedHeight
+
+         ~SettingsHS2.setFixedSize
+
+         ~SettingsHS2.setFixedWidth
+
+         ~SettingsHS2.setFocus
+
+         ~SettingsHS2.setFocusPolicy
+
+         ~SettingsHS2.setFocusProxy
+
+         ~SettingsHS2.setFont
+
+         ~SettingsHS2.setForegroundRole
+
+         ~SettingsHS2.setGeometry
+
+         ~SettingsHS2.setGraphicsEffect
+
+         ~SettingsHS2.setHidden
+
+         ~SettingsHS2.setInputMethodHints
+
+         ~SettingsHS2.setLayout
+
+         ~SettingsHS2.setLayoutDirection
+
+         ~SettingsHS2.setLocale
+
+         ~SettingsHS2.setMask
+
+         ~SettingsHS2.setMaximumHeight
+
+         ~SettingsHS2.setMaximumSize
+
+         ~SettingsHS2.setMaximumWidth
+
+         ~SettingsHS2.setMinimumHeight
+
+         ~SettingsHS2.setMinimumSize
+
+         ~SettingsHS2.setMinimumWidth
+
+         ~SettingsHS2.setMouseTracking
+
+         ~SettingsHS2.setObjectName
+
+         ~SettingsHS2.setPalette
+
+         ~SettingsHS2.setParent
+
+         ~SettingsHS2.setProperty
+
+         ~SettingsHS2.setShortcutAutoRepeat
+
+         ~SettingsHS2.setShortcutEnabled
+
+         ~SettingsHS2.setSizeIncrement
+
+         ~SettingsHS2.setSizePolicy
+
+         ~SettingsHS2.setStatusTip
+
+         ~SettingsHS2.setStyle
+
+         ~SettingsHS2.setStyleSheet
+
+         ~SettingsHS2.setTabOrder
+
+         ~SettingsHS2.setTabletTracking
+
+         ~SettingsHS2.setToolTip
+
+         ~SettingsHS2.setToolTipDuration
+
+         ~SettingsHS2.setUpdatesEnabled
+
+         ~SettingsHS2.setVisible
+
+         ~SettingsHS2.setWhatsThis
+
+         ~SettingsHS2.setWindowFilePath
+
+         ~SettingsHS2.setWindowFlag
+
+         ~SettingsHS2.setWindowFlags
+
+         ~SettingsHS2.setWindowIcon
+
+         ~SettingsHS2.setWindowIconText
+
+         ~SettingsHS2.setWindowModality
+
+         ~SettingsHS2.setWindowModified
+
+         ~SettingsHS2.setWindowOpacity
+
+         ~SettingsHS2.setWindowRole
+
+         ~SettingsHS2.setWindowState
+
+         ~SettingsHS2.setWindowTitle
+
+         ~SettingsHS2.sharedPainter
+
+         ~SettingsHS2.show
+
+         ~SettingsHS2.showEvent
+
+         ~SettingsHS2.showFullScreen
+
+         ~SettingsHS2.showMaximized
+
+         ~SettingsHS2.showMinimized
+
+         ~SettingsHS2.showNormal
+
+         ~SettingsHS2.signalsBlocked
+
+         ~SettingsHS2.size
+
+         ~SettingsHS2.sizeHint
+
+         ~SettingsHS2.sizeIncrement
+
+         ~SettingsHS2.sizePolicy
+
+         ~SettingsHS2.stackUnder
+
+         ~SettingsHS2.startTimer
+
+         ~SettingsHS2.statusTip
+
+         ~SettingsHS2.style
+
+         ~SettingsHS2.styleSheet
+
+         ~SettingsHS2.tabletEvent
+
+         ~SettingsHS2.testAttribute
+
+         ~SettingsHS2.thread
+
+         ~SettingsHS2.timerEvent
+
+         ~SettingsHS2.toolTip
+
+         ~SettingsHS2.toolTipDuration
+
+         ~SettingsHS2.tr
+
+         ~SettingsHS2.underMouse
+
+         ~SettingsHS2.ungrabGesture
+
+         ~SettingsHS2.unsetCursor
+
+         ~SettingsHS2.unsetLayoutDirection
+
+         ~SettingsHS2.unsetLocale
+
+         ~SettingsHS2.update
+
+         ~SettingsHS2.updateGeometry
+
+         ~SettingsHS2.updateMicroFocus
+
+         ~SettingsHS2.updatesEnabled
+
+         ~SettingsHS2.visibleRegion
+
+         ~SettingsHS2.whatsThis
+
+         ~SettingsHS2.wheelEvent
+
+         ~SettingsHS2.width
+
+         ~SettingsHS2.widthMM
+
+         ~SettingsHS2.winId
+
+         ~SettingsHS2.window
+
+         ~SettingsHS2.windowFilePath
+
+         ~SettingsHS2.windowFlags
+
+         ~SettingsHS2.windowHandle
+
+         ~SettingsHS2.windowIcon
+
+         ~SettingsHS2.windowIconText
+
+         ~SettingsHS2.windowModality
+
+         ~SettingsHS2.windowOpacity
+
+         ~SettingsHS2.windowRole
+
+         ~SettingsHS2.windowState
+
+         ~SettingsHS2.windowTitle
+
+         ~SettingsHS2.windowType
+
+         ~SettingsHS2.x
+
+         ~SettingsHS2.y
+
+
+
+
+
+
+
+
+Attributes
+==========
+
+.. tab-set::
+
+   .. tab-item:: Plain
+      :sync: key-plain
+
+      .. autosummary::
+
+
+   .. tab-item:: Inherited
+      :sync: key-inherited
+
+      .. autosummary::
+
+         ~SettingsHS2.DrawChildren
+
+         ~SettingsHS2.DrawWindowBackground
+
+         ~SettingsHS2.IgnoreMask
+
+         ~SettingsHS2.PdmDepth
+
+         ~SettingsHS2.PdmDevicePixelRatio
+
+         ~SettingsHS2.PdmDevicePixelRatioScaled
+
+         ~SettingsHS2.PdmDpiX
+
+         ~SettingsHS2.PdmDpiY
+
+         ~SettingsHS2.PdmHeight
+
+         ~SettingsHS2.PdmHeightMM
+
+         ~SettingsHS2.PdmNumColors
+
+         ~SettingsHS2.PdmPhysicalDpiX
+
+         ~SettingsHS2.PdmPhysicalDpiY
+
+         ~SettingsHS2.PdmWidth
+
+         ~SettingsHS2.PdmWidthMM
+
+         ~SettingsHS2.customContextMenuRequested
+
+         ~SettingsHS2.destroyed
+
+         ~SettingsHS2.objectNameChanged
+
+         ~SettingsHS2.staticMetaObject
+
+         ~SettingsHS2.windowIconChanged
+
+         ~SettingsHS2.windowIconTextChanged
+
+         ~SettingsHS2.windowTitleChanged
+
+
+
+
+
+
+
+
+
+
+
+
+
+Definition
+==========
+
+.. tab-set::
+
+   .. tab-item:: Plain
+      :sync: key-plain
+
+      .. autoclass:: SettingsHS2
+         :show-inheritance:
+         :members: SettingsHS2.__init__,SettingsHS2.save_settings,
+
+   .. tab-item:: Inherited
+      :sync: key-inherited
+
+      .. autoclass:: SettingsHS2
+         :show-inheritance:
+         :inherited-members:
+         :noindex:

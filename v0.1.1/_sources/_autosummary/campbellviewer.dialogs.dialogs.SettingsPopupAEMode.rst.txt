@@ -1,0 +1,775 @@
+SettingsPopupAEMode
+###################
+*campbellviewer.dialogs.dialogs.SettingsPopupAEMode*
+
+.. currentmodule:: campbellviewer.dialogs.dialogs
+
+
+
+
+Methods
+=======
+
+.. tab-set::
+
+   .. tab-item:: Plain
+      :sync: key-plain
+
+      .. autosummary::
+
+         ~SettingsPopupAEMode.__init__
+
+         ~SettingsPopupAEMode.get_settings
+
+         ~SettingsPopupAEMode.update_settings
+
+
+   .. tab-item:: Inherited
+      :sync: key-inherited
+
+      .. autosummary::
+
+         ~SettingsPopupAEMode.accept
+
+         ~SettingsPopupAEMode.acceptDrops
+
+         ~SettingsPopupAEMode.accessibleDescription
+
+         ~SettingsPopupAEMode.accessibleName
+
+         ~SettingsPopupAEMode.actionEvent
+
+         ~SettingsPopupAEMode.actions
+
+         ~SettingsPopupAEMode.activateWindow
+
+         ~SettingsPopupAEMode.addAction
+
+         ~SettingsPopupAEMode.addActions
+
+         ~SettingsPopupAEMode.adjustSize
+
+         ~SettingsPopupAEMode.autoFillBackground
+
+         ~SettingsPopupAEMode.backgroundRole
+
+         ~SettingsPopupAEMode.baseSize
+
+         ~SettingsPopupAEMode.blockSignals
+
+         ~SettingsPopupAEMode.changeEvent
+
+         ~SettingsPopupAEMode.childAt
+
+         ~SettingsPopupAEMode.childEvent
+
+         ~SettingsPopupAEMode.children
+
+         ~SettingsPopupAEMode.childrenRect
+
+         ~SettingsPopupAEMode.childrenRegion
+
+         ~SettingsPopupAEMode.clearFocus
+
+         ~SettingsPopupAEMode.clearMask
+
+         ~SettingsPopupAEMode.close
+
+         ~SettingsPopupAEMode.closeEvent
+
+         ~SettingsPopupAEMode.close_popup
+
+         ~SettingsPopupAEMode.colorCount
+
+         ~SettingsPopupAEMode.connectNotify
+
+         ~SettingsPopupAEMode.contentsMargins
+
+         ~SettingsPopupAEMode.contentsRect
+
+         ~SettingsPopupAEMode.contextMenuEvent
+
+         ~SettingsPopupAEMode.contextMenuPolicy
+
+         ~SettingsPopupAEMode.create
+
+         ~SettingsPopupAEMode.createWindowContainer
+
+         ~SettingsPopupAEMode.cursor
+
+         ~SettingsPopupAEMode.customEvent
+
+         ~SettingsPopupAEMode.deleteLater
+
+         ~SettingsPopupAEMode.depth
+
+         ~SettingsPopupAEMode.destroy
+
+         ~SettingsPopupAEMode.devType
+
+         ~SettingsPopupAEMode.devicePixelRatio
+
+         ~SettingsPopupAEMode.devicePixelRatioF
+
+         ~SettingsPopupAEMode.devicePixelRatioFScale
+
+         ~SettingsPopupAEMode.disconnect
+
+         ~SettingsPopupAEMode.disconnectNotify
+
+         ~SettingsPopupAEMode.done
+
+         ~SettingsPopupAEMode.dragEnterEvent
+
+         ~SettingsPopupAEMode.dragLeaveEvent
+
+         ~SettingsPopupAEMode.dragMoveEvent
+
+         ~SettingsPopupAEMode.dropEvent
+
+         ~SettingsPopupAEMode.dumpObjectInfo
+
+         ~SettingsPopupAEMode.dumpObjectTree
+
+         ~SettingsPopupAEMode.dynamicPropertyNames
+
+         ~SettingsPopupAEMode.effectiveWinId
+
+         ~SettingsPopupAEMode.ensurePolished
+
+         ~SettingsPopupAEMode.enterEvent
+
+         ~SettingsPopupAEMode.event
+
+         ~SettingsPopupAEMode.eventFilter
+
+         ~SettingsPopupAEMode.exec
+
+         ~SettingsPopupAEMode.exec_
+
+         ~SettingsPopupAEMode.find
+
+         ~SettingsPopupAEMode.findChild
+
+         ~SettingsPopupAEMode.findChildren
+
+         ~SettingsPopupAEMode.focusInEvent
+
+         ~SettingsPopupAEMode.focusNextChild
+
+         ~SettingsPopupAEMode.focusNextPrevChild
+
+         ~SettingsPopupAEMode.focusOutEvent
+
+         ~SettingsPopupAEMode.focusPolicy
+
+         ~SettingsPopupAEMode.focusPreviousChild
+
+         ~SettingsPopupAEMode.focusProxy
+
+         ~SettingsPopupAEMode.focusWidget
+
+         ~SettingsPopupAEMode.font
+
+         ~SettingsPopupAEMode.fontInfo
+
+         ~SettingsPopupAEMode.fontMetrics
+
+         ~SettingsPopupAEMode.foregroundRole
+
+         ~SettingsPopupAEMode.frameGeometry
+
+         ~SettingsPopupAEMode.frameSize
+
+         ~SettingsPopupAEMode.geometry
+
+         ~SettingsPopupAEMode.getContentsMargins
+
+         ~SettingsPopupAEMode.grab
+
+         ~SettingsPopupAEMode.grabGesture
+
+         ~SettingsPopupAEMode.grabKeyboard
+
+         ~SettingsPopupAEMode.grabMouse
+
+         ~SettingsPopupAEMode.grabShortcut
+
+         ~SettingsPopupAEMode.graphicsEffect
+
+         ~SettingsPopupAEMode.graphicsProxyWidget
+
+         ~SettingsPopupAEMode.hasFocus
+
+         ~SettingsPopupAEMode.hasHeightForWidth
+
+         ~SettingsPopupAEMode.hasMouseTracking
+
+         ~SettingsPopupAEMode.hasTabletTracking
+
+         ~SettingsPopupAEMode.height
+
+         ~SettingsPopupAEMode.heightForWidth
+
+         ~SettingsPopupAEMode.heightMM
+
+         ~SettingsPopupAEMode.hide
+
+         ~SettingsPopupAEMode.hideEvent
+
+         ~SettingsPopupAEMode.inherits
+
+         ~SettingsPopupAEMode.initPainter
+
+         ~SettingsPopupAEMode.inputMethodEvent
+
+         ~SettingsPopupAEMode.inputMethodHints
+
+         ~SettingsPopupAEMode.inputMethodQuery
+
+         ~SettingsPopupAEMode.insertAction
+
+         ~SettingsPopupAEMode.insertActions
+
+         ~SettingsPopupAEMode.installEventFilter
+
+         ~SettingsPopupAEMode.isActiveWindow
+
+         ~SettingsPopupAEMode.isAncestorOf
+
+         ~SettingsPopupAEMode.isEnabled
+
+         ~SettingsPopupAEMode.isEnabledTo
+
+         ~SettingsPopupAEMode.isFullScreen
+
+         ~SettingsPopupAEMode.isHidden
+
+         ~SettingsPopupAEMode.isLeftToRight
+
+         ~SettingsPopupAEMode.isMaximized
+
+         ~SettingsPopupAEMode.isMinimized
+
+         ~SettingsPopupAEMode.isModal
+
+         ~SettingsPopupAEMode.isRightToLeft
+
+         ~SettingsPopupAEMode.isSignalConnected
+
+         ~SettingsPopupAEMode.isSizeGripEnabled
+
+         ~SettingsPopupAEMode.isVisible
+
+         ~SettingsPopupAEMode.isVisibleTo
+
+         ~SettingsPopupAEMode.isWidgetType
+
+         ~SettingsPopupAEMode.isWindow
+
+         ~SettingsPopupAEMode.isWindowModified
+
+         ~SettingsPopupAEMode.isWindowType
+
+         ~SettingsPopupAEMode.keyPressEvent
+
+         ~SettingsPopupAEMode.keyReleaseEvent
+
+         ~SettingsPopupAEMode.keyboardGrabber
+
+         ~SettingsPopupAEMode.killTimer
+
+         ~SettingsPopupAEMode.layout
+
+         ~SettingsPopupAEMode.layoutDirection
+
+         ~SettingsPopupAEMode.leaveEvent
+
+         ~SettingsPopupAEMode.locale
+
+         ~SettingsPopupAEMode.logicalDpiX
+
+         ~SettingsPopupAEMode.logicalDpiY
+
+         ~SettingsPopupAEMode.lower
+
+         ~SettingsPopupAEMode.mapFrom
+
+         ~SettingsPopupAEMode.mapFromGlobal
+
+         ~SettingsPopupAEMode.mapFromParent
+
+         ~SettingsPopupAEMode.mapTo
+
+         ~SettingsPopupAEMode.mapToGlobal
+
+         ~SettingsPopupAEMode.mapToParent
+
+         ~SettingsPopupAEMode.mask
+
+         ~SettingsPopupAEMode.maximumHeight
+
+         ~SettingsPopupAEMode.maximumSize
+
+         ~SettingsPopupAEMode.maximumWidth
+
+         ~SettingsPopupAEMode.metaObject
+
+         ~SettingsPopupAEMode.metric
+
+         ~SettingsPopupAEMode.minimumHeight
+
+         ~SettingsPopupAEMode.minimumSize
+
+         ~SettingsPopupAEMode.minimumSizeHint
+
+         ~SettingsPopupAEMode.minimumWidth
+
+         ~SettingsPopupAEMode.mouseDoubleClickEvent
+
+         ~SettingsPopupAEMode.mouseGrabber
+
+         ~SettingsPopupAEMode.mouseMoveEvent
+
+         ~SettingsPopupAEMode.mousePressEvent
+
+         ~SettingsPopupAEMode.mouseReleaseEvent
+
+         ~SettingsPopupAEMode.move
+
+         ~SettingsPopupAEMode.moveEvent
+
+         ~SettingsPopupAEMode.moveToThread
+
+         ~SettingsPopupAEMode.nativeEvent
+
+         ~SettingsPopupAEMode.nativeParentWidget
+
+         ~SettingsPopupAEMode.nextInFocusChain
+
+         ~SettingsPopupAEMode.normalGeometry
+
+         ~SettingsPopupAEMode.objectName
+
+         ~SettingsPopupAEMode.ok_click
+
+         ~SettingsPopupAEMode.open
+
+         ~SettingsPopupAEMode.overrideWindowFlags
+
+         ~SettingsPopupAEMode.overrideWindowState
+
+         ~SettingsPopupAEMode.paintEngine
+
+         ~SettingsPopupAEMode.paintEvent
+
+         ~SettingsPopupAEMode.paintingActive
+
+         ~SettingsPopupAEMode.palette
+
+         ~SettingsPopupAEMode.parent
+
+         ~SettingsPopupAEMode.parentWidget
+
+         ~SettingsPopupAEMode.physicalDpiX
+
+         ~SettingsPopupAEMode.physicalDpiY
+
+         ~SettingsPopupAEMode.pos
+
+         ~SettingsPopupAEMode.previousInFocusChain
+
+         ~SettingsPopupAEMode.property
+
+         ~SettingsPopupAEMode.pyqtConfigure
+
+         ~SettingsPopupAEMode.raise_
+
+         ~SettingsPopupAEMode.receivers
+
+         ~SettingsPopupAEMode.rect
+
+         ~SettingsPopupAEMode.reject
+
+         ~SettingsPopupAEMode.releaseKeyboard
+
+         ~SettingsPopupAEMode.releaseMouse
+
+         ~SettingsPopupAEMode.releaseShortcut
+
+         ~SettingsPopupAEMode.removeAction
+
+         ~SettingsPopupAEMode.removeEventFilter
+
+         ~SettingsPopupAEMode.render
+
+         ~SettingsPopupAEMode.repaint
+
+         ~SettingsPopupAEMode.resize
+
+         ~SettingsPopupAEMode.resizeEvent
+
+         ~SettingsPopupAEMode.restoreGeometry
+
+         ~SettingsPopupAEMode.result
+
+         ~SettingsPopupAEMode.saveGeometry
+
+         ~SettingsPopupAEMode.screen
+
+         ~SettingsPopupAEMode.scroll
+
+         ~SettingsPopupAEMode.sender
+
+         ~SettingsPopupAEMode.senderSignalIndex
+
+         ~SettingsPopupAEMode.setAcceptDrops
+
+         ~SettingsPopupAEMode.setAccessibleDescription
+
+         ~SettingsPopupAEMode.setAccessibleName
+
+         ~SettingsPopupAEMode.setAttribute
+
+         ~SettingsPopupAEMode.setAutoFillBackground
+
+         ~SettingsPopupAEMode.setBackgroundRole
+
+         ~SettingsPopupAEMode.setBaseSize
+
+         ~SettingsPopupAEMode.setContentsMargins
+
+         ~SettingsPopupAEMode.setContextMenuPolicy
+
+         ~SettingsPopupAEMode.setCursor
+
+         ~SettingsPopupAEMode.setDisabled
+
+         ~SettingsPopupAEMode.setEnabled
+
+         ~SettingsPopupAEMode.setFixedHeight
+
+         ~SettingsPopupAEMode.setFixedSize
+
+         ~SettingsPopupAEMode.setFixedWidth
+
+         ~SettingsPopupAEMode.setFocus
+
+         ~SettingsPopupAEMode.setFocusPolicy
+
+         ~SettingsPopupAEMode.setFocusProxy
+
+         ~SettingsPopupAEMode.setFont
+
+         ~SettingsPopupAEMode.setForegroundRole
+
+         ~SettingsPopupAEMode.setGeometry
+
+         ~SettingsPopupAEMode.setGraphicsEffect
+
+         ~SettingsPopupAEMode.setHidden
+
+         ~SettingsPopupAEMode.setInputMethodHints
+
+         ~SettingsPopupAEMode.setLayout
+
+         ~SettingsPopupAEMode.setLayoutDirection
+
+         ~SettingsPopupAEMode.setLocale
+
+         ~SettingsPopupAEMode.setMask
+
+         ~SettingsPopupAEMode.setMaximumHeight
+
+         ~SettingsPopupAEMode.setMaximumSize
+
+         ~SettingsPopupAEMode.setMaximumWidth
+
+         ~SettingsPopupAEMode.setMinimumHeight
+
+         ~SettingsPopupAEMode.setMinimumSize
+
+         ~SettingsPopupAEMode.setMinimumWidth
+
+         ~SettingsPopupAEMode.setModal
+
+         ~SettingsPopupAEMode.setMouseTracking
+
+         ~SettingsPopupAEMode.setObjectName
+
+         ~SettingsPopupAEMode.setPalette
+
+         ~SettingsPopupAEMode.setParent
+
+         ~SettingsPopupAEMode.setProperty
+
+         ~SettingsPopupAEMode.setResult
+
+         ~SettingsPopupAEMode.setShortcutAutoRepeat
+
+         ~SettingsPopupAEMode.setShortcutEnabled
+
+         ~SettingsPopupAEMode.setSizeGripEnabled
+
+         ~SettingsPopupAEMode.setSizeIncrement
+
+         ~SettingsPopupAEMode.setSizePolicy
+
+         ~SettingsPopupAEMode.setStatusTip
+
+         ~SettingsPopupAEMode.setStyle
+
+         ~SettingsPopupAEMode.setStyleSheet
+
+         ~SettingsPopupAEMode.setTabOrder
+
+         ~SettingsPopupAEMode.setTabletTracking
+
+         ~SettingsPopupAEMode.setToolTip
+
+         ~SettingsPopupAEMode.setToolTipDuration
+
+         ~SettingsPopupAEMode.setUpdatesEnabled
+
+         ~SettingsPopupAEMode.setVisible
+
+         ~SettingsPopupAEMode.setWhatsThis
+
+         ~SettingsPopupAEMode.setWindowFilePath
+
+         ~SettingsPopupAEMode.setWindowFlag
+
+         ~SettingsPopupAEMode.setWindowFlags
+
+         ~SettingsPopupAEMode.setWindowIcon
+
+         ~SettingsPopupAEMode.setWindowIconText
+
+         ~SettingsPopupAEMode.setWindowModality
+
+         ~SettingsPopupAEMode.setWindowModified
+
+         ~SettingsPopupAEMode.setWindowOpacity
+
+         ~SettingsPopupAEMode.setWindowRole
+
+         ~SettingsPopupAEMode.setWindowState
+
+         ~SettingsPopupAEMode.setWindowTitle
+
+         ~SettingsPopupAEMode.sharedPainter
+
+         ~SettingsPopupAEMode.show
+
+         ~SettingsPopupAEMode.showEvent
+
+         ~SettingsPopupAEMode.showFullScreen
+
+         ~SettingsPopupAEMode.showMaximized
+
+         ~SettingsPopupAEMode.showMinimized
+
+         ~SettingsPopupAEMode.showNormal
+
+         ~SettingsPopupAEMode.signalsBlocked
+
+         ~SettingsPopupAEMode.size
+
+         ~SettingsPopupAEMode.sizeHint
+
+         ~SettingsPopupAEMode.sizeIncrement
+
+         ~SettingsPopupAEMode.sizePolicy
+
+         ~SettingsPopupAEMode.stackUnder
+
+         ~SettingsPopupAEMode.startTimer
+
+         ~SettingsPopupAEMode.statusTip
+
+         ~SettingsPopupAEMode.style
+
+         ~SettingsPopupAEMode.styleSheet
+
+         ~SettingsPopupAEMode.tabletEvent
+
+         ~SettingsPopupAEMode.testAttribute
+
+         ~SettingsPopupAEMode.thread
+
+         ~SettingsPopupAEMode.timerEvent
+
+         ~SettingsPopupAEMode.toolTip
+
+         ~SettingsPopupAEMode.toolTipDuration
+
+         ~SettingsPopupAEMode.tr
+
+         ~SettingsPopupAEMode.underMouse
+
+         ~SettingsPopupAEMode.ungrabGesture
+
+         ~SettingsPopupAEMode.unsetCursor
+
+         ~SettingsPopupAEMode.unsetLayoutDirection
+
+         ~SettingsPopupAEMode.unsetLocale
+
+         ~SettingsPopupAEMode.update
+
+         ~SettingsPopupAEMode.updateGeometry
+
+         ~SettingsPopupAEMode.updateMicroFocus
+
+         ~SettingsPopupAEMode.updatesEnabled
+
+         ~SettingsPopupAEMode.visibleRegion
+
+         ~SettingsPopupAEMode.whatsThis
+
+         ~SettingsPopupAEMode.wheelEvent
+
+         ~SettingsPopupAEMode.width
+
+         ~SettingsPopupAEMode.widthMM
+
+         ~SettingsPopupAEMode.winId
+
+         ~SettingsPopupAEMode.window
+
+         ~SettingsPopupAEMode.windowFilePath
+
+         ~SettingsPopupAEMode.windowFlags
+
+         ~SettingsPopupAEMode.windowHandle
+
+         ~SettingsPopupAEMode.windowIcon
+
+         ~SettingsPopupAEMode.windowIconText
+
+         ~SettingsPopupAEMode.windowModality
+
+         ~SettingsPopupAEMode.windowOpacity
+
+         ~SettingsPopupAEMode.windowRole
+
+         ~SettingsPopupAEMode.windowState
+
+         ~SettingsPopupAEMode.windowTitle
+
+         ~SettingsPopupAEMode.windowType
+
+         ~SettingsPopupAEMode.x
+
+         ~SettingsPopupAEMode.y
+
+
+
+
+
+
+
+
+Attributes
+==========
+
+.. tab-set::
+
+   .. tab-item:: Plain
+      :sync: key-plain
+
+      .. autosummary::
+
+
+   .. tab-item:: Inherited
+      :sync: key-inherited
+
+      .. autosummary::
+
+         ~SettingsPopupAEMode.Accepted
+
+         ~SettingsPopupAEMode.DrawChildren
+
+         ~SettingsPopupAEMode.DrawWindowBackground
+
+         ~SettingsPopupAEMode.IgnoreMask
+
+         ~SettingsPopupAEMode.PdmDepth
+
+         ~SettingsPopupAEMode.PdmDevicePixelRatio
+
+         ~SettingsPopupAEMode.PdmDevicePixelRatioScaled
+
+         ~SettingsPopupAEMode.PdmDpiX
+
+         ~SettingsPopupAEMode.PdmDpiY
+
+         ~SettingsPopupAEMode.PdmHeight
+
+         ~SettingsPopupAEMode.PdmHeightMM
+
+         ~SettingsPopupAEMode.PdmNumColors
+
+         ~SettingsPopupAEMode.PdmPhysicalDpiX
+
+         ~SettingsPopupAEMode.PdmPhysicalDpiY
+
+         ~SettingsPopupAEMode.PdmWidth
+
+         ~SettingsPopupAEMode.PdmWidthMM
+
+         ~SettingsPopupAEMode.Rejected
+
+         ~SettingsPopupAEMode.accepted
+
+         ~SettingsPopupAEMode.customContextMenuRequested
+
+         ~SettingsPopupAEMode.destroyed
+
+         ~SettingsPopupAEMode.finished
+
+         ~SettingsPopupAEMode.objectNameChanged
+
+         ~SettingsPopupAEMode.rejected
+
+         ~SettingsPopupAEMode.staticMetaObject
+
+         ~SettingsPopupAEMode.windowIconChanged
+
+         ~SettingsPopupAEMode.windowIconTextChanged
+
+         ~SettingsPopupAEMode.windowTitleChanged
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Definition
+==========
+
+.. tab-set::
+
+   .. tab-item:: Plain
+      :sync: key-plain
+
+      .. autoclass:: SettingsPopupAEMode
+         :show-inheritance:
+         :members: SettingsPopupAEMode.__init__,SettingsPopupAEMode.get_settings,SettingsPopupAEMode.update_settings,
+
+   .. tab-item:: Inherited
+      :sync: key-inherited
+
+      .. autoclass:: SettingsPopupAEMode
+         :show-inheritance:
+         :inherited-members:
+         :noindex:

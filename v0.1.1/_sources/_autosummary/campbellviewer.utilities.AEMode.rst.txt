@@ -1,0 +1,81 @@
+AEMode
+######
+*campbellviewer.utilities.AEMode*
+
+.. currentmodule:: campbellviewer.utilities
+
+
+
+
+Methods
+=======
+
+.. tab-set::
+
+   .. tab-item:: Plain
+      :sync: key-plain
+
+      .. autosummary::
+
+         ~AEMode.__init__
+
+         ~AEMode.categorize_mode
+
+         ~AEMode.filter
+
+         ~AEMode.from_plain_text
+
+         ~AEMode.summary
+
+         ~AEMode.to_plain_text
+
+
+   .. tab-item:: Inherited
+      :sync: key-inherited
+
+      .. autosummary::
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Definition
+==========
+
+.. tab-set::
+
+   .. tab-item:: Plain
+      :sync: key-plain
+
+      .. autoclass:: AEMode
+         :show-inheritance:
+         :members: AEMode.__init__,AEMode.categorize_mode,AEMode.filter,AEMode.from_plain_text,AEMode.summary,AEMode.to_plain_text,
+
+   .. tab-item:: Inherited
+      :sync: key-inherited
+
+      .. autoclass:: AEMode
+         :show-inheritance:
+         :inherited-members:
+         :noindex:

@@ -1,0 +1,851 @@
+SettingsMenuTabs
+################
+*campbellviewer.dialogs.dialogs.SettingsMenuTabs*
+
+.. currentmodule:: campbellviewer.dialogs.dialogs
+
+
+
+
+Methods
+=======
+
+.. tab-set::
+
+   .. tab-item:: Plain
+      :sync: key-plain
+
+      .. autosummary::
+
+         ~SettingsMenuTabs.__init__
+
+         ~SettingsMenuTabs.save_settings
+
+
+   .. tab-item:: Inherited
+      :sync: key-inherited
+
+      .. autosummary::
+
+         ~SettingsMenuTabs.acceptDrops
+
+         ~SettingsMenuTabs.accessibleDescription
+
+         ~SettingsMenuTabs.accessibleName
+
+         ~SettingsMenuTabs.actionEvent
+
+         ~SettingsMenuTabs.actions
+
+         ~SettingsMenuTabs.activateWindow
+
+         ~SettingsMenuTabs.addAction
+
+         ~SettingsMenuTabs.addActions
+
+         ~SettingsMenuTabs.addTab
+
+         ~SettingsMenuTabs.adjustSize
+
+         ~SettingsMenuTabs.autoFillBackground
+
+         ~SettingsMenuTabs.backgroundRole
+
+         ~SettingsMenuTabs.baseSize
+
+         ~SettingsMenuTabs.blockSignals
+
+         ~SettingsMenuTabs.changeEvent
+
+         ~SettingsMenuTabs.childAt
+
+         ~SettingsMenuTabs.childEvent
+
+         ~SettingsMenuTabs.children
+
+         ~SettingsMenuTabs.childrenRect
+
+         ~SettingsMenuTabs.childrenRegion
+
+         ~SettingsMenuTabs.clear
+
+         ~SettingsMenuTabs.clearFocus
+
+         ~SettingsMenuTabs.clearMask
+
+         ~SettingsMenuTabs.close
+
+         ~SettingsMenuTabs.closeEvent
+
+         ~SettingsMenuTabs.colorCount
+
+         ~SettingsMenuTabs.connectNotify
+
+         ~SettingsMenuTabs.contentsMargins
+
+         ~SettingsMenuTabs.contentsRect
+
+         ~SettingsMenuTabs.contextMenuEvent
+
+         ~SettingsMenuTabs.contextMenuPolicy
+
+         ~SettingsMenuTabs.cornerWidget
+
+         ~SettingsMenuTabs.count
+
+         ~SettingsMenuTabs.create
+
+         ~SettingsMenuTabs.createWindowContainer
+
+         ~SettingsMenuTabs.currentIndex
+
+         ~SettingsMenuTabs.currentWidget
+
+         ~SettingsMenuTabs.cursor
+
+         ~SettingsMenuTabs.customEvent
+
+         ~SettingsMenuTabs.deleteLater
+
+         ~SettingsMenuTabs.depth
+
+         ~SettingsMenuTabs.destroy
+
+         ~SettingsMenuTabs.devType
+
+         ~SettingsMenuTabs.devicePixelRatio
+
+         ~SettingsMenuTabs.devicePixelRatioF
+
+         ~SettingsMenuTabs.devicePixelRatioFScale
+
+         ~SettingsMenuTabs.disconnect
+
+         ~SettingsMenuTabs.disconnectNotify
+
+         ~SettingsMenuTabs.documentMode
+
+         ~SettingsMenuTabs.dragEnterEvent
+
+         ~SettingsMenuTabs.dragLeaveEvent
+
+         ~SettingsMenuTabs.dragMoveEvent
+
+         ~SettingsMenuTabs.dropEvent
+
+         ~SettingsMenuTabs.dumpObjectInfo
+
+         ~SettingsMenuTabs.dumpObjectTree
+
+         ~SettingsMenuTabs.dynamicPropertyNames
+
+         ~SettingsMenuTabs.effectiveWinId
+
+         ~SettingsMenuTabs.elideMode
+
+         ~SettingsMenuTabs.ensurePolished
+
+         ~SettingsMenuTabs.enterEvent
+
+         ~SettingsMenuTabs.event
+
+         ~SettingsMenuTabs.eventFilter
+
+         ~SettingsMenuTabs.find
+
+         ~SettingsMenuTabs.findChild
+
+         ~SettingsMenuTabs.findChildren
+
+         ~SettingsMenuTabs.focusInEvent
+
+         ~SettingsMenuTabs.focusNextChild
+
+         ~SettingsMenuTabs.focusNextPrevChild
+
+         ~SettingsMenuTabs.focusOutEvent
+
+         ~SettingsMenuTabs.focusPolicy
+
+         ~SettingsMenuTabs.focusPreviousChild
+
+         ~SettingsMenuTabs.focusProxy
+
+         ~SettingsMenuTabs.focusWidget
+
+         ~SettingsMenuTabs.font
+
+         ~SettingsMenuTabs.fontInfo
+
+         ~SettingsMenuTabs.fontMetrics
+
+         ~SettingsMenuTabs.foregroundRole
+
+         ~SettingsMenuTabs.frameGeometry
+
+         ~SettingsMenuTabs.frameSize
+
+         ~SettingsMenuTabs.geometry
+
+         ~SettingsMenuTabs.getContentsMargins
+
+         ~SettingsMenuTabs.grab
+
+         ~SettingsMenuTabs.grabGesture
+
+         ~SettingsMenuTabs.grabKeyboard
+
+         ~SettingsMenuTabs.grabMouse
+
+         ~SettingsMenuTabs.grabShortcut
+
+         ~SettingsMenuTabs.graphicsEffect
+
+         ~SettingsMenuTabs.graphicsProxyWidget
+
+         ~SettingsMenuTabs.hasFocus
+
+         ~SettingsMenuTabs.hasHeightForWidth
+
+         ~SettingsMenuTabs.hasMouseTracking
+
+         ~SettingsMenuTabs.hasTabletTracking
+
+         ~SettingsMenuTabs.height
+
+         ~SettingsMenuTabs.heightForWidth
+
+         ~SettingsMenuTabs.heightMM
+
+         ~SettingsMenuTabs.hide
+
+         ~SettingsMenuTabs.hideEvent
+
+         ~SettingsMenuTabs.iconSize
+
+         ~SettingsMenuTabs.indexOf
+
+         ~SettingsMenuTabs.inherits
+
+         ~SettingsMenuTabs.initPainter
+
+         ~SettingsMenuTabs.initStyleOption
+
+         ~SettingsMenuTabs.inputMethodEvent
+
+         ~SettingsMenuTabs.inputMethodHints
+
+         ~SettingsMenuTabs.inputMethodQuery
+
+         ~SettingsMenuTabs.insertAction
+
+         ~SettingsMenuTabs.insertActions
+
+         ~SettingsMenuTabs.insertTab
+
+         ~SettingsMenuTabs.installEventFilter
+
+         ~SettingsMenuTabs.isActiveWindow
+
+         ~SettingsMenuTabs.isAncestorOf
+
+         ~SettingsMenuTabs.isEnabled
+
+         ~SettingsMenuTabs.isEnabledTo
+
+         ~SettingsMenuTabs.isFullScreen
+
+         ~SettingsMenuTabs.isHidden
+
+         ~SettingsMenuTabs.isLeftToRight
+
+         ~SettingsMenuTabs.isMaximized
+
+         ~SettingsMenuTabs.isMinimized
+
+         ~SettingsMenuTabs.isModal
+
+         ~SettingsMenuTabs.isMovable
+
+         ~SettingsMenuTabs.isRightToLeft
+
+         ~SettingsMenuTabs.isSignalConnected
+
+         ~SettingsMenuTabs.isTabEnabled
+
+         ~SettingsMenuTabs.isTabVisible
+
+         ~SettingsMenuTabs.isVisible
+
+         ~SettingsMenuTabs.isVisibleTo
+
+         ~SettingsMenuTabs.isWidgetType
+
+         ~SettingsMenuTabs.isWindow
+
+         ~SettingsMenuTabs.isWindowModified
+
+         ~SettingsMenuTabs.isWindowType
+
+         ~SettingsMenuTabs.keyPressEvent
+
+         ~SettingsMenuTabs.keyReleaseEvent
+
+         ~SettingsMenuTabs.keyboardGrabber
+
+         ~SettingsMenuTabs.killTimer
+
+         ~SettingsMenuTabs.layout
+
+         ~SettingsMenuTabs.layoutDirection
+
+         ~SettingsMenuTabs.leaveEvent
+
+         ~SettingsMenuTabs.locale
+
+         ~SettingsMenuTabs.logicalDpiX
+
+         ~SettingsMenuTabs.logicalDpiY
+
+         ~SettingsMenuTabs.lower
+
+         ~SettingsMenuTabs.mapFrom
+
+         ~SettingsMenuTabs.mapFromGlobal
+
+         ~SettingsMenuTabs.mapFromParent
+
+         ~SettingsMenuTabs.mapTo
+
+         ~SettingsMenuTabs.mapToGlobal
+
+         ~SettingsMenuTabs.mapToParent
+
+         ~SettingsMenuTabs.mask
+
+         ~SettingsMenuTabs.maximumHeight
+
+         ~SettingsMenuTabs.maximumSize
+
+         ~SettingsMenuTabs.maximumWidth
+
+         ~SettingsMenuTabs.metaObject
+
+         ~SettingsMenuTabs.metric
+
+         ~SettingsMenuTabs.minimumHeight
+
+         ~SettingsMenuTabs.minimumSize
+
+         ~SettingsMenuTabs.minimumSizeHint
+
+         ~SettingsMenuTabs.minimumWidth
+
+         ~SettingsMenuTabs.mouseDoubleClickEvent
+
+         ~SettingsMenuTabs.mouseGrabber
+
+         ~SettingsMenuTabs.mouseMoveEvent
+
+         ~SettingsMenuTabs.mousePressEvent
+
+         ~SettingsMenuTabs.mouseReleaseEvent
+
+         ~SettingsMenuTabs.move
+
+         ~SettingsMenuTabs.moveEvent
+
+         ~SettingsMenuTabs.moveToThread
+
+         ~SettingsMenuTabs.nativeEvent
+
+         ~SettingsMenuTabs.nativeParentWidget
+
+         ~SettingsMenuTabs.nextInFocusChain
+
+         ~SettingsMenuTabs.normalGeometry
+
+         ~SettingsMenuTabs.objectName
+
+         ~SettingsMenuTabs.overrideWindowFlags
+
+         ~SettingsMenuTabs.overrideWindowState
+
+         ~SettingsMenuTabs.paintEngine
+
+         ~SettingsMenuTabs.paintEvent
+
+         ~SettingsMenuTabs.paintingActive
+
+         ~SettingsMenuTabs.palette
+
+         ~SettingsMenuTabs.parent
+
+         ~SettingsMenuTabs.parentWidget
+
+         ~SettingsMenuTabs.physicalDpiX
+
+         ~SettingsMenuTabs.physicalDpiY
+
+         ~SettingsMenuTabs.pos
+
+         ~SettingsMenuTabs.previousInFocusChain
+
+         ~SettingsMenuTabs.property
+
+         ~SettingsMenuTabs.pyqtConfigure
+
+         ~SettingsMenuTabs.raise_
+
+         ~SettingsMenuTabs.receivers
+
+         ~SettingsMenuTabs.rect
+
+         ~SettingsMenuTabs.releaseKeyboard
+
+         ~SettingsMenuTabs.releaseMouse
+
+         ~SettingsMenuTabs.releaseShortcut
+
+         ~SettingsMenuTabs.removeAction
+
+         ~SettingsMenuTabs.removeEventFilter
+
+         ~SettingsMenuTabs.removeTab
+
+         ~SettingsMenuTabs.render
+
+         ~SettingsMenuTabs.repaint
+
+         ~SettingsMenuTabs.resize
+
+         ~SettingsMenuTabs.resizeEvent
+
+         ~SettingsMenuTabs.restoreGeometry
+
+         ~SettingsMenuTabs.saveGeometry
+
+         ~SettingsMenuTabs.screen
+
+         ~SettingsMenuTabs.scroll
+
+         ~SettingsMenuTabs.sender
+
+         ~SettingsMenuTabs.senderSignalIndex
+
+         ~SettingsMenuTabs.setAcceptDrops
+
+         ~SettingsMenuTabs.setAccessibleDescription
+
+         ~SettingsMenuTabs.setAccessibleName
+
+         ~SettingsMenuTabs.setAttribute
+
+         ~SettingsMenuTabs.setAutoFillBackground
+
+         ~SettingsMenuTabs.setBackgroundRole
+
+         ~SettingsMenuTabs.setBaseSize
+
+         ~SettingsMenuTabs.setContentsMargins
+
+         ~SettingsMenuTabs.setContextMenuPolicy
+
+         ~SettingsMenuTabs.setCornerWidget
+
+         ~SettingsMenuTabs.setCurrentIndex
+
+         ~SettingsMenuTabs.setCurrentWidget
+
+         ~SettingsMenuTabs.setCursor
+
+         ~SettingsMenuTabs.setDisabled
+
+         ~SettingsMenuTabs.setDocumentMode
+
+         ~SettingsMenuTabs.setElideMode
+
+         ~SettingsMenuTabs.setEnabled
+
+         ~SettingsMenuTabs.setFixedHeight
+
+         ~SettingsMenuTabs.setFixedSize
+
+         ~SettingsMenuTabs.setFixedWidth
+
+         ~SettingsMenuTabs.setFocus
+
+         ~SettingsMenuTabs.setFocusPolicy
+
+         ~SettingsMenuTabs.setFocusProxy
+
+         ~SettingsMenuTabs.setFont
+
+         ~SettingsMenuTabs.setForegroundRole
+
+         ~SettingsMenuTabs.setGeometry
+
+         ~SettingsMenuTabs.setGraphicsEffect
+
+         ~SettingsMenuTabs.setHidden
+
+         ~SettingsMenuTabs.setIconSize
+
+         ~SettingsMenuTabs.setInputMethodHints
+
+         ~SettingsMenuTabs.setLayout
+
+         ~SettingsMenuTabs.setLayoutDirection
+
+         ~SettingsMenuTabs.setLocale
+
+         ~SettingsMenuTabs.setMask
+
+         ~SettingsMenuTabs.setMaximumHeight
+
+         ~SettingsMenuTabs.setMaximumSize
+
+         ~SettingsMenuTabs.setMaximumWidth
+
+         ~SettingsMenuTabs.setMinimumHeight
+
+         ~SettingsMenuTabs.setMinimumSize
+
+         ~SettingsMenuTabs.setMinimumWidth
+
+         ~SettingsMenuTabs.setMouseTracking
+
+         ~SettingsMenuTabs.setMovable
+
+         ~SettingsMenuTabs.setObjectName
+
+         ~SettingsMenuTabs.setPalette
+
+         ~SettingsMenuTabs.setParent
+
+         ~SettingsMenuTabs.setProperty
+
+         ~SettingsMenuTabs.setShortcutAutoRepeat
+
+         ~SettingsMenuTabs.setShortcutEnabled
+
+         ~SettingsMenuTabs.setSizeIncrement
+
+         ~SettingsMenuTabs.setSizePolicy
+
+         ~SettingsMenuTabs.setStatusTip
+
+         ~SettingsMenuTabs.setStyle
+
+         ~SettingsMenuTabs.setStyleSheet
+
+         ~SettingsMenuTabs.setTabBar
+
+         ~SettingsMenuTabs.setTabBarAutoHide
+
+         ~SettingsMenuTabs.setTabEnabled
+
+         ~SettingsMenuTabs.setTabIcon
+
+         ~SettingsMenuTabs.setTabOrder
+
+         ~SettingsMenuTabs.setTabPosition
+
+         ~SettingsMenuTabs.setTabShape
+
+         ~SettingsMenuTabs.setTabText
+
+         ~SettingsMenuTabs.setTabToolTip
+
+         ~SettingsMenuTabs.setTabVisible
+
+         ~SettingsMenuTabs.setTabWhatsThis
+
+         ~SettingsMenuTabs.setTabletTracking
+
+         ~SettingsMenuTabs.setTabsClosable
+
+         ~SettingsMenuTabs.setToolTip
+
+         ~SettingsMenuTabs.setToolTipDuration
+
+         ~SettingsMenuTabs.setUpdatesEnabled
+
+         ~SettingsMenuTabs.setUsesScrollButtons
+
+         ~SettingsMenuTabs.setVisible
+
+         ~SettingsMenuTabs.setWhatsThis
+
+         ~SettingsMenuTabs.setWindowFilePath
+
+         ~SettingsMenuTabs.setWindowFlag
+
+         ~SettingsMenuTabs.setWindowFlags
+
+         ~SettingsMenuTabs.setWindowIcon
+
+         ~SettingsMenuTabs.setWindowIconText
+
+         ~SettingsMenuTabs.setWindowModality
+
+         ~SettingsMenuTabs.setWindowModified
+
+         ~SettingsMenuTabs.setWindowOpacity
+
+         ~SettingsMenuTabs.setWindowRole
+
+         ~SettingsMenuTabs.setWindowState
+
+         ~SettingsMenuTabs.setWindowTitle
+
+         ~SettingsMenuTabs.sharedPainter
+
+         ~SettingsMenuTabs.show
+
+         ~SettingsMenuTabs.showEvent
+
+         ~SettingsMenuTabs.showFullScreen
+
+         ~SettingsMenuTabs.showMaximized
+
+         ~SettingsMenuTabs.showMinimized
+
+         ~SettingsMenuTabs.showNormal
+
+         ~SettingsMenuTabs.signalsBlocked
+
+         ~SettingsMenuTabs.size
+
+         ~SettingsMenuTabs.sizeHint
+
+         ~SettingsMenuTabs.sizeIncrement
+
+         ~SettingsMenuTabs.sizePolicy
+
+         ~SettingsMenuTabs.stackUnder
+
+         ~SettingsMenuTabs.startTimer
+
+         ~SettingsMenuTabs.statusTip
+
+         ~SettingsMenuTabs.style
+
+         ~SettingsMenuTabs.styleSheet
+
+         ~SettingsMenuTabs.tabBar
+
+         ~SettingsMenuTabs.tabBarAutoHide
+
+         ~SettingsMenuTabs.tabIcon
+
+         ~SettingsMenuTabs.tabInserted
+
+         ~SettingsMenuTabs.tabPosition
+
+         ~SettingsMenuTabs.tabRemoved
+
+         ~SettingsMenuTabs.tabShape
+
+         ~SettingsMenuTabs.tabText
+
+         ~SettingsMenuTabs.tabToolTip
+
+         ~SettingsMenuTabs.tabWhatsThis
+
+         ~SettingsMenuTabs.tabletEvent
+
+         ~SettingsMenuTabs.tabsClosable
+
+         ~SettingsMenuTabs.testAttribute
+
+         ~SettingsMenuTabs.thread
+
+         ~SettingsMenuTabs.timerEvent
+
+         ~SettingsMenuTabs.toolTip
+
+         ~SettingsMenuTabs.toolTipDuration
+
+         ~SettingsMenuTabs.tr
+
+         ~SettingsMenuTabs.underMouse
+
+         ~SettingsMenuTabs.ungrabGesture
+
+         ~SettingsMenuTabs.unsetCursor
+
+         ~SettingsMenuTabs.unsetLayoutDirection
+
+         ~SettingsMenuTabs.unsetLocale
+
+         ~SettingsMenuTabs.update
+
+         ~SettingsMenuTabs.updateGeometry
+
+         ~SettingsMenuTabs.updateMicroFocus
+
+         ~SettingsMenuTabs.updatesEnabled
+
+         ~SettingsMenuTabs.usesScrollButtons
+
+         ~SettingsMenuTabs.visibleRegion
+
+         ~SettingsMenuTabs.whatsThis
+
+         ~SettingsMenuTabs.wheelEvent
+
+         ~SettingsMenuTabs.widget
+
+         ~SettingsMenuTabs.width
+
+         ~SettingsMenuTabs.widthMM
+
+         ~SettingsMenuTabs.winId
+
+         ~SettingsMenuTabs.window
+
+         ~SettingsMenuTabs.windowFilePath
+
+         ~SettingsMenuTabs.windowFlags
+
+         ~SettingsMenuTabs.windowHandle
+
+         ~SettingsMenuTabs.windowIcon
+
+         ~SettingsMenuTabs.windowIconText
+
+         ~SettingsMenuTabs.windowModality
+
+         ~SettingsMenuTabs.windowOpacity
+
+         ~SettingsMenuTabs.windowRole
+
+         ~SettingsMenuTabs.windowState
+
+         ~SettingsMenuTabs.windowTitle
+
+         ~SettingsMenuTabs.windowType
+
+         ~SettingsMenuTabs.x
+
+         ~SettingsMenuTabs.y
+
+
+
+
+
+
+
+
+Attributes
+==========
+
+.. tab-set::
+
+   .. tab-item:: Plain
+      :sync: key-plain
+
+      .. autosummary::
+
+
+   .. tab-item:: Inherited
+      :sync: key-inherited
+
+      .. autosummary::
+
+         ~SettingsMenuTabs.DrawChildren
+
+         ~SettingsMenuTabs.DrawWindowBackground
+
+         ~SettingsMenuTabs.East
+
+         ~SettingsMenuTabs.IgnoreMask
+
+         ~SettingsMenuTabs.North
+
+         ~SettingsMenuTabs.PdmDepth
+
+         ~SettingsMenuTabs.PdmDevicePixelRatio
+
+         ~SettingsMenuTabs.PdmDevicePixelRatioScaled
+
+         ~SettingsMenuTabs.PdmDpiX
+
+         ~SettingsMenuTabs.PdmDpiY
+
+         ~SettingsMenuTabs.PdmHeight
+
+         ~SettingsMenuTabs.PdmHeightMM
+
+         ~SettingsMenuTabs.PdmNumColors
+
+         ~SettingsMenuTabs.PdmPhysicalDpiX
+
+         ~SettingsMenuTabs.PdmPhysicalDpiY
+
+         ~SettingsMenuTabs.PdmWidth
+
+         ~SettingsMenuTabs.PdmWidthMM
+
+         ~SettingsMenuTabs.Rounded
+
+         ~SettingsMenuTabs.South
+
+         ~SettingsMenuTabs.Triangular
+
+         ~SettingsMenuTabs.West
+
+         ~SettingsMenuTabs.currentChanged
+
+         ~SettingsMenuTabs.customContextMenuRequested
+
+         ~SettingsMenuTabs.destroyed
+
+         ~SettingsMenuTabs.objectNameChanged
+
+         ~SettingsMenuTabs.staticMetaObject
+
+         ~SettingsMenuTabs.tabBarClicked
+
+         ~SettingsMenuTabs.tabBarDoubleClicked
+
+         ~SettingsMenuTabs.tabCloseRequested
+
+         ~SettingsMenuTabs.windowIconChanged
+
+         ~SettingsMenuTabs.windowIconTextChanged
+
+         ~SettingsMenuTabs.windowTitleChanged
+
+
+
+
+
+
+
+
+
+
+
+
+
+Definition
+==========
+
+.. tab-set::
+
+   .. tab-item:: Plain
+      :sync: key-plain
+
+      .. autoclass:: SettingsMenuTabs
+         :show-inheritance:
+         :members: SettingsMenuTabs.__init__,SettingsMenuTabs.save_settings,
+
+   .. tab-item:: Inherited
+      :sync: key-inherited
+
+      .. autoclass:: SettingsMenuTabs
+         :show-inheritance:
+         :inherited-members:
+         :noindex:

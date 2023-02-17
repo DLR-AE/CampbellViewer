@@ -1,0 +1,36 @@
+datatree\_model
+###############
+*campbellviewer.datatree_model*
+
+.. automodule:: campbellviewer.datatree_model
+   :no-members:
+
+
+
+
+
+
+
+
+
+
+
+Classes
+^^^^^^^
+
+.. autosummary::
+   :toctree:
+   :template: custom-class-template.rst
+   :recursive:
+
+   TreeItem
+   TreeModel
+
+
+
+
+
+
+
+
+

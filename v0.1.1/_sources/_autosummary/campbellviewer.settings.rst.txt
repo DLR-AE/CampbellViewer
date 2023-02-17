@@ -1,0 +1,36 @@
+settings
+########
+*campbellviewer.settings*
+
+.. automodule:: campbellviewer.settings
+   :no-members:
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Modules
+^^^^^^^
+
+.. autosummary::
+   :toctree:
+   :template: custom-module-template.rst
+   :recursive:
+
+   campbellviewer.settings.globals
+   campbellviewer.settings.view
+

@@ -1,0 +1,41 @@
+hawcstab2
+#########
+*campbellviewer.interfaces.hawcstab2*
+
+.. automodule:: campbellviewer.interfaces.hawcstab2
+   :no-members:
+
+
+
+
+
+
+
+
+
+
+
+Classes
+^^^^^^^
+
+.. autosummary::
+   :toctree:
+   :template: custom-class-template.rst
+   :recursive:
+
+   BodyDataClass
+   HAWCStab2Data
+   HS2BINReader
+   ModeClass
+   ModesClass
+   OpstatesClass
+   SubstructureDataClass
+
+
+
+
+
+
+
+
+

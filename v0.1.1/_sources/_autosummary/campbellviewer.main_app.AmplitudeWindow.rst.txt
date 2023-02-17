@@ -1,0 +1,859 @@
+AmplitudeWindow
+###############
+*campbellviewer.main_app.AmplitudeWindow*
+
+.. currentmodule:: campbellviewer.main_app
+
+
+
+
+Methods
+=======
+
+.. tab-set::
+
+   .. tab-item:: Plain
+      :sync: key-plain
+
+      .. autosummary::
+
+         ~AmplitudeWindow.__init__
+
+         ~AmplitudeWindow.closeEvent
+
+         ~AmplitudeWindow.configure_plotAMP
+
+         ~AmplitudeWindow.main_plotAMP
+
+
+   .. tab-item:: Inherited
+      :sync: key-inherited
+
+      .. autosummary::
+
+         ~AmplitudeWindow.acceptDrops
+
+         ~AmplitudeWindow.accessibleDescription
+
+         ~AmplitudeWindow.accessibleName
+
+         ~AmplitudeWindow.actionEvent
+
+         ~AmplitudeWindow.actions
+
+         ~AmplitudeWindow.activateWindow
+
+         ~AmplitudeWindow.addAction
+
+         ~AmplitudeWindow.addActions
+
+         ~AmplitudeWindow.addDockWidget
+
+         ~AmplitudeWindow.addToolBar
+
+         ~AmplitudeWindow.addToolBarBreak
+
+         ~AmplitudeWindow.adjustSize
+
+         ~AmplitudeWindow.autoFillBackground
+
+         ~AmplitudeWindow.backgroundRole
+
+         ~AmplitudeWindow.baseSize
+
+         ~AmplitudeWindow.blockSignals
+
+         ~AmplitudeWindow.centralWidget
+
+         ~AmplitudeWindow.changeEvent
+
+         ~AmplitudeWindow.childAt
+
+         ~AmplitudeWindow.childEvent
+
+         ~AmplitudeWindow.children
+
+         ~AmplitudeWindow.childrenRect
+
+         ~AmplitudeWindow.childrenRegion
+
+         ~AmplitudeWindow.clearFocus
+
+         ~AmplitudeWindow.clearMask
+
+         ~AmplitudeWindow.close
+
+         ~AmplitudeWindow.colorCount
+
+         ~AmplitudeWindow.connectNotify
+
+         ~AmplitudeWindow.contentsMargins
+
+         ~AmplitudeWindow.contentsRect
+
+         ~AmplitudeWindow.contextMenuEvent
+
+         ~AmplitudeWindow.contextMenuPolicy
+
+         ~AmplitudeWindow.corner
+
+         ~AmplitudeWindow.create
+
+         ~AmplitudeWindow.createPopupMenu
+
+         ~AmplitudeWindow.createWindowContainer
+
+         ~AmplitudeWindow.cursor
+
+         ~AmplitudeWindow.customEvent
+
+         ~AmplitudeWindow.deleteLater
+
+         ~AmplitudeWindow.depth
+
+         ~AmplitudeWindow.destroy
+
+         ~AmplitudeWindow.devType
+
+         ~AmplitudeWindow.devicePixelRatio
+
+         ~AmplitudeWindow.devicePixelRatioF
+
+         ~AmplitudeWindow.devicePixelRatioFScale
+
+         ~AmplitudeWindow.disconnect
+
+         ~AmplitudeWindow.disconnectNotify
+
+         ~AmplitudeWindow.dockOptions
+
+         ~AmplitudeWindow.dockWidgetArea
+
+         ~AmplitudeWindow.documentMode
+
+         ~AmplitudeWindow.dragEnterEvent
+
+         ~AmplitudeWindow.dragLeaveEvent
+
+         ~AmplitudeWindow.dragMoveEvent
+
+         ~AmplitudeWindow.dropEvent
+
+         ~AmplitudeWindow.dumpObjectInfo
+
+         ~AmplitudeWindow.dumpObjectTree
+
+         ~AmplitudeWindow.dynamicPropertyNames
+
+         ~AmplitudeWindow.effectiveWinId
+
+         ~AmplitudeWindow.ensurePolished
+
+         ~AmplitudeWindow.enterEvent
+
+         ~AmplitudeWindow.event
+
+         ~AmplitudeWindow.eventFilter
+
+         ~AmplitudeWindow.find
+
+         ~AmplitudeWindow.findChild
+
+         ~AmplitudeWindow.findChildren
+
+         ~AmplitudeWindow.focusInEvent
+
+         ~AmplitudeWindow.focusNextChild
+
+         ~AmplitudeWindow.focusNextPrevChild
+
+         ~AmplitudeWindow.focusOutEvent
+
+         ~AmplitudeWindow.focusPolicy
+
+         ~AmplitudeWindow.focusPreviousChild
+
+         ~AmplitudeWindow.focusProxy
+
+         ~AmplitudeWindow.focusWidget
+
+         ~AmplitudeWindow.font
+
+         ~AmplitudeWindow.fontInfo
+
+         ~AmplitudeWindow.fontMetrics
+
+         ~AmplitudeWindow.foregroundRole
+
+         ~AmplitudeWindow.frameGeometry
+
+         ~AmplitudeWindow.frameSize
+
+         ~AmplitudeWindow.geometry
+
+         ~AmplitudeWindow.getContentsMargins
+
+         ~AmplitudeWindow.grab
+
+         ~AmplitudeWindow.grabGesture
+
+         ~AmplitudeWindow.grabKeyboard
+
+         ~AmplitudeWindow.grabMouse
+
+         ~AmplitudeWindow.grabShortcut
+
+         ~AmplitudeWindow.graphicsEffect
+
+         ~AmplitudeWindow.graphicsProxyWidget
+
+         ~AmplitudeWindow.hasFocus
+
+         ~AmplitudeWindow.hasHeightForWidth
+
+         ~AmplitudeWindow.hasMouseTracking
+
+         ~AmplitudeWindow.hasTabletTracking
+
+         ~AmplitudeWindow.height
+
+         ~AmplitudeWindow.heightForWidth
+
+         ~AmplitudeWindow.heightMM
+
+         ~AmplitudeWindow.hide
+
+         ~AmplitudeWindow.hideEvent
+
+         ~AmplitudeWindow.iconSize
+
+         ~AmplitudeWindow.inherits
+
+         ~AmplitudeWindow.initPainter
+
+         ~AmplitudeWindow.inputMethodEvent
+
+         ~AmplitudeWindow.inputMethodHints
+
+         ~AmplitudeWindow.inputMethodQuery
+
+         ~AmplitudeWindow.insertAction
+
+         ~AmplitudeWindow.insertActions
+
+         ~AmplitudeWindow.insertToolBar
+
+         ~AmplitudeWindow.insertToolBarBreak
+
+         ~AmplitudeWindow.installEventFilter
+
+         ~AmplitudeWindow.isActiveWindow
+
+         ~AmplitudeWindow.isAncestorOf
+
+         ~AmplitudeWindow.isAnimated
+
+         ~AmplitudeWindow.isDockNestingEnabled
+
+         ~AmplitudeWindow.isEnabled
+
+         ~AmplitudeWindow.isEnabledTo
+
+         ~AmplitudeWindow.isFullScreen
+
+         ~AmplitudeWindow.isHidden
+
+         ~AmplitudeWindow.isLeftToRight
+
+         ~AmplitudeWindow.isMaximized
+
+         ~AmplitudeWindow.isMinimized
+
+         ~AmplitudeWindow.isModal
+
+         ~AmplitudeWindow.isRightToLeft
+
+         ~AmplitudeWindow.isSeparator
+
+         ~AmplitudeWindow.isSignalConnected
+
+         ~AmplitudeWindow.isVisible
+
+         ~AmplitudeWindow.isVisibleTo
+
+         ~AmplitudeWindow.isWidgetType
+
+         ~AmplitudeWindow.isWindow
+
+         ~AmplitudeWindow.isWindowModified
+
+         ~AmplitudeWindow.isWindowType
+
+         ~AmplitudeWindow.keyPressEvent
+
+         ~AmplitudeWindow.keyReleaseEvent
+
+         ~AmplitudeWindow.keyboardGrabber
+
+         ~AmplitudeWindow.killTimer
+
+         ~AmplitudeWindow.layout
+
+         ~AmplitudeWindow.layoutDirection
+
+         ~AmplitudeWindow.leaveEvent
+
+         ~AmplitudeWindow.locale
+
+         ~AmplitudeWindow.logicalDpiX
+
+         ~AmplitudeWindow.logicalDpiY
+
+         ~AmplitudeWindow.lower
+
+         ~AmplitudeWindow.mapFrom
+
+         ~AmplitudeWindow.mapFromGlobal
+
+         ~AmplitudeWindow.mapFromParent
+
+         ~AmplitudeWindow.mapTo
+
+         ~AmplitudeWindow.mapToGlobal
+
+         ~AmplitudeWindow.mapToParent
+
+         ~AmplitudeWindow.mask
+
+         ~AmplitudeWindow.maximumHeight
+
+         ~AmplitudeWindow.maximumSize
+
+         ~AmplitudeWindow.maximumWidth
+
+         ~AmplitudeWindow.menuBar
+
+         ~AmplitudeWindow.menuWidget
+
+         ~AmplitudeWindow.metaObject
+
+         ~AmplitudeWindow.metric
+
+         ~AmplitudeWindow.minimumHeight
+
+         ~AmplitudeWindow.minimumSize
+
+         ~AmplitudeWindow.minimumSizeHint
+
+         ~AmplitudeWindow.minimumWidth
+
+         ~AmplitudeWindow.mouseDoubleClickEvent
+
+         ~AmplitudeWindow.mouseGrabber
+
+         ~AmplitudeWindow.mouseMoveEvent
+
+         ~AmplitudeWindow.mousePressEvent
+
+         ~AmplitudeWindow.mouseReleaseEvent
+
+         ~AmplitudeWindow.move
+
+         ~AmplitudeWindow.moveEvent
+
+         ~AmplitudeWindow.moveToThread
+
+         ~AmplitudeWindow.nativeEvent
+
+         ~AmplitudeWindow.nativeParentWidget
+
+         ~AmplitudeWindow.nextInFocusChain
+
+         ~AmplitudeWindow.normalGeometry
+
+         ~AmplitudeWindow.objectName
+
+         ~AmplitudeWindow.overrideWindowFlags
+
+         ~AmplitudeWindow.overrideWindowState
+
+         ~AmplitudeWindow.paintEngine
+
+         ~AmplitudeWindow.paintEvent
+
+         ~AmplitudeWindow.paintingActive
+
+         ~AmplitudeWindow.palette
+
+         ~AmplitudeWindow.parent
+
+         ~AmplitudeWindow.parentWidget
+
+         ~AmplitudeWindow.physicalDpiX
+
+         ~AmplitudeWindow.physicalDpiY
+
+         ~AmplitudeWindow.pos
+
+         ~AmplitudeWindow.previousInFocusChain
+
+         ~AmplitudeWindow.property
+
+         ~AmplitudeWindow.pyqtConfigure
+
+         ~AmplitudeWindow.raise_
+
+         ~AmplitudeWindow.receivers
+
+         ~AmplitudeWindow.rect
+
+         ~AmplitudeWindow.releaseKeyboard
+
+         ~AmplitudeWindow.releaseMouse
+
+         ~AmplitudeWindow.releaseShortcut
+
+         ~AmplitudeWindow.removeAction
+
+         ~AmplitudeWindow.removeDockWidget
+
+         ~AmplitudeWindow.removeEventFilter
+
+         ~AmplitudeWindow.removeToolBar
+
+         ~AmplitudeWindow.removeToolBarBreak
+
+         ~AmplitudeWindow.render
+
+         ~AmplitudeWindow.repaint
+
+         ~AmplitudeWindow.resize
+
+         ~AmplitudeWindow.resizeDocks
+
+         ~AmplitudeWindow.resizeEvent
+
+         ~AmplitudeWindow.restoreDockWidget
+
+         ~AmplitudeWindow.restoreGeometry
+
+         ~AmplitudeWindow.restoreState
+
+         ~AmplitudeWindow.saveGeometry
+
+         ~AmplitudeWindow.saveState
+
+         ~AmplitudeWindow.screen
+
+         ~AmplitudeWindow.scroll
+
+         ~AmplitudeWindow.sender
+
+         ~AmplitudeWindow.senderSignalIndex
+
+         ~AmplitudeWindow.setAcceptDrops
+
+         ~AmplitudeWindow.setAccessibleDescription
+
+         ~AmplitudeWindow.setAccessibleName
+
+         ~AmplitudeWindow.setAnimated
+
+         ~AmplitudeWindow.setAttribute
+
+         ~AmplitudeWindow.setAutoFillBackground
+
+         ~AmplitudeWindow.setBackgroundRole
+
+         ~AmplitudeWindow.setBaseSize
+
+         ~AmplitudeWindow.setCentralWidget
+
+         ~AmplitudeWindow.setContentsMargins
+
+         ~AmplitudeWindow.setContextMenuPolicy
+
+         ~AmplitudeWindow.setCorner
+
+         ~AmplitudeWindow.setCursor
+
+         ~AmplitudeWindow.setDisabled
+
+         ~AmplitudeWindow.setDockNestingEnabled
+
+         ~AmplitudeWindow.setDockOptions
+
+         ~AmplitudeWindow.setDocumentMode
+
+         ~AmplitudeWindow.setEnabled
+
+         ~AmplitudeWindow.setFixedHeight
+
+         ~AmplitudeWindow.setFixedSize
+
+         ~AmplitudeWindow.setFixedWidth
+
+         ~AmplitudeWindow.setFocus
+
+         ~AmplitudeWindow.setFocusPolicy
+
+         ~AmplitudeWindow.setFocusProxy
+
+         ~AmplitudeWindow.setFont
+
+         ~AmplitudeWindow.setForegroundRole
+
+         ~AmplitudeWindow.setGeometry
+
+         ~AmplitudeWindow.setGraphicsEffect
+
+         ~AmplitudeWindow.setHidden
+
+         ~AmplitudeWindow.setIconSize
+
+         ~AmplitudeWindow.setInputMethodHints
+
+         ~AmplitudeWindow.setLayout
+
+         ~AmplitudeWindow.setLayoutDirection
+
+         ~AmplitudeWindow.setLocale
+
+         ~AmplitudeWindow.setMask
+
+         ~AmplitudeWindow.setMaximumHeight
+
+         ~AmplitudeWindow.setMaximumSize
+
+         ~AmplitudeWindow.setMaximumWidth
+
+         ~AmplitudeWindow.setMenuBar
+
+         ~AmplitudeWindow.setMenuWidget
+
+         ~AmplitudeWindow.setMinimumHeight
+
+         ~AmplitudeWindow.setMinimumSize
+
+         ~AmplitudeWindow.setMinimumWidth
+
+         ~AmplitudeWindow.setMouseTracking
+
+         ~AmplitudeWindow.setObjectName
+
+         ~AmplitudeWindow.setPalette
+
+         ~AmplitudeWindow.setParent
+
+         ~AmplitudeWindow.setProperty
+
+         ~AmplitudeWindow.setShortcutAutoRepeat
+
+         ~AmplitudeWindow.setShortcutEnabled
+
+         ~AmplitudeWindow.setSizeIncrement
+
+         ~AmplitudeWindow.setSizePolicy
+
+         ~AmplitudeWindow.setStatusBar
+
+         ~AmplitudeWindow.setStatusTip
+
+         ~AmplitudeWindow.setStyle
+
+         ~AmplitudeWindow.setStyleSheet
+
+         ~AmplitudeWindow.setTabOrder
+
+         ~AmplitudeWindow.setTabPosition
+
+         ~AmplitudeWindow.setTabShape
+
+         ~AmplitudeWindow.setTabletTracking
+
+         ~AmplitudeWindow.setToolButtonStyle
+
+         ~AmplitudeWindow.setToolTip
+
+         ~AmplitudeWindow.setToolTipDuration
+
+         ~AmplitudeWindow.setUnifiedTitleAndToolBarOnMac
+
+         ~AmplitudeWindow.setUpdatesEnabled
+
+         ~AmplitudeWindow.setVisible
+
+         ~AmplitudeWindow.setWhatsThis
+
+         ~AmplitudeWindow.setWindowFilePath
+
+         ~AmplitudeWindow.setWindowFlag
+
+         ~AmplitudeWindow.setWindowFlags
+
+         ~AmplitudeWindow.setWindowIcon
+
+         ~AmplitudeWindow.setWindowIconText
+
+         ~AmplitudeWindow.setWindowModality
+
+         ~AmplitudeWindow.setWindowModified
+
+         ~AmplitudeWindow.setWindowOpacity
+
+         ~AmplitudeWindow.setWindowRole
+
+         ~AmplitudeWindow.setWindowState
+
+         ~AmplitudeWindow.setWindowTitle
+
+         ~AmplitudeWindow.sharedPainter
+
+         ~AmplitudeWindow.show
+
+         ~AmplitudeWindow.showEvent
+
+         ~AmplitudeWindow.showFullScreen
+
+         ~AmplitudeWindow.showMaximized
+
+         ~AmplitudeWindow.showMinimized
+
+         ~AmplitudeWindow.showNormal
+
+         ~AmplitudeWindow.signalsBlocked
+
+         ~AmplitudeWindow.size
+
+         ~AmplitudeWindow.sizeHint
+
+         ~AmplitudeWindow.sizeIncrement
+
+         ~AmplitudeWindow.sizePolicy
+
+         ~AmplitudeWindow.splitDockWidget
+
+         ~AmplitudeWindow.stackUnder
+
+         ~AmplitudeWindow.startTimer
+
+         ~AmplitudeWindow.statusBar
+
+         ~AmplitudeWindow.statusTip
+
+         ~AmplitudeWindow.style
+
+         ~AmplitudeWindow.styleSheet
+
+         ~AmplitudeWindow.tabPosition
+
+         ~AmplitudeWindow.tabShape
+
+         ~AmplitudeWindow.tabifiedDockWidgets
+
+         ~AmplitudeWindow.tabifyDockWidget
+
+         ~AmplitudeWindow.tabletEvent
+
+         ~AmplitudeWindow.takeCentralWidget
+
+         ~AmplitudeWindow.testAttribute
+
+         ~AmplitudeWindow.thread
+
+         ~AmplitudeWindow.timerEvent
+
+         ~AmplitudeWindow.toolBarArea
+
+         ~AmplitudeWindow.toolBarBreak
+
+         ~AmplitudeWindow.toolButtonStyle
+
+         ~AmplitudeWindow.toolTip
+
+         ~AmplitudeWindow.toolTipDuration
+
+         ~AmplitudeWindow.tr
+
+         ~AmplitudeWindow.underMouse
+
+         ~AmplitudeWindow.ungrabGesture
+
+         ~AmplitudeWindow.unifiedTitleAndToolBarOnMac
+
+         ~AmplitudeWindow.unsetCursor
+
+         ~AmplitudeWindow.unsetLayoutDirection
+
+         ~AmplitudeWindow.unsetLocale
+
+         ~AmplitudeWindow.update
+
+         ~AmplitudeWindow.updateGeometry
+
+         ~AmplitudeWindow.updateMicroFocus
+
+         ~AmplitudeWindow.updatesEnabled
+
+         ~AmplitudeWindow.visibleRegion
+
+         ~AmplitudeWindow.whatsThis
+
+         ~AmplitudeWindow.wheelEvent
+
+         ~AmplitudeWindow.width
+
+         ~AmplitudeWindow.widthMM
+
+         ~AmplitudeWindow.winId
+
+         ~AmplitudeWindow.window
+
+         ~AmplitudeWindow.windowFilePath
+
+         ~AmplitudeWindow.windowFlags
+
+         ~AmplitudeWindow.windowHandle
+
+         ~AmplitudeWindow.windowIcon
+
+         ~AmplitudeWindow.windowIconText
+
+         ~AmplitudeWindow.windowModality
+
+         ~AmplitudeWindow.windowOpacity
+
+         ~AmplitudeWindow.windowRole
+
+         ~AmplitudeWindow.windowState
+
+         ~AmplitudeWindow.windowTitle
+
+         ~AmplitudeWindow.windowType
+
+         ~AmplitudeWindow.x
+
+         ~AmplitudeWindow.y
+
+
+
+
+
+
+
+
+Attributes
+==========
+
+.. tab-set::
+
+   .. tab-item:: Plain
+      :sync: key-plain
+
+      .. autosummary::
+
+         ~AmplitudeWindow.sigClosed
+
+
+   .. tab-item:: Inherited
+      :sync: key-inherited
+
+      .. autosummary::
+
+         ~AmplitudeWindow.AllowNestedDocks
+
+         ~AmplitudeWindow.AllowTabbedDocks
+
+         ~AmplitudeWindow.AnimatedDocks
+
+         ~AmplitudeWindow.DrawChildren
+
+         ~AmplitudeWindow.DrawWindowBackground
+
+         ~AmplitudeWindow.ForceTabbedDocks
+
+         ~AmplitudeWindow.GroupedDragging
+
+         ~AmplitudeWindow.IgnoreMask
+
+         ~AmplitudeWindow.PdmDepth
+
+         ~AmplitudeWindow.PdmDevicePixelRatio
+
+         ~AmplitudeWindow.PdmDevicePixelRatioScaled
+
+         ~AmplitudeWindow.PdmDpiX
+
+         ~AmplitudeWindow.PdmDpiY
+
+         ~AmplitudeWindow.PdmHeight
+
+         ~AmplitudeWindow.PdmHeightMM
+
+         ~AmplitudeWindow.PdmNumColors
+
+         ~AmplitudeWindow.PdmPhysicalDpiX
+
+         ~AmplitudeWindow.PdmPhysicalDpiY
+
+         ~AmplitudeWindow.PdmWidth
+
+         ~AmplitudeWindow.PdmWidthMM
+
+         ~AmplitudeWindow.VerticalTabs
+
+         ~AmplitudeWindow.customContextMenuRequested
+
+         ~AmplitudeWindow.destroyed
+
+         ~AmplitudeWindow.iconSizeChanged
+
+         ~AmplitudeWindow.objectNameChanged
+
+         ~AmplitudeWindow.staticMetaObject
+
+         ~AmplitudeWindow.tabifiedDockWidgetActivated
+
+         ~AmplitudeWindow.toolButtonStyleChanged
+
+         ~AmplitudeWindow.windowIconChanged
+
+         ~AmplitudeWindow.windowIconTextChanged
+
+         ~AmplitudeWindow.windowTitleChanged
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Definition
+==========
+
+.. tab-set::
+
+   .. tab-item:: Plain
+      :sync: key-plain
+
+      .. autoclass:: AmplitudeWindow
+         :show-inheritance:
+         :members: AmplitudeWindow.__init__,AmplitudeWindow.closeEvent,AmplitudeWindow.configure_plotAMP,AmplitudeWindow.main_plotAMP,
+
+   .. tab-item:: Inherited
+      :sync: key-inherited
+
+      .. autoclass:: AmplitudeWindow
+         :show-inheritance:
+         :inherited-members:
+         :noindex:
