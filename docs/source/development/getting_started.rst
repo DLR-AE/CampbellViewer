@@ -1,4 +1,4 @@
-.. _sec_pg_getting_started:
+.. _sec_dev_getting_started:
 
 Getting started
 ===============

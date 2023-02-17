@@ -1,4 +1,4 @@
-.. _sec_pg_main_building_blocks:
+.. _sec_dev_main_building_blocks:
 
 Main building blocks of the tool
 ################################
