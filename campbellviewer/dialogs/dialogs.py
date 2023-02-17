@@ -66,7 +66,7 @@ class GeneralSettingsDialog(QDialog):
         """
         super(GeneralSettingsDialog, self).__init__()
 
-        self.setWindowTitle("Settings")
+        self.setWindowTitle("User Start-Up Settings")
         self.setWindowFlag(Qt.WindowContextHelpButtonHint, False)
         self.setMinimumSize(640, 480)
         icon_path = importlib.resources.files('campbellviewer') / 'assets' / 'windturbine_square.png'
@@ -176,7 +176,7 @@ class SettingsPlot(QWidget):
 
 
         layout.addWidget(QLabel("<b>Amplitude-Plot</b>"), 4,0,1,2)
-        amp_th_label = QLabel('Default Threshold for Participation:')
+        amp_th_label = QLabel('Default Threshold for Mode Participation:')
         layout.addWidget(amp_th_label, 5,0,1,1)
         self.__amp_th_sb = QDoubleSpinBox()
         self.__amp_th_sb.setSingleStep(0.1)
