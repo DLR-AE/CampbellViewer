@@ -514,6 +514,7 @@ class ApplicationWindow(QMainWindow):
 
         freq_lines = []
         damp_lines = []
+        pharm_lines = []
         freq_scatters = []
         damp_scatters = []
         lines_to_be_selected = []
@@ -597,9 +598,10 @@ class ApplicationWindow(QMainWindow):
                         self.button_pharm.setChecked(True)
                     P_harmonics = [1, 3, 6, 9, 12]
                     for index in P_harmonics:
-                        P_hamonics_data = database[atool][ads].ds.operating_points.loc[:, 'rot. speed [rpm]']/60*index  # rpm in Hz
-                        self.axes1.plot(xaxis_values, P_hamonics_data,
+                        P_hamonics_data = database[atool][ads].ds.operating_points.loc[:, 'rot. speed [rpm]']/60.*index  # rpm in Hz
+                        pharm_line, = self.axes1.plot(xaxis_values, P_hamonics_data,
                                         c='grey', linestyle='--', linewidth=0.75, label=str(index)+'P')
+                        pharm_lines.append(pharm_line)
 
         # create a figure legend on the right edge and shrink the axes box accordingly
         # legend font size is decreased to make it fit - or disabled
@@ -633,6 +635,8 @@ class ApplicationWindow(QMainWindow):
             self.cursor = mplcursors.cursor(freq_scatters + damp_scatters, multiple=True, highlight=True,
                                        highlight_kwargs={'color': 'C3'})
 
+            self.cursor_p = mplcursors.cursor(pharm_lines, multiple=True)
+
             pairs = dict(zip(freq_scatters, damp_scatters))
             pairs.update(zip(damp_scatters, freq_scatters))
 
@@ -649,7 +653,7 @@ class ApplicationWindow(QMainWindow):
                 sel.extras.append(self.cursor.add_highlight(pairs[sel.artist],
                                                             pairs[sel.artist]._offsets[sel.index],
                                                             sel.index))
-                sel.annotation.get_bbox_patch().set(fc="grey")
+                sel.annotation.get_bbox_patch().set(fc="cornflowerblue")
 
         else:
             # setup mplcursors behavior: multiple text boxes if lines are clicked, highlighting line, pairing of
@@ -660,6 +664,8 @@ class ApplicationWindow(QMainWindow):
                                        highlight_kwargs={'color': 'C3', 'linewidth': view_cfg.ls.lw+2,
                                                          'markerfacecolor': 'C3',
                                                          'markersize': view_cfg.ls.markersizedefault+2})
+            self.cursor_p = mplcursors.cursor(pharm_lines, multiple=True)
+
             for line in lines_to_be_selected:
                 self.cursor.add_highlight(line)
 
@@ -675,6 +681,10 @@ class ApplicationWindow(QMainWindow):
             @self.cursor.connect("remove")
             def on_remove(sel):
                 self.on_mpl_cursors_pick(sel.artist, 'deselect')
+
+            @self.cursor_p.connect("add")
+            def on_add(sel):
+                sel.annotation.get_bbox_patch().set(fc="cornflowerblue")
 
         self.canvas.draw()
         self.canvas.mpl_connect('button_press_event', self.on_press)
