@@ -18,4 +18,4 @@ wind speed with 1 m/s steps. The first 60 modes are evaluated.
 
 Bladed
 ------
-
+The Bladed example simulation is made with the v1 version of the IEA 15 MW turbine. The .prj file can be found here: https://github.com/DLR-AE/CampbellViewer/blob/main/examples/data/bladed/IEA15MW/15MW_NREL_DNV_v1.prj. A Campbell diagram linearisation from 0 to 25 m/s wind speed was performed with 1 m/s steps in the wind speed.

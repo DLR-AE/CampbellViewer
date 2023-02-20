@@ -14,3 +14,4 @@ give information on how to start and how to use the main functionalities.
     user_guide/functionality
     user_guide/data_handling
     user_guide/examples
+    user_guide/tool_specific
