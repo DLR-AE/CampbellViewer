@@ -653,7 +653,7 @@ class ApplicationWindow(QMainWindow):
                 sel.extras.append(self.cursor.add_highlight(pairs[sel.artist],
                                                             pairs[sel.artist]._offsets[sel.index],
                                                             sel.index))
-                sel.annotation.get_bbox_patch().set(fc="grey")
+                sel.annotation.get_bbox_patch().set(fc="cornflowerblue")
 
         else:
             # setup mplcursors behavior: multiple text boxes if lines are clicked, highlighting line, pairing of
@@ -684,7 +684,7 @@ class ApplicationWindow(QMainWindow):
 
             @self.cursor_p.connect("add")
             def on_add(sel):
-                sel.annotation.get_bbox_patch().set(fc="grey")
+                sel.annotation.get_bbox_patch().set(fc="cornflowerblue")
 
         self.canvas.draw()
         self.canvas.mpl_connect('button_press_event', self.on_press)
