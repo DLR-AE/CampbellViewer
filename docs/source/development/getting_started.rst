@@ -1,4 +1,4 @@
-.. _sec_pg_getting_started:
+.. _sec_dev_getting_started:
 
 Getting started
 ===============
@@ -12,6 +12,12 @@ to install the package in development mode.
 .. code-block:: console
 
     pip install -e .
+
+Make sure you also have the dependencies for development installed.
+
+.. code-block:: console
+
+    pip install -r requirements-dev.txt
 
 
 Building the documentation

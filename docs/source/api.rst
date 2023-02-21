@@ -1,5 +1,5 @@
-API Reference
-=================================
+API reference
+===============
 
 .. autosummary::
     :toctree: _autosummary

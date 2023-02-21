@@ -42,7 +42,7 @@ html_theme_options = {
         "show_prev_next": False,
         "navigation_with_keys": False,
         "logo": {
-            "text": "CampbellViewer",
+            "text": " | CampbellViewer",
             "alt_text": "CampbellViewer",
         },
         "navbar_align": "content",
