@@ -1,10 +1,10 @@
 .. _sec_pg_adding_interface:
 
-Adding an Interface
+Adding an interface
 ===================
 
-The Interface Script
---------------------
+Interface script
+----------------
 
 If you want to visualize data from your own tool with the GUI, the preferred
 way is to set up an interface script, similar to the existing interfaces to
@@ -17,7 +17,7 @@ directory. Please also consider adding testing routines for your interface in
 ``CampbellViewer/tests/interfaces``.
 
 Further required modifications
--------------------------------
+------------------------------
 
 Further modifications which have to be made in modules :mod:`main_app <campbellviewer.main_app>`
 and :mod:`data <campbellviewer.data_storage.data>`:

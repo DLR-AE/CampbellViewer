@@ -1,10 +1,10 @@
 .. _sec_pg_data_format:
 
-Data Format
+Data format
 ===========
 
-The Database
-------------
+Database
+--------
 
 The database concept of the CampbellViewer is simple, because we do not expect
 to require a huge or complex database. The database is a dictionary with two
@@ -29,8 +29,8 @@ The database can be saved to a file for later use. This is done by using the
 :func:`xarray.to_netcdf` method. Each dataset is saved as a separate group in the
 netcdf file with the combined tool and dataset name as group name.
 
-A Dataset
----------
+Dataset
+-------
 The xarray dataset can contain following variables with corresponding
 dimensions:
 
