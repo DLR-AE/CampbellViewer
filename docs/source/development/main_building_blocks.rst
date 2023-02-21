@@ -19,6 +19,6 @@ Main building blocks of the tool
     have already been plotted', etc.
 
 * The individual datasets are xarray datasets, an abstract template is given in
-  data_template.py
+  :mod:`data_template <campbellviewer.data_storage.data_template>`.
 * The interfaces will get information from the GUI such as the paths to result
   files and load data into the xarray dataset convention.
