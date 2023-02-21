@@ -1,0 +1,40 @@
+﻿campbellviewer
+##############
+
+.. automodule:: campbellviewer
+   :no-members:
+
+   
+   
+   
+
+   
+   
+   
+
+   
+   
+   
+
+   
+   
+   
+
+
+
+Modules
+^^^^^^^
+
+.. autosummary::
+   :toctree:
+   :template: custom-module-template.rst
+   :recursive:
+
+   campbellviewer.data_storage
+   campbellviewer.datatree_model
+   campbellviewer.dialogs
+   campbellviewer.interfaces
+   campbellviewer.main_app
+   campbellviewer.settings
+   campbellviewer.utilities
+

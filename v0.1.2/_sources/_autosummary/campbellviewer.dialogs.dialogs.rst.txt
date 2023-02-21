@@ -1,0 +1,46 @@
+dialogs
+#######
+*campbellviewer.dialogs.dialogs*
+
+.. automodule:: campbellviewer.dialogs.dialogs
+   :no-members:
+
+
+
+
+
+
+
+
+
+
+
+Classes
+^^^^^^^
+
+.. autosummary::
+   :toctree:
+   :template: custom-class-template.rst
+   :recursive:
+
+   GeneralSettingsDialog
+   GeneralTab
+   SettingsGeneral
+   SettingsHS2
+   SettingsMenuTabs
+   SettingsPlot
+   SettingsPopup
+   SettingsPopupAEMode
+   SettingsPopupAMP
+   SettingsPopupDataSelection
+   SettingsPopupLinestyle
+   SettingsPopupModeFilter
+
+
+
+
+
+
+
+
+

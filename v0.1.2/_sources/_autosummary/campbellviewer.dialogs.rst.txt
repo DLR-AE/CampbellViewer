@@ -1,0 +1,35 @@
+dialogs
+#######
+*campbellviewer.dialogs*
+
+.. automodule:: campbellviewer.dialogs
+   :no-members:
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Modules
+^^^^^^^
+
+.. autosummary::
+   :toctree:
+   :template: custom-module-template.rst
+   :recursive:
+
+   campbellviewer.dialogs.dialogs
+

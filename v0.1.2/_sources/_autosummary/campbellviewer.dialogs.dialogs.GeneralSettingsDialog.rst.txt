@@ -1,0 +1,773 @@
+GeneralSettingsDialog
+#####################
+*campbellviewer.dialogs.dialogs.GeneralSettingsDialog*
+
+.. currentmodule:: campbellviewer.dialogs.dialogs
+
+
+
+
+Methods
+=======
+
+.. tab-set::
+
+   .. tab-item:: Plain
+      :sync: key-plain
+
+      .. autosummary::
+
+         ~GeneralSettingsDialog.__init__
+
+         ~GeneralSettingsDialog.cancel_clicked
+
+         ~GeneralSettingsDialog.ok_clicked
+
+
+   .. tab-item:: Inherited
+      :sync: key-inherited
+
+      .. autosummary::
+
+         ~GeneralSettingsDialog.accept
+
+         ~GeneralSettingsDialog.acceptDrops
+
+         ~GeneralSettingsDialog.accessibleDescription
+
+         ~GeneralSettingsDialog.accessibleName
+
+         ~GeneralSettingsDialog.actionEvent
+
+         ~GeneralSettingsDialog.actions
+
+         ~GeneralSettingsDialog.activateWindow
+
+         ~GeneralSettingsDialog.addAction
+
+         ~GeneralSettingsDialog.addActions
+
+         ~GeneralSettingsDialog.adjustSize
+
+         ~GeneralSettingsDialog.autoFillBackground
+
+         ~GeneralSettingsDialog.backgroundRole
+
+         ~GeneralSettingsDialog.baseSize
+
+         ~GeneralSettingsDialog.blockSignals
+
+         ~GeneralSettingsDialog.changeEvent
+
+         ~GeneralSettingsDialog.childAt
+
+         ~GeneralSettingsDialog.childEvent
+
+         ~GeneralSettingsDialog.children
+
+         ~GeneralSettingsDialog.childrenRect
+
+         ~GeneralSettingsDialog.childrenRegion
+
+         ~GeneralSettingsDialog.clearFocus
+
+         ~GeneralSettingsDialog.clearMask
+
+         ~GeneralSettingsDialog.close
+
+         ~GeneralSettingsDialog.closeEvent
+
+         ~GeneralSettingsDialog.colorCount
+
+         ~GeneralSettingsDialog.connectNotify
+
+         ~GeneralSettingsDialog.contentsMargins
+
+         ~GeneralSettingsDialog.contentsRect
+
+         ~GeneralSettingsDialog.contextMenuEvent
+
+         ~GeneralSettingsDialog.contextMenuPolicy
+
+         ~GeneralSettingsDialog.create
+
+         ~GeneralSettingsDialog.createWindowContainer
+
+         ~GeneralSettingsDialog.cursor
+
+         ~GeneralSettingsDialog.customEvent
+
+         ~GeneralSettingsDialog.deleteLater
+
+         ~GeneralSettingsDialog.depth
+
+         ~GeneralSettingsDialog.destroy
+
+         ~GeneralSettingsDialog.devType
+
+         ~GeneralSettingsDialog.devicePixelRatio
+
+         ~GeneralSettingsDialog.devicePixelRatioF
+
+         ~GeneralSettingsDialog.devicePixelRatioFScale
+
+         ~GeneralSettingsDialog.disconnect
+
+         ~GeneralSettingsDialog.disconnectNotify
+
+         ~GeneralSettingsDialog.done
+
+         ~GeneralSettingsDialog.dragEnterEvent
+
+         ~GeneralSettingsDialog.dragLeaveEvent
+
+         ~GeneralSettingsDialog.dragMoveEvent
+
+         ~GeneralSettingsDialog.dropEvent
+
+         ~GeneralSettingsDialog.dumpObjectInfo
+
+         ~GeneralSettingsDialog.dumpObjectTree
+
+         ~GeneralSettingsDialog.dynamicPropertyNames
+
+         ~GeneralSettingsDialog.effectiveWinId
+
+         ~GeneralSettingsDialog.ensurePolished
+
+         ~GeneralSettingsDialog.enterEvent
+
+         ~GeneralSettingsDialog.event
+
+         ~GeneralSettingsDialog.eventFilter
+
+         ~GeneralSettingsDialog.exec
+
+         ~GeneralSettingsDialog.exec_
+
+         ~GeneralSettingsDialog.find
+
+         ~GeneralSettingsDialog.findChild
+
+         ~GeneralSettingsDialog.findChildren
+
+         ~GeneralSettingsDialog.focusInEvent
+
+         ~GeneralSettingsDialog.focusNextChild
+
+         ~GeneralSettingsDialog.focusNextPrevChild
+
+         ~GeneralSettingsDialog.focusOutEvent
+
+         ~GeneralSettingsDialog.focusPolicy
+
+         ~GeneralSettingsDialog.focusPreviousChild
+
+         ~GeneralSettingsDialog.focusProxy
+
+         ~GeneralSettingsDialog.focusWidget
+
+         ~GeneralSettingsDialog.font
+
+         ~GeneralSettingsDialog.fontInfo
+
+         ~GeneralSettingsDialog.fontMetrics
+
+         ~GeneralSettingsDialog.foregroundRole
+
+         ~GeneralSettingsDialog.frameGeometry
+
+         ~GeneralSettingsDialog.frameSize
+
+         ~GeneralSettingsDialog.geometry
+
+         ~GeneralSettingsDialog.getContentsMargins
+
+         ~GeneralSettingsDialog.grab
+
+         ~GeneralSettingsDialog.grabGesture
+
+         ~GeneralSettingsDialog.grabKeyboard
+
+         ~GeneralSettingsDialog.grabMouse
+
+         ~GeneralSettingsDialog.grabShortcut
+
+         ~GeneralSettingsDialog.graphicsEffect
+
+         ~GeneralSettingsDialog.graphicsProxyWidget
+
+         ~GeneralSettingsDialog.hasFocus
+
+         ~GeneralSettingsDialog.hasHeightForWidth
+
+         ~GeneralSettingsDialog.hasMouseTracking
+
+         ~GeneralSettingsDialog.hasTabletTracking
+
+         ~GeneralSettingsDialog.height
+
+         ~GeneralSettingsDialog.heightForWidth
+
+         ~GeneralSettingsDialog.heightMM
+
+         ~GeneralSettingsDialog.hide
+
+         ~GeneralSettingsDialog.hideEvent
+
+         ~GeneralSettingsDialog.inherits
+
+         ~GeneralSettingsDialog.initPainter
+
+         ~GeneralSettingsDialog.inputMethodEvent
+
+         ~GeneralSettingsDialog.inputMethodHints
+
+         ~GeneralSettingsDialog.inputMethodQuery
+
+         ~GeneralSettingsDialog.insertAction
+
+         ~GeneralSettingsDialog.insertActions
+
+         ~GeneralSettingsDialog.installEventFilter
+
+         ~GeneralSettingsDialog.isActiveWindow
+
+         ~GeneralSettingsDialog.isAncestorOf
+
+         ~GeneralSettingsDialog.isEnabled
+
+         ~GeneralSettingsDialog.isEnabledTo
+
+         ~GeneralSettingsDialog.isFullScreen
+
+         ~GeneralSettingsDialog.isHidden
+
+         ~GeneralSettingsDialog.isLeftToRight
+
+         ~GeneralSettingsDialog.isMaximized
+
+         ~GeneralSettingsDialog.isMinimized
+
+         ~GeneralSettingsDialog.isModal
+
+         ~GeneralSettingsDialog.isRightToLeft
+
+         ~GeneralSettingsDialog.isSignalConnected
+
+         ~GeneralSettingsDialog.isSizeGripEnabled
+
+         ~GeneralSettingsDialog.isVisible
+
+         ~GeneralSettingsDialog.isVisibleTo
+
+         ~GeneralSettingsDialog.isWidgetType
+
+         ~GeneralSettingsDialog.isWindow
+
+         ~GeneralSettingsDialog.isWindowModified
+
+         ~GeneralSettingsDialog.isWindowType
+
+         ~GeneralSettingsDialog.keyPressEvent
+
+         ~GeneralSettingsDialog.keyReleaseEvent
+
+         ~GeneralSettingsDialog.keyboardGrabber
+
+         ~GeneralSettingsDialog.killTimer
+
+         ~GeneralSettingsDialog.layout
+
+         ~GeneralSettingsDialog.layoutDirection
+
+         ~GeneralSettingsDialog.leaveEvent
+
+         ~GeneralSettingsDialog.locale
+
+         ~GeneralSettingsDialog.logicalDpiX
+
+         ~GeneralSettingsDialog.logicalDpiY
+
+         ~GeneralSettingsDialog.lower
+
+         ~GeneralSettingsDialog.mapFrom
+
+         ~GeneralSettingsDialog.mapFromGlobal
+
+         ~GeneralSettingsDialog.mapFromParent
+
+         ~GeneralSettingsDialog.mapTo
+
+         ~GeneralSettingsDialog.mapToGlobal
+
+         ~GeneralSettingsDialog.mapToParent
+
+         ~GeneralSettingsDialog.mask
+
+         ~GeneralSettingsDialog.maximumHeight
+
+         ~GeneralSettingsDialog.maximumSize
+
+         ~GeneralSettingsDialog.maximumWidth
+
+         ~GeneralSettingsDialog.metaObject
+
+         ~GeneralSettingsDialog.metric
+
+         ~GeneralSettingsDialog.minimumHeight
+
+         ~GeneralSettingsDialog.minimumSize
+
+         ~GeneralSettingsDialog.minimumSizeHint
+
+         ~GeneralSettingsDialog.minimumWidth
+
+         ~GeneralSettingsDialog.mouseDoubleClickEvent
+
+         ~GeneralSettingsDialog.mouseGrabber
+
+         ~GeneralSettingsDialog.mouseMoveEvent
+
+         ~GeneralSettingsDialog.mousePressEvent
+
+         ~GeneralSettingsDialog.mouseReleaseEvent
+
+         ~GeneralSettingsDialog.move
+
+         ~GeneralSettingsDialog.moveEvent
+
+         ~GeneralSettingsDialog.moveToThread
+
+         ~GeneralSettingsDialog.nativeEvent
+
+         ~GeneralSettingsDialog.nativeParentWidget
+
+         ~GeneralSettingsDialog.nextInFocusChain
+
+         ~GeneralSettingsDialog.normalGeometry
+
+         ~GeneralSettingsDialog.objectName
+
+         ~GeneralSettingsDialog.open
+
+         ~GeneralSettingsDialog.overrideWindowFlags
+
+         ~GeneralSettingsDialog.overrideWindowState
+
+         ~GeneralSettingsDialog.paintEngine
+
+         ~GeneralSettingsDialog.paintEvent
+
+         ~GeneralSettingsDialog.paintingActive
+
+         ~GeneralSettingsDialog.palette
+
+         ~GeneralSettingsDialog.parent
+
+         ~GeneralSettingsDialog.parentWidget
+
+         ~GeneralSettingsDialog.physicalDpiX
+
+         ~GeneralSettingsDialog.physicalDpiY
+
+         ~GeneralSettingsDialog.pos
+
+         ~GeneralSettingsDialog.previousInFocusChain
+
+         ~GeneralSettingsDialog.property
+
+         ~GeneralSettingsDialog.pyqtConfigure
+
+         ~GeneralSettingsDialog.raise_
+
+         ~GeneralSettingsDialog.receivers
+
+         ~GeneralSettingsDialog.rect
+
+         ~GeneralSettingsDialog.reject
+
+         ~GeneralSettingsDialog.releaseKeyboard
+
+         ~GeneralSettingsDialog.releaseMouse
+
+         ~GeneralSettingsDialog.releaseShortcut
+
+         ~GeneralSettingsDialog.removeAction
+
+         ~GeneralSettingsDialog.removeEventFilter
+
+         ~GeneralSettingsDialog.render
+
+         ~GeneralSettingsDialog.repaint
+
+         ~GeneralSettingsDialog.resize
+
+         ~GeneralSettingsDialog.resizeEvent
+
+         ~GeneralSettingsDialog.restoreGeometry
+
+         ~GeneralSettingsDialog.result
+
+         ~GeneralSettingsDialog.saveGeometry
+
+         ~GeneralSettingsDialog.screen
+
+         ~GeneralSettingsDialog.scroll
+
+         ~GeneralSettingsDialog.sender
+
+         ~GeneralSettingsDialog.senderSignalIndex
+
+         ~GeneralSettingsDialog.setAcceptDrops
+
+         ~GeneralSettingsDialog.setAccessibleDescription
+
+         ~GeneralSettingsDialog.setAccessibleName
+
+         ~GeneralSettingsDialog.setAttribute
+
+         ~GeneralSettingsDialog.setAutoFillBackground
+
+         ~GeneralSettingsDialog.setBackgroundRole
+
+         ~GeneralSettingsDialog.setBaseSize
+
+         ~GeneralSettingsDialog.setContentsMargins
+
+         ~GeneralSettingsDialog.setContextMenuPolicy
+
+         ~GeneralSettingsDialog.setCursor
+
+         ~GeneralSettingsDialog.setDisabled
+
+         ~GeneralSettingsDialog.setEnabled
+
+         ~GeneralSettingsDialog.setFixedHeight
+
+         ~GeneralSettingsDialog.setFixedSize
+
+         ~GeneralSettingsDialog.setFixedWidth
+
+         ~GeneralSettingsDialog.setFocus
+
+         ~GeneralSettingsDialog.setFocusPolicy
+
+         ~GeneralSettingsDialog.setFocusProxy
+
+         ~GeneralSettingsDialog.setFont
+
+         ~GeneralSettingsDialog.setForegroundRole
+
+         ~GeneralSettingsDialog.setGeometry
+
+         ~GeneralSettingsDialog.setGraphicsEffect
+
+         ~GeneralSettingsDialog.setHidden
+
+         ~GeneralSettingsDialog.setInputMethodHints
+
+         ~GeneralSettingsDialog.setLayout
+
+         ~GeneralSettingsDialog.setLayoutDirection
+
+         ~GeneralSettingsDialog.setLocale
+
+         ~GeneralSettingsDialog.setMask
+
+         ~GeneralSettingsDialog.setMaximumHeight
+
+         ~GeneralSettingsDialog.setMaximumSize
+
+         ~GeneralSettingsDialog.setMaximumWidth
+
+         ~GeneralSettingsDialog.setMinimumHeight
+
+         ~GeneralSettingsDialog.setMinimumSize
+
+         ~GeneralSettingsDialog.setMinimumWidth
+
+         ~GeneralSettingsDialog.setModal
+
+         ~GeneralSettingsDialog.setMouseTracking
+
+         ~GeneralSettingsDialog.setObjectName
+
+         ~GeneralSettingsDialog.setPalette
+
+         ~GeneralSettingsDialog.setParent
+
+         ~GeneralSettingsDialog.setProperty
+
+         ~GeneralSettingsDialog.setResult
+
+         ~GeneralSettingsDialog.setShortcutAutoRepeat
+
+         ~GeneralSettingsDialog.setShortcutEnabled
+
+         ~GeneralSettingsDialog.setSizeGripEnabled
+
+         ~GeneralSettingsDialog.setSizeIncrement
+
+         ~GeneralSettingsDialog.setSizePolicy
+
+         ~GeneralSettingsDialog.setStatusTip
+
+         ~GeneralSettingsDialog.setStyle
+
+         ~GeneralSettingsDialog.setStyleSheet
+
+         ~GeneralSettingsDialog.setTabOrder
+
+         ~GeneralSettingsDialog.setTabletTracking
+
+         ~GeneralSettingsDialog.setToolTip
+
+         ~GeneralSettingsDialog.setToolTipDuration
+
+         ~GeneralSettingsDialog.setUpdatesEnabled
+
+         ~GeneralSettingsDialog.setVisible
+
+         ~GeneralSettingsDialog.setWhatsThis
+
+         ~GeneralSettingsDialog.setWindowFilePath
+
+         ~GeneralSettingsDialog.setWindowFlag
+
+         ~GeneralSettingsDialog.setWindowFlags
+
+         ~GeneralSettingsDialog.setWindowIcon
+
+         ~GeneralSettingsDialog.setWindowIconText
+
+         ~GeneralSettingsDialog.setWindowModality
+
+         ~GeneralSettingsDialog.setWindowModified
+
+         ~GeneralSettingsDialog.setWindowOpacity
+
+         ~GeneralSettingsDialog.setWindowRole
+
+         ~GeneralSettingsDialog.setWindowState
+
+         ~GeneralSettingsDialog.setWindowTitle
+
+         ~GeneralSettingsDialog.sharedPainter
+
+         ~GeneralSettingsDialog.show
+
+         ~GeneralSettingsDialog.showEvent
+
+         ~GeneralSettingsDialog.showFullScreen
+
+         ~GeneralSettingsDialog.showMaximized
+
+         ~GeneralSettingsDialog.showMinimized
+
+         ~GeneralSettingsDialog.showNormal
+
+         ~GeneralSettingsDialog.signalsBlocked
+
+         ~GeneralSettingsDialog.size
+
+         ~GeneralSettingsDialog.sizeHint
+
+         ~GeneralSettingsDialog.sizeIncrement
+
+         ~GeneralSettingsDialog.sizePolicy
+
+         ~GeneralSettingsDialog.stackUnder
+
+         ~GeneralSettingsDialog.startTimer
+
+         ~GeneralSettingsDialog.statusTip
+
+         ~GeneralSettingsDialog.style
+
+         ~GeneralSettingsDialog.styleSheet
+
+         ~GeneralSettingsDialog.tabletEvent
+
+         ~GeneralSettingsDialog.testAttribute
+
+         ~GeneralSettingsDialog.thread
+
+         ~GeneralSettingsDialog.timerEvent
+
+         ~GeneralSettingsDialog.toolTip
+
+         ~GeneralSettingsDialog.toolTipDuration
+
+         ~GeneralSettingsDialog.tr
+
+         ~GeneralSettingsDialog.underMouse
+
+         ~GeneralSettingsDialog.ungrabGesture
+
+         ~GeneralSettingsDialog.unsetCursor
+
+         ~GeneralSettingsDialog.unsetLayoutDirection
+
+         ~GeneralSettingsDialog.unsetLocale
+
+         ~GeneralSettingsDialog.update
+
+         ~GeneralSettingsDialog.updateGeometry
+
+         ~GeneralSettingsDialog.updateMicroFocus
+
+         ~GeneralSettingsDialog.updatesEnabled
+
+         ~GeneralSettingsDialog.visibleRegion
+
+         ~GeneralSettingsDialog.whatsThis
+
+         ~GeneralSettingsDialog.wheelEvent
+
+         ~GeneralSettingsDialog.width
+
+         ~GeneralSettingsDialog.widthMM
+
+         ~GeneralSettingsDialog.winId
+
+         ~GeneralSettingsDialog.window
+
+         ~GeneralSettingsDialog.windowFilePath
+
+         ~GeneralSettingsDialog.windowFlags
+
+         ~GeneralSettingsDialog.windowHandle
+
+         ~GeneralSettingsDialog.windowIcon
+
+         ~GeneralSettingsDialog.windowIconText
+
+         ~GeneralSettingsDialog.windowModality
+
+         ~GeneralSettingsDialog.windowOpacity
+
+         ~GeneralSettingsDialog.windowRole
+
+         ~GeneralSettingsDialog.windowState
+
+         ~GeneralSettingsDialog.windowTitle
+
+         ~GeneralSettingsDialog.windowType
+
+         ~GeneralSettingsDialog.x
+
+         ~GeneralSettingsDialog.y
+
+
+
+
+
+
+
+
+Attributes
+==========
+
+.. tab-set::
+
+   .. tab-item:: Plain
+      :sync: key-plain
+
+      .. autosummary::
+
+         ~GeneralSettingsDialog.saved
+
+
+   .. tab-item:: Inherited
+      :sync: key-inherited
+
+      .. autosummary::
+
+         ~GeneralSettingsDialog.Accepted
+
+         ~GeneralSettingsDialog.DrawChildren
+
+         ~GeneralSettingsDialog.DrawWindowBackground
+
+         ~GeneralSettingsDialog.IgnoreMask
+
+         ~GeneralSettingsDialog.PdmDepth
+
+         ~GeneralSettingsDialog.PdmDevicePixelRatio
+
+         ~GeneralSettingsDialog.PdmDevicePixelRatioScaled
+
+         ~GeneralSettingsDialog.PdmDpiX
+
+         ~GeneralSettingsDialog.PdmDpiY
+
+         ~GeneralSettingsDialog.PdmHeight
+
+         ~GeneralSettingsDialog.PdmHeightMM
+
+         ~GeneralSettingsDialog.PdmNumColors
+
+         ~GeneralSettingsDialog.PdmPhysicalDpiX
+
+         ~GeneralSettingsDialog.PdmPhysicalDpiY
+
+         ~GeneralSettingsDialog.PdmWidth
+
+         ~GeneralSettingsDialog.PdmWidthMM
+
+         ~GeneralSettingsDialog.Rejected
+
+         ~GeneralSettingsDialog.accepted
+
+         ~GeneralSettingsDialog.customContextMenuRequested
+
+         ~GeneralSettingsDialog.destroyed
+
+         ~GeneralSettingsDialog.finished
+
+         ~GeneralSettingsDialog.objectNameChanged
+
+         ~GeneralSettingsDialog.rejected
+
+         ~GeneralSettingsDialog.staticMetaObject
+
+         ~GeneralSettingsDialog.windowIconChanged
+
+         ~GeneralSettingsDialog.windowIconTextChanged
+
+         ~GeneralSettingsDialog.windowTitleChanged
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Definition
+==========
+
+.. tab-set::
+
+   .. tab-item:: Plain
+      :sync: key-plain
+
+      .. autoclass:: GeneralSettingsDialog
+         :show-inheritance:
+         :members: GeneralSettingsDialog.__init__,GeneralSettingsDialog.cancel_clicked,GeneralSettingsDialog.ok_clicked,
+
+   .. tab-item:: Inherited
+      :sync: key-inherited
+
+      .. autoclass:: GeneralSettingsDialog
+         :show-inheritance:
+         :inherited-members:
+         :noindex:

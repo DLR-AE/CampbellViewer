@@ -1,0 +1,36 @@
+interfaces
+##########
+*campbellviewer.interfaces*
+
+.. automodule:: campbellviewer.interfaces
+   :no-members:
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Modules
+^^^^^^^
+
+.. autosummary::
+   :toctree:
+   :template: custom-module-template.rst
+   :recursive:
+
+   campbellviewer.interfaces.bladed
+   campbellviewer.interfaces.hawcstab2
+

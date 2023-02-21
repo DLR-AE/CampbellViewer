@@ -1,0 +1,65 @@
+HS2BINReader
+############
+*campbellviewer.interfaces.hawcstab2.HS2BINReader*
+
+.. currentmodule:: campbellviewer.interfaces.hawcstab2
+
+
+
+
+Methods
+=======
+
+.. tab-set::
+
+   .. tab-item:: Plain
+      :sync: key-plain
+
+      .. autosummary::
+
+         ~HS2BINReader.__init__
+
+         ~HS2BINReader.numsubstr
+
+
+   .. tab-item:: Inherited
+      :sync: key-inherited
+
+      .. autosummary::
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Definition
+==========
+
+.. tab-set::
+
+   .. tab-item:: Plain
+      :sync: key-plain
+
+      .. autoclass:: HS2BINReader
+         :show-inheritance:
+         :members: HS2BINReader.__init__,HS2BINReader.numsubstr,
+
+   .. tab-item:: Inherited
+      :sync: key-inherited
+
+      .. autoclass:: HS2BINReader
+         :show-inheritance:
+         :inherited-members:
+         :noindex:

@@ -1,0 +1,731 @@
+GeneralTab
+##########
+*campbellviewer.dialogs.dialogs.GeneralTab*
+
+.. currentmodule:: campbellviewer.dialogs.dialogs
+
+
+
+
+Methods
+=======
+
+.. tab-set::
+
+   .. tab-item:: Plain
+      :sync: key-plain
+
+      .. autosummary::
+
+         ~GeneralTab.__init__
+
+
+   .. tab-item:: Inherited
+      :sync: key-inherited
+
+      .. autosummary::
+
+         ~GeneralTab.acceptDrops
+
+         ~GeneralTab.accessibleDescription
+
+         ~GeneralTab.accessibleName
+
+         ~GeneralTab.actionEvent
+
+         ~GeneralTab.actions
+
+         ~GeneralTab.activateWindow
+
+         ~GeneralTab.addAction
+
+         ~GeneralTab.addActions
+
+         ~GeneralTab.adjustSize
+
+         ~GeneralTab.autoFillBackground
+
+         ~GeneralTab.backgroundRole
+
+         ~GeneralTab.baseSize
+
+         ~GeneralTab.blockSignals
+
+         ~GeneralTab.changeEvent
+
+         ~GeneralTab.childAt
+
+         ~GeneralTab.childEvent
+
+         ~GeneralTab.children
+
+         ~GeneralTab.childrenRect
+
+         ~GeneralTab.childrenRegion
+
+         ~GeneralTab.clearFocus
+
+         ~GeneralTab.clearMask
+
+         ~GeneralTab.close
+
+         ~GeneralTab.closeEvent
+
+         ~GeneralTab.colorCount
+
+         ~GeneralTab.connectNotify
+
+         ~GeneralTab.contentsMargins
+
+         ~GeneralTab.contentsRect
+
+         ~GeneralTab.contextMenuEvent
+
+         ~GeneralTab.contextMenuPolicy
+
+         ~GeneralTab.create
+
+         ~GeneralTab.createWindowContainer
+
+         ~GeneralTab.cursor
+
+         ~GeneralTab.customEvent
+
+         ~GeneralTab.deleteLater
+
+         ~GeneralTab.depth
+
+         ~GeneralTab.destroy
+
+         ~GeneralTab.devType
+
+         ~GeneralTab.devicePixelRatio
+
+         ~GeneralTab.devicePixelRatioF
+
+         ~GeneralTab.devicePixelRatioFScale
+
+         ~GeneralTab.disconnect
+
+         ~GeneralTab.disconnectNotify
+
+         ~GeneralTab.dragEnterEvent
+
+         ~GeneralTab.dragLeaveEvent
+
+         ~GeneralTab.dragMoveEvent
+
+         ~GeneralTab.dropEvent
+
+         ~GeneralTab.dumpObjectInfo
+
+         ~GeneralTab.dumpObjectTree
+
+         ~GeneralTab.dynamicPropertyNames
+
+         ~GeneralTab.effectiveWinId
+
+         ~GeneralTab.ensurePolished
+
+         ~GeneralTab.enterEvent
+
+         ~GeneralTab.event
+
+         ~GeneralTab.eventFilter
+
+         ~GeneralTab.find
+
+         ~GeneralTab.findChild
+
+         ~GeneralTab.findChildren
+
+         ~GeneralTab.focusInEvent
+
+         ~GeneralTab.focusNextChild
+
+         ~GeneralTab.focusNextPrevChild
+
+         ~GeneralTab.focusOutEvent
+
+         ~GeneralTab.focusPolicy
+
+         ~GeneralTab.focusPreviousChild
+
+         ~GeneralTab.focusProxy
+
+         ~GeneralTab.focusWidget
+
+         ~GeneralTab.font
+
+         ~GeneralTab.fontInfo
+
+         ~GeneralTab.fontMetrics
+
+         ~GeneralTab.foregroundRole
+
+         ~GeneralTab.frameGeometry
+
+         ~GeneralTab.frameSize
+
+         ~GeneralTab.geometry
+
+         ~GeneralTab.getContentsMargins
+
+         ~GeneralTab.grab
+
+         ~GeneralTab.grabGesture
+
+         ~GeneralTab.grabKeyboard
+
+         ~GeneralTab.grabMouse
+
+         ~GeneralTab.grabShortcut
+
+         ~GeneralTab.graphicsEffect
+
+         ~GeneralTab.graphicsProxyWidget
+
+         ~GeneralTab.hasFocus
+
+         ~GeneralTab.hasHeightForWidth
+
+         ~GeneralTab.hasMouseTracking
+
+         ~GeneralTab.hasTabletTracking
+
+         ~GeneralTab.height
+
+         ~GeneralTab.heightForWidth
+
+         ~GeneralTab.heightMM
+
+         ~GeneralTab.hide
+
+         ~GeneralTab.hideEvent
+
+         ~GeneralTab.inherits
+
+         ~GeneralTab.initPainter
+
+         ~GeneralTab.inputMethodEvent
+
+         ~GeneralTab.inputMethodHints
+
+         ~GeneralTab.inputMethodQuery
+
+         ~GeneralTab.insertAction
+
+         ~GeneralTab.insertActions
+
+         ~GeneralTab.installEventFilter
+
+         ~GeneralTab.isActiveWindow
+
+         ~GeneralTab.isAncestorOf
+
+         ~GeneralTab.isEnabled
+
+         ~GeneralTab.isEnabledTo
+
+         ~GeneralTab.isFullScreen
+
+         ~GeneralTab.isHidden
+
+         ~GeneralTab.isLeftToRight
+
+         ~GeneralTab.isMaximized
+
+         ~GeneralTab.isMinimized
+
+         ~GeneralTab.isModal
+
+         ~GeneralTab.isRightToLeft
+
+         ~GeneralTab.isSignalConnected
+
+         ~GeneralTab.isVisible
+
+         ~GeneralTab.isVisibleTo
+
+         ~GeneralTab.isWidgetType
+
+         ~GeneralTab.isWindow
+
+         ~GeneralTab.isWindowModified
+
+         ~GeneralTab.isWindowType
+
+         ~GeneralTab.keyPressEvent
+
+         ~GeneralTab.keyReleaseEvent
+
+         ~GeneralTab.keyboardGrabber
+
+         ~GeneralTab.killTimer
+
+         ~GeneralTab.layout
+
+         ~GeneralTab.layoutDirection
+
+         ~GeneralTab.leaveEvent
+
+         ~GeneralTab.locale
+
+         ~GeneralTab.logicalDpiX
+
+         ~GeneralTab.logicalDpiY
+
+         ~GeneralTab.lower
+
+         ~GeneralTab.mapFrom
+
+         ~GeneralTab.mapFromGlobal
+
+         ~GeneralTab.mapFromParent
+
+         ~GeneralTab.mapTo
+
+         ~GeneralTab.mapToGlobal
+
+         ~GeneralTab.mapToParent
+
+         ~GeneralTab.mask
+
+         ~GeneralTab.maximumHeight
+
+         ~GeneralTab.maximumSize
+
+         ~GeneralTab.maximumWidth
+
+         ~GeneralTab.metaObject
+
+         ~GeneralTab.metric
+
+         ~GeneralTab.minimumHeight
+
+         ~GeneralTab.minimumSize
+
+         ~GeneralTab.minimumSizeHint
+
+         ~GeneralTab.minimumWidth
+
+         ~GeneralTab.mouseDoubleClickEvent
+
+         ~GeneralTab.mouseGrabber
+
+         ~GeneralTab.mouseMoveEvent
+
+         ~GeneralTab.mousePressEvent
+
+         ~GeneralTab.mouseReleaseEvent
+
+         ~GeneralTab.move
+
+         ~GeneralTab.moveEvent
+
+         ~GeneralTab.moveToThread
+
+         ~GeneralTab.nativeEvent
+
+         ~GeneralTab.nativeParentWidget
+
+         ~GeneralTab.nextInFocusChain
+
+         ~GeneralTab.normalGeometry
+
+         ~GeneralTab.objectName
+
+         ~GeneralTab.overrideWindowFlags
+
+         ~GeneralTab.overrideWindowState
+
+         ~GeneralTab.paintEngine
+
+         ~GeneralTab.paintEvent
+
+         ~GeneralTab.paintingActive
+
+         ~GeneralTab.palette
+
+         ~GeneralTab.parent
+
+         ~GeneralTab.parentWidget
+
+         ~GeneralTab.physicalDpiX
+
+         ~GeneralTab.physicalDpiY
+
+         ~GeneralTab.pos
+
+         ~GeneralTab.previousInFocusChain
+
+         ~GeneralTab.property
+
+         ~GeneralTab.pyqtConfigure
+
+         ~GeneralTab.raise_
+
+         ~GeneralTab.receivers
+
+         ~GeneralTab.rect
+
+         ~GeneralTab.releaseKeyboard
+
+         ~GeneralTab.releaseMouse
+
+         ~GeneralTab.releaseShortcut
+
+         ~GeneralTab.removeAction
+
+         ~GeneralTab.removeEventFilter
+
+         ~GeneralTab.render
+
+         ~GeneralTab.repaint
+
+         ~GeneralTab.resize
+
+         ~GeneralTab.resizeEvent
+
+         ~GeneralTab.restoreGeometry
+
+         ~GeneralTab.saveGeometry
+
+         ~GeneralTab.screen
+
+         ~GeneralTab.scroll
+
+         ~GeneralTab.sender
+
+         ~GeneralTab.senderSignalIndex
+
+         ~GeneralTab.setAcceptDrops
+
+         ~GeneralTab.setAccessibleDescription
+
+         ~GeneralTab.setAccessibleName
+
+         ~GeneralTab.setAttribute
+
+         ~GeneralTab.setAutoFillBackground
+
+         ~GeneralTab.setBackgroundRole
+
+         ~GeneralTab.setBaseSize
+
+         ~GeneralTab.setContentsMargins
+
+         ~GeneralTab.setContextMenuPolicy
+
+         ~GeneralTab.setCursor
+
+         ~GeneralTab.setDisabled
+
+         ~GeneralTab.setEnabled
+
+         ~GeneralTab.setFixedHeight
+
+         ~GeneralTab.setFixedSize
+
+         ~GeneralTab.setFixedWidth
+
+         ~GeneralTab.setFocus
+
+         ~GeneralTab.setFocusPolicy
+
+         ~GeneralTab.setFocusProxy
+
+         ~GeneralTab.setFont
+
+         ~GeneralTab.setForegroundRole
+
+         ~GeneralTab.setGeometry
+
+         ~GeneralTab.setGraphicsEffect
+
+         ~GeneralTab.setHidden
+
+         ~GeneralTab.setInputMethodHints
+
+         ~GeneralTab.setLayout
+
+         ~GeneralTab.setLayoutDirection
+
+         ~GeneralTab.setLocale
+
+         ~GeneralTab.setMask
+
+         ~GeneralTab.setMaximumHeight
+
+         ~GeneralTab.setMaximumSize
+
+         ~GeneralTab.setMaximumWidth
+
+         ~GeneralTab.setMinimumHeight
+
+         ~GeneralTab.setMinimumSize
+
+         ~GeneralTab.setMinimumWidth
+
+         ~GeneralTab.setMouseTracking
+
+         ~GeneralTab.setObjectName
+
+         ~GeneralTab.setPalette
+
+         ~GeneralTab.setParent
+
+         ~GeneralTab.setProperty
+
+         ~GeneralTab.setShortcutAutoRepeat
+
+         ~GeneralTab.setShortcutEnabled
+
+         ~GeneralTab.setSizeIncrement
+
+         ~GeneralTab.setSizePolicy
+
+         ~GeneralTab.setStatusTip
+
+         ~GeneralTab.setStyle
+
+         ~GeneralTab.setStyleSheet
+
+         ~GeneralTab.setTabOrder
+
+         ~GeneralTab.setTabletTracking
+
+         ~GeneralTab.setToolTip
+
+         ~GeneralTab.setToolTipDuration
+
+         ~GeneralTab.setUpdatesEnabled
+
+         ~GeneralTab.setVisible
+
+         ~GeneralTab.setWhatsThis
+
+         ~GeneralTab.setWindowFilePath
+
+         ~GeneralTab.setWindowFlag
+
+         ~GeneralTab.setWindowFlags
+
+         ~GeneralTab.setWindowIcon
+
+         ~GeneralTab.setWindowIconText
+
+         ~GeneralTab.setWindowModality
+
+         ~GeneralTab.setWindowModified
+
+         ~GeneralTab.setWindowOpacity
+
+         ~GeneralTab.setWindowRole
+
+         ~GeneralTab.setWindowState
+
+         ~GeneralTab.setWindowTitle
+
+         ~GeneralTab.sharedPainter
+
+         ~GeneralTab.show
+
+         ~GeneralTab.showEvent
+
+         ~GeneralTab.showFullScreen
+
+         ~GeneralTab.showMaximized
+
+         ~GeneralTab.showMinimized
+
+         ~GeneralTab.showNormal
+
+         ~GeneralTab.signalsBlocked
+
+         ~GeneralTab.size
+
+         ~GeneralTab.sizeHint
+
+         ~GeneralTab.sizeIncrement
+
+         ~GeneralTab.sizePolicy
+
+         ~GeneralTab.stackUnder
+
+         ~GeneralTab.startTimer
+
+         ~GeneralTab.statusTip
+
+         ~GeneralTab.style
+
+         ~GeneralTab.styleSheet
+
+         ~GeneralTab.tabletEvent
+
+         ~GeneralTab.testAttribute
+
+         ~GeneralTab.thread
+
+         ~GeneralTab.timerEvent
+
+         ~GeneralTab.toolTip
+
+         ~GeneralTab.toolTipDuration
+
+         ~GeneralTab.tr
+
+         ~GeneralTab.underMouse
+
+         ~GeneralTab.ungrabGesture
+
+         ~GeneralTab.unsetCursor
+
+         ~GeneralTab.unsetLayoutDirection
+
+         ~GeneralTab.unsetLocale
+
+         ~GeneralTab.update
+
+         ~GeneralTab.updateGeometry
+
+         ~GeneralTab.updateMicroFocus
+
+         ~GeneralTab.updatesEnabled
+
+         ~GeneralTab.visibleRegion
+
+         ~GeneralTab.whatsThis
+
+         ~GeneralTab.wheelEvent
+
+         ~GeneralTab.width
+
+         ~GeneralTab.widthMM
+
+         ~GeneralTab.winId
+
+         ~GeneralTab.window
+
+         ~GeneralTab.windowFilePath
+
+         ~GeneralTab.windowFlags
+
+         ~GeneralTab.windowHandle
+
+         ~GeneralTab.windowIcon
+
+         ~GeneralTab.windowIconText
+
+         ~GeneralTab.windowModality
+
+         ~GeneralTab.windowOpacity
+
+         ~GeneralTab.windowRole
+
+         ~GeneralTab.windowState
+
+         ~GeneralTab.windowTitle
+
+         ~GeneralTab.windowType
+
+         ~GeneralTab.x
+
+         ~GeneralTab.y
+
+
+
+
+
+
+
+
+Attributes
+==========
+
+.. tab-set::
+
+   .. tab-item:: Plain
+      :sync: key-plain
+
+      .. autosummary::
+
+
+   .. tab-item:: Inherited
+      :sync: key-inherited
+
+      .. autosummary::
+
+         ~GeneralTab.DrawChildren
+
+         ~GeneralTab.DrawWindowBackground
+
+         ~GeneralTab.IgnoreMask
+
+         ~GeneralTab.PdmDepth
+
+         ~GeneralTab.PdmDevicePixelRatio
+
+         ~GeneralTab.PdmDevicePixelRatioScaled
+
+         ~GeneralTab.PdmDpiX
+
+         ~GeneralTab.PdmDpiY
+
+         ~GeneralTab.PdmHeight
+
+         ~GeneralTab.PdmHeightMM
+
+         ~GeneralTab.PdmNumColors
+
+         ~GeneralTab.PdmPhysicalDpiX
+
+         ~GeneralTab.PdmPhysicalDpiY
+
+         ~GeneralTab.PdmWidth
+
+         ~GeneralTab.PdmWidthMM
+
+         ~GeneralTab.customContextMenuRequested
+
+         ~GeneralTab.destroyed
+
+         ~GeneralTab.objectNameChanged
+
+         ~GeneralTab.staticMetaObject
+
+         ~GeneralTab.windowIconChanged
+
+         ~GeneralTab.windowIconTextChanged
+
+         ~GeneralTab.windowTitleChanged
+
+
+
+
+
+
+
+
+
+
+
+Definition
+==========
+
+.. tab-set::
+
+   .. tab-item:: Plain
+      :sync: key-plain
+
+      .. autoclass:: GeneralTab
+         :show-inheritance:
+         :members: GeneralTab.__init__,
+
+   .. tab-item:: Inherited
+      :sync: key-inherited
+
+      .. autoclass:: GeneralTab
+         :show-inheritance:
+         :inherited-members:
+         :noindex:
