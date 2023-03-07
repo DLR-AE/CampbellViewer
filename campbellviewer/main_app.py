@@ -1058,6 +1058,8 @@ class ApplicationWindow(QMainWindow):
                                                       ffilter,
                                                       options=options)
         if pdf_filename:
+            if not pdf_filename.endswith('.pdf'):
+                pdf_filename += '.pdf'
             self.__qsettings.setValue("IO/pdf", pdf_filename)
             self.fig.savefig(pdf_filename)
 
