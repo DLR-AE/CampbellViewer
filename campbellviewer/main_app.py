@@ -1046,18 +1046,19 @@ class ApplicationWindow(QMainWindow):
         self.UpdateMainPlot()
 
     def save_pdf(self):
-        """ Saves the current plot to pdf. todo: FileDialog to set file name has to be added """
+        """ Saves the current plot to pdf. """
 
-        pdf_filename = 'CampbellViewerPlot.pdf'
-        if QFileInfo(pdf_filename).exists():
-            msg = QMessageBox()
-            msg.setWindowTitle("WARNING")
-            msg.setIcon(QMessageBox.Critical)
-            msg.setText("File already exist! Overwrite?")
-            msg.setStandardButtons(QMessageBox.Ok | QMessageBox.Cancel)
-            if msg.exec_() == QMessageBox.Ok:
-                self.fig.savefig(pdf_filename)
-        else:
+        options = QFileDialog.Options()
+        options |= QFileDialog.DontUseNativeDialog
+        ffilter = "Quick save of Campbell diagram PDF file (*.pdf)"
+        __file = self.__qsettings.value("IO/pdf", os.path.expanduser("~"))
+        pdf_filename, _ = QFileDialog.getSaveFileName(self,
+                                                      "Save to CampbellViewer Database",
+                                                      __file,
+                                                      ffilter,
+                                                      options=options)
+        if pdf_filename:
+            self.__qsettings.setValue("IO/pdf", pdf_filename)
             self.fig.savefig(pdf_filename)
 
     ##########
