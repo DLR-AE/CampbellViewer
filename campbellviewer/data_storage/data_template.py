@@ -47,6 +47,8 @@ class AbstractLinearizationData:
             # This is used for the testing pipeline
             self.ds.attrs["user"] = "default_user"
 
+        self.precomputed_modal_visualization = dict()
+
     def remove_modes(self, mode_ids):
         """Remove modes (identified by their index) from the database.
         """

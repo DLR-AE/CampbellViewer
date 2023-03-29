@@ -33,13 +33,19 @@ import copy
 import argparse
 import importlib.resources
 
+from visualization_gui import WTVisualizationGUI
+from wind_turbine_visualization import DefaultBladedTurbine
+
 from PyQt5 import QtCore
 from PyQt5.QtWidgets import (
     QApplication, QMainWindow, QMenu, QVBoxLayout, QHBoxLayout, QMessageBox, QWidget,
-    QFileDialog, QPushButton, QLabel, QCheckBox, QComboBox, QTreeView
+    QFileDialog, QPushButton, QLabel, QCheckBox, QComboBox, QTreeView, QDockWidget
     )
 from PyQt5.QtGui  import QIcon
 from PyQt5.QtCore import QFileInfo, Qt, QItemSelectionModel, QSettings
+
+os.environ['ETS_TOOLKIT'] = 'qt4'
+from pyface.qt import QtGui, QtCore
 
 import matplotlib
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
@@ -67,6 +73,21 @@ matplotlib.rcParams['hatch.linewidth'] = 0.2
 
 # activate clipboard --> not working currently!
 #~ matplotlib.rcParams['toolbar'] = 'toolmanager'
+
+
+class MayaviQWidget(QtGui.QWidget):
+    def __init__(self, parent=None, vis=None):
+        QtGui.QWidget.__init__(self, parent)
+        layout = QtGui.QVBoxLayout(self)
+        layout.setContentsMargins(0, 0, 0, 0)
+        layout.setSpacing(0)
+
+        self.visualization = WTVisualizationGUI(vis)
+
+        self.ui = self.visualization.edit_traits(parent=self,
+                                                 kind='subpanel').control
+        layout.addWidget(self.ui)
+        self.ui.setParent(self)
 
 
 class AmplitudeWindow(QMainWindow):
@@ -466,6 +487,10 @@ class ApplicationWindow(QMainWindow):
         self.button_rescale.clicked.connect(self.rescale_plot_limits)
         self.button_layout.addWidget(self.button_rescale)
 
+        self.button_visualization = QPushButton('Make mode visualization', self)
+        self.button_visualization.clicked.connect(self.make_mode_visualization)
+        self.button_layout.addWidget(self.button_visualization)
+
         self.pick_markers = False
         self.pick_markers_box = QCheckBox('Pick markers', self)
         self.pick_markers_box.clicked.connect(self.add_or_remove_scatter)
@@ -771,8 +796,12 @@ class ApplicationWindow(QMainWindow):
 
                         for sel in self.cursor.selections:
                             if sel.artist in mode_lines:
-                                # print('Selections are:', atool, ads, mode_ID)
-                                selected_lines.append([atool, ads, mode_ID])
+                                if isinstance(sel.artist, matplotlib.collections.PathCollection):
+                                    # print('Selections are:', atool, ads, mode_ID, int(sel.index))
+                                    selected_lines.append([atool, ads, mode_ID, int(sel.index)])
+                                else:
+                                    # print('Selections are:', atool, ads, mode_ID)
+                                    selected_lines.append([atool, ads, mode_ID])
 
         return selected_lines
 
@@ -815,6 +844,50 @@ class ApplicationWindow(QMainWindow):
                         if mode_lines is not None:
                             view_cfg.lines[atool][ads][mode_ID] = mode_lines[:2]
             self.UpdateMainPlot()
+
+    def make_mode_visualization(self):
+        selected_lines = self.find_data_of_highlights()
+        for selected_line in selected_lines:
+
+            if len(selected_line) == 4:  # a marker is picked
+                vis = self.get_vis(tool=selected_line[0], dataset=selected_line[1],
+                                   mode_ID=selected_line[2], op_point_ID=selected_line[3])
+            else:
+                vis = self.get_vis(tool=selected_line[0], dataset=selected_line[1],
+                                   mode_ID=selected_line[2])
+
+            container = QtGui.QWidget()
+            mayavi_widget = MayaviQWidget(container, vis)
+
+            dockWidget = QDockWidget('Dock', self)
+            dockWidget.setWidget(mayavi_widget)
+            self.addDockWidget(Qt.RightDockWidgetArea, dockWidget)
+
+            # self.layout_mpliblist.addWidget(mayavi_widget)
+
+    def get_vis(self, tool, dataset, mode_ID, op_point_ID=None):
+        if tool == 'Bladed (lin.)':
+            if str(mode_ID) in database[tool][dataset].precomputed_modal_visualization:
+                if str(op_point_ID) in database[tool][dataset].precomputed_modal_visualization[str(mode_ID)]:
+                    vis = database[tool][dataset].precomputed_modal_visualization[str(mode_ID)][str(op_point_ID)]
+                else:
+                    vis = DefaultBladedTurbine(database[tool][dataset].ds.attrs['result_dir'],
+                                               database[tool][dataset].ds.attrs['result_prefix'],
+                                               database[tool][dataset].ds.modes.values[mode_ID].name,
+                                               [op_point_ID])
+                    database[tool][dataset].precomputed_modal_visualization[str(mode_ID)][str(op_point_ID)] = vis
+            else:
+                vis = DefaultBladedTurbine(database[tool][dataset].ds.attrs['result_dir'],
+                                           database[tool][dataset].ds.attrs['result_prefix'],
+                                           database[tool][dataset].ds.modes.values[mode_ID].name,
+                                           [op_point_ID])
+                database[tool][dataset].precomputed_modal_visualization[str(mode_ID)] = {str(op_point_ID): vis}
+
+        elif tool == 'HAWCStab2':
+            print('Visualization of HS2 data not yet implemented')
+
+        database[tool][dataset].precomputed_modal_visualization[str(op_point_ID)] = vis
+        return vis
 
     ##############################################################
     # Database methods
@@ -1067,7 +1140,6 @@ class ApplicationWindow(QMainWindow):
         """opens the settings popup"""
         self.settings.exec_()
 
-
     def set_settings_to_default(self, save: bool = False) -> None:
         """retrieves the default values or settings
 
@@ -1094,7 +1166,6 @@ class ApplicationWindow(QMainWindow):
         if save:
             for settings_key in self.__CV_settings:
                 self.__qsettings.setValue(settings_key, self.__CV_settings[settings_key])
-
 
     def update_settings(self) -> None:
         """retrieves the default values or the user specific settings from QSettings"""
