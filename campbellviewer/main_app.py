@@ -89,6 +89,10 @@ class MayaviQWidget(QtGui.QWidget):
         layout.addWidget(self.ui)
         self.ui.setParent(self)
 
+    def closeEvent(self, QCloseEvent):
+        print('MayaviQWidget close event')
+        # self.ui.Finalize()     ############################ important
+
 
 class AmplitudeWindow(QMainWindow):
     """Separate window for participation factor plot
@@ -845,7 +849,16 @@ class ApplicationWindow(QMainWindow):
                             view_cfg.lines[atool][ads][mode_ID] = mode_lines[:2]
             self.UpdateMainPlot()
 
+    ##############################################################
+    # Modal visualization methods
+    ##############################################################
     def make_mode_visualization(self):
+        """ Generate the modal visualization sub-GUI in dock widgets
+
+        1) Loop over the items which are selected in the matplotlib figure and find which data belongs to these items
+        2) Set up the visualization for each selection
+        3) create the QDockWidget with the MayaviQWidget for the visualization
+        """
         selected_lines = self.find_data_of_highlights()
         for selected_line in selected_lines:
 
@@ -861,6 +874,7 @@ class ApplicationWindow(QMainWindow):
 
             dockWidget = QDockWidget('Dock', self)
             dockWidget.setWidget(mayavi_widget)
+            dockWidget.installEventFilter(self)
             self.addDockWidget(Qt.RightDockWidgetArea, dockWidget)
 
             # self.layout_mpliblist.addWidget(mayavi_widget)
@@ -888,6 +902,20 @@ class ApplicationWindow(QMainWindow):
 
         database[tool][dataset].precomputed_modal_visualization[str(op_point_ID)] = vis
         return vis
+
+    def eventFilter(self, source, event):
+        """ Filtering GUI events for dockwidget close events
+
+        If a dockwidget is closed, the widget which is in it has to be closed/finalized correctly. This seems to be
+        only possible by filtering all the GUI events for 'Close events' of 'Dock widgets'
+        """
+        if (event.type() == QtCore.QEvent.Close and
+                isinstance(source, QtGui.QDockWidget)):
+            source.widget().visualization.stop_timer()
+            source.widget().close()
+            source.close()
+
+        return super(ApplicationWindow, self).eventFilter(source, event)
 
     ##############################################################
     # Database methods
