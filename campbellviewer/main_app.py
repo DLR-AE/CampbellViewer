@@ -33,6 +33,7 @@ import copy
 import argparse
 import importlib.resources
 
+sys.path.append(r'..\..\WiVis')
 from visualization_gui import WTVisualizationGUI
 from wind_turbine_visualization import DefaultBladedTurbine
 
@@ -872,7 +873,9 @@ class ApplicationWindow(QMainWindow):
             container = QtGui.QWidget()
             mayavi_widget = MayaviQWidget(container, vis)
 
-            dockWidget = QDockWidget('Dock', self)
+            mode_name = database[selected_line[0]][selected_line[1]].ds.modes.values[selected_line[2]].name
+            operating_param_value = float(database[selected_line[0]][selected_line[1]].ds['operating_points'].loc[selected_line[3], self.xaxis_param])
+            dockWidget = QDockWidget(mode_name + ' at ' + self.xaxis_param + '=' + str(operating_param_value), self)
             dockWidget.setWidget(mayavi_widget)
             dockWidget.installEventFilter(self)
             self.addDockWidget(Qt.RightDockWidgetArea, dockWidget)
