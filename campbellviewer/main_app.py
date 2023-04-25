@@ -888,14 +888,14 @@ class ApplicationWindow(QMainWindow):
                 if str(op_point_ID) in database[tool][dataset].precomputed_modal_visualization[str(mode_ID)]:
                     vis = database[tool][dataset].precomputed_modal_visualization[str(mode_ID)][str(op_point_ID)]
                 else:
-                    vis = DefaultBladedTurbine(database[tool][dataset].ds.attrs['result_dir'],
-                                               database[tool][dataset].ds.attrs['result_prefix'],
+                    vis = DefaultBladedTurbine(os.path.join(database[tool][dataset].ds.attrs['result_dir'],
+                                                            database[tool][dataset].ds.attrs['result_prefix'] + '.$PJ'),
                                                database[tool][dataset].ds.modes.values[mode_ID].name,
                                                [op_point_ID])
                     database[tool][dataset].precomputed_modal_visualization[str(mode_ID)][str(op_point_ID)] = vis
             else:
-                vis = DefaultBladedTurbine(database[tool][dataset].ds.attrs['result_dir'],
-                                           database[tool][dataset].ds.attrs['result_prefix'],
+                vis = DefaultBladedTurbine(os.path.join(database[tool][dataset].ds.attrs['result_dir'],
+                                                            database[tool][dataset].ds.attrs['result_prefix'] + '.$PJ'),
                                            database[tool][dataset].ds.modes.values[mode_ID].name,
                                            [op_point_ID])
                 database[tool][dataset].precomputed_modal_visualization[str(mode_ID)] = {str(op_point_ID): vis}
