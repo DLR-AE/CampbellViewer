@@ -36,6 +36,7 @@ import importlib.resources
 sys.path.append(r'..\..\WiVis')
 from visualization_gui import WTVisualizationGUI
 from wind_turbine_visualization import DefaultBladedTurbine
+from mpl_2d_animation import Mpl2DAnimWidget
 
 from PyQt5 import QtCore
 from PyQt5.QtWidgets import (
@@ -863,26 +864,53 @@ class ApplicationWindow(QMainWindow):
         selected_lines = self.find_data_of_highlights()
         for selected_line in selected_lines:
 
-            if len(selected_line) == 4:  # a marker is picked
-                vis = self.get_vis(tool=selected_line[0], dataset=selected_line[1],
-                                   mode_ID=selected_line[2], op_point_ID=selected_line[3])
-            else:
-                vis = self.get_vis(tool=selected_line[0], dataset=selected_line[1],
-                                   mode_ID=selected_line[2])
-
-            container = QtGui.QWidget()
-            mayavi_widget = MayaviQWidget(container, vis)
-
             mode_name = database[selected_line[0]][selected_line[1]].ds.modes.values[selected_line[2]].name
             operating_param_value = float(database[selected_line[0]][selected_line[1]].ds['operating_points'].loc[selected_line[3], self.xaxis_param])
             dockWidget = QDockWidget(mode_name + ' at ' + self.xaxis_param + '=' + str(operating_param_value), self)
-            dockWidget.setWidget(mayavi_widget)
+
+            visualize_in_3d = False  # hardcoded for now -> should be setting later
+            if visualize_in_3d:
+                if len(selected_line) == 4:  # a marker is picked
+                    vis = self.get_vis(tool=selected_line[0], dataset=selected_line[1],
+                                       mode_ID=selected_line[2], op_point_ID=selected_line[3])
+                else:
+                    vis = self.get_vis(tool=selected_line[0], dataset=selected_line[1],
+                                       mode_ID=selected_line[2])
+
+                container = QtGui.QWidget()
+                mayavi_widget = MayaviQWidget(container, vis)
+                dockWidget.setWidget(mayavi_widget)
+
+                # Other option for implementation in GUI -> no dock widget -> a direct widget
+                # self.layout_mpliblist.addWidget(mayavi_widget)
+
+            else:
+                if len(selected_line) == 4:  # a marker is picked
+                    widget_2d_anim = self.get_2d_vis(tool=selected_line[0], dataset=selected_line[1],
+                                                     mode_ID=selected_line[2], op_point_ID=selected_line[3])
+                else:
+                    widget_2d_anim = self.get_2d_vis(tool=selected_line[0], dataset=selected_line[1],
+                                                     mode_ID=selected_line[2])
+
+                dockWidget.setWidget(widget_2d_anim)
+
             dockWidget.installEventFilter(self)
             self.addDockWidget(Qt.RightDockWidgetArea, dockWidget)
 
-            # self.layout_mpliblist.addWidget(mayavi_widget)
+    def get_vis(self, tool: str, dataset: str, mode_ID: int, op_point_ID: int=None) -> WindTurbineVisualization:
+        """ Get the WiVis 3D visualization object
 
-    def get_vis(self, tool, dataset, mode_ID, op_point_ID=None):
+        A WiVis WindTurbineVisualization object will be generated for the given tool, dataset, mode_ID and
+        op_point_ID combination.
+        If the visualization is available in the precomputed_modal_visualization dictionary, no new visualization object
+        has to be made.
+
+        Args:
+            tool: Name of the tool
+            dataset: Name of the dataset
+            mode_ID: ID of the mode
+            op_point_ID: ID of the operating point
+        """
         if tool == 'Bladed (lin.)':
             if str(mode_ID) in database[tool][dataset].precomputed_modal_visualization:
                 if str(op_point_ID) in database[tool][dataset].precomputed_modal_visualization[str(mode_ID)]:
@@ -903,19 +931,47 @@ class ApplicationWindow(QMainWindow):
         elif tool == 'HAWCStab2':
             print('Visualization of HS2 data not yet implemented')
 
-        database[tool][dataset].precomputed_modal_visualization[str(op_point_ID)] = vis
         return vis
+
+    def get_2d_vis(self, tool: str, dataset: str, mode_ID: int, op_point_ID: int=None) -> Mpl2DAnimWidget:
+        """ Get the WiVis 2D visualization object
+
+        A WiVis Mpl2DAnimWidget object will be generated for the given tool, dataset, mode_ID and
+        op_point_ID combination.
+        todo: If the visualization is available in the precomputed_modal_visualization dictionary, no new visualization
+        should be made -> common wrapping method with get_vis necessary.
+
+        Args:
+            tool: Name of the tool
+            dataset: Name of the dataset
+            mode_ID: ID of the mode
+            op_point_ID: ID of the operating point
+        """
+        if tool == 'Bladed (lin.)':
+            return Mpl2DAnimWidget(tool,
+                                   {'result_dir': database[tool][dataset].ds.attrs['result_dir'],
+                                    'prefix': database[tool][dataset].ds.attrs['result_prefix']},
+                                   [database[tool][dataset].ds.modes.values[mode_ID].name],
+                                   [op_point_ID],
+                                   minimalistic_plot=True)
+        elif tool == 'HAWCStab2':
+            print('2D visualization of HS2 data not yet implemented')
 
     def eventFilter(self, source, event):
         """ Filtering GUI events for dockwidget close events
 
         If a dockwidget is closed, the widget which is in it has to be closed/finalized correctly. This seems to be
         only possible by filtering all the GUI events for 'Close events' of 'Dock widgets'
+
+        Args:
+            source: Source widget which created the event
+            event: Qt event
         """
         if (event.type() == QtCore.QEvent.Close and
                 isinstance(source, QtGui.QDockWidget)):
-            source.widget().visualization.stop_timer()
-            source.widget().close()
+            if isinstance(source.widget(), WTVisualizationGUI):
+                source.widget().visualization.stop_timer()
+                source.widget().close()
             source.close()
 
         return super(ApplicationWindow, self).eventFilter(source, event)
