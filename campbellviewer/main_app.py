@@ -1020,8 +1020,15 @@ class ApplicationWindow(QMainWindow):
 
         if db_filename[-3:] != ".nc":
             db_filename = db_filename + ".nc"
-
-        database.save(fname=db_filename)
+        try:
+            database.save(fname=db_filename)
+        except PermissionError:
+            msg = QMessageBox()
+            msg.setWindowTitle("Warning")
+            msg.setIcon(QMessageBox.Critical)
+            msg.setText("File cannot be accessed because it is used by another proecss.")
+            msg.setStandardButtons(QMessageBox.Ok)
+            msg.exec_()
 
     def get_database_filename(self, mode: str) -> str:
         """ Use a QFileDialog to get the filename where the database can be loaded or saved.
