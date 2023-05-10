@@ -869,7 +869,7 @@ class ApplicationWindow(QMainWindow):
             operating_param_value = float(database[selected_line[0]][selected_line[1]].ds['operating_points'].loc[selected_line[3], self.xaxis_param])
             dockWidget = QDockWidget(mode_name + ' at ' + self.xaxis_param + '=' + str(operating_param_value), self)
 
-            visualize_in_3d = True  # hardcoded for now -> should be setting later
+            visualize_in_3d = False  # hardcoded for now -> should be setting later
             if visualize_in_3d:
                 if len(selected_line) == 4:  # a marker is picked
                     vis = self.get_vis(tool=selected_line[0], dataset=selected_line[1],
@@ -978,14 +978,35 @@ class ApplicationWindow(QMainWindow):
             op_point_ID: ID of the operating point
         """
         if tool == 'Bladed (lin.)':
-            return Mpl2DAnimWidget(tool,
-                                   {'result_dir': database[tool][dataset].ds.attrs['result_dir'],
-                                    'prefix': database[tool][dataset].ds.attrs['result_prefix']},
-                                   [database[tool][dataset].ds.modes.values[mode_ID].name],
-                                   [op_point_ID],
-                                   minimalistic_plot=True)
+            return Mpl2DAnimWidget(
+                tool,
+                {
+                    'result_dir': database[tool][dataset].ds.attrs['result_dir'],
+                    'prefix': database[tool][dataset].ds.attrs['result_prefix']
+                },
+                [database[tool][dataset].ds.modes.values[mode_ID].name],
+                [op_point_ID],
+                minimalistic_plot=True
+            )
         elif tool == 'HAWCStab2':
-            print('2D visualization of HS2 data not yet implemented')
+            try:
+                if not database[tool][dataset].ds.attrs['filenamebin']:
+                    filenamebin, _ = QFileDialog.getOpenFileName(self, 'Select binary file')
+                    database[tool][dataset].ds.attrs['filenamebin'] = filenamebin
+                    database[tool][dataset].substructure = HAWCStab2Data().read_bin_file(filenamebin)
+            except KeyError:
+                filenamebin, _ = QFileDialog.getOpenFileName(self, 'Select binary file')
+                database[tool][dataset].ds.attrs['filenamebin'] = filenamebin
+                database[tool][dataset].substructure = HAWCStab2Data().read_bin_file(filenamebin)
+            return Mpl2DAnimWidget(
+                tool,
+                {
+                    'filenamebin': database[tool][dataset].ds.attrs['filenamebin'],
+                },
+                [mode_ID],
+                [op_point_ID],
+                minimalistic_plot=True
+            )
 
     def eventFilter(self, source, event):
         """ Filtering GUI events for dockwidget close events
