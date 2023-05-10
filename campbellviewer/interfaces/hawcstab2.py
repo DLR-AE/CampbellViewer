@@ -7,6 +7,8 @@ import numpy as np
 from campbellviewer.data_storage.data_template import AbstractLinearizationData
 from campbellviewer.utilities import AEMode
 
+# WiVis
+from hawcstab_interface import read_turbine_mode_shapes
 
 class HAWCStab2Data(AbstractLinearizationData):
     """This is a class for handling HAWCStab2 linearization data.
@@ -15,25 +17,29 @@ class HAWCStab2Data(AbstractLinearizationData):
         ds (xarray.Dataset): xarray Dataset containing all linearization data
 
     Args:
-        filenamecmb (str):
+        filenamecmb:
             Filename of \*.cmb file.
-        filenameamp (str):
+        filenameamp:
             Filename of \*.amp file.
         filenameopt:
             Filename of \*.opt file.
+        filenameopt:
+            Filename of \*.bin file.
 
     """
 
     def __init__(
-        self, filenamecmb:str=None, filenameamp:str=None, filenameopt:str=None
+        self, filenamecmb:str='', filenameamp:str='', filenameopt:str='',
+        filenamebin:str='',
     ):
         super().__init__()
 
         self.ds.attrs['filenamecmb'] = filenamecmb
         self.ds.attrs['filenameamp'] = filenameamp
         self.ds.attrs['filenameopt'] = filenameopt
+        self.ds.attrs['filenamebin'] = filenamebin
 
-    def read_cmb_data(self, filenamecmb:str=None, skip_header_lines:int=1):
+    def read_cmb_data(self, filenamecmb:str='', skip_header_lines:int=1):
         """Reads and parse the HS2 result cmb data.
 
         Two different types do exist based on the analysis.
@@ -93,7 +99,7 @@ class HAWCStab2Data(AbstractLinearizationData):
         )
 
 
-    def read_amp_data(self, filenameamp:str=None, skip_header_lines:int=5):
+    def read_amp_data(self, filenameamp:str='', skip_header_lines:int=5):
         """Reads and parse the HS2 result amp data.
 
             - The first 5 rows contains header text.
@@ -204,7 +210,7 @@ class HAWCStab2Data(AbstractLinearizationData):
         )
 
 
-    def read_opt_data(self, filenameopt:str=None, skip_header_lines:int=1):
+    def read_opt_data(self, filenameopt:str='', skip_header_lines:int=1):
         """Reads the operational data from HS2.
 
         Operational data file contains 5 columns: Wind speed, pitch, rot. speed,
@@ -246,345 +252,20 @@ class HAWCStab2Data(AbstractLinearizationData):
         self.read_opt_data()
 
 
+    def read_bin_file(self, filenamebin:str=''):
+        """Reads the mode shape data from binary HS2 file.
 
-########
-# Basic Turbine Classes
-########
-class SubstructureDataClass(object):
-    """ Main class for substructure data
-
-    Attributes:
-        bodies(list) : list of element properties of type of a body
-        opstate(list): list of operational state data
-    """
-    def __init__(self):
-        super(SubstructureDataClass, self).__init__()
-
-        # define list for data
-        self.bodies  = []
-        self.opstate = {}
-
-    def numbody(self):
-        return len(self.bodies)
-
-
-class BodyDataClass(object):
-    """Main class for body element data.
-
-    Attributes:
-        s(ndarry) :(N,1) arc length position of end nodes of an element
-    """
-    def __init__(self):
-        super(BodyDataClass, self).__init__()
-
-        # define list for data
-        self.s = None
-
-    def numele(self):
-        if not self.s is None:
-            return len(self.s)
-        else:
-            return 0
-
-
-class OpstatesClass(object):
-    """ Main class for operational point data
-
-    Attributes:
-        bodies(list) : list of bodies
-    """
-    def __init__(self):
-        super(OpstatesClass, self).__init__()
-
-        # define list for data
-        self.bodies = []
-
-    def num(self):
-        if not self.bodies is None:
-            return len(self.bodies)
-        else:
-            return 0
-
-class ModesClass(object):
-    """ Main class for operational point data modes
-
-    Attributes:
-        modes(list) : list of modes
-    """
-    def __init__(self):
-        super(ModesClass, self).__init__()
-
-        # define list for data
-        self.modes = []
-
-    def num(self):
-        if not self.modes is None:
-            return len(self.modes)
-        else:
-            return 0
-
-class ModeClass(object):
-    """ Main class for operational point data modes
-
-    Attributes:
-        modes(list) : list of modes
-    """
-    def __init__(self):
-        super(ModeClass, self).__init__()
-
-        # define data
-        self.ua0 = None
-        self.ua1 = None
-        self.ub1 = None
-
-    #~ def num(self):
-        #~ if not self.bodies is None:
-            #~ return len(self.bodies)
-        #~ else:
-            #~ return 0
-
-#########
-#
-#########
-class HS2BINReader(object):
-    """Extract mode shapes out of HAWCStab2 binary files.
-
-    The HAWCStab2 model is set up hierarchically in this way:
-
-    .. code-block:: text
-
-        TURBINE
-            |
-            --> substructure i
-                    |
-                    |
-                    --> bodies
-                    |   |
-                    |   --> body ii
-                    |   |        |
-                    |   |        --> body data s (arc position for each element)
-                    |   |
-                    |   --> body ii + 1
-                    |       |
-                    |       --> body data s (arc position for each element, 1d array)
-                    |
-                    --> opstate jj (states, dictionary)
-                        |
-                        --> bodies (list)
-                            |
-                            --> body jjj
-                                |
-                                --> mode jjjj
-                                |   |
-                                |   --> ua0 (2d array)
-                                |
-                                --> mode jjjj + 1
-                                    |
-                                    --> ua0 (2d array)
-
-    Matlab struct: self.substructure[i_subs].opstate[istate].body_result(ibody).mode(imode).ua0
-
-    Attributes:
-        substructure(list)      : list of substructures present in a turbine
-        num_modes(int)          : number of modes stored in the binary file
-        num_steps(int)          : number of state points e.g. wind steps/ rpm steps
-        operational_data(ndarry): (N,3) map of operational data
-                                  i = operation point, j = 0 -> wind speed, j = 1 -> pitch, j = 2 -> power
-        __offset(int)           : current offset of bytes in bin file, position in file/cached string
-        __buff(bytes)           : cached binary file
-        __num_DOF(int)          : parameter for the number of DOFs = u_x, u_y, u_z, theta_x, theta_y, theta_z
-
-    """
-
-    def __init__(self, file: str, parent=None):
-        """
         Args:
-            file(str): file name of the bin file
+            filenamebin:
+                Binary file containing mode shapes
+
+        Returns:
+            Dictionary containing mode shapes.
+
         """
-        super(HS2BINReader, self).__init__()
+        self.substructure, _ = read_turbine_mode_shapes(filenamebin)
 
-        self.__file = file
-
-        # init attributes
-        self.substructure     = []
-        self.num_modes        = 0
-        self.num_steps        = 0
-        self.operational_data = None
-        self.__offset         = 0
-        self.__num_DOF        = 6
-
-        # read the binary into the buffer
-        self.__read_file()
-
-        # read the turbine data from buffer
-        self.__read_turbine()
-
-        # read the operational modal state data from buffer
-        # these data follow directly the turbine data
-        self.__read_opstate()
-
-    ###
-    # private methods
-    def __read_file(self):
-        """reads the bin file as binary data into a buffer object
-        """
-        with open(self.__file, 'br') as f:
-            self.__buff = f.read()
-
-
-    def __read_data(self, dtype, count: int):
-        """
-        Args:
-            dtype()   : numpy data type
-            count(int): number of byted to read
-        """
-        data = None
-
-        num_bytes = np.frombuffer(self.__buff, dtype=np.int32, count=1, offset=self.__offset).squeeze()
-        #~ print(num_bytes)
-
-        # offset the first 32bit int == 4 bytes
-        self.__offset += 4
-
-        # decide on data type
-        current_dtype = None
-        byte_offset   = None
-        if dtype == int:
-            if num_bytes == 4*count:
-                # 32 bit int
-                current_dtype = np.int32
-                byte_offset   = 4
-            elif num_bytes == 8*count:
-                # 64 bit int
-                current_dtype = np.int64
-                byte_offset   = 8
-            elif num_bytes == 16*count:
-                # 128 bit int
-                current_dtype = np.int128
-                byte_offset   = 16
-        elif dtype == float:
-            if num_bytes == 4*count:
-                # 32 bit real
-                current_dtype = np.float32
-                byte_offset   = 4
-            elif num_bytes == 8*count:
-                # 64 bit real
-                current_dtype = np.float64
-                byte_offset   = 8
-            elif num_bytes == 16*count:
-                # 128 bit real
-                current_dtype = np.float128
-                byte_offset   = 16
-
-        # read the data
-        data = np.frombuffer(self.__buff, dtype=current_dtype, count=count, offset=self.__offset)
-        self.__offset += byte_offset * count
-
-        # finally spool forward another 32 bits = 4 bytes
-        self.__offset += 4
-
-        return data.squeeze()
-
-
-    def __read_turbine(self):
-        """ read the hierarchical structure data and save
-            it in internal data structure.
-        """
-
-        # read substructure
-        num_subs = self.__read_data(dtype=int,count=1)
-        for isub in range(num_subs):
-            self.substructure.append(SubstructureDataClass())
-
-            # read bodies
-            num_bodies = self.__read_data(int,1)
-            for ibody in range(num_bodies):
-                self.substructure[isub].bodies.append(BodyDataClass())
-
-                # read elements
-                num_elements = self.__read_data(int, 1)
-                self.substructure[isub].bodies[ibody].s = np.empty([num_elements])
-                for iele in range(num_elements):
-                    self.substructure[isub].bodies[ibody].s[iele] = self.__read_data(float,1)
-
-
-    def __read_opstate(self):
-        """read the modal operational state data from buffer
-        """
-
-        # read operation information
-        opstate_info = self.__read_data(dtype=int,count=2)
-        self.num_modes = opstate_info[0]
-        self.num_steps = opstate_info[1]
-        print(self.num_modes, self.num_steps)
-
-        # read operation data map (N,3)
-        self.operational_data = np.zeros([self.num_steps,3])
-
-        # loop over states
-        for i_state in range(self.num_steps):
-            dummy = self.__read_data(dtype=float,count=1)
-            self.operational_data[i_state,:] = self.__read_data(dtype=float,count=3)
-
-            # loop over substructures
-            for i_subs in range(self.numsubstr()):
-
-                #
-                self.substructure[i_subs].opstate[i_state] = OpstatesClass()
-
-                # allocate data
-                for i_body in range(self.substructure[i_subs].numbody()):
-                    self.substructure[i_subs].opstate[i_state].bodies.append(ModesClass())
-
-                # one have to know, which number the three-bladed substructure is!
-                # This is not covering the general case! Be careful!
-                if i_subs < 2:    # ground_fixed_substructure and rotating_axissym_substructure
-
-
-                    # loop over modes
-                    for i_mode in range(self.num_modes):
-
-
-                        #loop over bodies
-                        for i_body in range(self.substructure[i_subs].numbody()):
-                            self.substructure[i_subs].opstate[i_state].bodies[i_body].modes.append(ModeClass())
-                            num_elements = self.substructure[i_subs].bodies[i_body].numele()
-                            count = 2*self.__num_DOF*(num_elements+1)
-                            data = -self.__read_data(dtype=float,count=count)
-                            self.substructure[i_subs].opstate[i_state].bodies[i_body].modes[i_mode].ua0 = data.reshape([2,int(data.size/2)]).T
-
-                else:    # rotating_threebladed_substructure
-                    # loop over modes
-                    for i_mode in range(self.num_modes):
-
-
-                        self.substructure[i_subs].opstate[i_state].bodies[i_body].modes.append(ModeClass())
-
-                        #loop over bodies
-                        for i_body in range(self.substructure[i_subs].numbody()):
-                            self.substructure[i_subs].opstate[i_state].bodies[i_body].modes.append(ModeClass())
-                            num_elements = self.substructure[i_subs].bodies[i_body].numele()
-
-                            data = -self.__read_data(dtype=float,count=2*self.__num_DOF*(num_elements+1))
-                            self.substructure[i_subs].opstate[i_state].bodies[i_body].modes[i_mode].ua0 = data.reshape([2,int(data.size/2)]).T
-                            data = -self.__read_data(dtype=float,count=2*self.__num_DOF*(num_elements+1))
-                            self.substructure[i_subs].opstate[i_state].bodies[i_body].modes[i_mode].ua1 = data.reshape([2,int(data.size/2)]).T
-                            data = -self.__read_data(dtype=float,count=2*self.__num_DOF*(num_elements+1))
-                            self.substructure[i_subs].opstate[i_state].bodies[i_body].modes[i_mode].ub1 = data.reshape([2,int(data.size/2)]).T
-
-
-
-        #~ self.operational_data[0,:] = self.__read_data(dtype=float,count=3)
-
-        # switch sign for pitch and convert to degree
-        self.operational_data[:,1] = np.rad2deg(-self.operational_data[:,1])
-        print(self.operational_data)
-
-
-    ###
-    # public methods
-    def numsubstr(self):
-        return len(self.substructure)
+        return self.substructure
 
 
 if __name__ == "__main__":
@@ -592,20 +273,3 @@ if __name__ == "__main__":
                            r"./examples/data/modified.amp",
                            r"./examples/data/modified.opt")
     mytest.read_data()
-
-
-    print("########## HAWCStab2 binary result reader ##########\n")
-    file = "IWT_7.5-164_Rev-2.5.2_HS2_coarse.bin"
-    MyTurbine = HS2BINReader(file)
-
-    num_subs = MyTurbine.numsubstr()
-    print("number of substructures:", num_subs)
-    for i in range(num_subs):
-        print(f"substructure {i+1}:")
-        num_bodies = MyTurbine.substructure[i].numbody()
-        print("    number of bodies       :", num_bodies)
-        for ii in range(num_bodies):
-            print(f"    body {ii+1}:")
-            num_elements = MyTurbine.substructure[i].bodies[ii].numele()
-            print("        number of elements     :", num_elements)
-            print(f"        {MyTurbine.substructure[i].bodies[ii].s}")

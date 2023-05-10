@@ -33,9 +33,9 @@ import copy
 import argparse
 import importlib.resources
 
-sys.path.append(r'..\..\WiVis')
+sys.path.append(r'C:\git\WiVis')
 from visualization_gui import WTVisualizationGUI
-from wind_turbine_visualization import DefaultBladedTurbine
+from wind_turbine_visualization import DefaultBladedTurbine, DefaultHAWCStabTurbine, WindTurbineVisualization
 from mpl_2d_animation import Mpl2DAnimWidget
 
 from PyQt5 import QtCore
@@ -56,6 +56,7 @@ from matplotlib.backend_bases import MouseButton
 from matplotlib.figure import Figure
 import mplcursors
 
+from campbellviewer.interfaces.hawcstab2 import HAWCStab2Data
 from campbellviewer.datatree_model import TreeModel
 from campbellviewer.settings.globals import database, view_cfg
 from campbellviewer.settings.view import MPLLinestyle
@@ -868,7 +869,7 @@ class ApplicationWindow(QMainWindow):
             operating_param_value = float(database[selected_line[0]][selected_line[1]].ds['operating_points'].loc[selected_line[3], self.xaxis_param])
             dockWidget = QDockWidget(mode_name + ' at ' + self.xaxis_param + '=' + str(operating_param_value), self)
 
-            visualize_in_3d = False  # hardcoded for now -> should be setting later
+            visualize_in_3d = True  # hardcoded for now -> should be setting later
             if visualize_in_3d:
                 if len(selected_line) == 4:  # a marker is picked
                     vis = self.get_vis(tool=selected_line[0], dataset=selected_line[1],
@@ -916,20 +917,49 @@ class ApplicationWindow(QMainWindow):
                 if str(op_point_ID) in database[tool][dataset].precomputed_modal_visualization[str(mode_ID)]:
                     vis = database[tool][dataset].precomputed_modal_visualization[str(mode_ID)][str(op_point_ID)]
                 else:
-                    vis = DefaultBladedTurbine(os.path.join(database[tool][dataset].ds.attrs['result_dir'],
-                                                            database[tool][dataset].ds.attrs['result_prefix'] + '.$PJ'),
-                                               database[tool][dataset].ds.modes.values[mode_ID].name,
-                                               [op_point_ID])
+                    vis = DefaultBladedTurbine(
+                        database[tool][dataset].ds.attrs['result_dir'],
+                        database[tool][dataset].ds.attrs['result_prefix'],
+                        database[tool][dataset].ds.modes.values[mode_ID].name,
+                        [op_point_ID]
+                    )
                     database[tool][dataset].precomputed_modal_visualization[str(mode_ID)][str(op_point_ID)] = vis
             else:
-                vis = DefaultBladedTurbine(os.path.join(database[tool][dataset].ds.attrs['result_dir'],
-                                                            database[tool][dataset].ds.attrs['result_prefix'] + '.$PJ'),
-                                           database[tool][dataset].ds.modes.values[mode_ID].name,
-                                           [op_point_ID])
+                vis = DefaultBladedTurbine(
+                    database[tool][dataset].ds.attrs['result_dir'],
+                    database[tool][dataset].ds.attrs['result_prefix'],
+                    database[tool][dataset].ds.modes.values[mode_ID].name,
+                    [op_point_ID]
+                )
                 database[tool][dataset].precomputed_modal_visualization[str(mode_ID)] = {str(op_point_ID): vis}
 
         elif tool == 'HAWCStab2':
-            print('Visualization of HS2 data not yet implemented')
+            try:
+                if not database[tool][dataset].ds.attrs['filenamebin']:
+                    filenamebin, _ = QFileDialog.getOpenFileName(self, 'Select binary file')
+                    database[tool][dataset].ds.attrs['filenamebin'] = filenamebin
+                    database[tool][dataset].substructure = HAWCStab2Data().read_bin_file(filenamebin)
+            except KeyError:
+                filenamebin, _ = QFileDialog.getOpenFileName(self, 'Select binary file')
+                database[tool][dataset].ds.attrs['filenamebin'] = filenamebin
+                database[tool][dataset].substructure = HAWCStab2Data().read_bin_file(filenamebin)
+
+            if str(mode_ID) in database[tool][dataset].precomputed_modal_visualization:
+                if str(op_point_ID) in database[tool][dataset].precomputed_modal_visualization[str(mode_ID)]:
+                    vis = database[tool][dataset].precomputed_modal_visualization[str(mode_ID)][str(op_point_ID)]
+                else:
+                    vis = DefaultHAWCStabTurbine(database[tool][dataset].substructure,mode_ID,op_point_ID)
+                    database[tool][dataset].precomputed_modal_visualization[str(mode_ID)][str(op_point_ID)] = vis
+
+                vis = database[tool][dataset].precomputed_modal_visualization[str(mode_ID)][str(op_point_ID)]
+            else:
+                filenamebin = database[tool][dataset].ds.attrs['filenamebin']
+                try:
+                    database[tool][dataset].substructure
+                except AttributeError:
+                    database[tool][dataset].substructure = HAWCStab2Data().read_bin_file(filenamebin)
+                vis = DefaultHAWCStabTurbine(database[tool][dataset].substructure,mode_ID,op_point_ID)
+                database[tool][dataset].precomputed_modal_visualization[str(mode_ID)] = {str(op_point_ID): vis}
 
         return vis
 
