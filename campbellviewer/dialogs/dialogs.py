@@ -286,8 +286,9 @@ class SettingsPopupDataSelection(SettingsPopup):
         super(SettingsPopupDataSelection, self).__init__()
 
         # define initial tool and dataset
-        self.selected_tool = 'HAWCStab2'
-        self.dataset_name = 'default'
+        self.success = False
+        self.selected_tool = None
+        self.dataset_name = None
 
         self.setWindowTitle("Tool selection")
         popup_layoutV = QVBoxLayout(self)
@@ -308,7 +309,7 @@ class SettingsPopupDataSelection(SettingsPopup):
         button_OK.clicked.connect(self.ok_click)
         popup_layoutBttn.addWidget(button_OK)
         button_Cancel = QPushButton('Cancel', self)
-        button_Cancel.clicked.connect(self.close_popup)
+        button_Cancel.clicked.connect(self.cancel)
         popup_layoutBttn.addWidget(button_Cancel)
 
         popup_layoutV.addLayout(popup_layoutTool)
@@ -323,13 +324,20 @@ class SettingsPopupDataSelection(SettingsPopup):
           selected_tool: string indicating from which tool data will be selected
           dataset_name: string with user specified name for the dataset
         """
-        return self.selected_tool, self.dataset_name
+        return self.success, self.selected_tool, self.dataset_name
 
     def update_settings(self):
         """ Updates the settings based on the current content of the popup """
+        self.success = True
         self.selected_tool = self.__ToolSelection.currentText()
         self.dataset_name = self.__DataSetName.text()
         self.close()
+
+    def cancel(self):
+        """ Action if user presses cancel. Do not continue with the modal participation plotting. """
+        self.success = False
+        self.close_popup()
+
 
 class SettingsPopupAMP(SettingsPopup):
     """Class for popup-window to select for which mode the modal participations have to be shown
