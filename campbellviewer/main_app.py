@@ -576,7 +576,8 @@ class ApplicationWindow(QMainWindow):
                             damp_line = self.axes2.add_line(view_cfg.lines[atool][ads][mode_ID][1])
                             self.axes2.update_datalim(damp_line.get_xydata())
                             self.axes2.autoscale_view()
-                            # disabled to avoid double entries in legend
+                            # disabled to avoid double entries in legend (if this is changed the mplcursors on_add
+                            # method should be updated)
                             # damp_line.set_label(ads + ': ' + database[atool][ads].ds.modes.values[mode_ID].name)
                             if self.pick_markers is True:
                                 scat_collection_freq = self.axes1.add_collection(view_cfg.lines[atool][ads][mode_ID][2])
@@ -677,6 +678,10 @@ class ApplicationWindow(QMainWindow):
                 self.on_mpl_cursors_pick(sel.artist, 'select')
                 sel.extras.append(self.cursor.add_highlight(pairs[sel.artist]))
                 sel.annotation.get_bbox_patch().set(fc="grey")
+                if sel.artist.axes == self.axes2:
+                    # line in damping plot is selected -> these lines do not have a label -> so manually add label
+                    # to cursor text box
+                    sel.annotation.set_text(pairs[sel.artist].get_label() + '\n' + sel.annotation.get_text())
 
             @self.cursor.connect("remove")
             def on_remove(sel):
