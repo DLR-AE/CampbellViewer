@@ -1005,13 +1005,16 @@ class ApplicationWindow(QMainWindow):
         options = QFileDialog.Options()
         options |= QFileDialog.DontUseNativeDialog
         filter = "Bladed Linearization Result Files (*.$PJ);;All Files (*)"
-        fileName, _ = QFileDialog.getOpenFileName(self, "Open Bladed Linearization Result Files", "", filter, options=options)
+        __path = self.__qsettings.value("IO/Bladed_project", os.path.expanduser("~"))
+        fileName, _ = QFileDialog.getOpenFileName(self, "Open Bladed Linearization Result Files", __path, filter, options=options)
 
         if QFileInfo(fileName).exists():
             result_dir = QFileInfo(fileName).absolutePath()
             result_prefix = QFileInfo(fileName).baseName()
             database.add_data(datasetname, 'bladed-lin',
                               tool_specific_info={'result_dir': result_dir, 'result_prefix': result_prefix})
+            # save location to settings
+            self.__qsettings.setValue("IO/Bladed_project", QFileInfo(fileName).absolutePath())
 
     ##############################################################
     # Button action methods
