@@ -112,6 +112,7 @@ class AmplitudeWindow(QMainWindow):
                 a significant participation are shown.
         """
         self.requested_toolname = requested_toolname
+        self.requested_datasetname = requested_datasetname
         self.settingsAMPmode = requested_mode_id
         self.AMPmode_name = database[requested_toolname][requested_datasetname].ds.modes.values[requested_mode_id].name
         self.dataset = dataset
@@ -192,7 +193,7 @@ class AmplitudeWindow(QMainWindow):
         for i, mode in enumerate(self.dataset.participation_modes.values):
             # only show modes with a part. of minimum self.AMPthreshold (for at least one of the operating points)
             if max(self.dataset.participation_factors_amp.loc[:, i, self.settingsAMPmode]) > self.AMPthreshold:
-                ls = mpl_ls.new_ls(self.requested_toolname)
+                ls = mpl_ls.new_ls(self.requested_toolname, self.requested_datasetname)
                 ampl_line, = self.axes1.plot(self.dataset.operating_points.loc[:, self.xaxis_param],
                                 self.dataset.participation_factors_amp.loc[:, i, self.settingsAMPmode],
                                 label=mode.name, linewidth=mpl_ls.lw, c=ls['color'], linestyle=ls['linestyle'],
@@ -536,7 +537,7 @@ class ApplicationWindow(QMainWindow):
                     # this can probably also be done without a loop and just with the indices
                     for mode_ID in view_cfg.active_data[atool][ads]:
                         if view_cfg.lines[atool][ads][mode_ID] is None:
-                            ls = view_cfg.ls.new_ls(atool)
+                            ls = view_cfg.ls.new_ls(atool, ads)
                             freq_line, = self.axes1.plot(xaxis_values,
                                                          database[atool][ads].ds.frequency.loc[:, mode_ID],
                                                          color=ls['color'],
