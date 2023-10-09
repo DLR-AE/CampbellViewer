@@ -32,7 +32,7 @@ class BladedLinData(AbstractLinearizationData):
 
     def extract_bladed_version(self) -> str:
         """ Get the Bladed version from the header in the .$PJ file """
-        with open(os.path.join(self.ds.attrs["result_dir"], self.ds.attrs["result_prefix"]+'.$PJ')) as f:
+        with open(os.path.join(self.ds.attrs["result_dir"], self.ds.attrs["result_prefix"]+'.$PJ'), errors='ignore') as f:
             for line in f:
                 if 'ApplicationVersion' in line:
                     version = line.split("\"")[1]
@@ -102,6 +102,12 @@ class BladedLinData(AbstractLinearizationData):
         damping, damping_metadata = bladed_result['Damping']
         damping = 100 * damping  # damping ratio in %
         mode_names_orig = damping_metadata['AXITICK']
+
+        # It seems to happen that the number of mode names does not match the size of the frequency and damping array
+        # add some random names for the last modes
+        if len(mode_names_orig) < frequency.shape[1]:
+            mode_names_orig = mode_names_orig + ['...'] * (frequency.shape[1] - len(mode_names_orig))
+
         # make sure mode names are unique -> add numbers if identical names appear
         modes = []
         for mode_name in mode_names_orig:
