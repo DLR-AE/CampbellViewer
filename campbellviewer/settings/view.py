@@ -168,8 +168,8 @@ class MPLLinestyle:
                 E.g. if ['color', 'marker', 'linestyle'] -> first the lines will be differentiated by color, then by
                 marker, then by linestyle
         """
-        self.nr_lines_allocated = {'HAWCStab2': {}, 'Bladed (lin.)': {}}
-        self.reserved_index_dataset = {'HAWCStab2': {}, 'Bladed (lin.)': {}}
+        self.nr_lines_allocated = {'HAWCStab2': {}, 'Bladed (lin.)': {}, 'Identification': {}}
+        self.reserved_index_dataset = {'HAWCStab2': {}, 'Bladed (lin.)': {}, 'Identification': {}}
         self.colormap = colormap
         self.markersizedefault = markersizedefault
         self.style_sequences = style_sequences
@@ -203,7 +203,7 @@ class MPLLinestyle:
         else:
             counter = 0
             self.nr_lines_allocated[tool][ds] = 0
-            self.reserved_index_dataset[tool][ds] = len(self.reserved_index_dataset['Bladed (lin.)']) + len(self.reserved_index_dataset['HAWCStab2'])
+            self.reserved_index_dataset[tool][ds] = len(self.reserved_index_dataset['Bladed (lin.)']) + len(self.reserved_index_dataset['HAWCStab2']) + len(self.reserved_index_dataset['Identification'])
 
         seq_0 = self.style_sequences[self.style_determination_order[0]]
         seq_1 = self.style_sequences[self.style_determination_order[1]]

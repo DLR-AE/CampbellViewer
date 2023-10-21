@@ -10,6 +10,7 @@ import copy
 # Local libs
 from campbellviewer.interfaces.hawcstab2 import HAWCStab2Data
 from campbellviewer.interfaces.bladed import BladedLinData
+from campbellviewer.interfaces.ssi import SSIData
 from campbellviewer.data_storage.data_template import AbstractLinearizationData
 from campbellviewer.utilities import assure_unique_name, AEMode
 
@@ -52,6 +53,13 @@ class LinearizationDataWrapper(dict):
                     self['HAWCStab2'][name].read_amp_data(value, tool_specific_info['skip_header_AMP'])
                 elif key == 'filenameopt':
                     self['HAWCStab2'][name].read_opt_data(value, tool_specific_info['skip_header_OP'])
+
+        elif tool == 'ssi':
+            if 'Identification' not in self:
+                self['Identification'] = {}
+            self['Identification'][name] = SSIData(tool_specific_info['result_file'])
+            self['Identification'][name].read_data()
+
         else:
             raise NotImplementedError('Only reading of bladed and hawcstab2 data implemented.')
 

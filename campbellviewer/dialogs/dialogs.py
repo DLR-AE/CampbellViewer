@@ -297,7 +297,7 @@ class SettingsPopupDataSelection(SettingsPopup):
         popup_layoutBttn = QHBoxLayout()
 
         self.__ToolSelection = QComboBox()
-        self.__ToolSelection.addItems(['HAWCStab2', 'Bladed (lin.)'])
+        self.__ToolSelection.addItems(['HAWCStab2', 'Bladed (lin.)', 'Identification'])
         popup_layoutTool.addWidget(QLabel('Select which data type will be loaded (default=''HAWCStab2''):'))
         popup_layoutTool.addWidget(self.__ToolSelection)
 

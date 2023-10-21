@@ -928,6 +928,8 @@ class ApplicationWindow(QMainWindow):
             self.openFileNameDialogHAWCStab2(datasetname)
         elif tool == 'Bladed (lin.)':
             self.openFileNameDialogBladedLin(datasetname)
+        elif tool == 'Identification':
+            self.openFileNameDialogSSI(datasetname)
         else:
             raise ValueError('Only HAWCStab2 and Bladed-Linearization data are allowed as input.')
         del self.popup
@@ -1015,6 +1017,27 @@ class ApplicationWindow(QMainWindow):
                               tool_specific_info={'result_dir': result_dir, 'result_prefix': result_prefix})
             # save location to settings
             self.__qsettings.setValue("IO/Bladed_project", QFileInfo(fileName).absolutePath())
+
+    def openFileNameDialogSSI(self, datasetname: str='default'):
+        """ Open File Dialog for Identified linearization Campbell diagram files
+
+        Args:
+            datasetname: Name that will be given to the selected dataset in the database
+        """
+        options = QFileDialog.Options()
+        options |= QFileDialog.DontUseNativeDialog
+        filter = "Matlab identification output data (*.mat);;All Files (*)"
+        __path = self.__qsettings.value("IO/Identification_file", os.path.expanduser("~"))
+        fileName, _ = QFileDialog.getOpenFileName(self, "Open Identification Result File", __path, filter, options=options)
+
+        if QFileInfo(fileName).exists():
+            #result_dir = QFileInfo(fileName).absolutePath()
+            #result_prefix = QFileInfo(fileName).baseName()
+            database.add_data(datasetname, 'ssi',
+                              tool_specific_info={'result_file': fileName})
+            # save location to settings
+            self.__qsettings.setValue("IO/Identification_file", fileName)
+
 
     ##############################################################
     # Button action methods
