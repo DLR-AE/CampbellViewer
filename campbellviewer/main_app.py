@@ -33,13 +33,21 @@ import copy
 import argparse
 import importlib.resources
 
+sys.path.append(r'C:\git\WiVis')
+from visualization_gui import WTVisualizationGUI
+from wind_turbine_visualization import DefaultBladedTurbine, DefaultHAWCStabTurbine, WindTurbineVisualization
+from mpl_2d_animation import Mpl2DAnimWidget
+
 from PyQt5 import QtCore
 from PyQt5.QtWidgets import (
     QApplication, QMainWindow, QMenu, QVBoxLayout, QHBoxLayout, QMessageBox, QWidget,
-    QFileDialog, QPushButton, QLabel, QCheckBox, QComboBox, QTreeView
+    QFileDialog, QPushButton, QLabel, QCheckBox, QComboBox, QTreeView, QDockWidget
     )
 from PyQt5.QtGui  import QIcon
 from PyQt5.QtCore import QFileInfo, Qt, QItemSelectionModel, QSettings
+
+os.environ['ETS_TOOLKIT'] = 'qt4'
+from pyface.qt import QtGui, QtCore
 
 import matplotlib
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
@@ -48,6 +56,7 @@ from matplotlib.backend_bases import MouseButton
 from matplotlib.figure import Figure
 import mplcursors
 
+from campbellviewer.interfaces.hawcstab2 import HAWCStab2Data
 from campbellviewer.datatree_model import TreeModel
 from campbellviewer.settings.globals import database, view_cfg
 from campbellviewer.settings.view import MPLLinestyle
@@ -67,6 +76,25 @@ matplotlib.rcParams['hatch.linewidth'] = 0.2
 
 # activate clipboard --> not working currently!
 #~ matplotlib.rcParams['toolbar'] = 'toolmanager'
+
+
+class MayaviQWidget(QtGui.QWidget):
+    def __init__(self, parent=None, vis=None):
+        QtGui.QWidget.__init__(self, parent)
+        layout = QtGui.QVBoxLayout(self)
+        layout.setContentsMargins(0, 0, 0, 0)
+        layout.setSpacing(0)
+
+        self.visualization = WTVisualizationGUI(vis)
+
+        self.ui = self.visualization.edit_traits(parent=self,
+                                                 kind='subpanel').control
+        layout.addWidget(self.ui)
+        self.ui.setParent(self)
+
+    def closeEvent(self, QCloseEvent):
+        print('MayaviQWidget close event')
+        # self.ui.Finalize()     ############################ important
 
 
 class AmplitudeWindow(QMainWindow):
@@ -467,6 +495,10 @@ class ApplicationWindow(QMainWindow):
         self.button_rescale.clicked.connect(self.rescale_plot_limits)
         self.button_layout.addWidget(self.button_rescale)
 
+        self.button_visualization = QPushButton('Make mode visualization', self)
+        self.button_visualization.clicked.connect(self.make_mode_visualization)
+        self.button_layout.addWidget(self.button_visualization)
+
         self.pick_markers = False
         self.pick_markers_box = QCheckBox('Pick markers', self)
         self.pick_markers_box.clicked.connect(self.add_or_remove_scatter)
@@ -777,8 +809,12 @@ class ApplicationWindow(QMainWindow):
 
                         for sel in self.cursor.selections:
                             if sel.artist in mode_lines:
-                                # print('Selections are:', atool, ads, mode_ID)
-                                selected_lines.append([atool, ads, mode_ID])
+                                if isinstance(sel.artist, matplotlib.collections.PathCollection):
+                                    # print('Selections are:', atool, ads, mode_ID, int(sel.index))
+                                    selected_lines.append([atool, ads, mode_ID, int(sel.index)])
+                                else:
+                                    # print('Selections are:', atool, ads, mode_ID)
+                                    selected_lines.append([atool, ads, mode_ID])
 
         return selected_lines
 
@@ -821,6 +857,181 @@ class ApplicationWindow(QMainWindow):
                         if mode_lines is not None:
                             view_cfg.lines[atool][ads][mode_ID] = mode_lines[:2]
             self.UpdateMainPlot()
+
+    ##############################################################
+    # Modal visualization methods
+    ##############################################################
+    def make_mode_visualization(self):
+        """ Generate the modal visualization sub-GUI in dock widgets
+
+        1) Loop over the items which are selected in the matplotlib figure and find which data belongs to these items
+        2) Set up the visualization for each selection
+        3) create the QDockWidget with the MayaviQWidget for the visualization
+        """
+        selected_lines = self.find_data_of_highlights()
+        for selected_line in selected_lines:
+
+            mode_name = database[selected_line[0]][selected_line[1]].ds.modes.values[selected_line[2]].name
+            operating_param_value = float(database[selected_line[0]][selected_line[1]].ds['operating_points'].loc[selected_line[3], self.xaxis_param])
+            dockWidget = QDockWidget(mode_name + ' at ' + self.xaxis_param + '=' + str(operating_param_value), self)
+
+            visualize_in_3d = False  # hardcoded for now -> should be setting later
+            if visualize_in_3d:
+                if len(selected_line) == 4:  # a marker is picked
+                    vis = self.get_vis(tool=selected_line[0], dataset=selected_line[1],
+                                       mode_ID=selected_line[2], op_point_ID=selected_line[3])
+                else:
+                    vis = self.get_vis(tool=selected_line[0], dataset=selected_line[1],
+                                       mode_ID=selected_line[2])
+
+                container = QtGui.QWidget()
+                mayavi_widget = MayaviQWidget(container, vis)
+                dockWidget.setWidget(mayavi_widget)
+
+                # Other option for implementation in GUI -> no dock widget -> a direct widget
+                # self.layout_mpliblist.addWidget(mayavi_widget)
+
+            else:
+                if len(selected_line) == 4:  # a marker is picked
+                    widget_2d_anim = self.get_2d_vis(tool=selected_line[0], dataset=selected_line[1],
+                                                     mode_ID=selected_line[2], op_point_ID=selected_line[3])
+                else:
+                    widget_2d_anim = self.get_2d_vis(tool=selected_line[0], dataset=selected_line[1],
+                                                     mode_ID=selected_line[2])
+
+                dockWidget.setWidget(widget_2d_anim)
+
+            dockWidget.installEventFilter(self)
+            self.addDockWidget(Qt.RightDockWidgetArea, dockWidget)
+
+    def get_vis(self, tool: str, dataset: str, mode_ID: int, op_point_ID: int=None) -> WindTurbineVisualization:
+        """ Get the WiVis 3D visualization object
+
+        A WiVis WindTurbineVisualization object will be generated for the given tool, dataset, mode_ID and
+        op_point_ID combination.
+        If the visualization is available in the precomputed_modal_visualization dictionary, no new visualization object
+        has to be made.
+
+        Args:
+            tool: Name of the tool
+            dataset: Name of the dataset
+            mode_ID: ID of the mode
+            op_point_ID: ID of the operating point
+        """
+        if tool == 'Bladed (lin.)':
+            if str(mode_ID) in database[tool][dataset].precomputed_modal_visualization:
+                if str(op_point_ID) in database[tool][dataset].precomputed_modal_visualization[str(mode_ID)]:
+                    vis = database[tool][dataset].precomputed_modal_visualization[str(mode_ID)][str(op_point_ID)]
+                else:
+                    vis = DefaultBladedTurbine(
+                        database[tool][dataset].ds.attrs['result_dir'],
+                        database[tool][dataset].ds.attrs['result_prefix'],
+                        database[tool][dataset].ds.modes.values[mode_ID].name,
+                        [op_point_ID]
+                    )
+                    database[tool][dataset].precomputed_modal_visualization[str(mode_ID)][str(op_point_ID)] = vis
+            else:
+                vis = DefaultBladedTurbine(
+                    database[tool][dataset].ds.attrs['result_dir'],
+                    database[tool][dataset].ds.attrs['result_prefix'],
+                    database[tool][dataset].ds.modes.values[mode_ID].name,
+                    [op_point_ID]
+                )
+                database[tool][dataset].precomputed_modal_visualization[str(mode_ID)] = {str(op_point_ID): vis}
+
+        elif tool == 'HAWCStab2':
+            try:
+                if not database[tool][dataset].ds.attrs['filenamebin']:
+                    filenamebin, _ = QFileDialog.getOpenFileName(self, 'Select binary file')
+                    database[tool][dataset].ds.attrs['filenamebin'] = filenamebin
+                    database[tool][dataset].substructure = HAWCStab2Data().read_bin_file(filenamebin)
+            except KeyError:
+                filenamebin, _ = QFileDialog.getOpenFileName(self, 'Select binary file')
+                database[tool][dataset].ds.attrs['filenamebin'] = filenamebin
+                database[tool][dataset].substructure = HAWCStab2Data().read_bin_file(filenamebin)
+
+            if str(mode_ID) in database[tool][dataset].precomputed_modal_visualization:
+                if str(op_point_ID) in database[tool][dataset].precomputed_modal_visualization[str(mode_ID)]:
+                    vis = database[tool][dataset].precomputed_modal_visualization[str(mode_ID)][str(op_point_ID)]
+                else:
+                    vis = DefaultHAWCStabTurbine(database[tool][dataset].substructure,mode_ID,op_point_ID)
+                    database[tool][dataset].precomputed_modal_visualization[str(mode_ID)][str(op_point_ID)] = vis
+
+                vis = database[tool][dataset].precomputed_modal_visualization[str(mode_ID)][str(op_point_ID)]
+            else:
+                filenamebin = database[tool][dataset].ds.attrs['filenamebin']
+                try:
+                    database[tool][dataset].substructure
+                except AttributeError:
+                    database[tool][dataset].substructure = HAWCStab2Data().read_bin_file(filenamebin)
+                vis = DefaultHAWCStabTurbine(database[tool][dataset].substructure,mode_ID,op_point_ID)
+                database[tool][dataset].precomputed_modal_visualization[str(mode_ID)] = {str(op_point_ID): vis}
+
+        return vis
+
+    def get_2d_vis(self, tool: str, dataset: str, mode_ID: int, op_point_ID: int=None) -> Mpl2DAnimWidget:
+        """ Get the WiVis 2D visualization object
+
+        A WiVis Mpl2DAnimWidget object will be generated for the given tool, dataset, mode_ID and
+        op_point_ID combination.
+        todo: If the visualization is available in the precomputed_modal_visualization dictionary, no new visualization
+        should be made -> common wrapping method with get_vis necessary.
+
+        Args:
+            tool: Name of the tool
+            dataset: Name of the dataset
+            mode_ID: ID of the mode
+            op_point_ID: ID of the operating point
+        """
+        if tool == 'Bladed (lin.)':
+            return Mpl2DAnimWidget(
+                tool,
+                {
+                    'result_dir': database[tool][dataset].ds.attrs['result_dir'],
+                    'prefix': database[tool][dataset].ds.attrs['result_prefix']
+                },
+                [database[tool][dataset].ds.modes.values[mode_ID].name],
+                [op_point_ID],
+                minimalistic_plot=True
+            )
+        elif tool == 'HAWCStab2':
+            try:
+                if not database[tool][dataset].ds.attrs['filenamebin']:
+                    filenamebin, _ = QFileDialog.getOpenFileName(self, 'Select binary file')
+                    database[tool][dataset].ds.attrs['filenamebin'] = filenamebin
+                    database[tool][dataset].substructure = HAWCStab2Data().read_bin_file(filenamebin)
+            except KeyError:
+                filenamebin, _ = QFileDialog.getOpenFileName(self, 'Select binary file')
+                database[tool][dataset].ds.attrs['filenamebin'] = filenamebin
+                database[tool][dataset].substructure = HAWCStab2Data().read_bin_file(filenamebin)
+            return Mpl2DAnimWidget(
+                tool,
+                {
+                    'filenamebin': database[tool][dataset].ds.attrs['filenamebin'],
+                },
+                [mode_ID],
+                [op_point_ID],
+                minimalistic_plot=True
+            )
+
+    def eventFilter(self, source, event):
+        """ Filtering GUI events for dockwidget close events
+
+        If a dockwidget is closed, the widget which is in it has to be closed/finalized correctly. This seems to be
+        only possible by filtering all the GUI events for 'Close events' of 'Dock widgets'
+
+        Args:
+            source: Source widget which created the event
+            event: Qt event
+        """
+        if (event.type() == QtCore.QEvent.Close and
+                isinstance(source, QtGui.QDockWidget)):
+            if isinstance(source.widget(), WTVisualizationGUI):
+                source.widget().visualization.stop_timer()
+                source.widget().close()
+            source.close()
+
+        return super(ApplicationWindow, self).eventFilter(source, event)
 
     ##############################################################
     # Database methods
@@ -1114,7 +1325,6 @@ class ApplicationWindow(QMainWindow):
         """opens the settings popup"""
         self.settings.exec_()
 
-
     def set_settings_to_default(self, save: bool = False) -> None:
         """retrieves the default values or settings
 
@@ -1141,7 +1351,6 @@ class ApplicationWindow(QMainWindow):
         if save:
             for settings_key in self.__CV_settings:
                 self.__qsettings.setValue(settings_key, self.__CV_settings[settings_key])
-
 
     def update_settings(self) -> None:
         """retrieves the default values or the user specific settings from QSettings"""
