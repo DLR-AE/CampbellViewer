@@ -498,6 +498,13 @@ class ApplicationWindow(QMainWindow):
         self.button_visualization.clicked.connect(self.make_mode_visualization)
         self.button_layout.addWidget(self.button_visualization)
 
+        self.button_3d_or_2d_visualization = QComboBox(self)
+        self.button_3d_or_2d_visualization.addItems(['3D', '2D'])
+        self.modal_vis_3d_or_2d_box = QVBoxLayout()
+        self.modal_vis_3d_or_2d_box.addWidget(QLabel('Modal vis. in 3D or 2D:'))
+        self.modal_vis_3d_or_2d_box.addWidget(self.button_3d_or_2d_visualization)
+        self.button_layout.addLayout(self.modal_vis_3d_or_2d_box)
+
         self.pick_markers = False
         self.pick_markers_box = QCheckBox('Pick markers', self)
         self.pick_markers_box.clicked.connect(self.add_or_remove_scatter)
@@ -869,8 +876,7 @@ class ApplicationWindow(QMainWindow):
             operating_param_value = float(database[selected_line[0]][selected_line[1]].ds['operating_points'].loc[selected_line[3], self.xaxis_param])
             dockWidget = QDockWidget(mode_name + ' at ' + self.xaxis_param + '=' + str(operating_param_value), self)
 
-            visualize_in_3d = False  # hardcoded for now -> should be setting later
-            if visualize_in_3d:
+            if self.button_3d_or_2d_visualization.currentText() == '3D':
                 if len(selected_line) == 4:  # a marker is picked
                     vis = self.get_vis(tool=selected_line[0], dataset=selected_line[1],
                                        mode_ID=selected_line[2], op_point_ID=selected_line[3])
@@ -885,7 +891,7 @@ class ApplicationWindow(QMainWindow):
                 # Other option for implementation in GUI -> no dock widget -> a direct widget
                 # self.layout_mpliblist.addWidget(mayavi_widget)
 
-            else:
+            elif self.button_3d_or_2d_visualization.currentText() == '2D':
                 if len(selected_line) == 4:  # a marker is picked
                     widget_2d_anim = self.get_2d_vis(tool=selected_line[0], dataset=selected_line[1],
                                                      mode_ID=selected_line[2], op_point_ID=selected_line[3])
@@ -918,16 +924,16 @@ class ApplicationWindow(QMainWindow):
                     vis = database[tool][dataset].precomputed_modal_visualization[str(mode_ID)][str(op_point_ID)]
                 else:
                     vis = DefaultBladedTurbine(
-                        database[tool][dataset].ds.attrs['result_dir'],
-                        database[tool][dataset].ds.attrs['result_prefix'],
+                        os.path.join(database[tool][dataset].ds.attrs['result_dir'],
+                                     database[tool][dataset].ds.attrs['result_prefix']+'.$PJ'),
                         database[tool][dataset].ds.modes.values[mode_ID].name,
                         [op_point_ID]
                     )
                     database[tool][dataset].precomputed_modal_visualization[str(mode_ID)][str(op_point_ID)] = vis
             else:
                 vis = DefaultBladedTurbine(
-                    database[tool][dataset].ds.attrs['result_dir'],
-                    database[tool][dataset].ds.attrs['result_prefix'],
+                    os.path.join(database[tool][dataset].ds.attrs['result_dir'],
+                                 database[tool][dataset].ds.attrs['result_prefix']+'.$PJ'),
                     database[tool][dataset].ds.modes.values[mode_ID].name,
                     [op_point_ID]
                 )
