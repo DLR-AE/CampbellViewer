@@ -33,9 +33,9 @@ import copy
 import argparse
 import importlib.resources
 
-sys.path.append(r'C:\git\WiVis')
+sys.path.append(r'..\..\WiVis')
 from visualization_gui import WTVisualizationGUI
-from wind_turbine_visualization import DefaultBladedTurbine, DefaultHAWCStabTurbine, WindTurbineVisualization
+from wind_turbine_visualization import DefaultBladedTurbine, DefaultHAWCStabTurbine, DefaultSSITurbine, WindTurbineVisualization
 from mpl_2d_animation import Mpl2DAnimWidget
 
 from PyQt5 import QtCore
@@ -973,6 +973,12 @@ class ApplicationWindow(QMainWindow):
                 vis = DefaultHAWCStabTurbine(database[tool][dataset].substructure,mode_ID,op_point_ID)
                 database[tool][dataset].precomputed_modal_visualization[str(mode_ID)] = {str(op_point_ID): vis}
 
+        elif tool == 'Identification':
+
+            vis = DefaultSSITurbine(
+                database[tool][dataset].ds.attrs['matlab_idenfication_file'],
+                selected_mode_idx=mode_ID, selected_op_points=[op_point_ID])
+
         return vis
 
     def get_2d_vis(self, tool: str, dataset: str, mode_ID: int, op_point_ID: int=None) -> Mpl2DAnimWidget:
@@ -1014,6 +1020,17 @@ class ApplicationWindow(QMainWindow):
                 tool,
                 {
                     'filenamebin': database[tool][dataset].ds.attrs['filenamebin'],
+                },
+                [mode_ID],
+                [op_point_ID],
+                minimalistic_plot=True
+            )
+
+        elif tool == 'Identification':
+            return Mpl2DAnimWidget(
+                'SSI',
+                {
+                    'resultfile': database[tool][dataset].ds.attrs['matlab_idenfication_file']
                 },
                 [mode_ID],
                 [op_point_ID],

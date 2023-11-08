@@ -34,8 +34,8 @@ class SSIData(AbstractLinearizationData):
         self.ds["operating_points"] = (["operating_point_ID", "operating_parameter"], [[10, 10]])
 
         matlab_data = scipy.io.loadmat(self.matlab_idenfication_file)
-        frequency = matlab_data['freq'].squeeze()
-        damping = matlab_data['damp'].squeeze()
+        frequency = matlab_data['frequencies'].squeeze()
+        damping = matlab_data['dampings'].squeeze() * 100
 
         # make sure mode names are unique -> add numbers if identical names appear
         mode_names_orig = ['Mode {}'.format(i+1) for i in range(np.size(frequency))]
