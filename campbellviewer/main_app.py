@@ -35,11 +35,12 @@ import importlib.resources
 
 from PyQt5 import QtCore
 from PyQt5.QtWidgets import (
-    QApplication, QMainWindow, QMenu, QVBoxLayout, QHBoxLayout, QMessageBox, QWidget,
-    QFileDialog, QPushButton, QLabel, QCheckBox, QComboBox, QTreeView
+    QApplication, QMainWindow, QMenu, QVBoxLayout, QHBoxLayout, QGridLayout, QMessageBox, QWidget,
+    QFileDialog, QPushButton, QLabel, QCheckBox, QComboBox, QTreeView, QSplitter
     )
 from PyQt5.QtGui  import QIcon
 from PyQt5.QtCore import QFileInfo, Qt, QItemSelectionModel, QSettings
+import qtawesome as qta
 
 import matplotlib
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
@@ -372,6 +373,9 @@ class ApplicationWindow(QMainWindow):
         self.menuBar().addMenu(self.tools_menu)
         self.tools_menu.addAction('&Plot amplitudes of modes', self.initAmplitudes)
         self.tools_menu.addAction('&Plot amplitudes of highlighted modes', self.amplitudes_of_highlights)
+        self.tools_menu.addAction('&grab to clipboard', self.__grab_sreen,
+                                 Qt.CTRL + Qt.Key_C)
+        self.tools_menu.addAction('&grab and save', self.__grab_sreen_save)
 
         # HELP
         self.help_menu = QMenu('&Help', self)
@@ -385,28 +389,81 @@ class ApplicationWindow(QMainWindow):
 
         ##############################################################
         # Layout definition
-        self.main_layout      = QVBoxLayout(self.main_widget)
-        self.button_layout    = QHBoxLayout()
-        self.layout_mplib     = QVBoxLayout()
-        self.layout_list      = QVBoxLayout()
-        self.layout_mpliblist = QHBoxLayout()
+        self.main_layout   = QGridLayout(self.main_widget)
+        self.plot_splitter = QSplitter(Qt.Horizontal)
 
-        self.main_layout.addLayout(self.button_layout)
-        self.main_layout.addLayout(self.layout_mpliblist)
-        self.layout_mpliblist.addLayout(self.layout_mplib, 4)
-        self.layout_mpliblist.addLayout(self.layout_list, 1)
+        ##############################################################
+        # Set buttons
+        self.button_pharm = QPushButton('Plot P-Harmonics', self)
+        self.button_pharm.setCheckable(True)
+        self.button_pharm.clicked.connect(self.plotPharmonics)
+        self.main_layout.addWidget(self.button_pharm, 0,0,1,1)
+        
+        self.button_rescale = QPushButton('Rescale plot limits', self)
+        self.button_rescale.clicked.connect(self.rescale_plot_limits)
+        self.main_layout.addWidget(self.button_rescale, 1,0,1,1)
+
+        self.xaxis_label = QLabel('x-axis operating parameter:')
+        self.main_layout.addWidget(self.xaxis_label, 0,1,1,1)
+        self.button_xaxis = QComboBox(self)
+        self.main_layout.addWidget(self.button_xaxis, 0,2,1,1)
+        self.button_xaxis.currentTextChanged.connect(self.xaxis_change)
+        self.xaxis_param = self.button_xaxis.currentText()
+
+        self.pick_markers = False
+        self.pick_markers_box = QCheckBox('Pick markers', self)
+        self.pick_markers_box.clicked.connect(self.add_or_remove_scatter)
+        self.main_layout.addWidget(self.pick_markers_box, 1,1,2,1)
+
+        self.button_savepdf = QPushButton('Quick Save to PDF', self)
+        self.button_savepdf.clicked.connect(self.save_pdf)
+        self.main_layout.addWidget(self.button_savepdf, 0,3,1,1)
+
+        ##############################################################        
+        # Figure settings
+        self.main_plot_widget = QWidget()
+        self.layout_mplib     = QVBoxLayout()
+        self.main_plot_widget.setLayout(self.layout_mplib)
+        
+        self.fig = Figure(figsize=(6, 6), dpi=100)
+        self.canvas = FigureCanvas(self.fig)
+        toolbar = NavigationToolbar(self.canvas, self)
+        self.layout_mplib.addWidget(toolbar)
+        toolbar.addAction(QIcon(qta.icon('ph.camera')), "Grab a screenshot of the plot.", self.__grab_sreen)
+        toolbar.setFixedHeight(25)
+        self.layout_mplib.addWidget(self.canvas)
+        self.legend = None
+
+        # create figure with two axis
+        self.axes1 = self.fig.add_subplot(211)
+        self.axes2 = self.fig.add_subplot(212, sharex=self.axes1)
+        self.right_mouse_press = False
+        self.cursor = None
 
         ##############################################################
         # Treemodel of datasets
         self.dataset_tree_model = TreeModel()
         self.dataset_tree = DatasetTree(self.dataset_tree_model, self)
-        self.layout_list.addWidget(self.dataset_tree, 0)
 
         ##############################################################
         # Signals from the tree model.
         # -> layoutChanged signals are used to update the main plot
         # -> dataChanged signals are used to update the tree view
         self.dataset_tree_model.layoutChanged.connect(self.UpdateMainPlot)
+
+        ##############################################################
+        # Set Main Widget
+        self.canvas.setFocusPolicy(QtCore.Qt.ClickFocus)
+        self.main_widget.setFocus()
+        self.setCentralWidget(self.main_widget)
+        
+        # combine the splitter
+        self.plot_splitter.addWidget(self.main_plot_widget)
+        self.plot_splitter.addWidget(self.dataset_tree)
+        self.main_layout.addWidget(self.plot_splitter, 2,0,1,4)
+
+
+        self.statusBar().showMessage("GUI started", 2000)
 
         ##############################################################
         # init QSettings for setting/getting user defaults settings
@@ -417,59 +474,6 @@ class ApplicationWindow(QMainWindow):
         ##############################################################
         # Get default settings
         self.update_settings()
-
-        ##############################################################
-        # Figure settings
-        self.fig = Figure(figsize=(6, 6), dpi=100)
-        self.canvas = FigureCanvas(self.fig)
-        toolbar = NavigationToolbar(self.canvas, self)
-        self.layout_mplib.addWidget(toolbar)
-        self.layout_mplib.addWidget(self.canvas)
-        self.legend = None
-
-        # create figure with two axis
-        self.axes1      = self.fig.add_subplot(211)
-        self.axes2      = self.fig.add_subplot(212, sharex=self.axes1)
-        self.right_mouse_press = False
-        self.cursor = None
-
-        ##############################################################
-        # Set Main Widget
-        # This next line makes sure that key press events arrive in the matplotlib figure (e.g. to use 'x' and
-        # 'y' for fixing an axis when zooming/panning)
-        self.canvas.setFocusPolicy(QtCore.Qt.ClickFocus)
-        self.main_widget.setFocus()
-        self.setCentralWidget(self.main_widget)
-
-        self.statusBar().showMessage("GUI started", 2000)
-
-        ##############################################################
-        # Set buttons
-        self.button_pharm = QPushButton('Plot P-Harmonics', self)
-        self.button_pharm.setCheckable(True)
-        self.button_pharm.clicked.connect(self.plotPharmonics)
-        self.button_layout.addWidget(self.button_pharm)
-
-        self.button_xaxis = QComboBox(self)
-        self.button_xaxis.currentTextChanged.connect(self.xaxis_change)
-        self.xaxis_param = self.button_xaxis.currentText()
-        self.xaxis_selection_box = QVBoxLayout()
-        self.xaxis_selection_box.addWidget(QLabel('x-axis operating parameter:'))
-        self.xaxis_selection_box.addWidget(self.button_xaxis)
-        self.button_layout.addLayout(self.xaxis_selection_box)
-
-        self.button_savepdf = QPushButton('Quick Save to PDF', self)
-        self.button_savepdf.clicked.connect(self.save_pdf)
-        self.button_layout.addWidget(self.button_savepdf)
-
-        self.button_rescale = QPushButton('Rescale plot limits', self)
-        self.button_rescale.clicked.connect(self.rescale_plot_limits)
-        self.button_layout.addWidget(self.button_rescale)
-
-        self.pick_markers = False
-        self.pick_markers_box = QCheckBox('Pick markers', self)
-        self.pick_markers_box.clicked.connect(self.add_or_remove_scatter)
-        self.button_layout.addWidget(self.pick_markers_box)
 
     ##############################################################
     # Matplotlib and Matplotlib callback methods
@@ -815,6 +819,24 @@ class ApplicationWindow(QMainWindow):
                         if mode_lines is not None:
                             view_cfg.lines[atool][ads][mode_ID] = mode_lines[:2]
             self.UpdateMainPlot()
+    
+    def __grab_sreen(self):
+        """graps matplotlib widget and put it into clipboard"""
+        pixmap = self.canvas.grab()
+        QApplication.clipboard().setPixmap(pixmap)
+        
+    def __grab_sreen_save(self):
+        """graps matplotlib widget and save it to a file"""
+        pixmap = self.canvas.grab()
+        
+        # open a file menu diaglog
+        response = QFileDialog.getSaveFileName(self, 'Save screen shot', '', "Portable Network Grafic(*.png)")
+
+        if response[0]:
+
+            path = response[0]
+            ext  = response[1]
+            pixmap.save(path)        
 
     ##############################################################
     # Database methods
