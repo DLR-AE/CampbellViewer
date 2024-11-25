@@ -50,11 +50,11 @@ class ViewSettings:
 
     def update_lines(self):
         for atool in self.active_data:
-            self.ls.nr_lines_allocated[atool] = 0
             for ads in self.active_data[atool]:
+                self.ls.nr_lines_allocated[atool][ads] = 0
                 for mode_idx, line in enumerate(self.lines[atool][ads]):
                     if line is not None:
-                        ls = self.ls.new_ls(atool)
+                        ls = self.ls.new_ls(atool, ads)
                         for idx in [0, 1]:
                             self.lines[atool][ads][mode_idx][idx].set_linewidth(self.ls.lw)
                             self.lines[atool][ads][mode_idx][idx].set_linestyle(ls['linestyle'])
@@ -92,7 +92,8 @@ class ViewSettings:
         for tool in self.lines:
             for ds in self.lines[tool]:
                 self.lines[tool][ds] = [None]*len(self.lines[tool][ds])
-            self.ls.nr_lines_allocated[tool] = 0
+                self.ls.nr_lines_allocated[tool][ds] = {}
+                self.ls.reserved_index_dataset[tool][ds] = {}
 
     def reset_these_lines(self, tool, ds):
         """
@@ -167,7 +168,8 @@ class MPLLinestyle:
                 E.g. if ['color', 'marker', 'linestyle'] -> first the lines will be differentiated by color, then by
                 marker, then by linestyle
         """
-        self.nr_lines_allocated = {'HAWCStab2': 0, 'Bladed (lin.)':0}
+        self.nr_lines_allocated = {'HAWCStab2': {}, 'Bladed (lin.)': {}}
+        self.reserved_index_dataset = {'HAWCStab2': {}, 'Bladed (lin.)': {}}
         self.colormap = colormap
         self.markersizedefault = markersizedefault
         self.style_sequences = style_sequences
@@ -175,13 +177,15 @@ class MPLLinestyle:
         self.overwrite_cm_color_sequence = overwrite_cm_color_sequence
         self.style_determination_order = style_determination_order
 
-    def new_ls(self, tool:str) -> dict:
+    def new_ls(self, tool:str, ds:str) -> dict:
         """Get the next linestyle and increase the nr_lines_allocated by one.
 
         Args:
             tool:
                 Name of the tool for which frequencies and damping ratios are
                 plotted.
+            ds:
+                Name of the dataset which frequencies and damping ratios are plotted
 
         Returns:
             linestyle
@@ -194,7 +198,12 @@ class MPLLinestyle:
         else:
             self.style_sequences['color'] = [matplotlib.colors.to_hex(color) for color in matplotlib.cm.get_cmap(self.colormap).colors]
 
-        counter = self.nr_lines_allocated[tool]
+        if ds in self.nr_lines_allocated[tool]:
+            counter = self.nr_lines_allocated[tool][ds]
+        else:
+            counter = 0
+            self.nr_lines_allocated[tool][ds] = 0
+            self.reserved_index_dataset[tool][ds] = len(self.reserved_index_dataset['Bladed (lin.)']) + len(self.reserved_index_dataset['HAWCStab2'])
 
         seq_0 = self.style_sequences[self.style_determination_order[0]]
         seq_1 = self.style_sequences[self.style_determination_order[1]]
@@ -202,19 +211,16 @@ class MPLLinestyle:
 
         idx_0 = counter % len(seq_0)
 
-        # Fix index 1 for different tools (Markers for default view)
-        if tool == 'HAWCStab2':
-            idx_1 = 0
-        elif tool == 'Bladed (lin.)':
-            idx_1 = 1
+        # Fix index 1 for different dataset (Markers for default view)
+        idx_1 = self.reserved_index_dataset[tool][ds]
 
-        idx_2 = int(self.nr_lines_allocated[tool] / len(seq_0)) % len(seq_2)
+        idx_2 = int(self.nr_lines_allocated[tool][ds] / len(seq_0)) % len(seq_2)
 
-        self.nr_lines_allocated[tool] += 1
+        self.nr_lines_allocated[tool][ds] += 1
 
-        return {self.style_determination_order[0]: seq_0[idx_0],
-                self.style_determination_order[1]: seq_1[idx_1],
-                self.style_determination_order[2]: seq_2[idx_2],}
+        return {self.style_determination_order[0]: seq_0[idx_0%len(seq_0)],
+                self.style_determination_order[1]: seq_1[idx_1%len(seq_1)],
+                self.style_determination_order[2]: seq_2[idx_2%len(seq_2)],}
 
     def verify_inputs(self):
         raise NotImplementedError

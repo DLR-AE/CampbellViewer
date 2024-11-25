@@ -113,6 +113,7 @@ class AmplitudeWindow(QMainWindow):
                 a significant participation are shown.
         """
         self.requested_toolname = requested_toolname
+        self.requested_datasetname = requested_datasetname
         self.settingsAMPmode = requested_mode_id
         self.AMPmode_name = database[requested_toolname][requested_datasetname].ds.modes.values[requested_mode_id].name
         self.dataset = dataset
@@ -193,7 +194,7 @@ class AmplitudeWindow(QMainWindow):
         for i, mode in enumerate(self.dataset.participation_modes.values):
             # only show modes with a part. of minimum self.AMPthreshold (for at least one of the operating points)
             if max(self.dataset.participation_factors_amp.loc[:, i, self.settingsAMPmode]) > self.AMPthreshold:
-                ls = mpl_ls.new_ls(self.requested_toolname)
+                ls = mpl_ls.new_ls(self.requested_toolname, self.requested_datasetname)
                 ampl_line, = self.axes1.plot(self.dataset.operating_points.loc[:, self.xaxis_param],
                                 self.dataset.participation_factors_amp.loc[:, i, self.settingsAMPmode],
                                 label=mode.name, linewidth=mpl_ls.lw, c=ls['color'], linestyle=ls['linestyle'],
@@ -540,7 +541,7 @@ class ApplicationWindow(QMainWindow):
                     # this can probably also be done without a loop and just with the indices
                     for mode_ID in view_cfg.active_data[atool][ads]:
                         if view_cfg.lines[atool][ads][mode_ID] is None:
-                            ls = view_cfg.ls.new_ls(atool)
+                            ls = view_cfg.ls.new_ls(atool, ads)
                             freq_line, = self.axes1.plot(xaxis_values,
                                                          database[atool][ads].ds.frequency.loc[:, mode_ID],
                                                          color=ls['color'],
@@ -580,7 +581,8 @@ class ApplicationWindow(QMainWindow):
                             damp_line = self.axes2.add_line(view_cfg.lines[atool][ads][mode_ID][1])
                             self.axes2.update_datalim(damp_line.get_xydata())
                             self.axes2.autoscale_view()
-                            # disabled to avoid double entries in legend
+                            # disabled to avoid double entries in legend (if this is changed the mplcursors on_add
+                            # method should be updated)
                             # damp_line.set_label(ads + ': ' + database[atool][ads].ds.modes.values[mode_ID].name)
                             if self.pick_markers is True:
                                 scat_collection_freq = self.axes1.add_collection(view_cfg.lines[atool][ads][mode_ID][2])
@@ -681,6 +683,10 @@ class ApplicationWindow(QMainWindow):
                 self.on_mpl_cursors_pick(sel.artist, 'select')
                 sel.extras.append(self.cursor.add_highlight(pairs[sel.artist]))
                 sel.annotation.get_bbox_patch().set(fc="grey")
+                if sel.artist.axes == self.axes2:
+                    # line in damping plot is selected -> these lines do not have a label -> so manually add label
+                    # to cursor text box
+                    sel.annotation.set_text(pairs[sel.artist].get_label() + '\n' + sel.annotation.get_text())
 
             @self.cursor.connect("remove")
             def on_remove(sel):
@@ -844,16 +850,26 @@ class ApplicationWindow(QMainWindow):
     def load_database(self):
         """ Load data from database (and use default view settings) """
         db_filename = self.get_database_filename(mode='load')
-        self.apply_database(db_filename)
+        if db_filename != "":
+            self.apply_database(db_filename)
 
     def save_database(self):
         """ Save data to database """
         db_filename = self.get_database_filename(mode='save')
+        if db_filename == "":
+            return
 
         if db_filename[-3:] != ".nc":
             db_filename = db_filename + ".nc"
-
-        database.save(fname=db_filename)
+        try:
+            database.save(fname=db_filename)
+        except PermissionError:
+            msg = QMessageBox()
+            msg.setWindowTitle("Warning")
+            msg.setIcon(QMessageBox.Critical)
+            msg.setText("File cannot be accessed because it is used by another process.")
+            msg.setStandardButtons(QMessageBox.Ok)
+            msg.exec_()
 
     def get_database_filename(self, mode: str) -> str:
         """ Use a QFileDialog to get the filename where the database can be loaded or saved.
@@ -913,7 +929,9 @@ class ApplicationWindow(QMainWindow):
 
         """
         self.popup = SettingsPopupDataSelection()
-        tool, datasetname = self.popup.get_settings()
+        success, tool, datasetname = self.popup.get_settings()
+        if success is False:
+            return
 
         if '&' in datasetname:
             self.statusBar().showMessage('& is not allowed in the datasetname', 4000)
@@ -1009,13 +1027,16 @@ class ApplicationWindow(QMainWindow):
         options = QFileDialog.Options()
         options |= QFileDialog.DontUseNativeDialog
         filter = "Bladed Linearization Result Files (*.$PJ);;All Files (*)"
-        fileName, _ = QFileDialog.getOpenFileName(self, "Open Bladed Linearization Result Files", "", filter, options=options)
+        __path = self.__qsettings.value("IO/Bladed_project", os.path.expanduser("~"))
+        fileName, _ = QFileDialog.getOpenFileName(self, "Open Bladed Linearization Result Files", __path, filter, options=options)
 
         if QFileInfo(fileName).exists():
             result_dir = QFileInfo(fileName).absolutePath()
             result_prefix = QFileInfo(fileName).baseName()
             database.add_data(datasetname, 'bladed-lin',
                               tool_specific_info={'result_dir': result_dir, 'result_prefix': result_prefix})
+            # save location to settings
+            self.__qsettings.setValue("IO/Bladed_project", QFileInfo(fileName).absolutePath())
 
     ##############################################################
     # Button action methods

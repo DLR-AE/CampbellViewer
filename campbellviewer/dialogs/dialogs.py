@@ -286,8 +286,9 @@ class SettingsPopupDataSelection(SettingsPopup):
         super(SettingsPopupDataSelection, self).__init__()
 
         # define initial tool and dataset
-        self.selected_tool = 'HAWCStab2'
-        self.dataset_name = 'default'
+        self.success = False
+        self.selected_tool = None
+        self.dataset_name = None
 
         self.setWindowTitle("Tool selection")
         popup_layoutV = QVBoxLayout(self)
@@ -308,7 +309,7 @@ class SettingsPopupDataSelection(SettingsPopup):
         button_OK.clicked.connect(self.ok_click)
         popup_layoutBttn.addWidget(button_OK)
         button_Cancel = QPushButton('Cancel', self)
-        button_Cancel.clicked.connect(self.close_popup)
+        button_Cancel.clicked.connect(self.cancel)
         popup_layoutBttn.addWidget(button_Cancel)
 
         popup_layoutV.addLayout(popup_layoutTool)
@@ -323,13 +324,20 @@ class SettingsPopupDataSelection(SettingsPopup):
           selected_tool: string indicating from which tool data will be selected
           dataset_name: string with user specified name for the dataset
         """
-        return self.selected_tool, self.dataset_name
+        return self.success, self.selected_tool, self.dataset_name
 
     def update_settings(self):
         """ Updates the settings based on the current content of the popup """
+        self.success = True
         self.selected_tool = self.__ToolSelection.currentText()
         self.dataset_name = self.__DataSetName.text()
         self.close()
+
+    def cancel(self):
+        """ Action if user presses cancel. Do not continue with the modal participation plotting. """
+        self.success = False
+        self.close_popup()
+
 
 class SettingsPopupAMP(SettingsPopup):
     """Class for popup-window to select for which mode the modal participations have to be shown
@@ -529,9 +537,11 @@ class SettingsPopupModeFilter(SettingsPopup):
         symmetry_type (str): string with indication of the symmetry type of the aeroelastic mode for the filter
         whirl_type (str): string with indication of the whirling type of the aeroelastic mode for the filter
         wt_component (str): string with indication of the main wind turbine component of the aeroelastic mode for the filter
+        blade_mode_type (str): string with indication of the aeroelastic blade mode type for the filter
         __SymTypeSelection (QComboBox): QComboBox to select the symmetry type of the mode for the filter
         __WhirlTypeSelection (QComboBox): QComboBox to select the whirling type of the mode for the filter
         __WTCompSelection (QComboBox): QComboBox to select the main wind turbine component of the mode for the filter
+        __BladeModeTypeSelection (QComboBox): QComboBox to select the blade mode type for the filter
     """
     def __init__(self):
         """ Initializes popup to select a filter for the aeroelastic modes """
@@ -540,12 +550,14 @@ class SettingsPopupModeFilter(SettingsPopup):
         self.symmetry_type = 'all'
         self.whirl_type = 'all'
         self.wt_component = 'all'
+        self.blade_mode_type = 'all'
         self.setWindowTitle("Filter modes")
 
         popup_layoutV = QVBoxLayout(self)
         popup_layoutSYM = QHBoxLayout()
         popup_layoutWHIRL = QHBoxLayout()
         popup_layoutWT = QHBoxLayout()
+        popup_layoutBMT = QHBoxLayout()
         popup_layoutBttn = QHBoxLayout()
 
         self.__SymTypeSelection = QComboBox()
@@ -566,6 +578,12 @@ class SettingsPopupModeFilter(SettingsPopup):
         popup_layoutWT.addWidget(QLabel('Only show this wind turbine component:'))
         popup_layoutWT.addWidget(self.__WTCompSelection)
 
+        self.__BladeModeTypeSelection = QComboBox()
+        self.__BladeModeTypeSelection.addItems(['all', 'edge', 'flap', 'torsion'])
+        self.__BladeModeTypeSelection.setEditable(True)
+        popup_layoutBMT.addWidget(QLabel('Only show this type of blade modes:'))
+        popup_layoutBMT.addWidget(self.__BladeModeTypeSelection)
+
         button_OK = QPushButton('OK', self)
         button_OK.clicked.connect(self.ok_click)
         popup_layoutBttn.addWidget(button_OK)
@@ -576,6 +594,7 @@ class SettingsPopupModeFilter(SettingsPopup):
         popup_layoutV.addLayout(popup_layoutSYM)
         popup_layoutV.addLayout(popup_layoutWHIRL)
         popup_layoutV.addLayout(popup_layoutWT)
+        popup_layoutV.addLayout(popup_layoutBMT)
         popup_layoutV.addLayout(popup_layoutBttn)
         self.exec_()
 
@@ -586,14 +605,16 @@ class SettingsPopupModeFilter(SettingsPopup):
             symmetry_type: user-defined symmetry type of the aeroelastic mode for filtering
             whirl_type: user-defined whirl type of the aeroelastic mode for filtering
             wt_component: user-defined wind turbine component of the aeroelastic mode for filtering
+            blade_mode_type: user-defined aeroelastic blade mode type for filtering
         """
-        return self.symmetry_type, self.whirl_type, self.wt_component
+        return self.symmetry_type, self.whirl_type, self.wt_component, self.blade_mode_type
 
     def update_settings(self):
         """Updates the settings based on the current content of the popup """
-        self.symmetry_type = self.__SymTypeSelection.currentText()
-        self.whirl_type    = self.__WhirlTypeSelection.currentText()
-        self.wt_component  = self.__WTCompSelection.currentText()
+        self.symmetry_type   = self.__SymTypeSelection.currentText()
+        self.whirl_type      = self.__WhirlTypeSelection.currentText()
+        self.wt_component    = self.__WTCompSelection.currentText()
+        self.blade_mode_type = self.__BladeModeTypeSelection.currentText()
 
 
 class SettingsPopupLinestyle(SettingsPopup):
