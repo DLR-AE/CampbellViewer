@@ -9,7 +9,7 @@ from campbellviewer.utilities import AEMode
 
 
 class HAWCStab2Data(AbstractLinearizationData):
-    """This is a class for handling HAWCStab2 linearization data.
+    r"""This is a class for handling HAWCStab2 linearization data.
 
     Attributes:
         ds (xarray.Dataset): xarray Dataset containing all linearization data
@@ -181,14 +181,24 @@ class HAWCStab2Data(AbstractLinearizationData):
         )
 
         # Determine dominant DOF per mode
+        shape_numbering = {1 : '1st', 2 : '2nd', 3 : '3rd'}
+        for i in range(4,20):
+            shape_numbering[i] =f'{i}th'
         mode_names = []
-        for i_mode in range(0, num_modes):
-            mean_dof = np.mean(amp_data[:, :, i_mode], axis=0)
-            mode_names.append(sensor_list[np.argmax(mean_dof)])
+        reoccurant_mode_shape = {}
+        for shape_name in sensor_list:
+            reoccurant_mode_shape[shape_name.strip()] = 0
+        for i_mode in range(0,num_modes):
+            mean_DOF = np.mean(amp_data[:,:,i_mode],axis=0)
+            shape_name = sensor_list[np.argmax(mean_DOF)].strip()
+            reoccurant_mode_shape[shape_name] += 1
+            mode_names.append(f'{shape_numbering[reoccurant_mode_shape[shape_name]]} {shape_name}')
 
-        # Override first tower mode
-        if mode_names[2] == sensor_list[0]:
-            mode_names[1] = sensor_list[1]
+        # Override data for first two modes, because in HAWCStab2 tower amplitudes are not 1.0 although it is a tower mode.
+        # Unfortunately, higher tower modes cannot be filtered easyly.
+        mode_names[0]='lag mode'
+        mode_names[1]='1st Tower SS'
+        mode_names[2]='1st Tower FA'
 
         # Make sure mode names are unique -> mode names are used as indices in xarrays
         # unique_mode_names = []
