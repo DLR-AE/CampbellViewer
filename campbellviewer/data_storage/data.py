@@ -152,10 +152,10 @@ class LinearizationDataWrapper(dict):
                 self[toolname][datasetname].ds.attrs["database_file"] = fname
 
                 # convert AEModes saved as plain text to AEMode objects
-                for ii, ae_mode in enumerate(self[toolname][datasetname].ds['modes'].values):
-                    self[toolname][datasetname].ds['modes'][ii] = AEMode.from_plain_text(ae_mode)
-                for ii, ae_mode in enumerate(self[toolname][datasetname].ds['participation_modes'].values):
-                    self[toolname][datasetname].ds['participation_modes'][ii] = AEMode.from_plain_text(ae_mode)
+                self[toolname][datasetname].ds['modes'].values = [AEMode.from_plain_text(ae_mode) for ae_mode in
+                                                                  self[toolname][datasetname].ds['modes'].values]
+                self[toolname][datasetname].ds['participation_modes'].values = [AEMode.from_plain_text(ae_mode) for ae_mode in
+                                                                                self[toolname][datasetname].ds['participation_modes'].values]
         else:
             print('REQUESTED DATABASE FILE {} was not found'.format(fname))
             loaded_data = dict()
