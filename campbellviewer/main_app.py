@@ -1169,10 +1169,12 @@ class ApplicationWindow(QMainWindow):
         for settings_key in self.__CV_settings:
             if self.__qsettings.contains(settings_key):
                 user_setting = self.__qsettings.value(settings_key)
-                if isinstance(self.__CV_settings[settings_key],float):
+                if isinstance(self.__CV_settings[settings_key], float):
                     self.__CV_settings[settings_key] = float(user_setting)
-                elif isinstance(self.__CV_settings[settings_key],bool):
+                elif isinstance(self.__CV_settings[settings_key], bool):
                     self.__CV_settings[settings_key] = bool(user_setting)
+                elif isinstance(self.__CV_settings[settings_key], int):
+                    self.__CV_settings[settings_key] = int(user_setting)
                 else:
                     self.__CV_settings[settings_key] = user_setting
 
