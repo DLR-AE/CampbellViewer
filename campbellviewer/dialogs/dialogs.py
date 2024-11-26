@@ -151,8 +151,8 @@ class SettingsPlot(QWidget):
         layout.setAlignment(Qt.AlignLeft|Qt.AlignTop)
 
         # try to fetch the data from qsettings, otherwise take default
-        mode_minpara = self.__qsettings.value('mode_minpara_cmb', 1) # default to 1
-        mode_maxpara = self.__qsettings.value('mode_maxpara_cmb', 6) # default to 6
+        mode_minpara = int(self.__qsettings.value('mode_minpara_cmb', int(1)))  # default to 1
+        mode_maxpara = int(self.__qsettings.value('mode_maxpara_cmb', 6))  # default to 6
         amp_part_threshold = float(self.__qsettings.value('amp_part_threshold',0.05)) # for PyQt5/Python 3.9 an explicit conversion has to be performed
         pharmonics = bool(self.__qsettings.value('pharmonics', False)) # default to False
 
@@ -221,9 +221,9 @@ class SettingsHS2(QWidget):
         layout.setAlignment(Qt.AlignLeft|Qt.AlignTop)
 
         # try to fetch the data from qsettings, otherwise take default
-        self.skip_header_CMB = self.__qsettings.value('skip_header_CMB', 1) # default to 1
-        self.skip_header_AMP = self.__qsettings.value('skip_header_AMP', 5) # default to 5
-        self.skip_header_OP  = self.__qsettings.value('skip_header_OP' , 1) # default to 6
+        self.skip_header_CMB = int(self.__qsettings.value('skip_header_CMB', 1))  # default to 1
+        self.skip_header_AMP = int(self.__qsettings.value('skip_header_AMP', 5))  # default to 5
+        self.skip_header_OP  = int(self.__qsettings.value('skip_header_OP' , 1))  # default to 6
 
         layout.addWidget(QLabel("<b>HAWCStab2: Header lines to skip</b>"), 0,0,1,2)
         headerLinesCMBL = QLabel('Number of header lines in Campbell file:')
