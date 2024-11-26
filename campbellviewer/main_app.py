@@ -36,7 +36,7 @@ import importlib.resources
 from PyQt5 import QtCore
 from PyQt5.QtWidgets import (
     QApplication, QMainWindow, QMenu, QVBoxLayout, QHBoxLayout, QGridLayout, QMessageBox, QWidget,
-    QFileDialog, QPushButton, QLabel, QCheckBox, QComboBox, QTreeView, QSplitter
+    QFileDialog, QPushButton, QLabel, QCheckBox, QComboBox, QTreeView, QSplitter, QSizePolicy
     )
 from PyQt5.QtGui  import QIcon
 from PyQt5.QtCore import QFileInfo, Qt, QItemSelectionModel, QSettings
@@ -124,6 +124,8 @@ class AmplitudeWindow(QMainWindow):
         self.AMPfig = Figure(figsize=(6, 6), dpi=100, tight_layout=True)
         self.AMPcanvas = FigureCanvas(self.AMPfig)
         toolbar = NavigationToolbar(self.AMPcanvas, self)
+        toolbar.addAction(QIcon(qta.icon('ph.camera')), "Grab a screenshot of the plot.", self.__grab_sreen)
+        toolbar.setFixedHeight(25)
 
         self.main_widget = QWidget(self)
         self.layout_mplib = QVBoxLayout(self.main_widget)
@@ -219,6 +221,11 @@ class AmplitudeWindow(QMainWindow):
                 line.set(color="C3")
 
         self.AMPcanvas.draw()
+        
+    def __grab_sreen(self):
+        """graps matplotlib widget and put it into clipboard"""
+        pixmap = self.canvas.grab()
+        QApplication.clipboard().setPixmap(pixmap)
 
     def closeEvent(self, event):
         self.sigClosed.emit()
@@ -289,7 +296,7 @@ class DatasetTree(QTreeView):
                 del popupAEMode
             elif action == showAmplitudes:
                 modeID, dataset, tool = self.tree_model.get_branch_from_item(idx.internalPointer())
-                self.aw.initAmplitudes(popup=False, chosen_mode=[tool, dataset, modeID[0]])
+                self.aw.plot_amplitudes(popup=False, chosen_mode=[tool, dataset, modeID[0]])
         elif idx.internalPointer().itemType == 'dataset' or idx.internalPointer().itemType == 'tool':
             if action == checkAll:
                 self.tree_model.set_checked(idx, Qt.Checked)
@@ -372,7 +379,7 @@ class ApplicationWindow(QMainWindow):
         self.tools_menu = QMenu('&Tools', self)
         self.menuBar().addSeparator()
         self.menuBar().addMenu(self.tools_menu)
-        self.tools_menu.addAction('&Plot amplitudes of modes', self.initAmplitudes)
+        self.tools_menu.addAction('&Plot amplitudes of modes', self.plot_amplitudes)
         self.tools_menu.addAction('&Plot amplitudes of highlighted modes', self.amplitudes_of_highlights)
         self.tools_menu.addAction('&grab to clipboard', self.__grab_sreen,
                                  Qt.CTRL + Qt.Key_C)
@@ -395,30 +402,40 @@ class ApplicationWindow(QMainWindow):
 
         ##############################################################
         # Set buttons
-        self.button_pharm = QPushButton('Plot P-Harmonics', self)
-        self.button_pharm.setCheckable(True)
-        self.button_pharm.clicked.connect(self.plotPharmonics)
+        self.button_pharm = QCheckBox('Plot P-Harmonics', self)
+        self.button_pharm.setToolTip('Adds or removes the P-harmonics from operational data into the frequency plot.')
+        self.button_pharm.clicked.connect(self.plot_P_harmonics)
         self.main_layout.addWidget(self.button_pharm, 0,0,1,1)
-        
-        self.button_rescale = QPushButton('Rescale plot limits', self)
-        self.button_rescale.clicked.connect(self.rescale_plot_limits)
-        self.main_layout.addWidget(self.button_rescale, 1,0,1,1)
-
-        self.xaxis_label = QLabel('x-axis operating parameter:')
-        self.main_layout.addWidget(self.xaxis_label, 0,1,1,1)
-        self.button_xaxis = QComboBox(self)
-        self.main_layout.addWidget(self.button_xaxis, 0,2,1,1)
-        self.button_xaxis.currentTextChanged.connect(self.xaxis_change)
-        self.xaxis_param = self.button_xaxis.currentText()
 
         self.pick_markers = False
         self.pick_markers_box = QCheckBox('Pick markers', self)
         self.pick_markers_box.clicked.connect(self.add_or_remove_scatter)
-        self.main_layout.addWidget(self.pick_markers_box, 1,1,2,1)
+        self.main_layout.addWidget(self.pick_markers_box, 0,1,1,1)
+        
+        self.button_rescale = QPushButton('Rescale plot limits', self)
+        self.button_rescale.clicked.connect(self.rescale_plot_limits)
+        self.main_layout.addWidget(self.button_rescale, 0,2,1,1)
+        
+        self.button_amp_plot = QPushButton('Plot amplitudes', self)
+        popup=True
+        self.button_amp_plot.clicked.connect(lambda :self.plot_amplitudes(popup))
+        self.main_layout.addWidget(self.button_amp_plot, 0,3,1,1)
+        
+        self.button_amp_plot_highlighted = QPushButton('Plot highl. amp.', self)
+        self.button_amp_plot_highlighted.clicked.connect(self.amplitudes_of_highlights)
+        self.main_layout.addWidget(self.button_amp_plot_highlighted, 0,4,1,1)
+
+        self.xaxis_label = QLabel('x-axis operating parameter:')
+        self.main_layout.addWidget(self.xaxis_label, 0,5,1,1)
+        self.button_xaxis = QComboBox(self)
+        self.main_layout.addWidget(self.button_xaxis, 0,6,1,1)
+        self.button_xaxis.currentTextChanged.connect(self.xaxis_change)
+        self.xaxis_param = self.button_xaxis.currentText()
 
         self.button_savepdf = QPushButton('Quick Save to PDF', self)
+        self.button_savepdf.setIcon(QIcon(qta.icon('mdi.file-pdf-box')))
         self.button_savepdf.clicked.connect(self.save_pdf)
-        self.main_layout.addWidget(self.button_savepdf, 0,3,1,1)
+        self.main_layout.addWidget(self.button_savepdf, 0,7,1,1)
 
         ##############################################################        
         # Figure settings
@@ -459,9 +476,10 @@ class ApplicationWindow(QMainWindow):
         self.setCentralWidget(self.main_widget)
         
         # combine the splitter
-        self.plot_splitter.addWidget(self.main_plot_widget)
         self.plot_splitter.addWidget(self.dataset_tree)
-        self.main_layout.addWidget(self.plot_splitter, 2,0,1,4)
+        self.plot_splitter.addWidget(self.main_plot_widget)
+        self.plot_splitter.setStretchFactor(1, 15)
+        self.main_layout.addWidget(self.plot_splitter, 1,0,1,8)
 
 
         self.statusBar().showMessage("GUI started", 2000)
@@ -1041,7 +1059,7 @@ class ApplicationWindow(QMainWindow):
     ##############################################################
     # Button action methods
     ##############################################################
-    def plotPharmonics(self):
+    def plot_P_harmonics(self):
         """ Plot P-Harmonics in Campbell diagram """
         if self.__CV_settings['pharmonics']:
             self.button_pharm.setChecked(False)
@@ -1178,9 +1196,9 @@ class ApplicationWindow(QMainWindow):
             if len(selected_lines) > 1:
                 self.statusBar().showMessage('WARNING: Multiple lines are selected in the diagram, '
                                              'but only one amplitude plot will be made', 4000)
-            self.initAmplitudes(popup=False, chosen_mode=selected_lines[0])
+            self.plot_amplitudes(popup=False, chosen_mode=selected_lines[0])
 
-    def initAmplitudes(self, popup: bool=True, chosen_mode: list=None) -> None:
+    def plot_amplitudes(self, popup: bool=True, chosen_mode: list=None) -> None:
         """ Initialize the participation diagram
 
         This routine initializes the window/plot of the participation factors on the amplitudes for a
