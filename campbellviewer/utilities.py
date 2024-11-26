@@ -21,8 +21,8 @@ def assure_unique_name(unique_name, occupied_names):
             Modified unique_name if original unique_name was already available in occupied_names
     """
     while unique_name in occupied_names:
-        if bool(re.search('\([0-9]+\)', unique_name)):
-            id = re.findall('\([0-9]+\)', unique_name)[-1]
+        if bool(re.search(r'\([0-9]+\)', unique_name)):
+            id = re.findall(r'\([0-9]+\)', unique_name)[-1]
             unique_name = unique_name.replace(id, id[0 ] +str(int(id[1:-1] ) +1 ) +id[-1])
         else:
             unique_name = unique_name + ' (1)'
@@ -109,7 +109,7 @@ class AEMode:
                                                                                                            self.blade_mode_type)
 
     def filter(self, filter):
-        """
+        r"""
         Check if this AE mode matches with the filter
 
         Args:
