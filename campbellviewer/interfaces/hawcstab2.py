@@ -3,6 +3,7 @@ Module for reading HAWCStab2 linearization results.
 """
 
 import numpy as np
+from typing import Optional
 
 from campbellviewer.data_storage.data_template import AbstractLinearizationData
 from campbellviewer.utilities import AEMode
@@ -93,7 +94,10 @@ class HAWCStab2Data(AbstractLinearizationData):
         )
 
 
-    def read_amp_data(self, filenameamp:str=None, skip_header_lines:int=5):
+    def read_amp_data(self, 
+                      filenameamp:str, 
+                      skip_header_lines: Optional[int]=5, 
+                      override_mode_names: Optional[bool]=True):
         """Reads and parse the HS2 result amp data.
 
             - The first 5 rows contains header text.
@@ -115,6 +119,13 @@ class HAWCStab2Data(AbstractLinearizationData):
               Sym tors[rad]   phase [deg]
               BW tors [rad]   phase [deg]
               FW tors [rad]   phase [deg]
+              
+        Args:
+            filenameamp: filename of the amp file
+            skip_header_lines: parameter to skip the comment rows in amp file
+            override_mode_names: flag, which defines, whether the first three modes 
+                                 in amp file shall be renamed to 'lag mode',
+                                 '1st Tower SS','1st Tower FA', default is True
 
         """
 
@@ -196,9 +207,10 @@ class HAWCStab2Data(AbstractLinearizationData):
 
         # Override data for first two modes, because in HAWCStab2 tower amplitudes are not 1.0 although it is a tower mode.
         # Unfortunately, higher tower modes cannot be filtered easyly.
-        mode_names[0]='lag mode'
-        mode_names[1]='1st Tower SS'
-        mode_names[2]='1st Tower FA'
+        if override_mode_names:
+            mode_names[0]='lag mode'
+            mode_names[1]='1st Tower FA'
+            mode_names[2]='1st Tower SS'
 
         # Make sure mode names are unique -> mode names are used as indices in xarrays
         # unique_mode_names = []
