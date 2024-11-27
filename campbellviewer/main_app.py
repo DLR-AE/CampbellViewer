@@ -69,6 +69,7 @@ from campbellviewer.dialogs.dialogs import (
     SettingsPopupAMP,
     GeneralSettingsDialog
     )
+from campbellviewer.utilities import safe_bool_conversion
 
 matplotlib.use("Qt5Agg")
 matplotlib.rcParams['hatch.color']     = 'grey'
@@ -356,8 +357,7 @@ class ApplicationWindow(QMainWindow):
         main_layout (QVBoxLayout): Layout widget containing all widgets
         button_layout (QHBoxLayout): Layout widget containing interactive buttons
         layout_mplib (QVBoxLayout): Layout widget containing matplotlib plot
-        layout_list (QVBoxLayout): Layout widget containing data tree
-        layout_mpliblist (QHBoxLayout): Layout widget containing matplotlib and data tree
+        plot_splitter (QSplitter): for dynamic size adjustment of plot and tree visualization
         dataset_tree_model (TreeModel): Model for the dataset tree
         dataset_tree (DatasetTree): View for the dataset tree
         fig (Figure): Matplotlib figure
@@ -367,7 +367,7 @@ class ApplicationWindow(QMainWindow):
         axes2 (mpl.ax): damping plot axes of the matplotlib figure
         right_mouse_press (bool): Flag for storing right mouse press on matplotlib figure
         cursor (mplcursors.cursor): Cursor object
-        button_pharm (QPushButton): Button to toggle plotting P-harmonics
+        cbox_pharm (QCheckBox): Checkbox to toggle plotting P-harmonics
         button_xaxis (QComboBox): Button to select xaxis parameter
         xaxis_param (str): xaxis parameter
         xaxis_selection_box (QVBoxLayout): Layout for xaxis button + text
@@ -429,10 +429,10 @@ class ApplicationWindow(QMainWindow):
 
         ##############################################################
         # Set buttons
-        self.button_pharm = QCheckBox('Plot P-Harmonics', self)
-        self.button_pharm.setToolTip('Adds or removes the P-harmonics from operational data into the frequency plot.')
-        self.button_pharm.clicked.connect(self.plot_P_harmonics)
-        self.main_layout.addWidget(self.button_pharm, 0,0,1,1)
+        self.cbox_pharm = QCheckBox('Plot P-Harmonics', self)
+        self.cbox_pharm.setToolTip('Adds or removes the P-harmonics from operational data into the frequency plot.')
+        self.cbox_pharm.clicked.connect(self.plot_P_harmonics)
+        self.main_layout.addWidget(self.cbox_pharm, 0,0,1,1)
 
         self.button_rescale = QPushButton('Rescale plot limits', self)
         self.button_rescale.clicked.connect(self.rescale_plot_limits)
@@ -656,7 +656,7 @@ class ApplicationWindow(QMainWindow):
                 # plot p-harmonics if present
                 if database[atool][ads].ds.operating_points.values.ndim != 0 and self.__CV_settings['pharmonics']:
                     if self.__CV_settings['pharmonics']:
-                        self.button_pharm.setChecked(True)
+                        self.cbox_pharm.setChecked(True)
                     P_harmonics = [1, 3, 6, 9, 12]
                     for index in P_harmonics:
                         P_hamonics_data = database[atool][ads].ds.operating_points.loc[:, 'rot. speed [rpm]']/60.*index  # rpm in Hz
@@ -1248,7 +1248,8 @@ class ApplicationWindow(QMainWindow):
                                       tool_specific_info={'filename{}'.format(suffix): fileName,
                                                           'skip_header_CMB': self.__CV_settings['skip_header_CMB'],
                                                           'skip_header_AMP': self.__CV_settings['skip_header_AMP'],
-                                                          'skip_header_OP': self.__CV_settings['skip_header_OP']})
+                                                          'skip_header_OP': self.__CV_settings['skip_header_OP'],
+                                                          'override_mode_names': self.__CV_settings['override_mode_names']})
                 # save location to settings
                 self.__qsettings.setValue("IO/HS2_project", QFileInfo(fileName).absolutePath())
 
@@ -1278,10 +1279,10 @@ class ApplicationWindow(QMainWindow):
     def plot_P_harmonics(self):
         """ Plot P-Harmonics in Campbell diagram """
         if self.__CV_settings['pharmonics']:
-            self.button_pharm.setChecked(False)
+            self.cbox_pharm.setChecked(False)
             self.__CV_settings['pharmonics'] = False
         else:
-            self.button_pharm.setChecked(True)
+            self.cbox_pharm.setChecked(True)
             self.__CV_settings['pharmonics'] = True
         self.UpdateMainPlot()
 
@@ -1363,13 +1364,14 @@ class ApplicationWindow(QMainWindow):
 
         """
         # defaults
-        self.__CV_settings = {'mode_minpara_cmb'  : 1,
-                              'mode_maxpara_cmb'  : 6,
-                              'pharmonics'        : False,
-                              'skip_header_CMB'   : 1,
-                              'skip_header_AMP'   : 5,
-                              'skip_header_OP'    : 1,
-                              'amp_part_threshold': 0.5}
+        self.__CV_settings = {'mode_minpara_cmb'    : 1,
+                              'mode_maxpara_cmb'    : 6,
+                              'pharmonics'          : False,
+                              'skip_header_CMB'     : 1,
+                              'skip_header_AMP'     : 5,
+                              'skip_header_OP'      : 1,
+                              'override_mode_names' : True,
+                              'amp_part_threshold'  : 0.5}
 
         if save:
             for settings_key in self.__CV_settings:
@@ -1380,7 +1382,7 @@ class ApplicationWindow(QMainWindow):
         """retrieves the default values or the user specific settings from QSettings"""
         # defaults
         self.set_settings_to_default(save=False)
-
+        
         # try to get the user settings
         for settings_key in self.__CV_settings:
             if self.__qsettings.contains(settings_key):
@@ -1388,7 +1390,7 @@ class ApplicationWindow(QMainWindow):
                 if isinstance(self.__CV_settings[settings_key], float):
                     self.__CV_settings[settings_key] = float(user_setting)
                 elif isinstance(self.__CV_settings[settings_key], bool):
-                    self.__CV_settings[settings_key] = bool(user_setting)
+                    self.__CV_settings[settings_key] = safe_bool_conversion(user_setting)
                 elif isinstance(self.__CV_settings[settings_key], int):
                     self.__CV_settings[settings_key] = int(user_setting)
                 else:

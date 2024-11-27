@@ -49,7 +49,8 @@ class LinearizationDataWrapper(dict):
                 if key == 'filenamecmb':
                     self['HAWCStab2'][name].read_cmb_data(value, tool_specific_info['skip_header_CMB'])
                 elif key == 'filenameamp':
-                    self['HAWCStab2'][name].read_amp_data(value, tool_specific_info['skip_header_AMP'])
+                    self['HAWCStab2'][name].read_amp_data(value, tool_specific_info['skip_header_AMP'], 
+                                                             tool_specific_info['override_mode_names'])
                 elif key == 'filenameopt':
                     self['HAWCStab2'][name].read_opt_data(value, tool_specific_info['skip_header_OP'])
         else:

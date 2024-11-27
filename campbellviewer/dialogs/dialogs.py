@@ -12,6 +12,7 @@ from PyQt5.QtGui  import QDoubleValidator, QIcon
 from PyQt5.QtCore import Qt, QSettings, pyqtSignal, pyqtSlot
 
 from campbellviewer.settings.globals import view_cfg, database
+from campbellviewer.utilities import safe_bool_conversion
 
 ####
 # Popup setting dialogs
@@ -206,6 +207,9 @@ class SettingsHS2(QWidget):
         skip_header_CMB (int): Number of header lines in the .cmb file
         skip_header_AMP (int): Number of header lines in the .amp file
         skip_header_OP (int): Number of header lines in the .opt file
+        override_mode_names(bool): flag, which defines, whether the first three modes 
+                                   in amp file shall be renamed to 'lag mode',
+                                  '1st Tower SS','1st Tower FA', default is True
     """
     def __init__(self, qsettings: QSettings) -> None:
         """Initializes popup for HAWCStab2 input file header line definitions
@@ -221,32 +225,39 @@ class SettingsHS2(QWidget):
         layout.setAlignment(Qt.AlignLeft|Qt.AlignTop)
 
         # try to fetch the data from qsettings, otherwise take default
-        self.skip_header_CMB = int(self.__qsettings.value('skip_header_CMB', 1))  # default to 1
-        self.skip_header_AMP = int(self.__qsettings.value('skip_header_AMP', 5))  # default to 5
-        self.skip_header_OP  = int(self.__qsettings.value('skip_header_OP' , 1))  # default to 6
+        self.skip_header_CMB     = int(self.__qsettings.value('skip_header_CMB'     , 1   ))  # default to 1
+        self.skip_header_AMP     = int(self.__qsettings.value('skip_header_AMP'     , 5   ))  # default to 5
+        self.skip_header_OP      = int(self.__qsettings.value('skip_header_OP'      , 1   ))  # default to 6
+        self.override_mode_names = safe_bool_conversion(self.__qsettings.value('override_mode_names', True))  # default to True
 
         layout.addWidget(QLabel("<b>HAWCStab2: Header lines to skip</b>"), 0,0,1,2)
         headerLinesCMBL = QLabel('Number of header lines in Campbell file:')
         headerLinesAMPL = QLabel('Number of header lines in Amplitude file:')
         headerLinesOPL = QLabel('Number of header lines in Operational data file:')
+        headerLinesOMN = QLabel('Flag for overriding first three mode names:')
         layout.addWidget(headerLinesCMBL, 1,0,1,1)
         layout.addWidget(headerLinesAMPL, 2,0,1,1)
         layout.addWidget(headerLinesOPL , 3,0,1,1)
+        layout.addWidget(headerLinesOMN , 4,0,1,1)
         self.__headerLinesCMBE = QSpinBox()
         self.__headerLinesAMPE = QSpinBox()
         self.__headerLinesOPE  = QSpinBox()
+        self.__headerLinesOME  = QCheckBox()
         self.__headerLinesCMBE.setValue(self.skip_header_CMB)
         self.__headerLinesAMPE.setValue(self.skip_header_AMP)
         self.__headerLinesOPE.setValue(self.skip_header_OP)
+        self.__headerLinesOME.setChecked(self.override_mode_names)
         layout.addWidget(self.__headerLinesCMBE, 1,1,1,1)
         layout.addWidget(self.__headerLinesAMPE, 2,1,1,1)
         layout.addWidget(self.__headerLinesOPE , 3,1,1,1)
+        layout.addWidget(self.__headerLinesOME , 4,1,1,1)
 
     def save_settings(self):
         """save the settings"""
-        self.__qsettings.setValue('skip_header_CMB',self.__headerLinesCMBE.value())
-        self.__qsettings.setValue('skip_header_AMP',self.__headerLinesAMPE.value())
-        self.__qsettings.setValue('skip_header_OP' ,self.__headerLinesOPE.value())
+        self.__qsettings.setValue('skip_header_CMB'    ,self.__headerLinesCMBE.value())
+        self.__qsettings.setValue('skip_header_AMP'    ,self.__headerLinesAMPE.value())
+        self.__qsettings.setValue('skip_header_OP'     ,self.__headerLinesOPE.value())
+        self.__qsettings.setValue('override_mode_names',self.__headerLinesOME.isChecked())
 
 ########################################################################################################################
 class SettingsPopup(QDialog):
