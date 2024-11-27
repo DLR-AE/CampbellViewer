@@ -5,6 +5,18 @@ Module containing utilities for the campbellviewer.
 import re
 from PyQt5.QtCore import Qt
 
+def safe_bool_conversion(input_value: str|bool) -> bool:
+    """converts a string or a bool value to type bool safely
+    
+    Args:
+        input_value: the value, which shall be converted
+        
+    Returns:
+        result: the resulting value of type bool
+    """
+    bool_conversion_dict = {"true": True, "false": False}
+    result = bool_conversion_dict[(str(input_value)).lower()]
+    return result
 
 def assure_unique_name(unique_name, occupied_names):
     """
