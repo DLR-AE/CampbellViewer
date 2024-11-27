@@ -40,11 +40,12 @@ from mpl_2d_animation import Mpl2DAnimWidget
 
 from PyQt5 import QtCore
 from PyQt5.QtWidgets import (
-    QApplication, QMainWindow, QMenu, QVBoxLayout, QHBoxLayout, QMessageBox, QWidget,
-    QFileDialog, QPushButton, QLabel, QCheckBox, QComboBox, QTreeView, QDockWidget
+    QApplication, QMainWindow, QMenu, QVBoxLayout, QHBoxLayout, QGridLayout, QMessageBox, QWidget,
+    QFileDialog, QPushButton, QLabel, QCheckBox, QComboBox, QTreeView, QSplitter, QSizePolicy, QDockWidget
     )
 from PyQt5.QtGui  import QIcon
 from PyQt5.QtCore import QFileInfo, Qt, QItemSelectionModel, QSettings
+import qtawesome as qta
 
 os.environ['ETS_TOOLKIT'] = 'qt4'
 
@@ -139,6 +140,7 @@ class AmplitudeWindow(QMainWindow):
                 a significant participation are shown.
         """
         self.requested_toolname = requested_toolname
+        self.requested_datasetname = requested_datasetname
         self.settingsAMPmode = requested_mode_id
         self.AMPmode_name = database[requested_toolname][requested_datasetname].ds.modes.values[requested_mode_id].name
         self.dataset = dataset
@@ -149,6 +151,8 @@ class AmplitudeWindow(QMainWindow):
         self.AMPfig = Figure(figsize=(6, 6), dpi=100, tight_layout=True)
         self.AMPcanvas = FigureCanvas(self.AMPfig)
         toolbar = NavigationToolbar(self.AMPcanvas, self)
+        toolbar.addAction(QIcon(qta.icon('ph.camera')), "Grab a screenshot of the plot.", self.__grab_sreen)
+        toolbar.setFixedHeight(25)
 
         self.main_widget = QWidget(self)
         self.layout_mplib = QVBoxLayout(self.main_widget)
@@ -219,7 +223,7 @@ class AmplitudeWindow(QMainWindow):
         for i, mode in enumerate(self.dataset.participation_modes.values):
             # only show modes with a part. of minimum self.AMPthreshold (for at least one of the operating points)
             if max(self.dataset.participation_factors_amp.loc[:, i, self.settingsAMPmode]) > self.AMPthreshold:
-                ls = mpl_ls.new_ls(self.requested_toolname)
+                ls = mpl_ls.new_ls(self.requested_toolname, self.requested_datasetname)
                 ampl_line, = self.axes1.plot(self.dataset.operating_points.loc[:, self.xaxis_param],
                                 self.dataset.participation_factors_amp.loc[:, i, self.settingsAMPmode],
                                 label=mode.name, linewidth=mpl_ls.lw, c=ls['color'], linestyle=ls['linestyle'],
@@ -244,6 +248,11 @@ class AmplitudeWindow(QMainWindow):
                 line.set(color="C3")
 
         self.AMPcanvas.draw()
+
+    def __grab_sreen(self):
+        """graps matplotlib widget and put it into clipboard"""
+        pixmap = self.canvas.grab()
+        QApplication.clipboard().setPixmap(pixmap)
 
     def closeEvent(self, event):
         self.sigClosed.emit()
@@ -314,7 +323,7 @@ class DatasetTree(QTreeView):
                 del popupAEMode
             elif action == showAmplitudes:
                 modeID, dataset, tool = self.tree_model.get_branch_from_item(idx.internalPointer())
-                self.aw.initAmplitudes(popup=False, chosen_mode=[tool, dataset, modeID[0]])
+                self.aw.plot_amplitudes(popup=False, chosen_mode=[tool, dataset, modeID[0]])
         elif idx.internalPointer().itemType == 'dataset' or idx.internalPointer().itemType == 'tool':
             if action == checkAll:
                 self.tree_model.set_checked(idx, Qt.Checked)
@@ -397,8 +406,11 @@ class ApplicationWindow(QMainWindow):
         self.tools_menu = QMenu('&Tools', self)
         self.menuBar().addSeparator()
         self.menuBar().addMenu(self.tools_menu)
-        self.tools_menu.addAction('&Plot amplitudes of modes', self.initAmplitudes)
+        self.tools_menu.addAction('&Plot amplitudes of modes', self.plot_amplitudes)
         self.tools_menu.addAction('&Plot amplitudes of highlighted modes', self.amplitudes_of_highlights)
+        self.tools_menu.addAction('&grab to clipboard', self.__grab_sreen,
+                                 Qt.CTRL + Qt.Key_C)
+        self.tools_menu.addAction('&grab and save', self.__grab_sreen_save)
 
         # HELP
         self.help_menu = QMenu('&Help', self)
@@ -412,28 +424,102 @@ class ApplicationWindow(QMainWindow):
 
         ##############################################################
         # Layout definition
-        self.main_layout      = QVBoxLayout(self.main_widget)
-        self.button_layout    = QHBoxLayout()
-        self.layout_mplib     = QVBoxLayout()
-        self.layout_list      = QVBoxLayout()
-        self.layout_mpliblist = QHBoxLayout()
+        self.main_layout   = QGridLayout(self.main_widget)
+        self.plot_splitter = QSplitter(Qt.Horizontal)
 
-        self.main_layout.addLayout(self.button_layout)
-        self.main_layout.addLayout(self.layout_mpliblist)
-        self.layout_mpliblist.addLayout(self.layout_mplib, 4)
-        self.layout_mpliblist.addLayout(self.layout_list, 1)
+        ##############################################################
+        # Set buttons
+        self.button_pharm = QCheckBox('Plot P-Harmonics', self)
+        self.button_pharm.setToolTip('Adds or removes the P-harmonics from operational data into the frequency plot.')
+        self.button_pharm.clicked.connect(self.plot_P_harmonics)
+        self.main_layout.addWidget(self.button_pharm, 0,0,1,1)
+
+        self.button_rescale = QPushButton('Rescale plot limits', self)
+        self.button_rescale.clicked.connect(self.rescale_plot_limits)
+        self.main_layout.addWidget(self.button_rescale, 0,1,1,1)
+
+        self.button_amp_plot = QPushButton('Plot amplitudes', self)
+        popup=True
+        self.button_amp_plot.clicked.connect(lambda :self.plot_amplitudes(popup))
+        self.main_layout.addWidget(self.button_amp_plot, 0,2,1,1)
+
+        self.button_amp_plot_highlighted = QPushButton('Plot highl. amp.', self)
+        self.button_amp_plot_highlighted.clicked.connect(self.amplitudes_of_highlights)
+        self.main_layout.addWidget(self.button_amp_plot_highlighted, 0,3,1,1)
+
+        self.xaxis_label = QLabel('x-axis operating parameter:')
+        self.main_layout.addWidget(self.xaxis_label, 0,4,1,1)
+        self.button_xaxis = QComboBox(self)
+        self.main_layout.addWidget(self.button_xaxis, 0,5,1,1)
+        self.button_xaxis.currentTextChanged.connect(self.xaxis_change)
+        self.xaxis_param = self.button_xaxis.currentText()
+
+        self.button_savepdf = QPushButton('Quick Save to PDF', self)
+        self.button_savepdf.setIcon(QIcon(qta.icon('mdi.file-pdf-box')))
+        self.button_savepdf.clicked.connect(self.save_pdf)
+        self.main_layout.addWidget(self.button_savepdf, 0,6,1,1)
+
+        self.pick_markers = False
+        self.pick_markers_box = QCheckBox('Pick markers', self)
+        self.pick_markers_box.clicked.connect(self.add_or_remove_scatter)
+        self.main_layout.addWidget(self.pick_markers_box, 1,0,1,1)
+
+        self.button_visualization = QPushButton('Make mode visualization', self)
+        self.button_visualization.clicked.connect(self.make_mode_visualization)
+        self.main_layout.addWidget(self.button_visualization, 1,1,1,1)
+
+        self.modal_vis_3d_or_2d_label = QLabel('Modal vis. in 3D or 2D:')
+        self.main_layout.addWidget(self.modal_vis_3d_or_2d_label, 1,2,1,1)
+
+        self.button_3d_or_2d_visualization = QComboBox(self)
+        self.button_3d_or_2d_visualization.addItems(['3D', '2D'])
+        self.main_layout.addWidget(self.button_3d_or_2d_visualization, 1,3,1,1)
+
+        ##############################################################
+        # Figure settings
+        self.main_plot_widget = QWidget()
+        self.layout_mplib = QVBoxLayout()
+        self.main_plot_widget.setLayout(self.layout_mplib)
+
+        self.fig = Figure(figsize=(6, 6), dpi=100)
+        self.canvas = FigureCanvas(self.fig)
+        toolbar = NavigationToolbar(self.canvas, self)
+        self.layout_mplib.addWidget(toolbar)
+        toolbar.addAction(QIcon(qta.icon('ph.camera')), "Grab a screenshot of the plot.", self.__grab_sreen)
+        toolbar.setFixedHeight(25)
+        self.layout_mplib.addWidget(self.canvas)
+        self.legend = None
+
+        # create figure with two axis
+        self.axes1 = self.fig.add_subplot(211)
+        self.axes2 = self.fig.add_subplot(212, sharex=self.axes1)
+        self.right_mouse_press = False
+        self.cursor = None
 
         ##############################################################
         # Treemodel of datasets
         self.dataset_tree_model = TreeModel()
         self.dataset_tree = DatasetTree(self.dataset_tree_model, self)
-        self.layout_list.addWidget(self.dataset_tree, 0)
 
         ##############################################################
         # Signals from the tree model.
         # -> layoutChanged signals are used to update the main plot
         # -> dataChanged signals are used to update the tree view
         self.dataset_tree_model.layoutChanged.connect(self.UpdateMainPlot)
+
+        ##############################################################
+        # Set Main Widget
+        self.canvas.setFocusPolicy(QtCore.Qt.ClickFocus)
+        self.main_widget.setFocus()
+        self.setCentralWidget(self.main_widget)
+
+        # combine the splitter
+        self.plot_splitter.addWidget(self.dataset_tree)
+        self.plot_splitter.addWidget(self.main_plot_widget)
+        self.plot_splitter.setStretchFactor(1, 15)
+        self.main_layout.addWidget(self.plot_splitter, 2,0,1,11)
+
+        self.statusBar().showMessage("GUI started", 2000)
 
         ##############################################################
         # init QSettings for setting/getting user defaults settings
@@ -444,70 +530,6 @@ class ApplicationWindow(QMainWindow):
         ##############################################################
         # Get default settings
         self.update_settings()
-
-        ##############################################################
-        # Figure settings
-        self.fig = Figure(figsize=(6, 6), dpi=100)
-        self.canvas = FigureCanvas(self.fig)
-        toolbar = NavigationToolbar(self.canvas, self)
-        self.layout_mplib.addWidget(toolbar)
-        self.layout_mplib.addWidget(self.canvas)
-        self.legend = None
-
-        # create figure with two axis
-        self.axes1      = self.fig.add_subplot(211)
-        self.axes2      = self.fig.add_subplot(212, sharex=self.axes1)
-        self.right_mouse_press = False
-        self.cursor = None
-
-        ##############################################################
-        # Set Main Widget
-        # This next line makes sure that key press events arrive in the matplotlib figure (e.g. to use 'x' and
-        # 'y' for fixing an axis when zooming/panning)
-        self.canvas.setFocusPolicy(QtCore.Qt.ClickFocus)
-        self.main_widget.setFocus()
-        self.setCentralWidget(self.main_widget)
-
-        self.statusBar().showMessage("GUI started", 2000)
-
-        ##############################################################
-        # Set buttons
-        self.button_pharm = QPushButton('Plot P-Harmonics', self)
-        self.button_pharm.setCheckable(True)
-        self.button_pharm.clicked.connect(self.plotPharmonics)
-        self.button_layout.addWidget(self.button_pharm)
-
-        self.button_xaxis = QComboBox(self)
-        self.button_xaxis.currentTextChanged.connect(self.xaxis_change)
-        self.xaxis_param = self.button_xaxis.currentText()
-        self.xaxis_selection_box = QVBoxLayout()
-        self.xaxis_selection_box.addWidget(QLabel('x-axis operating parameter:'))
-        self.xaxis_selection_box.addWidget(self.button_xaxis)
-        self.button_layout.addLayout(self.xaxis_selection_box)
-
-        self.button_savepdf = QPushButton('Quick Save to PDF', self)
-        self.button_savepdf.clicked.connect(self.save_pdf)
-        self.button_layout.addWidget(self.button_savepdf)
-
-        self.button_rescale = QPushButton('Rescale plot limits', self)
-        self.button_rescale.clicked.connect(self.rescale_plot_limits)
-        self.button_layout.addWidget(self.button_rescale)
-
-        self.button_visualization = QPushButton('Make mode visualization', self)
-        self.button_visualization.clicked.connect(self.make_mode_visualization)
-        self.button_layout.addWidget(self.button_visualization)
-
-        self.button_3d_or_2d_visualization = QComboBox(self)
-        self.button_3d_or_2d_visualization.addItems(['3D', '2D'])
-        self.modal_vis_3d_or_2d_box = QVBoxLayout()
-        self.modal_vis_3d_or_2d_box.addWidget(QLabel('Modal vis. in 3D or 2D:'))
-        self.modal_vis_3d_or_2d_box.addWidget(self.button_3d_or_2d_visualization)
-        self.button_layout.addLayout(self.modal_vis_3d_or_2d_box)
-
-        self.pick_markers = False
-        self.pick_markers_box = QCheckBox('Pick markers', self)
-        self.pick_markers_box.clicked.connect(self.add_or_remove_scatter)
-        self.button_layout.addWidget(self.pick_markers_box)
 
     ##############################################################
     # Matplotlib and Matplotlib callback methods
@@ -574,7 +596,7 @@ class ApplicationWindow(QMainWindow):
                     # this can probably also be done without a loop and just with the indices
                     for mode_ID in view_cfg.active_data[atool][ads]:
                         if view_cfg.lines[atool][ads][mode_ID] is None:
-                            ls = view_cfg.ls.new_ls(atool)
+                            ls = view_cfg.ls.new_ls(atool, ads)
                             freq_line, = self.axes1.plot(xaxis_values,
                                                          database[atool][ads].ds.frequency.loc[:, mode_ID],
                                                          color=ls['color'],
@@ -614,7 +636,8 @@ class ApplicationWindow(QMainWindow):
                             damp_line = self.axes2.add_line(view_cfg.lines[atool][ads][mode_ID][1])
                             self.axes2.update_datalim(damp_line.get_xydata())
                             self.axes2.autoscale_view()
-                            # disabled to avoid double entries in legend
+                            # disabled to avoid double entries in legend (if this is changed the mplcursors on_add
+                            # method should be updated)
                             # damp_line.set_label(ads + ': ' + database[atool][ads].ds.modes.values[mode_ID].name)
                             if self.pick_markers is True:
                                 scat_collection_freq = self.axes1.add_collection(view_cfg.lines[atool][ads][mode_ID][2])
@@ -715,6 +738,10 @@ class ApplicationWindow(QMainWindow):
                 self.on_mpl_cursors_pick(sel.artist, 'select')
                 sel.extras.append(self.cursor.add_highlight(pairs[sel.artist]))
                 sel.annotation.get_bbox_patch().set(fc="grey")
+                if sel.artist.axes == self.axes2:
+                    # line in damping plot is selected -> these lines do not have a label -> so manually add label
+                    # to cursor text box
+                    sel.annotation.set_text(pairs[sel.artist].get_label() + '\n' + sel.annotation.get_text())
 
             @self.cursor.connect("remove")
             def on_remove(sel):
@@ -857,6 +884,25 @@ class ApplicationWindow(QMainWindow):
                         if mode_lines is not None:
                             view_cfg.lines[atool][ads][mode_ID] = mode_lines[:2]
             self.UpdateMainPlot()
+
+    def __grab_sreen(self):
+        """graps matplotlib widget and put it into clipboard"""
+        pixmap = self.canvas.grab()
+        QApplication.clipboard().setPixmap(pixmap)
+
+    def __grab_sreen_save(self):
+        """graps matplotlib widget and save it to a file"""
+        pixmap = self.canvas.grab()
+
+        # open a file menu diaglog
+        response = QFileDialog.getSaveFileName(self, 'Save screen shot', '', "Portable Network Grafic(*.png)")
+
+        if response[0]:
+
+            path = response[0]
+            ext  = response[1]
+            pixmap.save(path)
+
 
     ##############################################################
     # Modal visualization methods
@@ -1038,11 +1084,14 @@ class ApplicationWindow(QMainWindow):
     def load_database(self):
         """ Load data from database (and use default view settings) """
         db_filename = self.get_database_filename(mode='load')
-        self.apply_database(db_filename)
+        if db_filename != "":
+            self.apply_database(db_filename)
 
     def save_database(self):
         """ Save data to database """
         db_filename = self.get_database_filename(mode='save')
+        if db_filename == "":
+            return
 
         if db_filename[-3:] != ".nc":
             db_filename = db_filename + ".nc"
@@ -1052,7 +1101,7 @@ class ApplicationWindow(QMainWindow):
             msg = QMessageBox()
             msg.setWindowTitle("Warning")
             msg.setIcon(QMessageBox.Critical)
-            msg.setText("File cannot be accessed because it is used by another proecss.")
+            msg.setText("File cannot be accessed because it is used by another process.")
             msg.setStandardButtons(QMessageBox.Ok)
             msg.exec_()
 
@@ -1114,7 +1163,9 @@ class ApplicationWindow(QMainWindow):
 
         """
         self.popup = SettingsPopupDataSelection()
-        tool, datasetname = self.popup.get_settings()
+        success, tool, datasetname = self.popup.get_settings()
+        if success is False:
+            return
 
         if '&' in datasetname:
             self.statusBar().showMessage('& is not allowed in the datasetname', 4000)
@@ -1210,18 +1261,21 @@ class ApplicationWindow(QMainWindow):
         options = QFileDialog.Options()
         options |= QFileDialog.DontUseNativeDialog
         filter = "Bladed Linearization Result Files (*.$PJ);;All Files (*)"
-        fileName, _ = QFileDialog.getOpenFileName(self, "Open Bladed Linearization Result Files", "", filter, options=options)
+        __path = self.__qsettings.value("IO/Bladed_project", os.path.expanduser("~"))
+        fileName, _ = QFileDialog.getOpenFileName(self, "Open Bladed Linearization Result Files", __path, filter, options=options)
 
         if QFileInfo(fileName).exists():
             result_dir = QFileInfo(fileName).absolutePath()
             result_prefix = QFileInfo(fileName).baseName()
             database.add_data(datasetname, 'bladed-lin',
                               tool_specific_info={'result_dir': result_dir, 'result_prefix': result_prefix})
+            # save location to settings
+            self.__qsettings.setValue("IO/Bladed_project", QFileInfo(fileName).absolutePath())
 
     ##############################################################
     # Button action methods
     ##############################################################
-    def plotPharmonics(self):
+    def plot_P_harmonics(self):
         """ Plot P-Harmonics in Campbell diagram """
         if self.__CV_settings['pharmonics']:
             self.button_pharm.setChecked(False)
@@ -1269,18 +1323,21 @@ class ApplicationWindow(QMainWindow):
         self.UpdateMainPlot()
 
     def save_pdf(self):
-        """ Saves the current plot to pdf. todo: FileDialog to set file name has to be added """
+        """ Saves the current plot to pdf. """
 
-        pdf_filename = 'CampbellViewerPlot.pdf'
-        if QFileInfo(pdf_filename).exists():
-            msg = QMessageBox()
-            msg.setWindowTitle("WARNING")
-            msg.setIcon(QMessageBox.Critical)
-            msg.setText("File already exist! Overwrite?")
-            msg.setStandardButtons(QMessageBox.Ok | QMessageBox.Cancel)
-            if msg.exec_() == QMessageBox.Ok:
-                self.fig.savefig(pdf_filename)
-        else:
+        options = QFileDialog.Options()
+        options |= QFileDialog.DontUseNativeDialog
+        ffilter = "Quick save of Campbell diagram PDF file (*.pdf)"
+        __file = self.__qsettings.value("IO/pdf", os.path.expanduser("~"))
+        pdf_filename, _ = QFileDialog.getSaveFileName(self,
+                                                      "Save to CampbellViewer Database",
+                                                      __file,
+                                                      ffilter,
+                                                      options=options)
+        if pdf_filename:
+            if not pdf_filename.endswith('.pdf'):
+                pdf_filename += '.pdf'
+            self.__qsettings.setValue("IO/pdf", pdf_filename)
             self.fig.savefig(pdf_filename)
 
     ##########
@@ -1289,6 +1346,7 @@ class ApplicationWindow(QMainWindow):
     def open_general_settings(self) -> None:
         """opens the settings popup"""
         self.settings.exec_()
+
 
     def set_settings_to_default(self, save: bool = False) -> None:
         """retrieves the default values or settings
@@ -1317,6 +1375,7 @@ class ApplicationWindow(QMainWindow):
             for settings_key in self.__CV_settings:
                 self.__qsettings.setValue(settings_key, self.__CV_settings[settings_key])
 
+
     def update_settings(self) -> None:
         """retrieves the default values or the user specific settings from QSettings"""
         # defaults
@@ -1326,10 +1385,12 @@ class ApplicationWindow(QMainWindow):
         for settings_key in self.__CV_settings:
             if self.__qsettings.contains(settings_key):
                 user_setting = self.__qsettings.value(settings_key)
-                if isinstance(self.__CV_settings[settings_key],float):
+                if isinstance(self.__CV_settings[settings_key], float):
                     self.__CV_settings[settings_key] = float(user_setting)
-                elif isinstance(self.__CV_settings[settings_key],bool):
+                elif isinstance(self.__CV_settings[settings_key], bool):
                     self.__CV_settings[settings_key] = bool(user_setting)
+                elif isinstance(self.__CV_settings[settings_key], int):
+                    self.__CV_settings[settings_key] = int(user_setting)
                 else:
                     self.__CV_settings[settings_key] = user_setting
 
@@ -1351,9 +1412,9 @@ class ApplicationWindow(QMainWindow):
             if len(selected_lines) > 1:
                 self.statusBar().showMessage('WARNING: Multiple lines are selected in the diagram, '
                                              'but only one amplitude plot will be made', 4000)
-            self.initAmplitudes(popup=False, chosen_mode=selected_lines[0])
+            self.plot_amplitudes(popup=False, chosen_mode=selected_lines[0])
 
-    def initAmplitudes(self, popup: bool=True, chosen_mode: list=None) -> None:
+    def plot_amplitudes(self, popup: bool=True, chosen_mode: list=None) -> None:
         """ Initialize the participation diagram
 
         This routine initializes the window/plot of the participation factors on the amplitudes for a
