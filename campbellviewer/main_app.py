@@ -47,7 +47,6 @@ from PyQt5.QtGui  import QIcon
 from PyQt5.QtCore import QFileInfo, Qt, QItemSelectionModel, QSettings
 
 os.environ['ETS_TOOLKIT'] = 'qt4'
-from pyface.qt import QtGui, QtCore
 
 import matplotlib
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
@@ -78,10 +77,10 @@ matplotlib.rcParams['hatch.linewidth'] = 0.2
 #~ matplotlib.rcParams['toolbar'] = 'toolmanager'
 
 
-class MayaviQWidget(QtGui.QWidget):
+class MayaviQWidget(QWidget):
     def __init__(self, parent=None, vis=None):
-        QtGui.QWidget.__init__(self, parent)
-        layout = QtGui.QVBoxLayout(self)
+        QWidget.__init__(self, parent)
+        layout = QVBoxLayout(self)
         layout.setContentsMargins(0, 0, 0, 0)
         layout.setSpacing(0)
 
@@ -884,7 +883,7 @@ class ApplicationWindow(QMainWindow):
                     vis = self.get_vis(tool=selected_line[0], dataset=selected_line[1],
                                        mode_ID=selected_line[2])
 
-                container = QtGui.QWidget()
+                container = QWidget()
                 mayavi_widget = MayaviQWidget(container, vis)
                 dockWidget.setWidget(mayavi_widget)
 
@@ -1025,7 +1024,7 @@ class ApplicationWindow(QMainWindow):
             event: Qt event
         """
         if (event.type() == QtCore.QEvent.Close and
-                isinstance(source, QtGui.QDockWidget)):
+                isinstance(source, QDockWidget)):
             if isinstance(source.widget(), WTVisualizationGUI):
                 source.widget().visualization.stop_timer()
                 source.widget().close()
