@@ -2,6 +2,7 @@
 Module containing utilities for the campbellviewer.
 """
 
+from __future__ import annotations
 import re
 from PyQt5.QtCore import Qt
 
