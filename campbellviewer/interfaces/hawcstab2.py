@@ -131,6 +131,12 @@ class HAWCStab2Data(AbstractLinearizationData):
 
         if filenameamp:
             self.ds.attrs['filenameamp'] = filenameamp
+        else:
+            # No .amp file provided
+            self.ds.attrs['filenameamp'] = 'not provided'
+            self.ds['modes'] = (['mode_ID'], [AEMode(name='Mode {}'.format(mode_ii)) for mode_ii in self.ds.mode_ID.values])
+            self.ds['participation_modes'] = (['participation_mode_ID'], [AEMode(name='n.a.')])
+            return
 
         sensor_list = [
             'TWR SS', 'TWR FA', 'TWR yaw', 'SFT x', 'SFT y', 'SFT tor',

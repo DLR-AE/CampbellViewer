@@ -1023,6 +1023,10 @@ class ApplicationWindow(QMainWindow):
             __path = self.__qsettings.value("IO/HS2_project", os.path.expanduser("~"))
             fileName, _ = QFileDialog.getOpenFileName(self, "Open {}".format(descr), __path, filter, options=options)
 
+            if fileName[-10:] == '_Blade.amp':
+                print('.amp file for blade-only HAWCStab2 analysis will not be used.')
+                fileName = ''
+
             if QFileInfo(fileName).exists():
                 # get filename extension
                 fileNameExtension = QFileInfo(fileName).suffix()
@@ -1036,6 +1040,26 @@ class ApplicationWindow(QMainWindow):
                                                           'override_mode_names': self.__CV_settings['override_mode_names']})
                 # save location to settings
                 self.__qsettings.setValue("IO/HS2_project", QFileInfo(fileName).absolutePath())
+
+            else:
+                if suffix == 'cmb':
+                    print('.cmb file could not be found, cancel adding data')
+                    return
+                elif suffix == 'opt':
+                    print('.opt file could not be found, cancel adding data')
+                    if len(database['HAWCStab2']):
+                        database.remove_data(['HAWCStab2'])
+                    else:
+                        database.remove_data([datasetname, 'HAWCStab2'])
+                    return
+                elif suffix == 'amp':
+                    database.add_data(datasetname, 'hawcstab2',
+                                      tool_specific_info={'filename{}'.format(suffix): None,
+                                                          'skip_header_CMB': self.__CV_settings['skip_header_CMB'],
+                                                          'skip_header_AMP': self.__CV_settings['skip_header_AMP'],
+                                                          'skip_header_OP': self.__CV_settings['skip_header_OP'],
+                                                          'override_mode_names': self.__CV_settings['override_mode_names']})
+
 
     def openFileNameDialogBladedLin(self, datasetname: str='default'):
         """ Open File Dialog for Bladed linearization Campbell diagram files
