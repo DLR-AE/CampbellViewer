@@ -965,9 +965,9 @@ class ApplicationWindow(QMainWindow):
 
         # load data in database
         if tool == 'HAWCStab2':
-            self.openFileNameDialogHAWCStab2(datasetname)
+            datasetname = self.openFileNameDialogHAWCStab2(datasetname)
         elif tool == 'Bladed (lin.)':
-            self.openFileNameDialogBladedLin(datasetname)
+            datasetname = self.openFileNameDialogBladedLin(datasetname)
         else:
             raise ValueError('Only HAWCStab2 and Bladed-Linearization data are allowed as input.')
         del self.popup
@@ -1006,7 +1006,7 @@ class ApplicationWindow(QMainWindow):
                                            set([self.button_xaxis.itemText(i) for i in range(self.button_xaxis.count())]))))
         self.button_xaxis.model().sort(0)
 
-    def openFileNameDialogHAWCStab2(self, datasetname: str='default'):
+    def openFileNameDialogHAWCStab2(self, datasetname: str='Derive from .cmb or .$PJ'):
         """ Open File Dialog for HAWCStab2 Campbell diagram files
 
         Args:
@@ -1028,6 +1028,13 @@ class ApplicationWindow(QMainWindow):
                 fileNameExtension = QFileInfo(fileName).suffix()
                 # what kind of data are these
                 if fileNameExtension == suffix:
+                    if suffix == 'cmb' and datasetname == 'Derive from .cmb or .$PJ':
+                        result_name = QFileInfo(fileName).baseName()
+                        if 'HAWCStab2' in database:
+                            datasetname = assure_unique_name(result_name, database['HAWCStab2'].keys())
+                        else:
+                            datasetname = result_name
+
                     database.add_data(datasetname, 'hawcstab2',
                                       tool_specific_info={'filename{}'.format(suffix): fileName,
                                                           'skip_header_CMB': self.__CV_settings['skip_header_CMB'],
@@ -1037,7 +1044,9 @@ class ApplicationWindow(QMainWindow):
                 # save location to settings
                 self.__qsettings.setValue("IO/HS2_project", QFileInfo(fileName).absolutePath())
 
-    def openFileNameDialogBladedLin(self, datasetname: str='default'):
+        return datasetname
+
+    def openFileNameDialogBladedLin(self, datasetname: str='Derive from .cmb or .$PJ'):
         """ Open File Dialog for Bladed linearization Campbell diagram files
 
         Args:
@@ -1052,10 +1061,19 @@ class ApplicationWindow(QMainWindow):
         if QFileInfo(fileName).exists():
             result_dir = QFileInfo(fileName).absolutePath()
             result_prefix = QFileInfo(fileName).baseName()
+
+            if datasetname == 'Derive from .cmb or .$PJ':
+                if 'Bladed (lin.)' in database:
+                    datasetname = assure_unique_name(result_prefix, database['Bladed (lin.)'].keys())
+                else:
+                    datasetname = result_prefix
+
             database.add_data(datasetname, 'bladed-lin',
                               tool_specific_info={'result_dir': result_dir, 'result_prefix': result_prefix})
             # save location to settings
             self.__qsettings.setValue("IO/Bladed_project", QFileInfo(fileName).absolutePath())
+
+        return datasetname
 
     ##############################################################
     # Button action methods

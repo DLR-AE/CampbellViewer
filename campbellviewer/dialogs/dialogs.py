@@ -312,7 +312,7 @@ class SettingsPopupDataSelection(SettingsPopup):
         popup_layoutTool.addWidget(QLabel('Select which data type will be loaded (default=''HAWCStab2''):'))
         popup_layoutTool.addWidget(self.__ToolSelection)
 
-        self.__DataSetName = QLineEdit('default')
+        self.__DataSetName = QLineEdit('Derive from .cmb or .$PJ')
         popup_layoutName.addWidget(QLabel('Specify dataset name:'))
         popup_layoutName.addWidget(self.__DataSetName)
 
