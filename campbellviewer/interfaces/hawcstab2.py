@@ -193,7 +193,7 @@ class HAWCStab2Data(AbstractLinearizationData):
 
         # Determine dominant DOF per mode
         shape_numbering = {1 : '1st', 2 : '2nd', 3 : '3rd'}
-        for i in range(4,20):
+        for i in range(4,num_modes):
             shape_numbering[i] =f'{i}th'
         mode_names = []
         reoccurant_mode_shape = {}
