@@ -2,7 +2,6 @@
 Module for dialogs
 """
 from __future__ import annotations
-from typing import Tuple
 import importlib.resources
 from PyQt5.QtWidgets import (
     QMainWindow, QVBoxLayout, QHBoxLayout, QGridLayout, QDialog, QWidget, QTabWidget,
@@ -207,7 +206,7 @@ class SettingsHS2(QWidget):
         skip_header_CMB (int): Number of header lines in the .cmb file
         skip_header_AMP (int): Number of header lines in the .amp file
         skip_header_OP (int): Number of header lines in the .opt file
-        override_mode_names(bool): flag, which defines, whether the first three modes 
+        override_mode_names(bool): flag, which defines, whether the first three modes
                                    in amp file shall be renamed to 'lag mode',
                                   '1st Tower SS','1st Tower FA', default is True
     """
@@ -308,7 +307,7 @@ class SettingsPopupDataSelection(SettingsPopup):
         popup_layoutBttn = QHBoxLayout()
 
         self.__ToolSelection = QComboBox()
-        self.__ToolSelection.addItems(['HAWCStab2', 'Bladed (lin.)'])
+        self.__ToolSelection.addItems(['HAWCStab2', 'Bladed (lin.)', 'alaska/Wind (lin.)'])
         popup_layoutTool.addWidget(QLabel('Select which data type will be loaded (default=''HAWCStab2''):'))
         popup_layoutTool.addWidget(self.__ToolSelection)
 
@@ -328,7 +327,7 @@ class SettingsPopupDataSelection(SettingsPopup):
         popup_layoutV.addLayout(popup_layoutBttn)
         self.exec_()
 
-    def get_settings(self) -> Tuple[str, str]:
+    def get_settings(self) -> tuple[bool, str, str]:
         """Gives the current selected settings
 
         Returns:
@@ -422,7 +421,7 @@ class SettingsPopupAMP(SettingsPopup):
                 [str(database[self.__ToolSelection.currentText()][self.__DataSetSelection.currentText()].ds.modes.values[mode_id].name)
                  for mode_id in view_cfg.active_data[self.__ToolSelection.currentText()][self.__DataSetSelection.currentText()]])
 
-    def get_settings(self) -> Tuple[bool, str, str, str]:
+    def get_settings(self) -> tuple[bool, str, str, str]:
         """Gives the current selected settings
 
         Returns:
@@ -522,7 +521,7 @@ class SettingsPopupAEMode(SettingsPopup):
         popup_layoutV.addLayout(popup_layoutBttn)
         self.exec_()
 
-    def get_settings(self) -> Tuple[str, str, str, str]:
+    def get_settings(self) -> tuple[str, str, str, str]:
         """Gives the current selected settings
 
         Returns:
@@ -609,7 +608,7 @@ class SettingsPopupModeFilter(SettingsPopup):
         popup_layoutV.addLayout(popup_layoutBttn)
         self.exec_()
 
-    def get_settings(self) -> Tuple[str, str, str]:
+    def get_settings(self) -> tuple[str, str, str, str]:
         """Gives the current selected settings
 
         Returns:

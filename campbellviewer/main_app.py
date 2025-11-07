@@ -222,7 +222,7 @@ class AmplitudeWindow(QMainWindow):
                 line.set(color="C3")
 
         self.AMPcanvas.draw()
-        
+
     def __grab_sreen(self):
         """graps matplotlib widget and put it into clipboard"""
         pixmap = self.canvas.grab()
@@ -411,16 +411,16 @@ class ApplicationWindow(QMainWindow):
         self.pick_markers_box = QCheckBox('Pick markers', self)
         self.pick_markers_box.clicked.connect(self.add_or_remove_scatter)
         self.main_layout.addWidget(self.pick_markers_box, 0,1,1,1)
-        
+
         self.button_rescale = QPushButton('Rescale plot limits', self)
         self.button_rescale.clicked.connect(self.rescale_plot_limits)
         self.main_layout.addWidget(self.button_rescale, 0,2,1,1)
-        
+
         self.button_amp_plot = QPushButton('Plot amplitudes', self)
         popup=True
         self.button_amp_plot.clicked.connect(lambda :self.plot_amplitudes(popup))
         self.main_layout.addWidget(self.button_amp_plot, 0,3,1,1)
-        
+
         self.button_amp_plot_highlighted = QPushButton('Plot highl. amp.', self)
         self.button_amp_plot_highlighted.clicked.connect(self.amplitudes_of_highlights)
         self.main_layout.addWidget(self.button_amp_plot_highlighted, 0,4,1,1)
@@ -437,12 +437,12 @@ class ApplicationWindow(QMainWindow):
         self.button_savepdf.clicked.connect(self.save_pdf)
         self.main_layout.addWidget(self.button_savepdf, 0,7,1,1)
 
-        ##############################################################        
+        ##############################################################
         # Figure settings
         self.main_plot_widget = QWidget()
         self.layout_mplib     = QVBoxLayout()
         self.main_plot_widget.setLayout(self.layout_mplib)
-        
+
         self.fig = Figure(figsize=(6, 6), dpi=100)
         self.canvas = FigureCanvas(self.fig)
         toolbar = NavigationToolbar(self.canvas, self)
@@ -474,7 +474,7 @@ class ApplicationWindow(QMainWindow):
         self.canvas.setFocusPolicy(QtCore.Qt.ClickFocus)
         self.main_widget.setFocus()
         self.setCentralWidget(self.main_widget)
-        
+
         # combine the splitter
         self.plot_splitter.addWidget(self.dataset_tree)
         self.plot_splitter.addWidget(self.main_plot_widget)
@@ -843,16 +843,16 @@ class ApplicationWindow(QMainWindow):
                         if mode_lines is not None:
                             view_cfg.lines[atool][ads][mode_ID] = mode_lines[:2]
             self.UpdateMainPlot()
-    
+
     def __grab_sreen(self):
         """graps matplotlib widget and put it into clipboard"""
         pixmap = self.canvas.grab()
         QApplication.clipboard().setPixmap(pixmap)
-        
+
     def __grab_sreen_save(self):
         """graps matplotlib widget and save it to a file"""
         pixmap = self.canvas.grab()
-        
+
         # open a file menu diaglog
         response = QFileDialog.getSaveFileName(self, 'Save screen shot', '', "Portable Network Grafic(*.png)")
 
@@ -860,7 +860,7 @@ class ApplicationWindow(QMainWindow):
 
             path = response[0]
             ext  = response[1]
-            pixmap.save(path)        
+            pixmap.save(path)
 
     ##############################################################
     # Database methods
@@ -968,8 +968,10 @@ class ApplicationWindow(QMainWindow):
             self.openFileNameDialogHAWCStab2(datasetname)
         elif tool == 'Bladed (lin.)':
             self.openFileNameDialogBladedLin(datasetname)
+        elif tool == 'alaska/Wind (lin.)':
+            self.openFileNameDialogBladedLin(datasetname)
         else:
-            raise ValueError('Only HAWCStab2 and Bladed-Linearization data are allowed as input.')
+            raise ValueError('Only HAWCStab2, Bladed-Linearization or alaska/Wind data are allowed as input.')
         del self.popup
 
         # if the data is loaded successfully -> initialize the active modes
@@ -1056,6 +1058,26 @@ class ApplicationWindow(QMainWindow):
                               tool_specific_info={'result_dir': result_dir, 'result_prefix': result_prefix})
             # save location to settings
             self.__qsettings.setValue("IO/Bladed_project", QFileInfo(fileName).absolutePath())
+
+    def openFileNameDialogalaskaLin(self, datasetname: str='default'):
+        """ Open File Dialog for alaska/Wind linearization Campbell diagram files
+
+        Args:
+            datasetname: Name that will be given to the selected dataset in the database
+        """
+        options = QFileDialog.Options()
+        options |= QFileDialog.DontUseNativeDialog
+        filter = "alaska/Wind Linearization Result Files (*.xlsx);;All Files (*)"
+        __path = self.__qsettings.value("IO/alaska_project", os.path.expanduser("~"))
+        fileName, _ = QFileDialog.getOpenFileName(self, "alaska/Wind Linearization Result Files", __path, filter, options=options)
+
+        if QFileInfo(fileName).exists():
+            result_dir = QFileInfo(fileName).absolutePath()
+            result_prefix = QFileInfo(fileName).baseName()
+            database.add_data(datasetname, 'alaska-lin',
+                              tool_specific_info={'result_dir': result_dir, 'result_prefix': result_prefix})
+            # save location to settings
+            self.__qsettings.setValue("IO/alaska_project", QFileInfo(fileName).absolutePath())
 
     ##############################################################
     # Button action methods
@@ -1166,7 +1188,7 @@ class ApplicationWindow(QMainWindow):
         """retrieves the default values or the user specific settings from QSettings"""
         # defaults
         self.set_settings_to_default(save=False)
-        
+
         # try to get the user settings
         for settings_key in self.__CV_settings:
             if self.__qsettings.contains(settings_key):

@@ -10,6 +10,7 @@ import copy
 # Local libs
 from campbellviewer.interfaces.hawcstab2 import HAWCStab2Data
 from campbellviewer.interfaces.bladed import BladedLinData
+from campbellviewer.interfaces.alaska_wind import AlaskaWindData
 from campbellviewer.data_storage.data_template import AbstractLinearizationData
 from campbellviewer.utilities import assure_unique_name, AEMode
 
@@ -49,10 +50,17 @@ class LinearizationDataWrapper(dict):
                 if key == 'filenamecmb':
                     self['HAWCStab2'][name].read_cmb_data(value, tool_specific_info['skip_header_CMB'])
                 elif key == 'filenameamp':
-                    self['HAWCStab2'][name].read_amp_data(value, tool_specific_info['skip_header_AMP'], 
+                    self['HAWCStab2'][name].read_amp_data(value, tool_specific_info['skip_header_AMP'],
                                                              tool_specific_info['override_mode_names'])
                 elif key == 'filenameopt':
                     self['HAWCStab2'][name].read_opt_data(value, tool_specific_info['skip_header_OP'])
+        elif tool == 'alaska-wind':
+            if 'Alaska-Wind' not in self:
+                self['Alaska-Wind'] = {}
+            if name not in self['Alaska-Wind']:
+                self['Alaska-Wind'][name] = AlaskaWindData(tool_specific_info.get('input_file_results', None),
+                                                           tool_specific_info.get('input_file_op', None))
+            self['Alaska-Wind'][name].read_cmb_data()
         else:
             raise NotImplementedError('Only reading of bladed and hawcstab2 data implemented.')
 
